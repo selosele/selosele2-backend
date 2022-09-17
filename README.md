@@ -14,7 +14,7 @@
   - ```npm run start:dev``` (watch 모드)
   - ```npm run start:prod``` (운영)
 - module, controller, service 일괄 생성 명령어: ```nest g res```
-- [Frontend](https://github.com/selosele/selosele2-frontend) 저장소
+- [Frontend 저장소](https://github.com/selosele/selosele2-frontend)
 
 ## 라이브러리 및 기술
 
