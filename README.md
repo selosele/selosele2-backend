@@ -8,7 +8,7 @@
 - Frontend : Vue
 - DBMS : MariaDB (& TypeORM)
 - Port: 3000
-- [백엔드 API 문서](/api-docs)
+- [백엔드 API 문서](http://localhost:3000/api-docs)
 - 백엔드 구동
   - ```npm run start``` (개발)
   - ```npm run start:dev``` (watch 모드)
