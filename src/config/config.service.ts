@@ -14,4 +14,5 @@ export class ConfigService {
   async findAll(): Promise<Config[]> {
     return await this.configRepository.find();
   }
+  
 }

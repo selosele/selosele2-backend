@@ -14,4 +14,5 @@ export class ConfigController {
   getConfig(): Promise<Config[]> {
     return this.configService.findAll();
   }
+  
 }

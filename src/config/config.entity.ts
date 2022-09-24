@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'config' })
 export class Config extends BaseEntity {
+
   @PrimaryGeneratedColumn()
   @ApiProperty({ description: 'id' })
   id?: number;
@@ -86,4 +87,5 @@ export class Config extends BaseEntity {
   @Column({ comment: '방명록 댓글 표출 여부' })
   @ApiProperty({ description: '방명록 댓글 표출 여부' })
   show_guestbook_reply?: string;
+  
 }
