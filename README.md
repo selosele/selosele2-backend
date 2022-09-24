@@ -1,4 +1,4 @@
-# 개인블로그 리뉴얼 프로젝트 (Frontend)
+# 개인블로그 리뉴얼 프로젝트 (Backend)
 
 ## 기본정보
 
@@ -15,6 +15,18 @@
   - ```npm run start:prod``` (운영)
 - module, controller, service 일괄 생성 명령어: ```nest g res```
 - [Frontend 저장소](https://github.com/selosele/selosele2-frontend)
+
+## 코딩 컨벤션
+
+1. 메소드 명명 규칙
+   - 단건 조회: ```get```
+   - 다건 조회: ```list```
+   - 통계 조회: ```count```
+   - 추가수정삭제: ```save```
+   - 추가: ```add```
+   - 수정: ```update```
+   - 삭제: ```remove```
+   - 예) ```saveUser```
 
 ## 라이브러리 및 기술
 
