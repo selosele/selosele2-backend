@@ -15,7 +15,7 @@
   - ```npm run start:dev``` (watch 모드)
   - ```npm run start:prod``` (운영)
 - module, controller, service 일괄 생성 명령어: ```nest g res```
-  - ```nest g res controllers/Users --no-spec``` 명령어를 치면 service, controller, module 파일이 생성됨
+  - ```nest g res Users --no-spec``` 명령어를 치면 service, controller, module 파일이 생성됨
 - [Frontend 저장소](https://github.com/selosele/selosele2-frontend)
 - [AS-IS 저장소](https://github.com/selosele/devblog)
 
@@ -30,7 +30,7 @@
    - 삭제: ```remove```
    - 추가/수정/삭제: ```save```
    - 예) ```saveUser```
-2. 테이블 컬럼명과 1:1 매칭되는 HTML 태그 name 속성값의 표기는 카멜케이스를 사용
+2. 테이블 컬럼명과 1:1로 매칭되는 HTML 태그의 name 속성값의 표기는 카멜케이스를 사용
    - X) ```user_id```
    - O) ```userId```
 
@@ -57,6 +57,38 @@
 - 메인 카테고리 필터링 기능 개발
 - 공통코드 사용 및 공통코드 관리 기능 개발
 - 권한 검증
+- 빌더 패턴 적용
+  - npm 모듈: ```builder-pattern```
+
+## DB 개편
+
+- **[완료]** 공통코드 테이블 생성
+- **[완료]** 권한 테이블 생성
+- **[완료]** 사용자 권한 테이블 생성
+  - 계정 생성 시, 익명 사용자 권한이랑 관리자 권한을 모두 부여해야 함
+- **[완료]** 포스트 카테고리 테이블 생성
+- ```text``` 타입은 메모리를 많이 차지하고, 인덱스의 일부로 쓰일 수 없으니 ```varchar```로 변경
+  - ```char``` 타입도 사용해보기
+- **[완료]** 포스트 테이블에서 카테고리를 별도 테이블로 분리
+  - 포스트 테이블, 포스트 임시저장 테이블 해당
+- DB 개편 완료 후 ERDCloud에 import하기
+
+### 공통코드 ID
+
+- ```A01001``` : 전체
+- ```A01002``` : 제목
+- ```A01003``` : 내용
+- ```A01004``` : 카테고리
+- ```B01001``` : 매우 불만족
+- ```B01002``` : 불만족
+- ```B01003``` : 보통
+- ```B01004``` : 만족
+- ```B01005``` : 매우 만족
+
+### 권한 ID
+
+- ```ROLE_ANONYMOUS``` : 익명 사용자
+- ```ROLE_ADMIN``` : 관리자
 
 ## 기타
 
@@ -66,3 +98,7 @@
 - Spring Security 인증 처리 요청 인터셉트해서 특정 Controller에 공통 처리하는 거 Nest.js에서 ```AuthGuard```로 하면 됨
   - 인증 처리 관련 키워드: ```AuthModule```, ```AuthGuard```
 - AS-IS에서 태그명 입력 관련 프론트 스크립트 삭제 후 시도해도 "중복된 태그명입니다" 뜨는 유효성 검사 출처가 백엔드임
+- 좋아요 기능 관련
+  - IP 주소를 공개하면 안됨(통신비밀보호법 IP라고 검색)
+- 스케줄러, 배치 꼭 써보기
+  - 특정 시간대(새벽)에는 서버를 끄고, 아침에 켜는 배치 구성
