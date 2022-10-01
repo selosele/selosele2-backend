@@ -11,8 +11,10 @@ export class ConfigService {
   ) {}
 
   // 블로그 환경설정 정보를 조회한다.
-  async findAll(): Promise<Config[]> {
-    return await this.configRepository.find();
+  async find(): Promise<Config> {
+    return await this.configRepository.findOne({
+      where: { id: 1 },
+    });
   }
   
 }
