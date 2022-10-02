@@ -15,8 +15,8 @@ export class YearService {
     return await this.postsRepository
       .createQueryBuilder('posts')
         .select([
-          "DISTINCT(YEAR(create_at)) AS year",
-          "COUNT('year') count",
+          "DISTINCT(YEAR(reg_date)) AS year",
+          "COUNT('year') AS count",
         ])
         .groupBy('year')
         .orderBy('year', 'DESC')
@@ -30,11 +30,11 @@ export class YearService {
         .select([
           "id",
           "title",
-          "secret",
-          "DATE_FORMAT(create_at, '%Y.%m.%d') AS date"
+          "secret_yn",
+          "DATE_FORMAT(reg_date, '%Y.%m.%d') AS reg_date"
         ])
-        .where("YEAR(create_at) = :year", { year })
-        .orderBy('create_at', 'DESC')
+        .where("YEAR(reg_date) = :year", { year })
+        .orderBy('reg_date', 'DESC')
         .getRawMany();
   }
 

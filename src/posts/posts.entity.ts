@@ -19,20 +19,20 @@ export class Posts extends BaseEntity {
   title?: string;
 
   @CreateDateColumn({
-    comment: '포스트 작성일'
+    comment: '포스트 작성일자'
   })
   @ApiProperty({
-    description: '포스트 작성일'
+    description: '포스트 작성일자'
   })
-  create_at?: Date;
+  reg_date?: Date;
 
   @UpdateDateColumn({
-    comment: '포스트 수정일'
+    comment: '포스트 수정일자'
   })
   @ApiProperty({
-    description: '포스트 수정일'
+    description: '포스트 수정일자'
   })
-  modified_at?: Date;
+  mod_date?: Date;
 
   @Column({
     comment: '포스트 추천수'
@@ -72,7 +72,7 @@ export class Posts extends BaseEntity {
   @ApiProperty({
     description: '포스트 대표 이미지'
   })
-  og_image?: string;
+  og_img?: string;
   
   @Column({
     comment: '포스트 대표 이미지 URL'
@@ -80,7 +80,7 @@ export class Posts extends BaseEntity {
   @ApiProperty({
     description: '포스트 대표 이미지 URL'
   })
-  og_image_url?: string;
+  og_img_url?: string;
   
   @Column({
     comment: '포스트 대표 이미지 파일 크기'
@@ -88,7 +88,7 @@ export class Posts extends BaseEntity {
   @ApiProperty({
     description: '포스트 대표 이미지 파일 크기'
   })
-  og_image_size?: number;
+  og_img_size?: number;
   
   @Column({
     comment: '포스트 내용 요약'
@@ -96,7 +96,7 @@ export class Posts extends BaseEntity {
   @ApiProperty({
     description: '포스트 내용 요약'
   })
-  og_description?: string;
+  og_desc?: string;
   
   @Column({
     comment: '포스트 비공개 여부'
@@ -104,7 +104,7 @@ export class Posts extends BaseEntity {
   @ApiProperty({
     description: '포스트 비공개 여부'
   })
-  secret?: string;
+  secret_yn?: string;
   
   @Column({
     comment: '포스트 상단고정 여부'
@@ -112,6 +112,6 @@ export class Posts extends BaseEntity {
   @ApiProperty({
     description: '포스트 상단고정 여부'
   })
-  pin?: string;
+  pin_yn?: string;
   
 }

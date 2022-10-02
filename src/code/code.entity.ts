@@ -64,6 +64,6 @@ export class Code extends BaseEntity {
   @ApiProperty({
     description: '코드 사용여부'
   })
-  is_use?: string;
+  use_yn?: string;
   
 }
