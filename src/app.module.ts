@@ -3,7 +3,7 @@ import { CodeModule } from './code/code.module';
 import { ConfigModule } from './config/config.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './configs/typeorm.config';
-import { PostsModule } from './posts/posts.module';
+import { PostModule } from './post/post.module';
 import { YearModule } from './year/year.module';
 
 @Module({
@@ -11,7 +11,7 @@ import { YearModule } from './year/year.module';
     TypeOrmModule.forRoot(typeORMConfig),
     CodeModule,
     ConfigModule,
-    PostsModule,
+    PostModule,
     YearModule,
   ],
   controllers: [],

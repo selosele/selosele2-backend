@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Posts } from 'src/posts/posts.entity';
-import { PostsRepository } from 'src/posts/posts.repository';
+import { Post } from 'src/post/post.entity';
+import { PostRepository } from 'src/post/post.repository';
 
 @Injectable()
 export class YearService {
   constructor(
-    @InjectRepository(Posts)
-    private readonly postsRepository: PostsRepository,
+    @InjectRepository(Post)
+    private readonly postRepository: PostRepository,
   ) {}
 
   // 포스트의 연도 및 개수를 조회한다.
-  async findYearAndCount(): Promise<Posts[]> {
-    return await this.postsRepository
-      .createQueryBuilder('posts')
+  async findYearAndCount(): Promise<Post[]> {
+    return await this.postRepository
+      .createQueryBuilder('post')
         .select([
           "DISTINCT(YEAR(reg_date)) AS year",
           "COUNT('year') AS count",
@@ -24,9 +24,9 @@ export class YearService {
   }
 
   // 연도별 포스트 목록을 조회한다.
-  async findPostsByYear(year: string): Promise<Posts[]> {
-    return await this.postsRepository
-      .createQueryBuilder('posts')
+  async findPostsByYear(year: string): Promise<Post[]> {
+    return await this.postRepository
+      .createQueryBuilder('post')
         .select([
           "id",
           "title",

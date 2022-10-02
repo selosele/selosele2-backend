@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { YearService } from './year.service';
 import { YearController } from './year.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Posts } from 'src/posts/posts.entity';
+import { Post } from 'src/post/post.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Posts])],
+  imports: [TypeOrmModule.forFeature([Post])],
   controllers: [YearController],
   providers: [YearService]
 })

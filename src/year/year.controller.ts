@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Posts } from 'src/posts/posts.entity';
+import { Post } from 'src/post/post.entity';
 import { YearService } from './year.service';
 
 @Controller('api/v1/year')
@@ -15,9 +15,9 @@ export class YearController {
   })
   @ApiCreatedResponse({
     description: '포스트의 연도 및 개수를 조회한다.',
-    type: Posts
+    type: Post
   })
-  listYearAndCount(): Promise<Posts[]> {
+  listYearAndCount(): Promise<Post[]> {
     return this.yearService.findYearAndCount();
   }
 
@@ -28,9 +28,9 @@ export class YearController {
   })
   @ApiCreatedResponse({
     description: '연도별 포스트 목록을 조회한다.',
-    type: Posts
+    type: Post
   })
-  listPostsByYear(@Param('year') year: string): Promise<Posts[]> {
+  listPostsByYear(@Param('year') year: string): Promise<Post[]> {
     return this.yearService.findPostsByYear(year);
   }
 
