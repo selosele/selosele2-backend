@@ -1,7 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Entity({ name: 'post' })
+@Entity('post')
 export class Post extends BaseEntity {
 
   @PrimaryGeneratedColumn()

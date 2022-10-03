@@ -1,13 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BaseEntity, Column, Entity, JoinColumn, OneToMany, PrimaryColumn } from "typeorm";
-import { UserRole } from "./user-role.entity";
+import { BaseEntity, Column, Entity, PrimaryColumn, Unique } from "typeorm";
 
-@Entity({ name: 'user' })
+@Entity('user')
 export class User extends BaseEntity {
 
   @PrimaryColumn()
-  @OneToMany(() => UserRole, userRole => userRole.userId)
-  @JoinColumn()
   @ApiProperty({
     description: '사용자 ID'
   })
@@ -19,8 +16,7 @@ export class User extends BaseEntity {
   })
   userPw?: string;
 
-  @OneToMany(() => UserRole, userRole => userRole.roleId)
-  @JoinColumn()
+  @Column()
   @ApiProperty({
     description: '권한 ID'
   })
