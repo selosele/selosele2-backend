@@ -24,7 +24,7 @@ export class Post extends BaseEntity {
   @ApiProperty({
     description: '포스트 작성일자'
   })
-  reg_date?: Date;
+  regDate?: Date;
 
   @UpdateDateColumn({
     comment: '포스트 수정일자'
@@ -32,7 +32,7 @@ export class Post extends BaseEntity {
   @ApiProperty({
     description: '포스트 수정일자'
   })
-  mod_date?: Date;
+  modDate?: Date;
 
   @Column({
     comment: '포스트 추천수'
@@ -40,7 +40,7 @@ export class Post extends BaseEntity {
   @ApiProperty({
     description: '포스트 추천수'
   })
-  like_cnt?: number;
+  likeCnt?: number;
 
   @Column({
     comment: '포스트 댓글수'
@@ -48,7 +48,7 @@ export class Post extends BaseEntity {
   @ApiProperty({
     description: '포스트 댓글수'
   })
-  reply_cnt?: number;
+  replyCnt?: number;
   
   @Column({
     comment: '포스트 내용'
@@ -64,7 +64,7 @@ export class Post extends BaseEntity {
   @ApiProperty({
     description: '포스트 내용의 순수 텍스트'
   })
-  raw_text?: string;
+  rawText?: string;
   
   @Column({
     comment: '포스트 대표 이미지'
@@ -72,7 +72,7 @@ export class Post extends BaseEntity {
   @ApiProperty({
     description: '포스트 대표 이미지'
   })
-  og_img?: string;
+  ogImg?: string;
   
   @Column({
     comment: '포스트 대표 이미지 URL'
@@ -80,7 +80,7 @@ export class Post extends BaseEntity {
   @ApiProperty({
     description: '포스트 대표 이미지 URL'
   })
-  og_img_url?: string;
+  ogImgUrl?: string;
   
   @Column({
     comment: '포스트 대표 이미지 파일 크기'
@@ -88,7 +88,7 @@ export class Post extends BaseEntity {
   @ApiProperty({
     description: '포스트 대표 이미지 파일 크기'
   })
-  og_img_size?: number;
+  ogImgSize?: number;
   
   @Column({
     comment: '포스트 내용 요약'
@@ -96,7 +96,7 @@ export class Post extends BaseEntity {
   @ApiProperty({
     description: '포스트 내용 요약'
   })
-  og_desc?: string;
+  ogDesc?: string;
   
   @Column({
     comment: '포스트 비공개 여부'
@@ -104,7 +104,7 @@ export class Post extends BaseEntity {
   @ApiProperty({
     description: '포스트 비공개 여부'
   })
-  secret_yn?: string;
+  secretYn?: string;
   
   @Column({
     comment: '포스트 상단고정 여부'
@@ -112,6 +112,6 @@ export class Post extends BaseEntity {
   @ApiProperty({
     description: '포스트 상단고정 여부'
   })
-  pin_yn?: string;
+  pinYn?: string;
   
 }

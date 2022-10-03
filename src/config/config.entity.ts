@@ -40,7 +40,7 @@ export class Config extends BaseEntity {
   @ApiProperty({
     description: '블로그 아바타 이미지'
   })
-  avatar_img?: string;
+  avatarImg?: string;
 
   @Column({
     comment: '블로그 아바타 이미지 URL'
@@ -48,7 +48,7 @@ export class Config extends BaseEntity {
   @ApiProperty({
     description: '블로그 아바타 이미지 URL'
   })
-  avatar_img_url?: string;
+  avatarImgUrl?: string;
 
   @Column({
     comment: '블로그 아바타 이미지 용량'
@@ -56,7 +56,7 @@ export class Config extends BaseEntity {
   @ApiProperty({
     description: '블로그 아바타 이미지 용량'
   })
-  avatar_img_size?: string;
+  avatarImgSize?: string;
 
   @Column({
     comment: '블로그 대표 이미지'
@@ -64,7 +64,7 @@ export class Config extends BaseEntity {
   @ApiProperty({
     description: '블로그 대표 이미지'
   })
-  og_img?: string;
+  ogImg?: string;
 
   @Column({
     comment: '블로그 대표 이미지 URL'
@@ -72,7 +72,7 @@ export class Config extends BaseEntity {
   @ApiProperty({
     description: '블로그 대표 이미지 URL'
   })
-  og_img_url?: string;
+  ogImgUrl?: string;
 
   @Column({
     comment: '블로그 대표 이미지 용량'
@@ -80,7 +80,7 @@ export class Config extends BaseEntity {
   @ApiProperty({
     description: '블로그 대표 이미지 용량'
   })
-  og_img_size?: number;
+  ogImgSize?: number;
 
   @Column({
     comment: '블로그 대표 이미지 밝기'
@@ -88,7 +88,7 @@ export class Config extends BaseEntity {
   @ApiProperty({
     description: '블로그 대표 이미지 밝기'
   })
-  og_img_contrast?: number;
+  ogImgContrast?: number;
 
   @Column({
     comment: '블로그 대표 이미지 흐림'
@@ -96,7 +96,7 @@ export class Config extends BaseEntity {
   @ApiProperty({
     description: '블로그 대표 이미지 흐림'
   })
-  og_img_blur?: number;
+  ogImgBlur?: number;
 
   @Column({
     comment: '블로그 대표 이미지 가로 위치값'
@@ -104,7 +104,7 @@ export class Config extends BaseEntity {
   @ApiProperty({
     description: '블로그 대표 이미지 가로 위치값'
   })
-  og_img_pos_x?: number;
+  ogImgPosX?: number;
 
   @Column({
     comment: '블로그 대표 이미지 세로 위치값'
@@ -112,7 +112,7 @@ export class Config extends BaseEntity {
   @ApiProperty({
     description: '블로그 대표 이미지 세로 위치값'
   })
-  og_img_pos_y?: number;
+  ogImgPosY?: number;
 
   @Column({
     comment: '메인 포스트 목록 출력 개수'
@@ -120,7 +120,7 @@ export class Config extends BaseEntity {
   @ApiProperty({
     description: '메인 포스트 목록 출력 개수'
   })
-  page_size?: number;
+  pageSize?: number;
 
   @Column({
     comment: '만족도조사 표출 여부'
@@ -128,6 +128,6 @@ export class Config extends BaseEntity {
   @ApiProperty({
     description: '만족도조사 표출 여부'
   })
-  show_satis_yn?: string;
+  showSatisYn?: string;
   
 }

@@ -31,7 +31,7 @@ export class YearService {
           "id",
           "title",
           "secret_yn",
-          "DATE_FORMAT(reg_date, '%Y.%m.%d') AS reg_date"
+          "DATE_FORMAT(reg_date, '%Y.%m.%d') AS regDate"
         ])
         .where("YEAR(reg_date) = :year", { year })
         .orderBy('reg_date', 'DESC')

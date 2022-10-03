@@ -1,10 +1,10 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'cmmn_code' })
 export class Code extends BaseEntity {
 
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   @ApiProperty({
     description: 'id'
   })
@@ -48,7 +48,7 @@ export class Code extends BaseEntity {
   @ApiProperty({
     description: '코드 등록일자'
   })
-  reg_date?: Date;
+  regDate?: Date;
 
   @UpdateDateColumn({
     comment: '코드 수정일자'
@@ -56,7 +56,7 @@ export class Code extends BaseEntity {
   @ApiProperty({
     description: '코드 수정일자'
   })
-  mod_date?: Date;
+  modDate?: Date;
 
   @Column({
     comment: '코드 사용여부'
@@ -64,6 +64,6 @@ export class Code extends BaseEntity {
   @ApiProperty({
     description: '코드 사용여부'
   })
-  use_yn?: string;
+  useYn?: string;
   
 }
