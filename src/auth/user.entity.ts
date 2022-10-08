@@ -18,7 +18,7 @@ export class User extends BaseEntity {
 
   @CreateDateColumn()
   @ApiProperty({
-    description: '사용자 생성일'
+    description: '사용자 생성일시'
   })
   regDate?: Date;
 

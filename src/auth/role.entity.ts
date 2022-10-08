@@ -18,13 +18,13 @@ export class Role extends BaseEntity {
 
   @CreateDateColumn()
   @ApiProperty({
-    description: '권한 등록일자'
+    description: '권한 등록일시'
   })
   regDate?: Date;
 
   @UpdateDateColumn()
   @ApiProperty({
-    description: '권한 수정일자'
+    description: '권한 수정일시'
   })
   modDate?: Date;
 

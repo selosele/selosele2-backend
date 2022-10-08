@@ -1,9 +1,10 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, Req, UseGuards } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { InsertResult } from 'typeorm';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('api/auth')
 @ApiTags('인증·인가 API')
@@ -19,8 +20,27 @@ export class AuthController {
     description: '사용자를 생성한다.',
     type: User
   })
-  signUp(@Body() authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
+  signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
     return this.authService.addUser(authCredentialsDto);
+  }
+
+  @Post('signin')
+  @ApiOperation({
+    summary: '로그인 API',
+    description: '로그인을 한다.'
+  })
+  @ApiCreatedResponse({
+    description: '로그인을 한다.',
+    type: String
+  })
+  signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<{accessToken: string}> {
+    return this.authService.signIn(authCredentialsDto);
+  }
+
+  @Post('test')
+  @UseGuards(AuthGuard())
+  test(@Req() req) {
+    console.log('req >>>', req);
   }
 
 }

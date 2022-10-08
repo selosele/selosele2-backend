@@ -1,7 +1,7 @@
 import { BaseEntity, Entity, PrimaryColumn } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 
-@Entity({ name: 'user_role' })
+@Entity('user_role')
 export class UserRole extends BaseEntity {
 
   @PrimaryColumn()
