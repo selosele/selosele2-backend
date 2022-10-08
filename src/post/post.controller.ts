@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Param } from '@nestjs/common';
+import { Controller, Get, Query, Param, ValidationPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Post } from 'src/post/post.entity';
 import { SearchPostDto } from './dto/search-post.dto';
@@ -18,7 +18,7 @@ export class PostsController {
     description: '포스트를 검색한다.',
     type: Post
   })
-  listPostSearch(@Query() searchPostDto: SearchPostDto): Promise<Post[]> {
+  listPostSearch(@Query(ValidationPipe) searchPostDto: SearchPostDto): Promise<Post[]> {
     return this.postService.listPostSearch(searchPostDto);
   }
 
