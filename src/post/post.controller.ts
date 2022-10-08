@@ -3,7 +3,7 @@ import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Post } from 'src/post/post.entity';
 import { PostService } from './post.service';
 
-@Controller('api/v1/post')
+@Controller('api/post')
 @ApiTags('포스트 API')
 export class PostsController {
   constructor(private readonly postService: PostService) {}
@@ -18,7 +18,7 @@ export class PostsController {
     type: Post
   })
   listYearAndCount(): Promise<Post[]> {
-    return this.postService.findYearAndCount();
+    return this.postService.listYearAndCount();
   }
 
   @Get('year/list/:year')
@@ -31,7 +31,7 @@ export class PostsController {
     type: Post
   })
   listPostsByYear(@Param('year') year: string): Promise<Post[]> {
-    return this.postService.findPostsByYear(year);
+    return this.postService.listPostsByYear(year);
   }
 
 }

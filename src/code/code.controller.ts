@@ -3,7 +3,7 @@ import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Code } from './code.entity';
 import { CodeService } from './code.service';
 
-@Controller('api/v1/code')
+@Controller('api/code')
 @ApiTags('공통코드 API')
 export class CodeController {
   constructor(private readonly codeService: CodeService) {}
@@ -18,7 +18,7 @@ export class CodeController {
     type: Code
   })
   listByPrefix(@Param('prefix') prefix: string): Promise<Code[]> {
-    return this.codeService.find(prefix);
+    return this.codeService.listByPrefix(prefix);
   }
 
 }

@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { InsertResult } from 'typeorm';
 
-@Controller('api/v1/auth')
+@Controller('api/auth')
 @ApiTags('인증·인가 API')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

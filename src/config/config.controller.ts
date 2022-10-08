@@ -3,7 +3,7 @@ import { ConfigService } from './config.service';
 import { ApiTags, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
 import { Config } from './config.entity';
 
-@Controller('api/v1/config')
+@Controller('api/config')
 @ApiTags('블로그 환경설정 API')
 export class ConfigController {
   constructor(private readonly configService: ConfigService) {}
@@ -18,7 +18,7 @@ export class ConfigController {
     type: Config
   })
   getConfig(): Promise<Config> {
-    return this.configService.find();
+    return this.configService.getConfig();
   }
   
 }
