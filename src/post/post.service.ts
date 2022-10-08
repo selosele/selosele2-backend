@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SearchPostDto } from './dto/search-post.dto';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
 
@@ -9,6 +10,11 @@ export class PostService {
     @InjectRepository(PostRepository)
     private readonly postRepository: PostRepository,
   ) {}
+
+  // 포스트를 검색한다.
+  async listPostSearch(searchPostDto: SearchPostDto): Promise<Post[]> {
+    return await this.postRepository.listPostSearch(searchPostDto);
+  }
 
   // 포스트의 연도 및 개수를 조회한다.
   async listYearAndCount(): Promise<Post[]> {
