@@ -43,18 +43,18 @@ export class Code extends BaseEntity {
   desc?: string;
 
   @CreateDateColumn({
-    comment: '코드 등록일자'
+    comment: '코드 등록일시'
   })
   @ApiProperty({
-    description: '코드 등록일자'
+    description: '코드 등록일시'
   })
   regDate?: Date;
 
   @UpdateDateColumn({
-    comment: '코드 수정일자'
+    comment: '코드 수정일시'
   })
   @ApiProperty({
-    description: '코드 수정일자'
+    description: '코드 수정일시'
   })
   modDate?: Date;
 
