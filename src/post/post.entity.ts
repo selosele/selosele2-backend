@@ -19,18 +19,18 @@ export class Post extends BaseEntity {
   title?: string;
 
   @CreateDateColumn({
-    comment: '포스트 작성일자'
+    comment: '포스트 작성일시'
   })
   @ApiProperty({
-    description: '포스트 작성일자'
+    description: '포스트 작성일시'
   })
   regDate?: Date;
 
   @UpdateDateColumn({
-    comment: '포스트 수정일자'
+    comment: '포스트 수정일시'
   })
   @ApiProperty({
-    description: '포스트 수정일자'
+    description: '포스트 수정일시'
   })
   modDate?: Date;
 
