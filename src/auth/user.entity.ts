@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BaseEntity, Column, Entity, PrimaryColumn, Unique } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -16,10 +16,10 @@ export class User extends BaseEntity {
   })
   userPw?: string;
 
-  @Column()
+  @CreateDateColumn()
   @ApiProperty({
-    description: '권한 ID'
+    description: '사용자 생성일'
   })
-  roleId?: string;
+  regDate?: Date;
 
 }
