@@ -10,7 +10,7 @@ export class UserRepository extends Repository<User> {
 
   // 사용자를 생성한다.
   async addUser(authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
-    const { userId, userPw, roleId } = authCredentialsDto;
+    const { userId, userPw } = authCredentialsDto;
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(userPw, salt);
@@ -18,7 +18,6 @@ export class UserRepository extends Repository<User> {
     const user = this.create({
       userId,
       userPw: hashedPassword,
-      roleId: 'ROLE_ADMIN'
     });
 
     try {

@@ -6,11 +6,12 @@ import { User } from './user.entity';
 import { UserRole } from './user-role.entity';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
 import { UserRepository } from './user.repository';
+import { UserRoleRepository } from './user-role.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, UserRole]),
-    CustomTypeOrmModule.forCustomRepository([UserRepository]),
+    CustomTypeOrmModule.forCustomRepository([UserRepository, UserRoleRepository]),
   ],
   controllers: [AuthController],
   providers: [AuthService]
