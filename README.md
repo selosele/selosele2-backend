@@ -8,7 +8,7 @@
 - Frontend : Vue
 - DBMS : MariaDB (& TypeORM)
 - Port: 3000
-- API URI: ```/api/v1/**```
+- API URI: ```/api/**```
 - [백엔드 API 문서](http://localhost:3000/api-docs)
 - 백엔드 구동
   - ```npm run start``` (개발)
@@ -62,7 +62,7 @@
   - ```hasRole('ROLE_ADMIN')``` 같은 권한 검증 메소드 필요 (프론트에도)
 - **[대기]** 개발모드에서만 사용자 생성할 수 있게 하기
   - API를 타면서 운영모드일 경우 예외 던지기
-- 빌더 패턴 적용
+- **[완료]** 빌더 패턴 적용
   - npm 모듈: ```builder-pattern```
 
 ## DB 개편
