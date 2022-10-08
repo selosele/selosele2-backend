@@ -1,12 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { ConfigService } from './config.service';
+import { BlogConfigService } from './blog-config.service';
 import { ApiTags, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
-import { Config } from './config.entity';
+import { BlogConfig } from './blog-config.entity';
 
-@Controller('api/config')
+@Controller('api/blogconfig')
 @ApiTags('블로그 환경설정 API')
-export class ConfigController {
-  constructor(private readonly configService: ConfigService) {}
+export class BlogConfigController {
+  constructor(private readonly blogConfigService: BlogConfigService) {}
 
   @Get()
   @ApiOperation({
@@ -15,10 +15,10 @@ export class ConfigController {
   })
   @ApiCreatedResponse({
     description: '블로그 환경설정 정보를 조회한다.',
-    type: Config
+    type: BlogConfig
   })
-  getConfig(): Promise<Config> {
-    return this.configService.getConfig();
+  getBlogConfig(): Promise<BlogConfig> {
+    return this.blogConfigService.getBlogConfig();
   }
   
 }

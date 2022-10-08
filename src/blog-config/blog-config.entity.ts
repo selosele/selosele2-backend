@@ -1,8 +1,8 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Entity('config')
-export class Config extends BaseEntity {
+@Entity('blog_config')
+export class BlogConfig extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   @ApiProperty({
