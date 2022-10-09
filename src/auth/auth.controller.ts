@@ -1,10 +1,11 @@
-import { Controller, Post, Body, ValidationPipe, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, UseGuards } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { InsertResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from './decorator/get-user.decorator';
 
 @Controller('api/auth')
 @ApiTags('인증·인가 API')
@@ -39,8 +40,8 @@ export class AuthController {
 
   @Post('test')
   @UseGuards(AuthGuard())
-  test(@Req() req) {
-    console.log('req >>>', req);
+  test(@GetUser() user: User) {
+    console.log('user >>>', user);
   }
 
 }
