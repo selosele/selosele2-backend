@@ -50,18 +50,18 @@ export class AuthService {
   // 로그인을 한다.
   async signIn(authCredentialsDto: AuthCredentialsDto): Promise<{accessToken: string}> {
     const { userId, userPw } = authCredentialsDto;
-    let roleId = [];
+    let roles = [];
 
     const user: User = await this.userRepository.findOne({ where: { userId: userId } });
     const userRoles: UserRole[] = await this.userRoleRepository.find({ where: { userId: userId } });
 
     for (let role of userRoles) {
-      roleId.push(role.roleId);
+      roles.push(role.roleId);
     }
 
     if (user && (await bcrypt.compare(userPw, user.userPw))) {
       // 사용자 토큰 생성
-      const payload = { userId, roleId };
+      const payload = { userId, roles };
       const accessToken = await this.jwtService.sign(payload);
 
       return { accessToken };
