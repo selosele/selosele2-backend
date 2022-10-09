@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { InsertResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from './decorator/get-user.decorator';
+import { UserInfo } from './decorator/user-info.decorator';
 
 @Controller('api/auth')
 @ApiTags('인증·인가 API')
@@ -40,7 +40,7 @@ export class AuthController {
 
   @Post('test')
   @UseGuards(AuthGuard())
-  test(@GetUser() user: User) {
+  test(@UserInfo() user: User) {
     console.log('user >>>', user);
   }
 
