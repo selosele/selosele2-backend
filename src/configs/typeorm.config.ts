@@ -11,4 +11,5 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   entities: ['dist/**/*.entity.{js,ts}'],
   synchronize: false,
   namingStrategy: new SnakeNamingStrategy(),
+  timezone: 'Asia/Seoul',
 };
