@@ -41,18 +41,18 @@ export class AuthController {
     return this.authService.signIn(authCredentialsDto);
   }
 
-  @Get('csrftoken')
-  @ApiOperation({
-    summary: 'CSRF Token API',
-    description: 'CSRF Token을 받아온다.'
-  })
-  @ApiCreatedResponse({
-    description: 'CSRF Token을 받아온다.',
-    type: Object,
-  })
-  getCsrfToken(@Req() req): { CSRFToken: string } {
-    return { CSRFToken: req.csrfToken() };
-  }
+  // @Get('csrftoken')
+  // @ApiOperation({
+  //   summary: 'CSRF Token API',
+  //   description: 'CSRF Token을 받아온다.'
+  // })
+  // @ApiCreatedResponse({
+  //   description: 'CSRF Token을 받아온다.',
+  //   type: Object,
+  // })
+  // getCsrfToken(@Req() req): { CSRFToken: string } {
+  //   return { CSRFToken: req.csrfToken() };
+  // }
 
   @Post('test')
   @UseGuards(AuthGuard())
