@@ -1,4 +1,4 @@
-import { Controller, Post, Body, ValidationPipe, UseGuards, Get, Req, ForbiddenException } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, UseGuards, ForbiddenException } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { AuthService } from './auth.service';
@@ -40,19 +40,6 @@ export class AuthController {
   signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
     return this.authService.signIn(authCredentialsDto);
   }
-
-  // @Get('csrftoken')
-  // @ApiOperation({
-  //   summary: 'CSRF Token API',
-  //   description: 'CSRF Token을 받아온다.'
-  // })
-  // @ApiCreatedResponse({
-  //   description: 'CSRF Token을 받아온다.',
-  //   type: Object,
-  // })
-  // getCsrfToken(@Req() req): { CSRFToken: string } {
-  //   return { CSRFToken: req.csrfToken() };
-  // }
 
   @Post('test')
   @UseGuards(AuthGuard())

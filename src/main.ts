@@ -2,17 +2,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setupSwagger } from './utils/swagger/swagger.util';
-import * as cookieParser from 'cookie-parser';
-import * as csrf from 'csurf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  app.use(cookieParser());
-  // JWT 토큰을 통한 인증 방식을 사용한다면, CSRF를 활성화할 필요는 없다.
-  // app.use('/', csrf({
-  //   cookie: true,
-  // }));
 
   app.useGlobalPipes(
     new ValidationPipe({
