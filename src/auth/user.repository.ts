@@ -8,6 +8,21 @@ import * as bcrypt from 'bcrypt';
 @CustomRepository(User)
 export class UserRepository extends Repository<User> {
 
+  // 사용자를 조회한다.
+  async getUser(userId: string): Promise<User> {
+    return await this.createQueryBuilder('user')
+      .select([
+        'user.user_id',
+        'user.reg_date',
+        'userRole.role_id',
+        'role.role_nm',
+      ])
+      .innerJoin('user.roles', 'userRole')
+      .innerJoin('userRole.role', 'role')
+      .where('user.user_id = :user_id', { user_id: userId })
+      .getRawOne();
+  }
+
   // 사용자를 생성한다.
   async addUser(authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
     const { userId, userPw } = authCredentialsDto;

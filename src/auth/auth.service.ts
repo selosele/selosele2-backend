@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserRole } from './user-role.entity';
 import { User } from './user.entity';
+import { RoleRepository } from './role.repository';
 
 @Injectable()
 export class AuthService {
@@ -19,15 +20,23 @@ export class AuthService {
     @InjectRepository(UserRoleRepository)
     private readonly userRoleRepository: UserRoleRepository,
 
+    @InjectRepository(RoleRepository)
+    private readonly roleRepository: RoleRepository,
+
     private readonly jwtService: JwtService,
   ) {}
+
+  // 사용자를 조회한다.
+  async getUser(userId: string): Promise<User> {
+    return await this.userRepository.getUser(userId);
+  }
   
   // 사용자를 생성한다.
   async addUser(authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
-    const res: InsertResult = await this.userRepository.addUser(authCredentialsDto);
+    const addUserRes: InsertResult = await this.userRepository.addUser(authCredentialsDto);
 
-    if (res.identifiers[0].userId) {
-      let res: InsertResult = null;
+    if (addUserRes.identifiers[0].userId) {
+      let addUserRoleRes: InsertResult = null;
       let roles: string[] = ['ROLE_ANONYMOUS', 'ROLE_ADMIN'];
 
       for (let i = 0; i < roles.length; i++) {
@@ -36,9 +45,9 @@ export class AuthService {
           .roleId(roles[i])
           .build();
 
-        res = await this.addUserRole(dto);
+        addUserRoleRes = await this.addUserRole(dto);
       }
-      return res;
+      return addUserRoleRes;
     }
   }
 

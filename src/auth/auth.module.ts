@@ -11,6 +11,8 @@ import { UserRepository } from './user.repository';
 import { UserRoleRepository } from './user-role.repository';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigService } from '@nestjs/config';
+import { Role } from './role.entity';
+import { RoleRepository } from './role.repository';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -27,8 +29,8 @@ dotenv.config();
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([User, UserRole]),
-    CustomTypeOrmModule.forCustomRepository([UserRepository, UserRoleRepository]),
+    TypeOrmModule.forFeature([User, UserRole, Role]),
+    CustomTypeOrmModule.forCustomRepository([UserRepository, UserRoleRepository, RoleRepository]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryColumn } from "typeorm";
+import { UserRole } from "./user-role.entity";
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -21,5 +22,12 @@ export class User extends BaseEntity {
     description: '사용자 생성일시'
   })
   regDate?: Date;
+
+  @OneToMany(() => UserRole, userRole => userRole.user)
+  @JoinColumn({ referencedColumnName: 'user_id' })
+  @ApiProperty({
+    description: '사용자 권한'
+  })
+  roles?: UserRole[];
 
 }

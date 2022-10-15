@@ -1,4 +1,4 @@
-import { Controller, Post, Body, ValidationPipe, UseGuards, ForbiddenException } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, UseGuards, ForbiddenException, Get, Param } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { AuthService } from './auth.service';
@@ -11,6 +11,19 @@ import { UserInfo } from './decorator/user-info.decorator';
 @ApiTags('인증·인가 API')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Get('user/:userId')
+  @ApiOperation({
+    summary: '사용자 조회 API',
+    description: '사용자를 조회한다.'
+  })
+  @ApiCreatedResponse({
+    description: '사용자를 조회한다.',
+    type: User,
+  })
+  getUser(@Param('userId') userId: string): Promise<User> {
+    return this.authService.getUser(userId);
+  }
 
   @Post('signup')
   @ApiOperation({
