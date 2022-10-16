@@ -1,6 +1,10 @@
 import { INestApplication } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
+/**
+ * Swagger 유틸
+ * @param app
+ */
 export function setupSwagger(app: INestApplication): void {
   const options = new DocumentBuilder()
     .setTitle('Selosele2 API 문서')
