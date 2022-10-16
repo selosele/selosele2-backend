@@ -8,6 +8,12 @@ export class UserRole extends BaseEntity {
 
   @PrimaryColumn()
   @ApiProperty({
+    description: '사용자 일련번호'
+  })
+  userSn?: number;
+
+  @PrimaryColumn()
+  @ApiProperty({
     description: '사용자 ID'
   })
   userId?: string;

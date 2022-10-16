@@ -1,9 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { UserRole } from "./user-role.entity";
 
 @Entity('user')
 export class User extends BaseEntity {
+
+  @PrimaryGeneratedColumn()
+  @ApiProperty({
+    description: '사용자 일련번호'
+  })
+  userSn?: number;
 
   @PrimaryColumn()
   @ApiProperty({

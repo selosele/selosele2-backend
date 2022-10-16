@@ -1,5 +1,5 @@
-import { Controller, Post, Body, ValidationPipe, UseGuards, ForbiddenException, Get, Param } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Post, Body, ValidationPipe, UseGuards, ForbiddenException, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -12,27 +12,36 @@ import { UserInfo } from './decorator/user-info.decorator';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('user/:userId')
+  @Get('user/:userSn')
   @ApiOperation({
     summary: '사용자 조회 API',
-    description: '사용자를 조회한다.'
+    description: '사용자를 조회한다.',
   })
   @ApiCreatedResponse({
-    description: '사용자를 조회한다.',
     type: User,
+    description: '사용자를 조회한다.',
   })
-  getUser(@Param('userId') userId: string): Promise<User> {
-    return this.authService.getUser(userId);
+  @ApiParam({
+    type: Number,
+    name: 'userSn',
+    description: '사용자 일련번호',
+  })
+  getUser(@Param('userSn', ParseIntPipe) userSn: number): Promise<User> {
+    return this.authService.getUser(userSn);
   }
 
   @Post('signup')
   @ApiOperation({
     summary: '사용자 생성 API',
-    description: '사용자를 생성한다.'
+    description: '사용자를 생성한다.',
   })
   @ApiCreatedResponse({
-    description: '사용자를 생성한다.',
     type: User,
+    description: '사용자를 생성한다.',
+  })
+  @ApiBody({
+    type: AuthCredentialsDto,
+    description: '사용자 생성 DTO',
   })
   signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
     if (process.env.NODE_ENV === 'production') {
@@ -44,11 +53,15 @@ export class AuthController {
   @Post('signin')
   @ApiOperation({
     summary: '로그인 API',
-    description: '로그인을 한다.'
+    description: '로그인을 한다.',
   })
   @ApiCreatedResponse({
-    description: '로그인을 한다.',
     type: String,
+    description: '로그인을 한다.',
+  })
+  @ApiBody({
+    type: AuthCredentialsDto,
+    description: '로그인 DTO',
   })
   signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
     return this.authService.signIn(authCredentialsDto);
