@@ -17,9 +17,9 @@ export class PostRepository extends Repository<Post> {
         "SUBSTR(\`raw_text\`, 1, 180) AS rawText",
         "og_img_url",
       ])
-      .where('title LIKE :title', { title: `%${searchPostDto.q}%` })
-      .orWhere('raw_text LIKE :raw_text', { raw_text: `%${searchPostDto.q}%` })
-      .orderBy('reg_date', 'DESC')
+      .where("title LIKE :title", { title: `%${searchPostDto.q}%` })
+      .orWhere("raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` })
+      .orderBy("reg_date", "DESC")
       .getRawMany();
   }
 
@@ -30,8 +30,8 @@ export class PostRepository extends Repository<Post> {
         "DISTINCT(YEAR(reg_date)) AS year",
         "COUNT('year') AS count",
       ])
-      .groupBy('year')
-      .orderBy('year', 'DESC')
+      .groupBy("year")
+      .orderBy("year", "DESC")
       .getRawMany();
   }
 
@@ -45,7 +45,7 @@ export class PostRepository extends Repository<Post> {
         "DATE_FORMAT(reg_date, '%Y.%m.%d') AS regDate"
       ])
       .where("YEAR(reg_date) = :year", { year })
-      .orderBy('reg_date', 'DESC')
+      .orderBy("reg_date", "DESC")
       .getRawMany();
   }
 
