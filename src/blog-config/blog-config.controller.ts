@@ -14,8 +14,8 @@ export class BlogConfigController {
     description: '블로그 환경설정 정보를 조회한다.'
   })
   @ApiCreatedResponse({
+    type: BlogConfig,
     description: '블로그 환경설정 정보를 조회한다.',
-    type: BlogConfig
   })
   getBlogConfig(): Promise<BlogConfig> {
     return this.blogConfigService.getBlogConfig();

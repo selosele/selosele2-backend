@@ -1,5 +1,5 @@
 import { Controller, Get, Query, Param, ValidationPipe } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Post } from 'src/post/post.entity';
 import { SearchPostDto } from './dto/search-post.dto';
 import { PostService } from './post.service';
@@ -15,8 +15,13 @@ export class PostsController {
     description: '포스트를 검색한다.'
   })
   @ApiCreatedResponse({
+    type: Post,
     description: '포스트를 검색한다.',
-    type: Post
+  })
+  @ApiQuery({
+    type: SearchPostDto,
+    name: 'searchPostDto',
+    description: '포스트 검색 DTO',
   })
   listPostSearch(@Query(ValidationPipe) searchPostDto: SearchPostDto): Promise<Post[]> {
     return this.postService.listPostSearch(searchPostDto);
@@ -28,8 +33,8 @@ export class PostsController {
     description: '포스트의 연도 및 개수를 조회한다.'
   })
   @ApiCreatedResponse({
+    type: Post,
     description: '포스트의 연도 및 개수를 조회한다.',
-    type: Post
   })
   listYearAndCount(): Promise<Post[]> {
     return this.postService.listYearAndCount();
@@ -41,8 +46,13 @@ export class PostsController {
     description: '연도별 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
+    type: Post,
     description: '연도별 포스트 목록을 조회한다.',
-    type: Post
+  })
+  @ApiParam({
+    type: String,
+    name: 'year',
+    description: '연도',
   })
   listPostsByYear(@Param('year') year: string): Promise<Post[]> {
     return this.postService.listPostsByYear(year);

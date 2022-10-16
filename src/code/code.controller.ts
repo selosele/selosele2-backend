@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Code } from './code.entity';
 import { CodeService } from './code.service';
 
@@ -14,8 +14,13 @@ export class CodeController {
     description: '코드 접두사와 매칭되는 공통코드 목록을 조회한다.'
   })
   @ApiCreatedResponse({
+    type: Code,
     description: '코드 접두사와 매칭되는 공통코드 목록을 조회한다.',
-    type: Code
+  })
+  @ApiParam({
+    type: String,
+    name: 'prefix',
+    description: '코드 접두사',
   })
   listByPrefix(@Param('prefix') prefix: string): Promise<Code[]> {
     return this.codeService.listByPrefix(prefix);

@@ -1,5 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
+// 포스트 검색 DTO
 export class SearchPostDto {
 
   // 검색 옵션
