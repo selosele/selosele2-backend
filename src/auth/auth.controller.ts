@@ -6,6 +6,7 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { InsertResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
 import { UserInfo } from './decorator/user-info.decorator';
+import { AuthUtil } from 'src/utils/auth/auth.util';
 
 @Controller('api/auth')
 @ApiTags('인증·인가 API')
@@ -70,7 +71,9 @@ export class AuthController {
   @Post('test')
   @UseGuards(AuthGuard())
   test(@UserInfo() user: User) {
+    const a = AuthUtil.hasRole('ROLE_ADMIN');
     console.log('user >>>', user);
+    console.log('hasRole >>>', a);
   }
 
 }
