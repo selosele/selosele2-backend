@@ -40,6 +40,6 @@ export class Role extends BaseEntity {
   @ApiProperty({
     description: '사용자 권한'
   })
-  roles?: UserRole[];
+  userRole?: UserRole[];
 
 }

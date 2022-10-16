@@ -7,19 +7,23 @@ import { User } from './user.entity';
 export class UserRepository extends Repository<User> {
 
   // 사용자를 조회한다.
-  async getUser(userSn: number): Promise<User> {
-    return await this.createQueryBuilder('user')
-      .select([
-        'user.user_sn',
-        'user.user_id',
-        'user.reg_date',
-        'userRole.role_id',
-        'role.role_nm',
-      ])
-      .innerJoin('user.roles', 'userRole')
-      .innerJoin('userRole.role', 'role')
-      .where('user.user_sn = :user_sn', { user_sn: userSn })
-      .getRawOne();
+  async getUser(userKey: number | string): Promise<User> {
+    return await this.findOne({
+      relations: ['userRole'],
+      select: {
+        userSn: true,
+        userId: true,
+        userPw: true,
+        regDate: true,
+        userRole: {
+          roleId: true,
+        },
+      },
+      where: [
+        { userSn: userKey as number },
+        { userId: userKey as string },
+      ],
+    });
   }
 
   // 사용자를 생성한다.

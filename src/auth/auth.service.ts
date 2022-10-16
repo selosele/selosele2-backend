@@ -7,7 +7,6 @@ import { UserRoleRepository } from './user-role.repository';
 import { Builder } from 'builder-pattern';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserRole } from './user-role.entity';
 import { User } from './user.entity';
 
 @Injectable()
@@ -21,8 +20,8 @@ export class AuthService {
   ) {}
 
   // 사용자를 조회한다.
-  async getUser(userSn: number): Promise<User> {
-    return await this.userRepository.getUser(userSn);
+  async getUser(userKey: number | string): Promise<User> {
+    return await this.userRepository.getUser(userKey);
   }
   
   // 사용자를 생성한다.
@@ -30,7 +29,7 @@ export class AuthService {
     const { userId, userPw } = authCredentialsDto;
 
     // ID 중복 체크
-    const foundUser: User = await this.userRepository.findOne({ where: { userId: userId } });
+    const foundUser: User = await this.userRepository.findOne({ where: { userId } });
     if (foundUser) {
       throw new ConflictException('중복된 사용자 ID입니다.');
     }
@@ -68,18 +67,15 @@ export class AuthService {
   // 로그인을 한다.
   async signIn(authCredentialsDto: AuthCredentialsDto): Promise<{accessToken: string}> {
     const { userId, userPw } = authCredentialsDto;
-    let roles = [];
 
-    const user: User = await this.userRepository.findOne({ where: { userId: userId } });
-    const userRoles: UserRole[] = await this.userRoleRepository.find({ where: { userId: userId } });
-
-    for (let role of userRoles) {
-      roles.push(role.roleId);
-    }
+    const user: User = await this.getUser(userId);
 
     if (user && (await bcrypt.compare(userPw, user.userPw))) {
       // 사용자 토큰 생성
-      const payload = { userSn: user.userSn, roles };
+      const payload = {
+        userSn: user.userSn,
+        userRole: user.userRole,
+      };
       const accessToken = await this.jwtService.sign(payload);
 
       return { accessToken };
