@@ -86,7 +86,7 @@
     - ```category```, ```tag``` 테이블이 필요함
     - 즉, ```post``` 테이블과 ```category``` 테이블 사이에 ```post_category``` 테이블이 존재하는 구조가 되어야 함
 - **[완료]** 방문자 테이블 삭제
-- DB 개편 완료 후 ERDCloud에 import하기
+- DB 개편 후 ERDCloud에 import하기
 
 ## 기타
 
@@ -98,7 +98,7 @@
 - 공통 테이블(user, menu 등)은 조인 조건을 생략한다.
 - Spring Security 인증 처리 요청 인터셉트해서 특정 Controller에 공통 처리하는 거 Nest.js에서 ```AuthGuard```로 하면 됨
   - 인증 처리 관련 키워드: ```AuthModule```, ```AuthGuard```
-- AS-IS에서 태그명 입력 관련 프론트 JavaScript 삭제 후 시도해도 "중복된 태그명입니다" 뜨는 유효성 검사 출처가 백엔드임
+- AS-IS에서 태그명 입력 관련 프론트 JavaScript 삭제 후 시도해도 "중복된 태그명입니다" 뜨는 유효성검사 출처가 백엔드임
 - 좋아요 기능 관련
   - IP 주소를 공개하면 안됨(통신비밀보호법 IP라고 검색)
 - 스케줄러, 배치 꼭 써보기
