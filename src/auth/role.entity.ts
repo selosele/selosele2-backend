@@ -43,3 +43,13 @@ export class Role extends BaseEntity {
   userRole?: UserRole[];
 
 }
+
+export enum RoleEnum {
+  ROLE_ANONYMOUS = 'ROLE_ANONYMOUS',
+  ROLE_ADMIN = 'ROLE_ADMIN',
+  ROLE_TEST = 'ROLE_TEST',
+};
+
+export const RoleDefaultList = [
+  RoleEnum.ROLE_ANONYMOUS,
+];

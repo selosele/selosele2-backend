@@ -1,17 +1,32 @@
-import { Controller, Post, Body, ValidationPipe, UseGuards, ForbiddenException, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { 
+  Controller,
+  Post,
+  Body,
+  ValidationPipe,
+  UseGuards,
+  ForbiddenException,
+  Get,
+  Param,
+  ParseIntPipe
+} from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { User } from './user.entity';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { InsertResult } from 'typeorm';
-import { AuthGuard } from '@nestjs/passport';
-import { UserInfo } from './decorator/user-info.decorator';
-import { AuthUtil } from 'src/utils/auth/auth.util';
+import { UserInfo } from '../shared/decorator/auth/user-info.decorator';
+import { ConfigService } from '@nestjs/config';
+import { JwtAuthGuard } from '../shared/guard/jwt-auth.guard';
+import { RoleEnum } from './role.entity';
+import { Roles } from 'src/shared/decorator/auth/roles.decorator';
 
 @Controller('api/auth')
 @ApiTags('인증·인가 API')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly config: ConfigService,
+    private readonly authService: AuthService
+    ) {}
 
   @Get('user/:userSn')
   @ApiOperation({
@@ -45,7 +60,7 @@ export class AuthController {
     description: '사용자 생성 DTO',
   })
   signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
-    if (process.env.NODE_ENV === 'production') {
+    if (this.config.get<string>('NODE_ENV') === 'production') {
       throw new ForbiddenException();
     }
     return this.authService.addUser(authCredentialsDto);
@@ -69,11 +84,10 @@ export class AuthController {
   }
 
   @Post('test')
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleEnum.ROLE_ADMIN, RoleEnum.ROLE_TEST)
   test(@UserInfo() user: User) {
-    const a = AuthUtil.hasRole('ROLE_ADMIN');
-    console.log('user >>>', user);
-    console.log('hasRole >>>', a);
+    console.log('user >>>', user.userId);
   }
 
 }

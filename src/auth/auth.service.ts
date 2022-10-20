@@ -44,13 +44,13 @@ export class AuthService {
     // 사용자 권한 생성
     if (addUserRes.identifiers[0].userId) {
       let addUserRoleRes: InsertResult = null;
-      let roles: string[] = ['ROLE_ANONYMOUS', 'ROLE_ADMIN'];
+      const roles: string[] = ['ROLE_ANONYMOUS', 'ROLE_ADMIN'];
 
-      for (let i = 0; i < roles.length; i++) {
+      for (const role of roles) {
         const dto: AuthCredentialsRoleDto = Builder(AuthCredentialsRoleDto)
           .userSn(addUserRes.identifiers[0].userSn)
           .userId(userId)
-          .roleId(roles[i])
+          .roleId(role)
           .build();
 
         addUserRoleRes = await this.addUserRole(dto);

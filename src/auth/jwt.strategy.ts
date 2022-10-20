@@ -16,6 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       secretOrKey: config.get<string>('JWT_SECRET_KEY'),
+      // 요청에서 JWT 추출법을 설정 -> Authorization에서 Bearer Token에 JWT를 담아 전송해야 한다.
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     })
   }
