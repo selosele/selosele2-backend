@@ -6,7 +6,9 @@ import { BlogConfig } from './blog-config.entity';
 @Controller('api/blogconfig')
 @ApiTags('블로그 환경설정 API')
 export class BlogConfigController {
-  constructor(private readonly blogConfigService: BlogConfigService) {}
+  constructor(
+    private readonly blogConfigService: BlogConfigService
+    ) {}
 
   @Get()
   @ApiOperation({

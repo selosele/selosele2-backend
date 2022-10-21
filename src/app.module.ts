@@ -6,8 +6,6 @@ import { BlogConfigModule } from './blog-config/blog-config.module';
 import { PostModule } from './post/post.module';
 import { ConfigModule } from '@nestjs/config';
 import { typeORMConfig } from './configs/typeorm.config';
-import { APP_GUARD } from '@nestjs/core';
-import { RoleGuard } from './shared/guard/role.guard';
 
 @Module({
   imports: [
@@ -20,11 +18,6 @@ import { RoleGuard } from './shared/guard/role.guard';
     BlogConfigModule,
     PostModule,
   ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: RoleGuard,
-    },
-  ],
+  providers: [],
 })
 export class AppModule {}

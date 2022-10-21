@@ -1,5 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -9,23 +10,20 @@ export class RoleGuard implements CanActivate {
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
+    const roles = this.reflector.getAllAndOverride<string[]>('roles', [
+      context.getHandler(),  // method-scoped
+      context.getClass(),    // controller-scoped
+    ]);
     if (!roles) {
       return true;
     }
     const req = context.switchToHttp().getRequest();
-    // req.user가 undefined 뜸
-    const user = {
-      userSn: 1,
-      userRole: [
-        { roleId: 'ROLE_ADMIN' }
-      ]
-    };
+    const user: User = req.user;
     if (!user) {
       throw new ForbiddenException('사용자를 찾을 수 없습니다.');
     }
 
-    // roleId 속성을 제외한 string만 추출
+    // roleId 속성 제외 string만 추출
     const userRoles: string[] = user.userRole.map(d => d.roleId);
 
     return hasRole(roles, userRoles);
@@ -33,6 +31,7 @@ export class RoleGuard implements CanActivate {
 
 }
 
-const hasRole = (roles: string[], userRoles: string[]) => {
+// 권한을 검증한다.
+const hasRole = (roles: string[], userRoles: string[]): boolean => {
   return roles.some((role) => userRoles.includes(role));
 };
