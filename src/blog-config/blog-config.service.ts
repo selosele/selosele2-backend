@@ -5,6 +5,7 @@ import { BlogConfigRepository } from './blog-config.repository';
 
 @Injectable()
 export class BlogConfigService {
+  
   constructor(
     @InjectRepository(BlogConfigRepository)
     private readonly blogConfigRepository: BlogConfigRepository,

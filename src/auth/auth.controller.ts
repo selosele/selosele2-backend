@@ -87,7 +87,7 @@ export class AuthController {
   @Post('test')
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(RoleEnum.ROLE_ADMIN, RoleEnum.ROLE_TEST)
-  test(@UserInfo() user: User) {
+  jwtTest(@UserInfo() user: User) {
     console.log('user.userId >>>', user.userId);
   }
 
