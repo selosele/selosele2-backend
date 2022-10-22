@@ -6,10 +6,16 @@ import { PostRepository } from './post.repository';
 
 @Injectable()
 export class PostService {
+  
   constructor(
     @InjectRepository(PostRepository)
     private readonly postRepository: PostRepository,
   ) {}
+
+  // 개수별 포스트 목록을 조회한다.
+  async listPostByLimit(limit: number): Promise<Post[]> {
+    return await this.postRepository.listPostByLimit(limit);
+  }
 
   // 포스트를 검색한다.
   async listPostSearch(searchPostDto: SearchPostDto): Promise<Post[]> {
@@ -22,8 +28,8 @@ export class PostService {
   }
 
   // 연도별 포스트 목록을 조회한다.
-  async listPostsByYear(year: string): Promise<Post[]> {
-    return await this.postRepository.listPostsByYear(year);
+  async listPostByYear(year: string): Promise<Post[]> {
+    return await this.postRepository.listPostByYear(year);
   }
 
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Param, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Query, Param, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Post } from 'src/post/post.entity';
 import { SearchPostDto } from './dto/search-post.dto';
@@ -8,6 +8,24 @@ import { PostService } from './post.service';
 @ApiTags('포스트 API')
 export class PostsController {
   constructor(private readonly postService: PostService) {}
+
+  @Get('list/:limit')
+  @ApiOperation({
+    summary: '개수별 포스트 조회 API',
+    description: '개수별 포스트 목록을 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: Post,
+    description: '개수별 포스트 목록을 조회한다.',
+  })
+  @ApiParam({
+    type: Number,
+    name: 'limit',
+    description: '개수',
+  })
+  listPostByLimit(@Param('limit', ParseIntPipe) limit: number): Promise<Post[]> {
+    return this.postService.listPostByLimit(limit);
+  }
 
   @Get('search')
   @ApiOperation({
@@ -54,8 +72,8 @@ export class PostsController {
     name: 'year',
     description: '연도',
   })
-  listPostsByYear(@Param('year') year: string): Promise<Post[]> {
-    return this.postService.listPostsByYear(year);
+  listPostByYear(@Param('year') year: string): Promise<Post[]> {
+    return this.postService.listPostByYear(year);
   }
 
 }

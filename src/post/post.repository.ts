@@ -6,6 +6,16 @@ import { Post } from './post.entity';
 @CustomRepository(Post)
 export class PostRepository extends Repository<Post> {
 
+  // 개수별 포스트 목록을 조회한다.
+  async listPostByLimit(limit: number): Promise<Post[]> {
+    return await this.find({
+      order: {
+        regDate: 'DESC',
+      },
+      take: limit,
+    });
+  }
+
   // 포스트를 검색한다.
   async listPostSearch(searchPostDto: SearchPostDto): Promise<Post[]> {
     return await this.createQueryBuilder('post')
@@ -14,7 +24,7 @@ export class PostRepository extends Repository<Post> {
         "title",
         "DATE_FORMAT(reg_date, '%Y.%m.%d') AS regDate",
         "DATE_FORMAT(reg_date, '%Y-%m-%d %H:%i:%S') AS dateTime",
-        "SUBSTR(\`raw_text\`, 1, 180) AS rawText",
+        "SUBSTR(raw_text, 1, 180) AS rawText",
         "og_img_url",
       ])
       .where("title LIKE :title", { title: `%${searchPostDto.q}%` })
@@ -26,17 +36,16 @@ export class PostRepository extends Repository<Post> {
   // 포스트의 연도 및 개수를 조회한다.
   async listYearAndCount(): Promise<Post[]> {
     return await this.createQueryBuilder('post')
-      .select([
-        "DISTINCT(YEAR(reg_date)) AS year",
-        "COUNT('year') AS count",
-      ])
+      .select("YEAR(reg_date) AS year")
+        .distinct(true)
+      .addSelect("COUNT('year') AS count")
       .groupBy("year")
       .orderBy("year", "DESC")
       .getRawMany();
   }
 
   // 연도별 포스트 목록을 조회한다.
-  async listPostsByYear(year: string): Promise<Post[]> {
+  async listPostByYear(year: string): Promise<Post[]> {
     return await this.createQueryBuilder('post')
       .select([
         "id",
