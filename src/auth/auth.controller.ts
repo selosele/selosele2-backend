@@ -27,7 +27,7 @@ export class AuthController {
   constructor(
     private readonly config: ConfigService,
     private readonly authService: AuthService,
-    ) {}
+  ) {}
 
   @Get('user/:userSn')
   @ApiOperation({
