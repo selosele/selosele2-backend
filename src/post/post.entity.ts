@@ -1,5 +1,6 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { PostCategory } from 'src/category/post-category.entity';
 
 @Entity('post')
 export class Post extends BaseEntity {
@@ -113,5 +114,12 @@ export class Post extends BaseEntity {
     description: '포스트 상단고정 여부'
   })
   pinYn?: string;
+
+  @OneToMany(() => PostCategory, postCategory => postCategory.post)
+  @JoinColumn({ referencedColumnName: 'post_id' })
+  @ApiProperty({
+    description: '포스트 카테고리'
+  })
+  postCategory?: PostCategory[];
   
 }

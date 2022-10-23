@@ -78,4 +78,22 @@ export class PostsController {
     return this.postService.listPostByYear(year);
   }
 
+  @Get('category/list/:categoryId')
+  @ApiOperation({
+    summary: '카테고리별 포스트 목록 조회 API',
+    description: '카테고리별 포스트 목록을 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: Post,
+    description: '카테고리별 포스트 목록을 조회한다.',
+  })
+  @ApiParam({
+    type: Number,
+    name: 'categoryId',
+    description: '카테고리 ID',
+  })
+  listPostByCategory(@Param('categoryId', ParseIntPipe) categoryId: number): Promise<Post[]> {
+    return this.postService.listPostByCategory(categoryId);
+  }
+
 }

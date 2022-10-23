@@ -32,4 +32,9 @@ export class PostService {
     return await this.postRepository.listPostByYear(year);
   }
 
+  // 카테고리별 포스트 목록을 조회한다.
+  async listPostByCategory(categoryId: number): Promise<Post[]> {
+    return await this.postRepository.listPostByCategory(categoryId);
+  }
+
 }

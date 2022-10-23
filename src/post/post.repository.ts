@@ -58,4 +58,28 @@ export class PostRepository extends Repository<Post> {
       .getRawMany();
   }
 
+  // 카테고리별 포스트 목록을 조회한다.
+  async listPostByCategory(categoryId: number): Promise<Post[]> {
+    return await this.find({
+      relations: ['postCategory'],
+      select: {
+        postCategory: {
+          postId: false,
+          categoryId: false,
+          category: {
+            id: false,
+            nm: false,
+            regDate: false,
+          },
+        },
+      },
+      where: {
+        postCategory: { categoryId },
+      },
+      order: {
+        regDate: 'DESC',
+      },
+    });
+  }
+
 }
