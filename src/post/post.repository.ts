@@ -1,4 +1,5 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
+import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { Repository } from 'typeorm';
 import { SearchPostDto } from './dto/search-post.dto';
 import { Post } from './post.entity';
@@ -22,10 +23,9 @@ export class PostRepository extends Repository<Post> {
       .select([
         "id",
         "title",
-        "DATE_FORMAT(reg_date, '%Y.%m.%d') AS regDate",
-        "DATE_FORMAT(reg_date, '%Y-%m-%d %H:%i:%S') AS dateTime",
+        "reg_date AS regDate",
         "SUBSTR(raw_text, 1, 180) AS rawText",
-        "og_img_url",
+        "og_img_url AS ogImgUrl",
       ])
       .where("title LIKE :title", { title: `%${searchPostDto.q}%` })
       .orWhere("raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` })
@@ -50,7 +50,7 @@ export class PostRepository extends Repository<Post> {
       .select([
         "id",
         "title",
-        "secret_yn",
+        "secret_yn AS secretYn",
         "DATE_FORMAT(reg_date, '%Y.%m.%d') AS regDate"
       ])
       .where("YEAR(reg_date) = :year", { year })
@@ -59,7 +59,7 @@ export class PostRepository extends Repository<Post> {
   }
 
   // 카테고리별 포스트 목록을 조회한다.
-  async listPostByCategory(categoryId: number): Promise<Post[]> {
+  async listPostByCategory(categoryId: number, paginationDto: PaginationDto): Promise<Post[]> {
     return await this.find({
       relations: ['postCategory'],
       select: {
@@ -79,6 +79,8 @@ export class PostRepository extends Repository<Post> {
       order: {
         regDate: 'DESC',
       },
+      skip: paginationDto.skipSize,
+      take: paginationDto.pageSize,
     });
   }
 

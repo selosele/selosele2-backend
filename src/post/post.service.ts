@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { SearchPostDto } from './dto/search-post.dto';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
@@ -33,8 +34,8 @@ export class PostService {
   }
 
   // 카테고리별 포스트 목록을 조회한다.
-  async listPostByCategory(categoryId: number): Promise<Post[]> {
-    return await this.postRepository.listPostByCategory(categoryId);
+  async listPostByCategory(categoryId: number, paginationDto: PaginationDto): Promise<Post[]> {
+    return await this.postRepository.listPostByCategory(categoryId, paginationDto);
   }
 
 }

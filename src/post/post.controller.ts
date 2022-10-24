@@ -1,6 +1,7 @@
 import { Controller, Get, Query, Param, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Post } from 'src/post/post.entity';
+import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { SearchPostDto } from './dto/search-post.dto';
 import { PostService } from './post.service';
 
@@ -92,8 +93,16 @@ export class PostsController {
     name: 'categoryId',
     description: '카테고리 ID',
   })
-  listPostByCategory(@Param('categoryId', ParseIntPipe) categoryId: number): Promise<Post[]> {
-    return this.postService.listPostByCategory(categoryId);
+  @ApiQuery({
+    type: PaginationDto,
+    description: '페이지네이션 DTO',
+  })
+  listPostByCategory(
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+    @Query() paginationDto: PaginationDto
+  ): Promise<Post[]> {
+    //console.log('paginationDto >>>', paginationDto);
+    return this.postService.listPostByCategory(categoryId, paginationDto);
   }
 
 }
