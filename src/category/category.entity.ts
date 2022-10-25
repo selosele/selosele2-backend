@@ -28,7 +28,7 @@ export class Category extends BaseEntity {
   regDate?: Date;
 
   @OneToMany(() => PostCategory, postCategory => postCategory.category)
-  @JoinColumn({ referencedColumnName: 'post_id' })
+  @JoinColumn({ referencedColumnName: 'category_id' })
   @ApiProperty({
     description: '포스트 카테고리'
   })

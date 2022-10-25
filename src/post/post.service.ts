@@ -34,7 +34,7 @@ export class PostService {
   }
 
   // 카테고리별 포스트 목록을 조회한다.
-  async listPostByCategory(categoryId: number, paginationDto: PaginationDto): Promise<Post[]> {
+  async listPostByCategory(categoryId: number, paginationDto: PaginationDto): Promise<[Post[], number]> {
     return await this.postRepository.listPostByCategory(categoryId, paginationDto);
   }
 

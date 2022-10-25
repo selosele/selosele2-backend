@@ -26,7 +26,7 @@ export class PostCategory extends BaseEntity {
   post?: Post;
 
   @ManyToOne(() => Category, category => category.postCategory)
-  @JoinColumn({ name: 'post_id' })
+  @JoinColumn({ name: 'category_id' })
   @ApiProperty({
     description: '카테고리'
   })

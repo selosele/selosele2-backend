@@ -1,17 +1,24 @@
+import { Type } from "class-transformer";
+import { IsInt, IsOptional } from "class-validator";
+
 // 페이지네이션 DTO
 export class PaginationDto {
 
-  constructor() {
-    this.skipSize = (this.page - 1) * this.pageSize;
-  }
-
   // 페이지 번호
-  page?: number;
+  @Type(() => Number)
+  @IsInt()
+  @IsOptional()
+  page?: number | 1;
 
   // 페이지당 목록 수
-  pageSize?: number;
+  @Type(() => Number)
+  @IsInt()
+  @IsOptional()
+  pageSize?: number | 10;
 
   // 건너뛸 목록 수
-  skipSize?: number;
+  getSkipSize(): number {
+    return (this.page - 1) * this.pageSize;
+  }
 
 }

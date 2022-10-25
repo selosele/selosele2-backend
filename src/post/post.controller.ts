@@ -100,8 +100,7 @@ export class PostsController {
   listPostByCategory(
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Query() paginationDto: PaginationDto
-  ): Promise<Post[]> {
-    //console.log('paginationDto >>>', paginationDto);
+    ): Promise<[Post[], number]> {
     return this.postService.listPostByCategory(categoryId, paginationDto);
   }
 

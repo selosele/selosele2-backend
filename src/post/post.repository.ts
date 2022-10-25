@@ -51,7 +51,7 @@ export class PostRepository extends Repository<Post> {
         "id",
         "title",
         "secret_yn AS secretYn",
-        "DATE_FORMAT(reg_date, '%Y.%m.%d') AS regDate"
+        "reg_date AS regDate"
       ])
       .where("YEAR(reg_date) = :year", { year })
       .orderBy("reg_date", "DESC")
@@ -59,16 +59,20 @@ export class PostRepository extends Repository<Post> {
   }
 
   // 카테고리별 포스트 목록을 조회한다.
-  async listPostByCategory(categoryId: number, paginationDto: PaginationDto): Promise<Post[]> {
-    return await this.find({
-      relations: ['postCategory'],
+  async listPostByCategory(categoryId: number, paginationDto: PaginationDto): Promise<[Post[], number]> {
+    return await this.findAndCount({
+      relations: {
+        postCategory: {
+          category: true,
+        }
+      },
       select: {
         postCategory: {
           postId: false,
-          categoryId: false,
+          categoryId: true,
           category: {
             id: false,
-            nm: false,
+            nm: true,
             regDate: false,
           },
         },
@@ -79,8 +83,8 @@ export class PostRepository extends Repository<Post> {
       order: {
         regDate: 'DESC',
       },
-      skip: paginationDto.skipSize,
       take: paginationDto.pageSize,
+      skip: paginationDto.getSkipSize(),
     });
   }
 
