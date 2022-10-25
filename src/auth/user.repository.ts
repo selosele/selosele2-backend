@@ -20,7 +20,7 @@ export class UserRepository extends Repository<User> {
         },
       },
       where: [
-        { userSn: userKey as number },
+        { userSn: userKey as number }, // or
         { userId: userKey as string },
       ],
     });
