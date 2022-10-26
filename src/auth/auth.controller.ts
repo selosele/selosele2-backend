@@ -24,6 +24,7 @@ import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
 @Controller('api/auth')
 @ApiTags('인증·인가 API')
 export class AuthController {
+  
   constructor(
     private readonly config: ConfigService,
     private readonly authService: AuthService,
@@ -61,7 +62,7 @@ export class AuthController {
     description: '사용자 생성 DTO',
   })
   signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
-    if (this.config.get<string>('NODE_ENV') === 'production') {
+    if ('production' === this.config.get<string>('NODE_ENV')) {
       throw new ForbiddenException();
     }
     return this.authService.addUser(authCredentialsDto);

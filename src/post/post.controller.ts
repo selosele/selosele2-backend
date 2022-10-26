@@ -8,6 +8,7 @@ import { PostService } from './post.service';
 @Controller('api/post')
 @ApiTags('포스트 API')
 export class PostsController {
+  
   constructor(
     private readonly postService: PostService,
   ) {}

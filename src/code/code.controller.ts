@@ -6,6 +6,7 @@ import { CodeService } from './code.service';
 @Controller('api/code')
 @ApiTags('공통코드 API')
 export class CodeController {
+  
   constructor(
     private readonly codeService: CodeService,
   ) {}

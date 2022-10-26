@@ -4,6 +4,7 @@ import { DataSource } from "typeorm";
 import { TYPEORM_CUSTOM_REPOSITORY } from "./CustomRepository";
 
 export class CustomTypeOrmModule {
+
   public static forCustomRepository<T extends new (...args: any[]) => any>(repositories: T[]): DynamicModule {
     const providers: Provider[] = [];
 
@@ -29,4 +30,5 @@ export class CustomTypeOrmModule {
 
     return { exports: providers, module: CustomTypeOrmModule, providers };
   }
+  
 }
