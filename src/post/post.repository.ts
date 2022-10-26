@@ -45,17 +45,13 @@ export class PostRepository extends Repository<Post> {
   }
 
   // 연도별 포스트 목록을 조회한다.
-  async listPostByYear(year: string): Promise<Post[]> {
+  async listPostByYear(year: string, paginationDto: PaginationDto): Promise<[Post[], number]> {
     return await this.createQueryBuilder('post')
-      .select([
-        "id",
-        "title",
-        "secret_yn AS secretYn",
-        "reg_date AS regDate"
-      ])
       .where("YEAR(reg_date) = :year", { year })
       .orderBy("reg_date", "DESC")
-      .getRawMany();
+      .limit(paginationDto.pageSize)
+      .offset(paginationDto.getSkipSize())
+      .getManyAndCount();
   }
 
   // 카테고리별 포스트 목록을 조회한다.

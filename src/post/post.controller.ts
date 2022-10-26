@@ -76,8 +76,15 @@ export class PostsController {
     name: 'year',
     description: '연도',
   })
-  listPostByYear(@Param('year') year: string): Promise<Post[]> {
-    return this.postService.listPostByYear(year);
+  @ApiQuery({
+    type: PaginationDto,
+    description: '페이지네이션 DTO',
+  })
+  listPostByYear(
+    @Param('year') year: string,
+    @Query() paginationDto: PaginationDto
+  ): Promise<[Post[], number]> {
+    return this.postService.listPostByYear(year, paginationDto);
   }
 
   @Get('category/list/:categoryId')

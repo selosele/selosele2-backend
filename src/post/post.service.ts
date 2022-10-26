@@ -29,8 +29,8 @@ export class PostService {
   }
 
   // 연도별 포스트 목록을 조회한다.
-  async listPostByYear(year: string): Promise<Post[]> {
-    return await this.postRepository.listPostByYear(year);
+  async listPostByYear(year: string, paginationDto: PaginationDto): Promise<[Post[], number]> {
+    return await this.postRepository.listPostByYear(year, paginationDto);
   }
 
   // 카테고리별 포스트 목록을 조회한다.
