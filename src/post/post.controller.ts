@@ -112,4 +112,29 @@ export class PostsController {
     return this.postService.listPostByCategory(categoryId, paginationDto);
   }
 
+  @Get('tag/list/:tagId')
+  @ApiOperation({
+    summary: '태그별 포스트 목록 조회 API',
+    description: '태그별 포스트 목록을 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: Post,
+    description: '태그별 포스트 목록을 조회한다.',
+  })
+  @ApiParam({
+    type: Number,
+    name: 'tagId',
+    description: '태그 ID',
+  })
+  @ApiQuery({
+    type: PaginationDto,
+    description: '페이지네이션 DTO',
+  })
+  listPostByTag(
+    @Param('tagId', ParseIntPipe) tagId: number,
+    @Query() paginationDto: PaginationDto
+    ): Promise<[Post[], number]> {
+    return this.postService.listPostByTag(tagId, paginationDto);
+  }
+
 }

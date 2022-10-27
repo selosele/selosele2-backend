@@ -1,6 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { PostCategory } from 'src/category/post-category.entity';
+import { PostTag } from 'src/tag/post-tag.entity';
 
 @Entity('post')
 export class Post extends BaseEntity {
@@ -121,5 +122,12 @@ export class Post extends BaseEntity {
     description: '포스트 카테고리'
   })
   postCategory?: PostCategory[];
+
+  @OneToMany(() => PostTag, postTag => postTag.post)
+  @JoinColumn({ referencedColumnName: 'post_id' })
+  @ApiProperty({
+    description: '포스트 태그'
+  })
+  postTag?: PostTag[];
   
 }

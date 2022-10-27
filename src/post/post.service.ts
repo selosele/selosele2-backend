@@ -38,4 +38,9 @@ export class PostService {
     return await this.postRepository.listPostByCategory(categoryId, paginationDto);
   }
 
+  // 태그별 포스트 목록을 조회한다.
+  async listPostByTag(tagId: number, paginationDto: PaginationDto): Promise<[Post[], number]> {
+    return await this.postRepository.listPostByTag(tagId, paginationDto);
+  }
+
 }

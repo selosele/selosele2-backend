@@ -84,4 +84,34 @@ export class PostRepository extends Repository<Post> {
     });
   }
 
+  // 태그별 포스트 목록을 조회한다.
+  async listPostByTag(tagId: number, paginationDto: PaginationDto): Promise<[Post[], number]> {
+    return await this.findAndCount({
+      relations: {
+        postTag: {
+          tag: true,
+        }
+      },
+      select: {
+        postTag: {
+          postId: false,
+          tagId: true,
+          tag: {
+            id: false,
+            nm: true,
+            regDate: false,
+          },
+        },
+      },
+      where: {
+        postTag: { tagId },
+      },
+      order: {
+        regDate: 'DESC',
+      },
+      take: paginationDto.pageSize,
+      skip: paginationDto.getSkipSize(),
+    });
+  }
+
 }
