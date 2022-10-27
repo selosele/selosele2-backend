@@ -12,5 +12,5 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   synchronize: false,
   namingStrategy: new SnakeNamingStrategy(),
   timezone: '+09:00', //'Asia/Seoul'
-  //logging: process.env.NODE_ENV === 'development',
+  //logging: 'development' === process.env.NODE_ENV,
 };
