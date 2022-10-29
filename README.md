@@ -6,7 +6,8 @@
 - 어플리케이션 명 : selosele2
 - Backend : Nest.js
 - Frontend : Vue
-- DBMS : MariaDB (& TypeORM)
+- DBMS : MariaDB
+- ORM : TypeORM
 - Port: 3000
 - API URI: ```/api/**```
 - [백엔드 API 문서](http://localhost:3000/api-docs)
