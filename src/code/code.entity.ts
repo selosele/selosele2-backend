@@ -11,10 +11,10 @@ export class Code extends BaseEntity {
   id?: string;
 
   @Column({
-    comment: '코드 접두사'
+    comment: '코드 접두어'
   })
   @ApiProperty({
-    description: '코드 접두사'
+    description: '코드 접두어'
   })
   prefix?: string;
 

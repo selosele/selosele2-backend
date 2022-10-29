@@ -13,20 +13,33 @@ export class CodeController {
 
   @Get('list/:prefix')
   @ApiOperation({
-    summary: '코드 접두사와 매칭되는 공통코드 목록 조회 API',
-    description: '코드 접두사와 매칭되는 공통코드 목록을 조회한다.'
+    summary: '코드 접두어와 매칭되는 공통코드 목록 조회 API',
+    description: '코드 접두어와 매칭되는 공통코드 목록을 조회한다.'
   })
   @ApiCreatedResponse({
     type: Code,
-    description: '코드 접두사와 매칭되는 공통코드 목록을 조회한다.',
+    description: '코드 접두어와 매칭되는 공통코드 목록을 조회한다.',
   })
   @ApiParam({
     type: String,
     name: 'prefix',
-    description: '코드 접두사',
+    description: '코드 접두어',
   })
   listByPrefix(@Param('prefix') prefix: string): Promise<Code[]> {
     return this.codeService.listByPrefix(prefix);
+  }
+
+  @Get('list')
+  @ApiOperation({
+    summary: '공통코드 목록 조회 API',
+    description: '공통코드 목록을 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: Code,
+    description: '공통코드 목록을 조회한다.',
+  })
+  listCode(): Promise<Code[]> {
+    return this.codeService.listCode();
   }
 
 }
