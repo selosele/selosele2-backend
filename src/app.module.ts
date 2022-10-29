@@ -9,6 +9,7 @@ import { typeORMConfig } from './configs/typeorm.config';
 import { WidgetModule } from './widget/widget.module';
 import { CategoryModule } from './category/category.module';
 import { TagModule } from './tag/tag.module';
+import { SatisfactionModule } from './satisfaction/satisfaction.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TagModule } from './tag/tag.module';
     WidgetModule,
     CategoryModule,
     TagModule,
+    SatisfactionModule,
   ],
   providers: [],
 })

@@ -1,0 +1,53 @@
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+
+@Entity('satisfaction')
+export class Satisfaction extends BaseEntity {
+
+  @PrimaryGeneratedColumn()
+  @ApiProperty({
+    description: 'id'
+  })
+  id?: number;
+
+  @Column({
+    comment: '페이지 URL'
+  })
+  @ApiProperty({
+    description: '페이지 URL'
+  })
+  pagePath?: string;
+
+  @Column({
+    comment: '만족도 점수'
+  })
+  @ApiProperty({
+    description: '만족도 점수'
+  })
+  score?: string;
+
+  @Column({
+    comment: '만족도 의견'
+  })
+  @ApiProperty({
+    description: '만족도 의견'
+  })
+  comment?: string;
+
+  @Column({
+    comment: '참여자 IP'
+  })
+  @ApiProperty({
+    description: '참여자 IP'
+  })
+  ip?: string;
+
+  @CreateDateColumn({
+    comment: '참여일시'
+  })
+  @ApiProperty({
+    description: '참여일시'
+  })
+  regDate?: Date;
+  
+}
