@@ -4,6 +4,7 @@ import { InsertResult } from 'typeorm';
 import { AddSatisfactiontDto } from './dto/add-satisfaction.dto';
 import { SatisfactionRepository } from './satisfaction.repository';
 import * as sanitizeHtml from 'sanitize-html';
+import { Satisfaction } from './satisfaction.entity';
 
 @Injectable()
 export class SatisfactionService {
@@ -26,6 +27,11 @@ export class SatisfactionService {
   // 만족도조사 참여 여부를 조회한다.
   async countSatisfaction(addSatisfactiontDto: AddSatisfactiontDto): Promise<number> {
     return await this.satisfactionRepository.countSatisfaction(addSatisfactiontDto);
+  }
+
+  // 만족도조사 목록을 조회한다.
+  async listSatisfaction(): Promise<Satisfaction[]> {
+    return await this.satisfactionRepository.listSatisfaction();
   }
 
 }

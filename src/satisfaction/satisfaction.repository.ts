@@ -20,4 +20,16 @@ export class SatisfactionRepository extends Repository<Satisfaction> {
       .getCount();
   }
 
+  // 만족도조사 목록을 조회한다.
+  async listSatisfaction(): Promise<Satisfaction[]> {
+    return await this.find({
+      select: {
+        ip: false,
+      },
+      order: {
+        regDate: 'DESC',
+      },
+    });
+  }
+
 }
