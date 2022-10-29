@@ -6,7 +6,7 @@ import { User } from 'src/auth/user.entity';
 export class RoleGuard implements CanActivate {
 
   constructor(
-    private reflector: Reflector
+    private reflector: Reflector,
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
