@@ -5,6 +5,7 @@ import { AddSatisfactiontDto } from './dto/add-satisfaction.dto';
 import { SatisfactionRepository } from './satisfaction.repository';
 import * as sanitizeHtml from 'sanitize-html';
 import { Satisfaction } from './satisfaction.entity';
+import { SearchSatisfactiontDto } from './dto/search-satisfaction.dto';
 
 @Injectable()
 export class SatisfactionService {
@@ -30,8 +31,8 @@ export class SatisfactionService {
   }
 
   // 만족도조사 목록을 조회한다.
-  async listSatisfaction(): Promise<Satisfaction[]> {
-    return await this.satisfactionRepository.listSatisfaction();
+  async listSatisfaction(searchSatisfactiontDto: SearchSatisfactiontDto): Promise<Satisfaction[]> {
+    return await this.satisfactionRepository.listSatisfaction(searchSatisfactiontDto);
   }
 
 }

@@ -1,5 +1,5 @@
-import { Body, Controller, ForbiddenException, Post, Get, ValidationPipe, UseGuards } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Query, Controller, ForbiddenException, Post, Get, ValidationPipe, UseGuards } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { InsertResult } from 'typeorm';
 import { AddSatisfactiontDto } from './dto/add-satisfaction.dto';
 import { Satisfaction } from './satisfaction.entity';
@@ -10,6 +10,7 @@ import { Roles } from 'src/shared/decorator/auth/roles.decorator';
 import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
 import { RoleGuard } from 'src/shared/guard/role.guard';
 import { RoleEnum } from 'src/auth/role.entity';
+import { SearchSatisfactiontDto } from './dto/search-satisfaction.dto';
 
 @Controller('api/satisfaction')
 @ApiTags('만족도조사 API')
@@ -55,8 +56,13 @@ export class SatisfactionController {
     type: Satisfaction,
     description: '만족도조사 목록을 조회한다.',
   })
-  listSatisfaction(): Promise<Satisfaction[]> {
-    return this.satisfactionService.listSatisfaction();
+  @ApiQuery({
+    type: SearchSatisfactiontDto,
+    name: 'searchSatisfactiontDto',
+    description: '만족도조사 검색 DTO',
+  })
+  listSatisfaction(@Query(ValidationPipe) searchSatisfactiontDto: SearchSatisfactiontDto): Promise<Satisfaction[]> {
+    return this.satisfactionService.listSatisfaction(searchSatisfactiontDto);
   }
 
 }
