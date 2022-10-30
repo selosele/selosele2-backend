@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Category } from './category.entity';
 import { CategoryService } from './category.service';
 

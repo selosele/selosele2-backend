@@ -25,8 +25,8 @@ export class CodeController {
     name: 'prefix',
     description: '코드 접두어',
   })
-  listByPrefix(@Param('prefix') prefix: string): Promise<Code[]> {
-    return this.codeService.listByPrefix(prefix);
+  listCodeByPrefix(@Param('prefix') prefix: string): Promise<Code[]> {
+    return this.codeService.listCodeByPrefix(prefix);
   }
 
   @Get('list')

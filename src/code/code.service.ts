@@ -12,8 +12,8 @@ export class CodeService {
   ) {}
 
   // 코드 접두어와 매칭되는 공통코드 목록을 조회한다.
-  async listByPrefix(prefix: string): Promise<Code[]> {
-    return await this.codeRepository.listByPrefix(prefix);
+  async listCodeByPrefix(prefix: string): Promise<Code[]> {
+    return await this.codeRepository.listCodeByPrefix(prefix);
   }
 
   // 공통코드 목록을 조회한다.

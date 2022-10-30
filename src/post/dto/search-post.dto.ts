@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 // 포스트 검색 DTO
 export class SearchPostDto {
@@ -12,6 +12,7 @@ export class SearchPostDto {
   q?: string;
 
   // 대소문자 구분 여부
+  @IsOptional()
   c?: string;
 
 }
