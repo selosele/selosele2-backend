@@ -54,7 +54,7 @@ export class AuthController {
     description: '사용자를 생성한다.',
   })
   @ApiCreatedResponse({
-    type: User,
+    type: InsertResult,
     description: '사용자를 생성한다.',
   })
   @ApiBody({
