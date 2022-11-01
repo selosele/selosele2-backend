@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult } from 'typeorm';
 import { Code } from './code.entity';
 import { CodeRepository } from './code.repository';
+import { RemoveCodetDto } from './dto/remove-code.dto';
 
 @Injectable()
 export class CodeService {
@@ -19,6 +21,17 @@ export class CodeService {
   // 공통코드 목록을 조회한다.
   async listCode(): Promise<Code[]> {
     return await this.codeRepository.listCode();
+  }
+
+  // 공통코드를 삭제한다.
+  async removeCode(removeCodetDto: RemoveCodetDto[]): Promise<DeleteResult> {
+    let idList = [];
+
+    removeCodetDto.forEach((item,idx) => {
+      idList.push(item.id);
+    });
+    
+    return await this.codeRepository.removeCode(idList);
   }
 
 }

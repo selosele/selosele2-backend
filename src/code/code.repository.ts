@@ -1,5 +1,5 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { Code } from './code.entity';
 
 @CustomRepository(Code)
@@ -19,6 +19,11 @@ export class CodeRepository extends Repository<Code> {
         id: 'ASC',
       },
     });
+  }
+
+  // 공통코드를 삭제한다.
+  async removeCode(id: string[]): Promise<DeleteResult> {
+    return await this.delete(id);
   }
 
 }
