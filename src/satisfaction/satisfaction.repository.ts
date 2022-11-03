@@ -24,13 +24,11 @@ export class SatisfactionRepository extends Repository<Satisfaction> {
   // 만족도조사 목록을 조회한다.
   async listSatisfaction(searchSatisfactiontDto: SearchSatisfactiontDto): Promise<Satisfaction[]> {
     let query = this.createQueryBuilder('satisfaction')
-      .select([
-        "id",
-        "page_path AS pagePath",
-        "score",
-        "comment",
-        "reg_date AS regDate",
-      ]);
+      .select("id")
+        .addSelect("page_path", "pagePath")
+        .addSelect("score")
+        .addSelect("comment")
+        .addSelect("reg_date", "regDate")
 
     if ('Y' === searchSatisfactiontDto.isToday) {
       query = query
