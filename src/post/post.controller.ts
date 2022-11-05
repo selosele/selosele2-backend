@@ -45,8 +45,16 @@ export class PostsController {
     name: 'searchPostDto',
     description: '포스트 검색 DTO',
   })
-  listPostSearch(@Query(ValidationPipe) searchPostDto: SearchPostDto): Promise<Post[]> {
-    return this.postService.listPostSearch(searchPostDto);
+  @ApiQuery({
+    type: PaginationDto,
+    name: 'paginationDto',
+    description: '페이지네이션 DTO',
+  })
+  listPostSearch(
+    @Query(ValidationPipe) searchPostDto: SearchPostDto,
+    @Query(ValidationPipe) paginationDto: PaginationDto,
+  ): Promise<[Post[], number]> {
+    return this.postService.listPostSearch(searchPostDto, paginationDto);
   }
 
   @Get('year/list')

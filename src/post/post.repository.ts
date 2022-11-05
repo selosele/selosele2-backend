@@ -1,9 +1,5 @@
-import { Category } from 'src/category/category.entity';
-import { PostCategory } from 'src/category/post-category.entity';
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
-import { PostTag } from 'src/tag/post-tag.entity';
-import { Tag } from 'src/tag/tag.entity';
 import { Repository } from 'typeorm';
 import { SearchPostDto } from './dto/search-post.dto';
 import { Post } from './post.entity';
@@ -26,60 +22,70 @@ export class PostRepository extends Repository<Post> {
   }
 
   // 포스트를 검색한다.
-  async listPostSearch(searchPostDto: SearchPostDto): Promise<Post[]> {
+  async listPostSearch(
+    searchPostDto: SearchPostDto,
+    paginationDto: PaginationDto,
+  ): Promise<[Post[], number]> {
     let query = this.createQueryBuilder('post')
       .select("post.id", "id")
-        .distinct(true)
       .addSelect("post.title", "title")
       .addSelect("post.reg_date", "regDate")
       .addSelect("SUBSTR(post.raw_text, 1, 180)", "rawText")
       .addSelect("post.og_img_url", "ogImgUrl")
 
+    const caseSensitive = 'Y' === searchPostDto.c ? 'BINARY ' : '';
+
     // 전체 검색
     if ('001' === searchPostDto.t) {
       query = query
-        .leftJoin(PostCategory, "post_category", "post_category.post_id = post.id")
-        .leftJoin(Category, "category", "category.id = post_category.category_id")
-        .leftJoin(PostTag, "post_tag", "post_tag.post_id = post.id")
-        .leftJoin(Tag, "tag", "tag.id = post_tag.tag_id")
-        .where("post.title LIKE :title", { title: `%${searchPostDto.q}%` })
-        .orWhere("post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` })
-        .orWhere("category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
-        .orWhere("tag.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
+        .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
+        .leftJoin("post.postTag", "postTag", "postTag.post_id = post.id")
+        .leftJoin("postCategory.category", "category", "category.id = postCategory.category_id")
+        .leftJoin("postTag.tag", "tag", "tag.id = postTag.tag_id")
+        .where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` })
+        .orWhere(caseSensitive + "post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` })
+        .orWhere(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
+        .orWhere(caseSensitive + "tag.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
     }
     
     // 제목으로 검색
     if ('002' === searchPostDto.t) {
       query = query
-        .where("post.title LIKE :title", { title: `%${searchPostDto.q}%` })
+        .where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` })
     }
 
     // 내용으로 검색
     if ('003' === searchPostDto.t) {
       query = query
-        .where("post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` })
+        .where(caseSensitive + "post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` })
     }
 
     // 카테고리로 검색
     if ('004' === searchPostDto.t) {
       query = query
-        .innerJoin(PostCategory, "post_category", "post_category.post_id = post.id")
-        .innerJoin(Category, "category", "category.id = post_category.category_id")
-        .where("category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
+        .innerJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
+        .innerJoin("postCategory.category", "category", "category.id = postCategory.category_id")
+        .where(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
     }
 
     // 태그로 검색
     if ('005' === searchPostDto.t) {
       query = query
-        .innerJoin(PostTag, "post_tag", "post_tag.post_id = post.id")
-        .innerJoin(Tag, "tag", "tag.id = post_tag.tag_id")
-        .where("tag.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
+        .innerJoin("post.postTag", "postTag", "postTag.post_id = post.id")
+        .innerJoin("postTag.tag", "tag", "tag.id = postTag.tag_id")
+        .where(caseSensitive + "tag.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
     }
 
     query = query
-      .orderBy("post.reg_date", "DESC");
+      .groupBy("post.id")
+      .orderBy("post.reg_date", "DESC")
+      .limit(paginationDto.pageSize)
+      .offset(paginationDto.getSkipSize());
 
-    return await query.getRawMany();
+    return await Promise.all([
+      await query.getRawMany(),
+      await query.getCount(),
+    ]);
   }
 
   // 포스트의 연도 및 개수를 조회한다.
@@ -94,7 +100,10 @@ export class PostRepository extends Repository<Post> {
   }
 
   // 연도별 포스트 목록을 조회한다.
-  async listPostByYear(year: string, paginationDto: PaginationDto): Promise<[Post[], number]> {
+  async listPostByYear(
+    year: string, 
+    paginationDto: PaginationDto
+  ): Promise<[Post[], number]> {
     return await this.createQueryBuilder('post')
       .where("YEAR(reg_date) = :year", { year })
       .orderBy("reg_date", "DESC")
@@ -104,7 +113,10 @@ export class PostRepository extends Repository<Post> {
   }
 
   // 카테고리별 포스트 목록을 조회한다.
-  async listPostByCategory(categoryId: number, paginationDto: PaginationDto): Promise<[Post[], number]> {
+  async listPostByCategory(
+    categoryId: number,
+    paginationDto: PaginationDto
+  ): Promise<[Post[], number]> {
     return await this.findAndCount({
       relations: {
         postCategory: {
@@ -134,7 +146,10 @@ export class PostRepository extends Repository<Post> {
   }
 
   // 태그별 포스트 목록을 조회한다.
-  async listPostByTag(tagId: number, paginationDto: PaginationDto): Promise<[Post[], number]> {
+  async listPostByTag(
+    tagId: number,
+    paginationDto: PaginationDto
+  ): Promise<[Post[], number]> {
     return await this.findAndCount({
       relations: {
         postTag: {
