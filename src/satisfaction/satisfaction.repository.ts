@@ -16,19 +16,14 @@ export class SatisfactionRepository extends Repository<Satisfaction> {
   async countSatisfaction(addSatisfactiontDto: AddSatisfactiontDto): Promise<number> {
     return await this.createQueryBuilder('satisfaction')
       .where("DATE_FORMAT(reg_date, '%Y-%m-%d') = DATE_FORMAT(CURRENT_TIMESTAMP(), '%Y-%m-%d')")
-      .andWhere("page_path = :page_path", { page_path: addSatisfactiontDto.pagePath })
-      .andWhere("ip = :ip", { ip: addSatisfactiontDto.ip })
+        .andWhere("page_path = :page_path", { page_path: addSatisfactiontDto.pagePath })
+        .andWhere("ip = :ip", { ip: addSatisfactiontDto.ip })
       .getCount();
   }
 
   // 만족도조사 목록을 조회한다.
   async listSatisfaction(searchSatisfactiontDto: SearchSatisfactiontDto): Promise<Satisfaction[]> {
     let query = this.createQueryBuilder('satisfaction')
-      .select("id")
-        .addSelect("page_path", "pagePath")
-        .addSelect("score")
-        .addSelect("comment")
-        .addSelect("reg_date", "regDate")
 
     if ('Y' === searchSatisfactiontDto.isToday) {
       query = query
@@ -42,7 +37,7 @@ export class SatisfactionRepository extends Repository<Satisfaction> {
     query = query
       .orderBy("reg_date", "DESC");
 
-    return await query.getRawMany();
+    return await query.getMany();
   }
 
 }

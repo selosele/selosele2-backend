@@ -35,7 +35,8 @@ export class Satisfaction extends BaseEntity {
   comment?: string;
 
   @Column({
-    comment: '참여자 IP'
+    comment: '참여자 IP',
+    select: false,
   })
   @ApiProperty({
     description: '참여자 IP'

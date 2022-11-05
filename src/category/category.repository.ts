@@ -12,9 +12,9 @@ export class CategoryRepository extends Repository<Category> {
       .select("COUNT(*)", "count")
         .addSelect("category.id", "id")
         .addSelect("category.nm", "nm")
-      .innerJoin(PostCategory, "post_category", "category.id = post_category.category_id")
+      .innerJoin(PostCategory, "postCategory", "category.id = postCategory.category_id")
       .groupBy("category.id")
-      .addGroupBy("category.nm")
+        .addGroupBy("category.nm")
       .orderBy("count", "DESC")
       .getRawMany();
   }

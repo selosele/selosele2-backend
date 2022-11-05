@@ -12,9 +12,9 @@ export class TagRepository extends Repository<Tag> {
       .select("COUNT(*)", "count")
         .addSelect("tag.id", "id")
         .addSelect("tag.nm", "nm")
-      .innerJoin(PostTag, "post_tag", "tag.id = post_tag.tag_id")
+      .innerJoin(PostTag, "postTag", "tag.id = postTag.tag_id")
       .groupBy("tag.id")
-      .addGroupBy("tag.nm")
+        .addGroupBy("tag.nm")
       .orderBy("tag.nm", "ASC")
       .getRawMany();
   }
