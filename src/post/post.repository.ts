@@ -1,11 +1,47 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { Repository } from 'typeorm';
+import { ListPostDto } from './dto/list-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
 import { Post } from './post.entity';
 
 @CustomRepository(Post)
 export class PostRepository extends Repository<Post> {
+
+  // 포스트 목록을 조회한다.
+  async listPost(
+    listPostDto: ListPostDto,
+    paginationDto: PaginationDto
+  ): Promise<[Post[], number]> {
+    let query = this.createQueryBuilder('post')
+      .select("post.id", "id")
+        .addSelect("post.title", "title")
+        .addSelect("post.reg_date", "regDate")
+        .addSelect("post.like_cnt", "likeCnt")
+        .addSelect("post.reply_cnt", "replyCnt")
+        .addSelect("SUBSTR(post.raw_text, 1, 180)", "rawText")
+        .addSelect("post.og_img_url", "ogImgUrl")
+        .addSelect("post.secret_yn", "secretYn")
+        .addSelect("post.pin_yn", "pinYn")
+      .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
+      .leftJoin("post.postTag", "postTag", "postTag.post_id = post.id");
+
+    if ('N' === listPostDto?.isLogin) {
+      query = query
+        .where("post.secret_yn = 'N'")
+    }
+
+    query = query
+      .groupBy("post.id")
+      .orderBy("post.reg_date", "DESC")
+      .limit(paginationDto.pageSize)
+      .offset(paginationDto.getSkipSize());
+
+    return await Promise.all([
+      await query.getRawMany(),
+      await query.getCount(),
+    ]);
+  }
 
   // 개수별 포스트 목록을 조회한다.
   async listPostByLimit(limit: number): Promise<Post[]> {
@@ -30,8 +66,12 @@ export class PostRepository extends Repository<Post> {
       .select("post.id", "id")
       .addSelect("post.title", "title")
       .addSelect("post.reg_date", "regDate")
+      .addSelect("post.like_cnt", "likeCnt")
+      .addSelect("post.reply_cnt", "replyCnt")
       .addSelect("SUBSTR(post.raw_text, 1, 180)", "rawText")
       .addSelect("post.og_img_url", "ogImgUrl")
+      .addSelect("post.secret_yn", "secretYn")
+      .addSelect("post.pin_yn", "pinYn")
 
     const caseSensitive = 'Y' === searchPostDto.c ? 'BINARY ' : '';
 
@@ -63,16 +103,16 @@ export class PostRepository extends Repository<Post> {
     // 카테고리로 검색
     if ('004' === searchPostDto.t) {
       query = query
-        .innerJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
-        .innerJoin("postCategory.category", "category", "category.id = postCategory.category_id")
+        .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
+        .leftJoin("postCategory.category", "category", "category.id = postCategory.category_id")
         .where(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
     }
 
     // 태그로 검색
     if ('005' === searchPostDto.t) {
       query = query
-        .innerJoin("post.postTag", "postTag", "postTag.post_id = post.id")
-        .innerJoin("postTag.tag", "tag", "tag.id = postTag.tag_id")
+        .leftJoin("post.postTag", "postTag", "postTag.post_id = post.id")
+        .leftJoin("postTag.tag", "tag", "tag.id = postTag.tag_id")
         .where(caseSensitive + "tag.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
     }
 

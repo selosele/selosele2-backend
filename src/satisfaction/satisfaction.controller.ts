@@ -5,7 +5,7 @@ import { AddSatisfactiontDto } from './dto/add-satisfaction.dto';
 import { Satisfaction } from './satisfaction.entity';
 import { SatisfactionService } from './satisfaction.service';
 import { RealIP } from 'nestjs-real-ip';
-import { isAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
+import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
 import { Roles } from 'src/shared/decorator/auth/roles.decorator';
 import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
 import { RoleGuard } from 'src/shared/guard/role.guard';
@@ -36,7 +36,7 @@ export class SatisfactionController {
   addSatisfaction(
     @Body(ValidationPipe) addSatisfactiontDto: AddSatisfactiontDto,
     @RealIP() ip: string,
-    @isAuthenticated() isAuthenticated: boolean
+    @IsAuthenticated() isAuthenticated: boolean
   ): Promise<InsertResult> {
     if (isAuthenticated) {
       throw new ForbiddenException('관리자는 참여할 수 없습니다.');

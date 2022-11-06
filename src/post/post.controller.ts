@@ -1,7 +1,9 @@
 import { Controller, Get, Query, Param, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Post } from 'src/post/post.entity';
+import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
+import { ListPostDto } from './dto/list-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
 import { PostService } from './post.service';
 
@@ -13,9 +15,42 @@ export class PostsController {
     private readonly postService: PostService,
   ) {}
 
+  @Get('list')
+  @ApiOperation({
+    summary: '포스트 목록 조회 API',
+    description: '포스트 목록을 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: Post,
+    description: '포스트 목록을 조회한다.',
+  })
+  @ApiQuery({
+    type: ListPostDto,
+    name: 'listPostDto',
+    description: '포스트 목록 조회 DTO',
+  })
+  @ApiQuery({
+    type: PaginationDto,
+    name: 'paginationDto',
+    description: '페이지네이션 DTO',
+  })
+  listPost(
+    @IsAuthenticated() isAuthenticated: boolean,
+    @Query(ValidationPipe) paginationDto: PaginationDto,
+    @Query(ValidationPipe) listPostDto: ListPostDto,
+  ): Promise<[Post[], number]> {
+    if (isAuthenticated) {
+      // 비밀글 조회를 위한 세팅
+      listPostDto.isLogin = 'Y';
+    } else {
+      listPostDto.isLogin = 'N';
+    }
+    return this.postService.listPost(listPostDto, paginationDto);
+  }
+
   @Get('list/:limit')
   @ApiOperation({
-    summary: '개수별 포스트 조회 API',
+    summary: '개수별 포스트 목록 조회 API',
     description: '개수별 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
