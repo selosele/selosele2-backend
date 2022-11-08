@@ -29,14 +29,8 @@ export class PostsController {
     name: 'listPostDto',
     description: '포스트 목록 조회 DTO',
   })
-  @ApiQuery({
-    type: PaginationDto,
-    name: 'paginationDto',
-    description: '페이지네이션 DTO',
-  })
   listPost(
     @IsAuthenticated() isAuthenticated: boolean,
-    @Query(ValidationPipe) paginationDto: PaginationDto,
     @Query(ValidationPipe) listPostDto: ListPostDto,
   ): Promise<[Post[], number]> {
     if (isAuthenticated) {
@@ -45,7 +39,7 @@ export class PostsController {
     } else {
       listPostDto.isLogin = 'N';
     }
-    return this.postService.listPost(listPostDto, paginationDto);
+    return this.postService.listPost(listPostDto);
   }
 
   @Get('list/:limit')

@@ -9,7 +9,7 @@ import { PostCategory } from "./post-category.entity";
 export class PostCategoryRepository extends Repository<PostCategory> {
 
   // 포스트 목록 조회 시 카테고리를 조회한다.
-  async listPostCategory(paginationDto: PaginationDto): Promise<PostCategory[]> {
+  async listPostCategory(): Promise<PostCategory[]> {
     let query = this.createQueryBuilder('postCategory')
       .leftJoin("postCategory.post", "post", "post.id = postCategory.post_id")
       .leftJoinAndSelect("postCategory.category", "category", "category.id = postCategory.category_id")
@@ -17,9 +17,7 @@ export class PostCategoryRepository extends Repository<PostCategory> {
     query = query
       .groupBy("post.id")
       .addGroupBy("category.id")
-      .orderBy("post.reg_date", "DESC")
-      .limit(paginationDto.pageSize)
-      .offset(paginationDto.getSkipSize());
+      .orderBy("post.reg_date", "DESC");
 
     return query.getMany();
   }

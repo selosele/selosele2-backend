@@ -9,10 +9,7 @@ import { Post } from './post.entity';
 export class PostRepository extends Repository<Post> {
 
   // 포스트 목록을 조회한다.
-  async listPost(
-    listPostDto: ListPostDto,
-    paginationDto: PaginationDto
-  ): Promise<[Post[], number]> {
+  async listPost(listPostDto: ListPostDto): Promise<[Post[], number]> {
     let query = this.createQueryBuilder('post')
       .select("post.id", "id")
         .addSelect("post.title", "title")
@@ -33,9 +30,7 @@ export class PostRepository extends Repository<Post> {
 
     query = query
       .groupBy("post.id")
-      .orderBy("post.reg_date", "DESC")
-      .limit(paginationDto.pageSize)
-      .offset(paginationDto.getSkipSize());
+      .orderBy("post.reg_date", "DESC");
 
     return await Promise.all([
       await query.getRawMany(),
@@ -64,14 +59,14 @@ export class PostRepository extends Repository<Post> {
   ): Promise<[Post[], number]> {
     let query = this.createQueryBuilder('post')
       .select("post.id", "id")
-      .addSelect("post.title", "title")
-      .addSelect("post.reg_date", "regDate")
-      .addSelect("post.like_cnt", "likeCnt")
-      .addSelect("post.reply_cnt", "replyCnt")
-      .addSelect("SUBSTR(post.raw_text, 1, 180)", "rawText")
-      .addSelect("post.og_img_url", "ogImgUrl")
-      .addSelect("post.secret_yn", "secretYn")
-      .addSelect("post.pin_yn", "pinYn")
+        .addSelect("post.title", "title")
+        .addSelect("post.reg_date", "regDate")
+        .addSelect("post.like_cnt", "likeCnt")
+        .addSelect("post.reply_cnt", "replyCnt")
+        .addSelect("SUBSTR(post.raw_text, 1, 180)", "rawText")
+        .addSelect("post.og_img_url", "ogImgUrl")
+        .addSelect("post.secret_yn", "secretYn")
+        .addSelect("post.pin_yn", "pinYn")
 
     const caseSensitive = 'Y' === searchPostDto.c ? 'BINARY ' : '';
 

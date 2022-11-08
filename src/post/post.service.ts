@@ -18,15 +18,12 @@ export class PostService {
   ) {}
 
   // 포스트 목록을 조회한다.
-  async listPost(
-    listPostDto: ListPostDto,
-    paginationDto: PaginationDto
-  ): Promise<[Post[], number]> {
+  async listPost(listPostDto: ListPostDto): Promise<[Post[], number]> {
     const [post, postCategory] = await Promise.all([
       // 포스트 조회
-      await this.postRepository.listPost(listPostDto, paginationDto),
+      await this.postRepository.listPost(listPostDto),
       // 카테고리 조회
-      await this.postCategoryRepository.listPostCategory(paginationDto),
+      await this.postCategoryRepository.listPostCategory(),
     ]);
 
     // 포스트 데이타에 카테고리 데이타를 넣어준다.
