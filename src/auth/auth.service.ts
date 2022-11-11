@@ -81,7 +81,7 @@ export class AuthService {
 
       return { accessToken };
     }
-    throw new UnauthorizedException('로그인 실패');
+    throw new UnauthorizedException('로그인에 실패했습니다.');
   }
 
 }
