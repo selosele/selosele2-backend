@@ -1,6 +1,6 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { ListPostDto } from './dto/list-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
 import { Post } from './post.entity';
@@ -25,7 +25,7 @@ export class PostRepository extends Repository<Post> {
 
     if ('N' === listPostDto?.isLogin) {
       query = query
-        .where("post.secret_yn = 'N'")
+        .where("post.secret_yn = 'N'");
     }
 
     query = query
@@ -39,16 +39,19 @@ export class PostRepository extends Repository<Post> {
   }
 
   // 개수별 포스트 목록을 조회한다.
-  async listPostByLimit(limit: number): Promise<Post[]> {
+  async listPostByLimit(listPostDto: ListPostDto): Promise<Post[]> {
     return await this.find({
       select: {
         cont: false,
         rawText: false,
       },
+      where: {
+        ...('N' === listPostDto?.isLogin && { secretYn: 'N' }),
+      },
       order: {
         regDate: 'DESC',
       },
-      take: limit,
+      take: listPostDto?.limit,
     });
   }
 
@@ -77,22 +80,28 @@ export class PostRepository extends Repository<Post> {
         .leftJoin("post.postTag", "postTag", "postTag.post_id = post.id")
         .leftJoin("postCategory.category", "category", "category.id = postCategory.category_id")
         .leftJoin("postTag.tag", "tag", "tag.id = postTag.tag_id")
-        .where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` })
-        .orWhere(caseSensitive + "post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` })
-        .orWhere(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
-        .orWhere(caseSensitive + "tag.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
+        .where(new Brackets(qb => {
+          qb.where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` })
+            .orWhere(caseSensitive + "post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` })
+            .orWhere(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
+            .orWhere(caseSensitive + "tag.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
+        }));
     }
     
     // 제목으로 검색
     if ('002' === searchPostDto.t) {
       query = query
-        .where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` })
+        .where(new Brackets(qb => {
+          qb.where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` });
+        }));
     }
 
     // 내용으로 검색
     if ('003' === searchPostDto.t) {
       query = query
-        .where(caseSensitive + "post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` })
+        .where(new Brackets(qb => {
+          qb.where(caseSensitive + "post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` });
+        }));
     }
 
     // 카테고리로 검색
@@ -100,7 +109,9 @@ export class PostRepository extends Repository<Post> {
       query = query
         .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
         .leftJoin("postCategory.category", "category", "category.id = postCategory.category_id")
-        .where(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
+        .where(new Brackets(qb => {
+          qb.where(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` });
+        }));
     }
 
     // 태그로 검색
@@ -108,7 +119,14 @@ export class PostRepository extends Repository<Post> {
       query = query
         .leftJoin("post.postTag", "postTag", "postTag.post_id = post.id")
         .leftJoin("postTag.tag", "tag", "tag.id = postTag.tag_id")
-        .where(caseSensitive + "tag.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
+        .where(new Brackets(qb => {
+          qb.where(caseSensitive + "tag.nm LIKE :nm", { nm: `%${searchPostDto.q}%` });
+        }));
+    }
+
+    if ('N' === searchPostDto?.isLogin) {
+      query = query
+        .andWhere("post.secret_yn = :secret_yn", { secret_yn: 'N' });
     }
 
     query = query
@@ -124,32 +142,48 @@ export class PostRepository extends Repository<Post> {
   }
 
   // 포스트의 연도 및 개수를 조회한다.
-  async listYearAndCount(): Promise<Post[]> {
-    return await this.createQueryBuilder('post')
+  async listYearAndCount(listPostDto: ListPostDto): Promise<Post[]> {
+    let query = this.createQueryBuilder('post')
       .select("YEAR(reg_date)", "year")
         .distinct(true)
-      .addSelect("COUNT('year')", "count")
+      .addSelect("COUNT('year')", "count");
+
+    if ('N' === listPostDto?.isLogin) {
+      query = query
+        .where("secret_yn = :secret_yn", { secret_yn: 'N' });
+    }
+
+    query = query
       .groupBy("year")
-      .orderBy("year", "DESC")
-      .getRawMany();
+      .orderBy("year", "DESC");
+
+    return query.getRawMany();
   }
 
   // 연도별 포스트 목록을 조회한다.
   async listPostByYear(
-    year: string, 
+    listPostDto: ListPostDto,
     paginationDto: PaginationDto
   ): Promise<[Post[], number]> {
-    return await this.createQueryBuilder('post')
-      .where("YEAR(reg_date) = :year", { year })
+    let query = this.createQueryBuilder('post')
+      .where("YEAR(reg_date) = :year", { year: listPostDto?.year });
+
+    if ('N' === listPostDto?.isLogin) {
+      query = query
+        .andWhere("secret_yn = :secret_yn", { secret_yn: 'N' });
+    }
+      
+    query = query
       .orderBy("reg_date", "DESC")
       .limit(paginationDto.pageSize)
-      .offset(paginationDto.getSkipSize())
-      .getManyAndCount();
+      .offset(paginationDto.getSkipSize());
+
+    return await query.getManyAndCount();
   }
 
   // 카테고리별 포스트 목록을 조회한다.
   async listPostByCategory(
-    categoryId: number,
+    listPostDto: ListPostDto,
     paginationDto: PaginationDto
   ): Promise<[Post[], number]> {
     return await this.findAndCount({
@@ -170,7 +204,10 @@ export class PostRepository extends Repository<Post> {
         },
       },
       where: {
-        postCategory: { categoryId },
+        ...('N' === listPostDto?.isLogin && { secretYn: 'N' }),
+        postCategory: {
+          categoryId: listPostDto?.categoryId
+        },
       },
       order: {
         regDate: 'DESC',
@@ -182,7 +219,7 @@ export class PostRepository extends Repository<Post> {
 
   // 태그별 포스트 목록을 조회한다.
   async listPostByTag(
-    tagId: number,
+    listPostDto: ListPostDto,
     paginationDto: PaginationDto
   ): Promise<[Post[], number]> {
     return await this.findAndCount({
@@ -203,7 +240,10 @@ export class PostRepository extends Repository<Post> {
         },
       },
       where: {
-        postTag: { tagId },
+        ...('N' === listPostDto?.isLogin && { secretYn: 'N' }),
+        postTag: {
+          tagId: listPostDto?.tagId
+        },
       },
       order: {
         regDate: 'DESC',

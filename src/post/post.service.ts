@@ -23,7 +23,7 @@ export class PostService {
       // 포스트 조회
       await this.postRepository.listPost(listPostDto),
       // 카테고리 조회
-      await this.postCategoryRepository.listPostCategory(),
+      await this.postCategoryRepository.listPostCategory(listPostDto),
     ]);
 
     // 포스트 데이타에 카테고리 데이타를 넣어준다.
@@ -35,8 +35,8 @@ export class PostService {
   }
 
   // 개수별 포스트 목록을 조회한다.
-  async listPostByLimit(limit: number): Promise<Post[]> {
-    return await this.postRepository.listPostByLimit(limit);
+  async listPostByLimit(listPostDto: ListPostDto): Promise<Post[]> {
+    return await this.postRepository.listPostByLimit(listPostDto);
   }
 
   // 포스트를 검색한다.
@@ -60,32 +60,32 @@ export class PostService {
   }
 
   // 포스트의 연도 및 개수를 조회한다.
-  async listYearAndCount(): Promise<Post[]> {
-    return await this.postRepository.listYearAndCount();
+  async listYearAndCount(listPostDto: ListPostDto): Promise<Post[]> {
+    return await this.postRepository.listYearAndCount(listPostDto);
   }
 
   // 연도별 포스트 목록을 조회한다.
   async listPostByYear(
-    year: string, 
+    listPostDto: ListPostDto,
     paginationDto: PaginationDto
   ): Promise<[Post[], number]> {
-    return await this.postRepository.listPostByYear(year, paginationDto);
+    return await this.postRepository.listPostByYear(listPostDto, paginationDto);
   }
 
   // 카테고리별 포스트 목록을 조회한다.
   async listPostByCategory(
-    categoryId: number, 
+    listPostDto: ListPostDto,
     paginationDto: PaginationDto
   ): Promise<[Post[], number]> {
-    return await this.postRepository.listPostByCategory(categoryId, paginationDto);
+    return await this.postRepository.listPostByCategory(listPostDto, paginationDto);
   }
 
   // 태그별 포스트 목록을 조회한다.
   async listPostByTag(
-    tagId: number, 
+    listPostDto: ListPostDto,
     paginationDto: PaginationDto
   ): Promise<[Post[], number]> {
-    return await this.postRepository.listPostByTag(tagId, paginationDto);
+    return await this.postRepository.listPostByTag(listPostDto, paginationDto);
   }
 
 }

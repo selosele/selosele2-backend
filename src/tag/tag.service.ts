@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ListTagDto } from './dto/list-tag.dto';
 import { Tag } from './tag.entity';
 import { TagRepository } from './tag.repository';
 
@@ -12,8 +13,8 @@ export class TagService {
   ) {}
 
   // 태그 목록 및 개수를 조회한다.
-  async listTagAndCount(): Promise<Tag[]> {
-    return await this.tagRepository.listTagAndCount();
+  async listTagAndCount(listTagDto: ListTagDto): Promise<Tag[]> {
+    return await this.tagRepository.listTagAndCount(listTagDto);
   }
 
 }

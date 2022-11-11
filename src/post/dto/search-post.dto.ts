@@ -15,4 +15,8 @@ export class SearchPostDto {
   @IsOptional()
   c?: string;
 
+  // 로그인 여부
+  @IsOptional()
+  isLogin?: string;
+
 }

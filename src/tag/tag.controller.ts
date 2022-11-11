@@ -1,5 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Builder } from 'builder-pattern';
+import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
+import { ListTagDto } from './dto/list-tag.dto';
 import { Tag } from './tag.entity';
 import { TagService } from './tag.service';
 
@@ -20,8 +23,11 @@ export class TagController {
     type: Tag,
     description: '태그 목록 및 개수를 조회한다.',
   })
-  listTagAndCount(): Promise<Tag[]> {
-    return this.tagService.listTagAndCount();
+  listTagAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<Tag[]> {
+    const listTagDto: ListTagDto = Builder(ListTagDto)
+      .isLogin(isAuthenticated ? 'Y' : 'N')
+      .build();
+    return this.tagService.listTagAndCount(listTagDto);
   }
 
 }

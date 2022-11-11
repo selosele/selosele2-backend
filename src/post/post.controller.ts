@@ -1,5 +1,6 @@
 import { Controller, Get, Query, Param, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Builder } from 'builder-pattern';
 import { Post } from 'src/post/post.entity';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
@@ -56,8 +57,15 @@ export class PostsController {
     name: 'limit',
     description: '개수',
   })
-  listPostByLimit(@Param('limit', ParseIntPipe) limit: number): Promise<Post[]> {
-    return this.postService.listPostByLimit(limit);
+  listPostByLimit(
+    @IsAuthenticated() isAuthenticated: boolean,
+    @Param('limit', ParseIntPipe) limit: number
+  ): Promise<Post[]> {
+    const listPostDto: ListPostDto = Builder(ListPostDto)
+      .limit(limit)
+      .isLogin(isAuthenticated ? 'Y' : 'N')
+      .build();
+    return this.postService.listPostByLimit(listPostDto);
   }
 
   @Get('search')
@@ -80,9 +88,16 @@ export class PostsController {
     description: '페이지네이션 DTO',
   })
   listPostSearch(
+    @IsAuthenticated() isAuthenticated: boolean,
     @Query(ValidationPipe) searchPostDto: SearchPostDto,
     @Query(ValidationPipe) paginationDto: PaginationDto,
   ): Promise<[Post[], number]> {
+    if (isAuthenticated) {
+      // 비밀글 조회를 위한 세팅
+      searchPostDto.isLogin = 'Y';
+    } else {
+      searchPostDto.isLogin = 'N';
+    }
     return this.postService.listPostSearch(searchPostDto, paginationDto);
   }
 
@@ -95,8 +110,11 @@ export class PostsController {
     type: Post,
     description: '포스트의 연도 및 개수를 조회한다.',
   })
-  listYearAndCount(): Promise<Post[]> {
-    return this.postService.listYearAndCount();
+  listYearAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<Post[]> {
+    const listPostDto: ListPostDto = Builder(ListPostDto)
+      .isLogin(isAuthenticated ? 'Y' : 'N')
+      .build();
+    return this.postService.listYearAndCount(listPostDto);
   }
 
   @Get('year/list/:year')
@@ -118,10 +136,15 @@ export class PostsController {
     description: '페이지네이션 DTO',
   })
   listPostByYear(
+    @IsAuthenticated() isAuthenticated: boolean,
     @Param('year') year: string,
     @Query() paginationDto: PaginationDto
   ): Promise<[Post[], number]> {
-    return this.postService.listPostByYear(year, paginationDto);
+    const listPostDto: ListPostDto = Builder(ListPostDto)
+      .year(year)
+      .isLogin(isAuthenticated ? 'Y' : 'N')
+      .build();
+    return this.postService.listPostByYear(listPostDto, paginationDto);
   }
 
   @Get('category/list/:categoryId')
@@ -143,10 +166,15 @@ export class PostsController {
     description: '페이지네이션 DTO',
   })
   listPostByCategory(
+    @IsAuthenticated() isAuthenticated: boolean,
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Query() paginationDto: PaginationDto
-    ): Promise<[Post[], number]> {
-    return this.postService.listPostByCategory(categoryId, paginationDto);
+  ): Promise<[Post[], number]> {
+    const listPostDto: ListPostDto = Builder(ListPostDto)
+      .categoryId(categoryId)
+      .isLogin(isAuthenticated ? 'Y' : 'N')
+      .build();
+    return this.postService.listPostByCategory(listPostDto, paginationDto);
   }
 
   @Get('tag/list/:tagId')
@@ -168,10 +196,15 @@ export class PostsController {
     description: '페이지네이션 DTO',
   })
   listPostByTag(
+    @IsAuthenticated() isAuthenticated: boolean,
     @Param('tagId', ParseIntPipe) tagId: number,
     @Query() paginationDto: PaginationDto
-    ): Promise<[Post[], number]> {
-    return this.postService.listPostByTag(tagId, paginationDto);
+  ): Promise<[Post[], number]> {
+    const listPostDto: ListPostDto = Builder(ListPostDto)
+      .tagId(tagId)
+      .isLogin(isAuthenticated ? 'Y' : 'N')
+      .build();
+    return this.postService.listPostByTag(listPostDto, paginationDto);
   }
 
 }

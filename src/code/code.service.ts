@@ -27,7 +27,7 @@ export class CodeService {
   async removeCode(removeCodetDto: RemoveCodetDto[]): Promise<DeleteResult> {
     let idList = [];
 
-    removeCodetDto.forEach((d,i) => {
+    removeCodetDto.forEach(d => {
       idList.push(d.id);
     });
     
