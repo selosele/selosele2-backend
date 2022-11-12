@@ -30,11 +30,19 @@ export class PostRepository extends Repository<Post> {
 
     query = query
       .groupBy("post.id")
+        // .addGroupBy("post.title")
+        // .addGroupBy("post.reg_date")
+        // .addGroupBy("post.like_cnt")
+        // .addGroupBy("post.reply_cnt")
+        // .addGroupBy("SUBSTR(post.raw_text, 1, 180)")
+        // .addGroupBy("post.og_img_url")
+        // .addGroupBy("post.secret_yn")
+        // .addGroupBy("post.pin_yn")
       .orderBy("post.reg_date", "DESC");
 
     return await Promise.all([
       await query.getRawMany(),
-      22
+      await query.getCount(),
     ]);
   }
 
@@ -157,7 +165,7 @@ export class PostRepository extends Repository<Post> {
       .groupBy("year")
       .orderBy("year", "DESC");
 
-    return query.getRawMany();
+    return await query.getRawMany();
   }
 
   // 연도별 포스트 목록을 조회한다.

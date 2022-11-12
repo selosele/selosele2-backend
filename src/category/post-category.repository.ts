@@ -22,10 +22,10 @@ export class PostCategoryRepository extends Repository<PostCategory> {
 
     query = query
       .groupBy("post.id")
-        .addGroupBy("category.id")
+        .addGroupBy("postCategory.category_id")
       .orderBy("post.reg_date", "DESC");
 
-    return query.getMany();
+    return await query.getMany();
   }
 
   // 포스트 검색 시 카테고리를 조회한다.
@@ -96,7 +96,7 @@ export class PostCategoryRepository extends Repository<PostCategory> {
       .limit(paginationDto.pageSize)
       .offset(paginationDto.getSkipSize());
 
-    return query.getMany();
+    return await query.getMany();
   }
 
 }

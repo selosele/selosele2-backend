@@ -76,7 +76,7 @@ export class PostTagRepository extends Repository<PostTag> {
       .limit(paginationDto.pageSize)
       .offset(paginationDto.getSkipSize());
 
-    return query.getMany();
+    return await query.getMany();
   }
 
 }
