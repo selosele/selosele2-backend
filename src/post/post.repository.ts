@@ -34,7 +34,7 @@ export class PostRepository extends Repository<Post> {
 
     return await Promise.all([
       await query.getRawMany(),
-      await query.getCount(),
+      22
     ]);
   }
 
