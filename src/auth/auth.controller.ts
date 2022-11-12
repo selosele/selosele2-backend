@@ -14,12 +14,7 @@ import { User } from './user.entity';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { InsertResult } from 'typeorm';
-import { UserInfo } from '../shared/decorator/auth/user-info.decorator';
 import { ConfigService } from '@nestjs/config';
-import { RoleEnum } from './role.entity';
-import { Roles } from 'src/shared/decorator/auth/roles.decorator';
-import { RoleGuard } from 'src/shared/guard/role.guard';
-import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
 
 @Controller('api/auth')
 @ApiTags('인증·인가 API')
@@ -83,13 +78,6 @@ export class AuthController {
   })
   signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
     return this.authService.signIn(authCredentialsDto);
-  }
-
-  @Post('test')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN, RoleEnum.ROLE_TEST)
-  jwtTest(@UserInfo() user: User) {
-    console.log('user.userId >>>', user.userId);
   }
 
 }
