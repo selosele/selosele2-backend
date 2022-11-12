@@ -207,4 +207,22 @@ export class PostsController {
     return this.postService.listPostByTag(listPostDto, paginationDto);
   }
 
+  @Get(':id')
+  @ApiOperation({
+    summary: '포스트 상세 조회 API',
+    description: '포스트를 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: Post,
+    description: '포스트를 조회한다.',
+  })
+  @ApiParam({
+    type: Number,
+    name: 'id',
+    description: '포스트 ID',
+  })
+  getPost(@Param('id', ParseIntPipe) id: number): Promise<Post> {
+    return this.postService.getPost(id);
+  }
+
 }

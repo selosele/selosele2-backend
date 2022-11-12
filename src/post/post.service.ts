@@ -88,4 +88,9 @@ export class PostService {
     return await this.postRepository.listPostByTag(listPostDto, paginationDto);
   }
 
+  // 포스트를 조회한다.
+  async getPost(id: number): Promise<Post> {
+    return await this.postRepository.getPost(id);
+  }
+
 }
