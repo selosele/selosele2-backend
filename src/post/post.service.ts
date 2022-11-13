@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from 'src/category/post-category.repository';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
+import { isEmpty } from 'src/shared/util/util';
+import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
 import { Post } from './post.entity';
@@ -88,9 +90,18 @@ export class PostService {
     return await this.postRepository.listPostByTag(listPostDto, paginationDto);
   }
 
+  // 이전/다음 포스트를 조회한다.
+  async listPrevAndNextPost(listPostDto: ListPostDto): Promise<Post[]> {
+    return await this.postRepository.listPrevAndNextPost(listPostDto);
+  }
+
   // 포스트를 조회한다.
-  async getPost(id: number): Promise<Post> {
-    return await this.postRepository.getPost(id);
+  async getPost(getPostDto: GetPostDto): Promise<Post> {
+    const post = await this.postRepository.getPost(getPostDto);
+    if (isEmpty(post)) {
+      throw new NotFoundException();
+    }
+    return post;
   }
 
 }

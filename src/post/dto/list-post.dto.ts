@@ -3,6 +3,10 @@ import { IsOptional } from 'class-validator';
 // 포스트 목록 조회 DTO
 export class ListPostDto {
 
+  // 포스트 ID
+  @IsOptional()
+  id?: number;
+
   // 카테고리 ID
   @IsOptional()
   categoryId?: number;

@@ -4,6 +4,7 @@ import { Builder } from 'builder-pattern';
 import { Post } from 'src/post/post.entity';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
+import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
 import { PostService } from './post.service';
@@ -207,6 +208,31 @@ export class PostsController {
     return this.postService.listPostByTag(listPostDto, paginationDto);
   }
 
+  @Get('prevNext/:id')
+  @ApiOperation({
+    summary: '이전/다음 포스트 조회 API',
+    description: '이전/다음 포스트를 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: Post,
+    description: '이전/다음 포스트를 조회한다.',
+  })
+  @ApiParam({
+    type: Number,
+    name: 'id',
+    description: '포스트 ID',
+  })
+  listPrevAndNextPost(
+    @IsAuthenticated() isAuthenticated: boolean,
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<Post[]> {
+    const listPostDto: ListPostDto = Builder(ListPostDto)
+      .id(id)
+      .isLogin(isAuthenticated ? 'Y' : 'N')
+      .build();
+    return this.postService.listPrevAndNextPost(listPostDto);
+  }
+
   @Get(':id')
   @ApiOperation({
     summary: '포스트 상세 조회 API',
@@ -221,8 +247,15 @@ export class PostsController {
     name: 'id',
     description: '포스트 ID',
   })
-  getPost(@Param('id', ParseIntPipe) id: number): Promise<Post> {
-    return this.postService.getPost(id);
+  getPost(
+    @IsAuthenticated() isAuthenticated: boolean,
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<Post> {
+    const getPostDto: GetPostDto = Builder(GetPostDto)
+      .id(id)
+      .isLogin(isAuthenticated ? 'Y' : 'N')
+      .build();
+    return this.postService.getPost(getPostDto);
   }
 
 }

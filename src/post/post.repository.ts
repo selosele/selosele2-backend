@@ -1,6 +1,7 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { Brackets, Repository } from 'typeorm';
+import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
 import { Post } from './post.entity';
@@ -41,10 +42,7 @@ export class PostRepository extends Repository<Post> {
   // 개수별 포스트 목록을 조회한다.
   async listPostByLimit(listPostDto: ListPostDto): Promise<Post[]> {
     return await this.find({
-      select: {
-        cont: false,
-        rawText: false,
-      },
+      select: ['id', 'title', 'ogImgUrl'],
       where: {
         ...('N' === listPostDto?.isLogin && { secretYn: 'N' }),
       },
@@ -193,6 +191,12 @@ export class PostRepository extends Repository<Post> {
         }
       },
       select: {
+        id: true,
+        title: true,
+        regDate: true,
+        cont: false,
+        rawText: false,
+        secretYn: true,
         postCategory: {
           postId: false,
           categoryId: true,
@@ -229,6 +233,12 @@ export class PostRepository extends Repository<Post> {
         }
       },
       select: {
+        id: true,
+        title: true,
+        regDate: true,
+        cont: false,
+        rawText: false,
+        secretYn: true,
         postTag: {
           postId: false,
           tagId: true,
@@ -253,9 +263,75 @@ export class PostRepository extends Repository<Post> {
     });
   }
 
-  // 태그별 포스트 목록을 조회한다.
-  async getPost(id: number): Promise<Post> {
-    return await this.findOne({ where: { id } });
+  // 이전/다음 포스트를 조회한다.
+  async listPrevAndNextPost(listPostDto: ListPostDto): Promise<Post[]> {
+    let query = this.createQueryBuilder('post')
+      .select("post.id", "id")
+        .addSelect("post.title", "title")
+        .addSelect("post.secret_yn", "secretYn");
+
+    let prevSubQuery = query.subQuery()
+      .select("MAX(id)")
+      .from(Post, 'prev')
+      .where("1=1");
+
+    if ('N' === listPostDto?.isLogin) {
+      prevSubQuery = prevSubQuery
+        .andWhere("prev.secret_yn = :secret_yn", { secret_yn: 'N' });
+    }
+
+    prevSubQuery = prevSubQuery
+      .andWhere("prev.id < :id", { id: listPostDto?.id });
+
+    let nextSubQuery = query.subQuery()
+      .select("MIN(id)")
+      .from(Post, 'next')
+      .where("1=1");
+
+    if ('N' === listPostDto?.isLogin) {
+      nextSubQuery = nextSubQuery
+        .andWhere("next.secret_yn = :secret_yn", { secret_yn: 'N' });
+    }
+
+    nextSubQuery = nextSubQuery
+      .andWhere("next.id > :id", { id: listPostDto?.id });
+
+    const [prevSql, prevParams] = query
+      .where(`id = ${prevSubQuery.getQuery()}`)
+      .getQueryAndParameters();
+    const [nextSql, nextParams] = query
+      .where(`id = ${nextSubQuery.getQuery()}`)
+      .getQueryAndParameters();
+    
+    const rawQuery = await this.manager.query(
+      `(${prevSql}) UNION (${nextSql})`,
+      [...prevParams, ...nextParams],
+    ) as Post[];
+
+    return this.create(rawQuery);
+  }
+
+  // 포스트를 조회한다.
+  async getPost(getPostDto: GetPostDto): Promise<Post> {
+    return await this.findOne({
+      relations: {
+        postCategory: {
+          category: true,
+        },
+        postTag: {
+          tag: true,
+        },
+      },
+      select: [
+        'id', 'title', 'regDate',
+        'modDate', 'cont', 'secretYn',
+        'likeCnt', 'replyCnt'
+      ],
+      where: {
+        ...('N' === getPostDto?.isLogin && { secretYn: 'N' }),
+        id: getPostDto?.id
+      },
+    });
   }
 
 }
