@@ -6,7 +6,7 @@ export class Widget extends BaseEntity {
 
   @PrimaryColumn()
   @ApiProperty({
-    description: 'id'
+    description: '위젯 ID'
   })
   id?: string;
 

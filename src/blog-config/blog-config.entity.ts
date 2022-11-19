@@ -6,7 +6,7 @@ export class BlogConfig extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   @ApiProperty({
-    description: 'id'
+    description: '환경설정 ID'
   })
   id?: number;
 

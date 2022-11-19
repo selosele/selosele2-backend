@@ -8,6 +8,7 @@ import { Builder } from 'builder-pattern';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from './user.entity';
+import { RoleEnum } from './role.entity';
 
 @Injectable()
 export class AuthService {
@@ -45,7 +46,7 @@ export class AuthService {
     // 사용자 권한 생성
     if (addUserRes.identifiers[0].userId) {
       let addUserRoleRes: InsertResult = null;
-      const roles: string[] = ['ROLE_ANONYMOUS', 'ROLE_ADMIN'];
+      const roles: string[] = [RoleEnum.ROLE_ANONYMOUS, RoleEnum.ROLE_ADMIN];
 
       for (const role of roles) {
         const dto: AuthCredentialsRoleDto = Builder(AuthCredentialsRoleDto)

@@ -7,7 +7,7 @@ export class Tag extends BaseEntity {
 
   @PrimaryColumn()
   @ApiProperty({
-    description: 'id'
+    description: '태그 ID'
   })
   id?: string;
 

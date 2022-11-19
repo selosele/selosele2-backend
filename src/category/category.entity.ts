@@ -7,7 +7,7 @@ export class Category extends BaseEntity {
 
   @PrimaryColumn()
   @ApiProperty({
-    description: 'id'
+    description: '카테고리 ID'
   })
   id?: string;
 

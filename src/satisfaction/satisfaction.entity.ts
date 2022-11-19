@@ -6,7 +6,7 @@ export class Satisfaction extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   @ApiProperty({
-    description: 'id'
+    description: '만족도 ID'
   })
   id?: number;
 

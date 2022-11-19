@@ -8,7 +8,7 @@ export class Post extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   @ApiProperty({
-    description: 'id'
+    description: '포스트 ID'
   })
   id?: number;
 

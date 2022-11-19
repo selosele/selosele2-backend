@@ -6,7 +6,7 @@ export class Code extends BaseEntity {
 
   @PrimaryColumn()
   @ApiProperty({
-    description: 'id'
+    description: '코드 ID'
   })
   id?: string;
 
