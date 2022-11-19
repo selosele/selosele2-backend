@@ -13,6 +13,7 @@ import { TagModule } from './tag/tag.module';
 import { SatisfactionModule } from './satisfaction/satisfaction.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { GuestbookModule } from './guestbook/guestbook.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { join } from 'path';
     CategoryModule,
     TagModule,
     SatisfactionModule,
+    GuestbookModule,
   ],
   providers: [],
 })
