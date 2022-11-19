@@ -44,12 +44,20 @@ export class Menu extends BaseEntity {
   sort?: number;
 
   @Column({
-    comment: '하위 메뉴 존재여부'
+    comment: '하위 메뉴 존재 여부'
   })
   @ApiProperty({
-    description: '하위 메뉴 존재여부'
+    description: '하위 메뉴 존재 여부'
   })
   hasChildren?: string;
+
+  @Column({
+    comment: '메뉴 사용 여부'
+  })
+  @ApiProperty({
+    description: '메뉴 사용 여부'
+  })
+  useYn?: string;
   
   @ManyToOne(() => Menu, (menu) => menu.children)
   parent: Menu;

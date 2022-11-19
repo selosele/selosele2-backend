@@ -5,6 +5,10 @@ export class ListMenuDto {
 
   // 권한 ID
   @IsOptional()
-  roleId: string[];
+  roleIds?: string[];
+
+  // 메뉴 사용 여부
+  @IsOptional()
+  useYn?: string;
 
 }

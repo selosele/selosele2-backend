@@ -11,8 +11,9 @@ export class MenuRepository extends Repository<Menu> {
     return await this.createQueryBuilder('menu')
       .leftJoinAndSelect("menu.children", "parent")
       .innerJoin("menu.menuRole", "menuRole", "menuRole.menu_id = menu.id")
-      .where("menu.parentId IS NULL")
-        .andWhere("menuRole.role_id IN (:roleId)", { roleId: listMenuDto?.roleId })
+      .where("menu.use_yn = :use_yn", { use_yn: listMenuDto?.useYn })
+        .andWhere("menu.parent_id IS NULL")
+        .andWhere("menuRole.role_id IN (:role_id)", { role_id: listMenuDto?.roleIds })
       .orderBy("menu.sort")
         .addOrderBy("parent.sort")
       .getMany();

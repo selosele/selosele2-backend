@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { UserRole } from "./user-role.entity";
 
-@Entity({ name: 'role' })
+@Entity('role')
 export class Role extends BaseEntity {
 
   @PrimaryColumn()
@@ -47,7 +47,6 @@ export class Role extends BaseEntity {
 export enum RoleEnum {
   ROLE_ANONYMOUS = 'ROLE_ANONYMOUS',
   ROLE_ADMIN = 'ROLE_ADMIN',
-  ROLE_TEST = 'ROLE_TEST',
 };
 
 export const RoleDefaultList = [
