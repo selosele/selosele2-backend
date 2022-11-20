@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Query, ValidationPipe } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { RealIP } from 'nestjs-real-ip';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { AddGuestbookDto } from './dto/add-guestbook.dto';
@@ -41,9 +41,8 @@ export class GuestbookController {
     type: GuestbookEntity,
     description: '방명록을 등록한다.',
   })
-  @ApiQuery({
+  @ApiBody({
     type: AddGuestbookDto,
-    name: 'addGuestbookDto',
     description: '방명록 등록 DTO',
   })
   addGuestbook(
