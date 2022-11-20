@@ -25,7 +25,7 @@ export class PostController {
     description: '포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Post,
+    type: PostEntity,
     description: '포스트 목록을 조회한다.',
   })
   @ApiQuery({
@@ -52,7 +52,7 @@ export class PostController {
     description: '개수별 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Post,
+    type: PostEntity,
     description: '개수별 포스트 목록을 조회한다.',
   })
   @ApiParam({
@@ -77,7 +77,7 @@ export class PostController {
     description: '포스트를 검색한다.'
   })
   @ApiCreatedResponse({
-    type: Post,
+    type: PostEntity,
     description: '포스트를 검색한다.',
   })
   @ApiQuery({
@@ -110,7 +110,7 @@ export class PostController {
     description: '포스트의 연도 및 개수를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Post,
+    type: PostEntity,
     description: '포스트의 연도 및 개수를 조회한다.',
   })
   listYearAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<PostEntity[]> {
@@ -156,7 +156,7 @@ export class PostController {
     description: '카테고리별 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Post,
+    type: PostEntity,
     description: '카테고리별 포스트 목록을 조회한다.',
   })
   @ApiParam({
@@ -186,7 +186,7 @@ export class PostController {
     description: '태그별 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Post,
+    type: PostEntity,
     description: '태그별 포스트 목록을 조회한다.',
   })
   @ApiParam({
@@ -216,7 +216,7 @@ export class PostController {
     description: '이전/다음 포스트를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Post,
+    type: PostEntity,
     description: '이전/다음 포스트를 조회한다.',
   })
   @ApiParam({
@@ -241,7 +241,7 @@ export class PostController {
     description: '포스트를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Post,
+    type: PostEntity,
     description: '포스트를 조회한다.',
   })
   @ApiParam({

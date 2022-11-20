@@ -19,10 +19,10 @@ export class PostLikeController {
   @Get(':id')
   @ApiOperation({
     summary: '포스트 추천 정보 조회 API',
-    description: '포스트 추천 정보를 조회한다.'
+    description: '포스트 추천 정보를 조회한다.',
   })
   @ApiCreatedResponse({
-    type: Post,
+    type: PostLikeEntity,
     description: '포스트 추천 정보를 조회한다.',
   })
   @ApiParam({
@@ -44,10 +44,10 @@ export class PostLikeController {
   @Post(':id')
   @ApiOperation({
     summary: '포스트 추천/추천 해제 API',
-    description: '포스트를 추천/추천 해제한다.'
+    description: '포스트를 추천/추천 해제한다.',
   })
   @ApiCreatedResponse({
-    type: Post,
+    type: Number,
     description: '포스트를 추천/추천 해제한다.',
   })
   @ApiParam({

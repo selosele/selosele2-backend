@@ -38,7 +38,8 @@ export class PostLikeEntity extends BaseEntity {
   @ManyToOne(() => PostEntity, post => post.postLike)
   @JoinColumn({ name: 'post_id' })
   @ApiProperty({
-    description: '포스트'
+    type: () => PostEntity,
+    description: '포스트',
   })
   post?: PostEntity;
   

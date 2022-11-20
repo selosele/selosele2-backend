@@ -26,7 +26,7 @@ export class SatisfactionController {
     description: '만족도조사에 참여한다.',
   })
   @ApiCreatedResponse({
-    type: SatisfactionEntity,
+    type: InsertResult,
     description: '만족도조사에 참여한다.',
   })
   @ApiBody({
