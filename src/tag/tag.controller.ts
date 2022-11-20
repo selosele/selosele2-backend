@@ -14,7 +14,7 @@ export class TagController {
     private readonly tagService: TagService,
   ) {}
 
-  @Get('list')
+  @Get()
   @ApiOperation({
     summary: '태그 목록 및 개수 조회 API',
     description: '태그 목록 및 개수를 조회한다.'

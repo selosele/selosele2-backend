@@ -43,7 +43,7 @@ export class AuthController {
     return this.authService.getUser(userSn);
   }
 
-  @Post('signup')
+  @Post('user')
   @ApiOperation({
     summary: '사용자 생성 API',
     description: '사용자를 생성한다.',

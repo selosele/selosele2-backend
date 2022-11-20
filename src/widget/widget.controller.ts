@@ -12,7 +12,7 @@ export class WidgetController {
     private readonly widgetService: WidgetService,
   ) {}
 
-  @Get('list')
+  @Get()
   @ApiOperation({
     summary: '위젯 목록 조회 API',
     description: '위젯 목록을 조회한다.'

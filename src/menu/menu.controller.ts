@@ -15,7 +15,7 @@ export class MenuController {
     private readonly menuService: MenuService,
   ) {}
 
-  @Get('list')
+  @Get()
   @ApiOperation({
     summary: '메뉴 목록 조회 API',
     description: '메뉴 목록을 조회한다.',

@@ -19,7 +19,7 @@ export class PostController {
     private readonly postLikeService: PostLikeService,
   ) {}
 
-  @Get('list')
+  @Get()
   @ApiOperation({
     summary: '포스트 목록 조회 API',
     description: '포스트 목록을 조회한다.'
@@ -46,7 +46,7 @@ export class PostController {
     return this.postService.listPost(listPostDto);
   }
 
-  @Get('list/:limit')
+  @Get('/limit/:limit')
   @ApiOperation({
     summary: '개수별 포스트 목록 조회 API',
     description: '개수별 포스트 목록을 조회한다.'
@@ -104,7 +104,7 @@ export class PostController {
     return this.postService.listPostSearch(searchPostDto, paginationDto);
   }
 
-  @Get('year/list')
+  @Get('year')
   @ApiOperation({
     summary: '포스트의 연도 및 개수 조회 API',
     description: '포스트의 연도 및 개수를 조회한다.'
@@ -120,7 +120,7 @@ export class PostController {
     return this.postService.listYearAndCount(listPostDto);
   }
 
-  @Get('year/list/:year')
+  @Get('year/:year')
   @ApiOperation({
     summary: '연도별 포스트 목록 조회 API',
     description: '연도별 포스트 목록을 조회한다.'
@@ -150,7 +150,7 @@ export class PostController {
     return this.postService.listPostByYear(listPostDto, paginationDto);
   }
 
-  @Get('category/list/:categoryId')
+  @Get('category/:categoryId')
   @ApiOperation({
     summary: '카테고리별 포스트 목록 조회 API',
     description: '카테고리별 포스트 목록을 조회한다.'
@@ -180,7 +180,7 @@ export class PostController {
     return this.postService.listPostByCategory(listPostDto, paginationDto);
   }
 
-  @Get('tag/list/:tagId')
+  @Get('tag/:tagId')
   @ApiOperation({
     summary: '태그별 포스트 목록 조회 API',
     description: '태그별 포스트 목록을 조회한다.'

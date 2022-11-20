@@ -20,6 +20,26 @@ export class SatisfactionController {
     private readonly satisfactionService: SatisfactionService,
   ) {}
 
+  @Get()
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(RoleEnum.ROLE_ADMIN)
+  @ApiOperation({
+    summary: '만족도조사 목록 조회 API',
+    description: '만족도조사 목록을 조회한다.',
+  })
+  @ApiCreatedResponse({
+    type: SatisfactionEntity,
+    description: '만족도조사 목록을 조회한다.',
+  })
+  @ApiQuery({
+    type: SearchSatisfactiontDto,
+    name: 'searchSatisfactiontDto',
+    description: '만족도조사 검색 DTO',
+  })
+  listSatisfaction(@Query(ValidationPipe) searchSatisfactiontDto: SearchSatisfactiontDto): Promise<SatisfactionEntity[]> {
+    return this.satisfactionService.listSatisfaction(searchSatisfactiontDto);
+  }
+
   @Post()
   @ApiOperation({
     summary: '만족도조사 참여 API',
@@ -43,26 +63,6 @@ export class SatisfactionController {
     }
     addSatisfactiontDto.ip = ip;
     return this.satisfactionService.addSatisfaction(addSatisfactiontDto);
-  }
-
-  @Get('list')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
-  @ApiOperation({
-    summary: '만족도조사 목록 조회 API',
-    description: '만족도조사 목록을 조회한다.',
-  })
-  @ApiCreatedResponse({
-    type: SatisfactionEntity,
-    description: '만족도조사 목록을 조회한다.',
-  })
-  @ApiQuery({
-    type: SearchSatisfactiontDto,
-    name: 'searchSatisfactiontDto',
-    description: '만족도조사 검색 DTO',
-  })
-  listSatisfaction(@Query(ValidationPipe) searchSatisfactiontDto: SearchSatisfactiontDto): Promise<SatisfactionEntity[]> {
-    return this.satisfactionService.listSatisfaction(searchSatisfactiontDto);
   }
 
 }

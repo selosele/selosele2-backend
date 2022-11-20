@@ -14,7 +14,7 @@ export class CategoryController {
     private readonly categoryService: CategoryService,
   ) {}
 
-  @Get('list')
+  @Get()
   @ApiOperation({
     summary: '카테고리 목록 및 개수 조회 API',
     description: '카테고리 목록 및 개수를 조회한다.'

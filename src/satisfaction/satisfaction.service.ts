@@ -17,10 +17,12 @@ export class SatisfactionService {
 
   // 만족도조사에 참여한다.
   async addSatisfaction(addSatisfactiontDto: AddSatisfactiontDto): Promise<InsertResult> {
-    const count: number = await this.countSatisfaction(addSatisfactiontDto);
-    if (0 < count) {
+    const foundCount: number = await this.countSatisfaction(addSatisfactiontDto);
+    if (0 < foundCount) {
       throw new BadRequestException('페이지별 하루에 한 번 참여할 수 있습니다.');
     }
+
+    // HTML Escape
     addSatisfactiontDto.comment = sanitizeHtml(addSatisfactiontDto.comment);
     return await this.satisfactionRepository.addSatisfaction(addSatisfactiontDto);
   }

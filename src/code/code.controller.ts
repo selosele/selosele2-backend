@@ -13,7 +13,7 @@ export class CodeController {
     private readonly codeService: CodeService,
   ) {}
 
-  @Get('list/:prefix')
+  @Get(':prefix')
   @ApiOperation({
     summary: '코드 접두어와 매칭되는 공통코드 목록 조회 API',
     description: '코드 접두어와 매칭되는 공통코드 목록을 조회한다.',
@@ -31,7 +31,7 @@ export class CodeController {
     return this.codeService.listCodeByPrefix(prefix);
   }
 
-  @Get('list')
+  @Get()
   @ApiOperation({
     summary: '공통코드 목록 조회 API',
     description: '공통코드 목록을 조회한다.'
@@ -44,7 +44,7 @@ export class CodeController {
     return this.codeService.listCode();
   }
 
-  @Delete('remove')
+  @Delete()
   @ApiOperation({
     summary: '공통코드 삭제 API',
     description: '공통코드를 삭제한다.'
