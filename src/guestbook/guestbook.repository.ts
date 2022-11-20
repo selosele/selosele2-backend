@@ -39,10 +39,7 @@ export class GuestbookRepository extends Repository<GuestbookEntity> {
 
   // 방명록을 등록한다.
   async addGuestbook(addGuestbookDto: AddGuestbookDto): Promise<GuestbookEntity> {
-    const guestbook = await this.save(addGuestbookDto);
-    guestbook.guestbookReply = [];
-    
-    return guestbook;
+    return await this.save(addGuestbookDto);
   }
 
 }

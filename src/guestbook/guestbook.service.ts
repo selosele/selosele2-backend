@@ -31,7 +31,11 @@ export class GuestbookService {
     // HTML Escape
     addGuestbookDto.cont = sanitizeHtml(addGuestbookDto.cont);
 
-    return await this.guestbookRepository.addGuestbook(addGuestbookDto);
+    // 방명록 등록
+    const guestbook = await this.guestbookRepository.addGuestbook(addGuestbookDto);
+    guestbook.guestbookReply = [];
+    
+    return guestbook;
   }
 
 }
