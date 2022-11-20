@@ -13,16 +13,18 @@ export class PostRepository extends Repository<Post> {
   async listPost(listPostDto: ListPostDto): Promise<[Post[], number]> {
     let query = this.createQueryBuilder('post')
       .select("post.id", "id")
+          .distinct(true)
+        .addSelect("COUNT(postLike.id)", "likeCnt")
         .addSelect("post.title", "title")
         .addSelect("post.reg_date", "regDate")
-        .addSelect("post.like_cnt", "likeCnt")
         .addSelect("post.reply_cnt", "replyCnt")
         .addSelect("SUBSTR(post.raw_text, 1, 180)", "rawText")
         .addSelect("post.og_img_url", "ogImgUrl")
         .addSelect("post.secret_yn", "secretYn")
         .addSelect("post.pin_yn", "pinYn")
       .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
-      .leftJoin("post.postTag", "postTag", "postTag.post_id = post.id");
+      .leftJoin("post.postTag", "postTag", "postTag.post_id = post.id")
+      .leftJoin("post.postLike", "postLike", "postLike.post_id = post.id");
 
     if ('N' === listPostDto?.isLogin) {
       query = query
@@ -31,6 +33,8 @@ export class PostRepository extends Repository<Post> {
 
     query = query
       .groupBy("post.id")
+        .addGroupBy("postCategory.category_id")
+        .addGroupBy("postTag.tag_id")
       .orderBy("post.reg_date", "DESC");
 
     return await Promise.all([
@@ -62,7 +66,6 @@ export class PostRepository extends Repository<Post> {
       .select("post.id", "id")
         .addSelect("post.title", "title")
         .addSelect("post.reg_date", "regDate")
-        .addSelect("post.like_cnt", "likeCnt")
         .addSelect("post.reply_cnt", "replyCnt")
         .addSelect("SUBSTR(post.raw_text, 1, 180)", "rawText")
         .addSelect("post.og_img_url", "ogImgUrl")
@@ -143,8 +146,8 @@ export class PostRepository extends Repository<Post> {
   async listYearAndCount(listPostDto: ListPostDto): Promise<Post[]> {
     let query = this.createQueryBuilder('post')
       .select("YEAR(reg_date)", "year")
-        .distinct(true)
-      .addSelect("COUNT('year')", "count");
+          .distinct(true)
+        .addSelect("COUNT('year')", "count");
 
     if ('N' === listPostDto?.isLogin) {
       query = query
@@ -321,11 +324,12 @@ export class PostRepository extends Repository<Post> {
         postTag: {
           tag: true,
         },
+        postLike: true,
       },
       select: [
         'id', 'title', 'regDate',
-        'modDate', 'cont', 'secretYn',
-        'likeCnt', 'replyCnt'
+        'modDate', 'cont', 'ogImgUrl',
+        'secretYn', 'replyCnt'
       ],
       where: {
         ...('N' === getPostDto?.isLogin && { secretYn: 'N' }),

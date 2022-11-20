@@ -2,6 +2,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, Pr
 import { ApiProperty } from '@nestjs/swagger';
 import { PostCategory } from 'src/category/post-category.entity';
 import { PostTag } from 'src/tag/post-tag.entity';
+import { PostLike } from './post-like.entity';
 
 @Entity('post')
 export class Post extends BaseEntity {
@@ -35,14 +36,6 @@ export class Post extends BaseEntity {
     description: '포스트 수정일시'
   })
   modDate?: Date;
-
-  @Column({
-    comment: '포스트 추천수'
-  })
-  @ApiProperty({
-    description: '포스트 추천수'
-  })
-  likeCnt?: number;
 
   @Column({
     comment: '포스트 댓글수'
@@ -129,5 +122,12 @@ export class Post extends BaseEntity {
     description: '포스트 태그'
   })
   postTag?: PostTag[];
+
+  @OneToMany(() => PostLike, postLike => postLike.post)
+  @JoinColumn({ referencedColumnName: 'post_id' })
+  @ApiProperty({
+    description: '포스트 추천'
+  })
+  postLike?: PostLike[];
   
 }
