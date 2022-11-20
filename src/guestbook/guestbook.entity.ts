@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('guestbook')
-export class Guestbook extends BaseEntity {
+export class GuestbookEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   @ApiProperty({

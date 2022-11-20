@@ -1,13 +1,13 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { Repository } from 'typeorm';
 import { ListMenuDto } from './dto/list-menu.dto';
-import { Menu } from './menu.entity';
+import { MenuEntity } from './menu.entity';
 
-@CustomRepository(Menu)
-export class MenuRepository extends Repository<Menu> {
+@CustomRepository(MenuEntity)
+export class MenuRepository extends Repository<MenuEntity> {
 
   // 메뉴 목록을 조회한다.
-  async listMenu(listMenuDto: ListMenuDto): Promise<Menu[]> {
+  async listMenu(listMenuDto: ListMenuDto): Promise<MenuEntity[]> {
     return await this.createQueryBuilder('menu')
       .leftJoinAndSelect("menu.children", "parent")
       .innerJoin("menu.menuRole", "menuRole", "menuRole.menu_id = menu.id")

@@ -4,13 +4,13 @@ import { Brackets, Repository } from 'typeorm';
 import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
-import { Post } from './post.entity';
+import { PostEntity } from './post.entity';
 
-@CustomRepository(Post)
-export class PostRepository extends Repository<Post> {
+@CustomRepository(PostEntity)
+export class PostRepository extends Repository<PostEntity> {
 
   // 포스트 목록을 조회한다.
-  async listPost(listPostDto: ListPostDto): Promise<[Post[], number]> {
+  async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
     let query = this.createQueryBuilder('post')
       .select("post.id", "id")
           .distinct(true)
@@ -23,7 +23,6 @@ export class PostRepository extends Repository<Post> {
         .addSelect("post.secret_yn", "secretYn")
         .addSelect("post.pin_yn", "pinYn")
       .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
-      .leftJoin("post.postTag", "postTag", "postTag.post_id = post.id")
       .leftJoin("post.postLike", "postLike", "postLike.post_id = post.id");
 
     if ('N' === listPostDto?.isLogin) {
@@ -34,7 +33,6 @@ export class PostRepository extends Repository<Post> {
     query = query
       .groupBy("post.id")
         .addGroupBy("postCategory.category_id")
-        .addGroupBy("postTag.tag_id")
       .orderBy("post.reg_date", "DESC");
 
     return await Promise.all([
@@ -44,7 +42,7 @@ export class PostRepository extends Repository<Post> {
   }
 
   // 개수별 포스트 목록을 조회한다.
-  async listPostByLimit(listPostDto: ListPostDto): Promise<Post[]> {
+  async listPostByLimit(listPostDto: ListPostDto): Promise<PostEntity[]> {
     return await this.find({
       select: ['id', 'title', 'ogImgUrl'],
       where: {
@@ -61,7 +59,7 @@ export class PostRepository extends Repository<Post> {
   async listPostSearch(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto,
-  ): Promise<[Post[], number]> {
+  ): Promise<[PostEntity[], number]> {
     let query = this.createQueryBuilder('post')
       .select("post.id", "id")
         .addSelect("post.title", "title")
@@ -143,7 +141,7 @@ export class PostRepository extends Repository<Post> {
   }
 
   // 포스트의 연도 및 개수를 조회한다.
-  async listYearAndCount(listPostDto: ListPostDto): Promise<Post[]> {
+  async listYearAndCount(listPostDto: ListPostDto): Promise<PostEntity[]> {
     let query = this.createQueryBuilder('post')
       .select("YEAR(reg_date)", "year")
           .distinct(true)
@@ -165,7 +163,7 @@ export class PostRepository extends Repository<Post> {
   async listPostByYear(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
-  ): Promise<[Post[], number]> {
+  ): Promise<[PostEntity[], number]> {
     let query = this.createQueryBuilder('post')
       .where("YEAR(reg_date) = :year", { year: listPostDto?.year });
 
@@ -186,7 +184,7 @@ export class PostRepository extends Repository<Post> {
   async listPostByCategory(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
-  ): Promise<[Post[], number]> {
+  ): Promise<[PostEntity[], number]> {
     return await this.findAndCount({
       relations: {
         postCategory: {
@@ -228,7 +226,7 @@ export class PostRepository extends Repository<Post> {
   async listPostByTag(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
-  ): Promise<[Post[], number]> {
+  ): Promise<[PostEntity[], number]> {
     return await this.findAndCount({
       relations: {
         postTag: {
@@ -267,7 +265,7 @@ export class PostRepository extends Repository<Post> {
   }
 
   // 이전/다음 포스트를 조회한다.
-  async listPrevAndNextPost(listPostDto: ListPostDto): Promise<Post[]> {
+  async listPrevAndNextPost(listPostDto: ListPostDto): Promise<PostEntity[]> {
     let query = this.createQueryBuilder('post')
       .select("post.id", "id")
         .addSelect("post.title", "title")
@@ -275,7 +273,7 @@ export class PostRepository extends Repository<Post> {
 
     let prevSubQuery = query.subQuery()
       .select("MAX(id)")
-      .from(Post, 'prev')
+      .from(PostEntity, 'prev')
       .where("1=1");
 
     if ('N' === listPostDto?.isLogin) {
@@ -288,7 +286,7 @@ export class PostRepository extends Repository<Post> {
 
     let nextSubQuery = query.subQuery()
       .select("MIN(id)")
-      .from(Post, 'next')
+      .from(PostEntity, 'next')
       .where("1=1");
 
     if ('N' === listPostDto?.isLogin) {
@@ -309,13 +307,13 @@ export class PostRepository extends Repository<Post> {
     const rawQuery = await this.manager.query(
       `(${prevSql}) UNION (${nextSql})`,
       [...prevParams, ...nextParams],
-    ) as Post[];
+    ) as PostEntity[];
 
     return this.create(rawQuery);
   }
 
   // 포스트를 조회한다.
-  async getPost(getPostDto: GetPostDto): Promise<Post> {
+  async getPost(getPostDto: GetPostDto): Promise<PostEntity> {
     return await this.findOne({
       relations: {
         postCategory: {
@@ -326,11 +324,20 @@ export class PostRepository extends Repository<Post> {
         },
         postLike: true,
       },
-      select: [
-        'id', 'title', 'regDate',
-        'modDate', 'cont', 'ogImgUrl',
-        'secretYn', 'replyCnt'
-      ],
+      select: {
+        id: true,
+        title: true,
+        regDate: true,
+        modDate: true,
+        cont: true,
+        ogImgUrl: true,
+        secretYn: true,
+        replyCnt: true,
+        postLike: {
+          postId: true,
+          ip: false,
+        }
+      },
       where: {
         ...('N' === getPostDto?.isLogin && { secretYn: 'N' }),
         id: getPostDto?.id

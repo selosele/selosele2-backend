@@ -1,9 +1,9 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Post } from './post.entity';
+import { PostEntity } from './post.entity';
 
 @Entity('post_like')
-export class PostLike extends BaseEntity {
+export class PostLikeEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   @ApiProperty({
@@ -21,7 +21,6 @@ export class PostLike extends BaseEntity {
 
   @Column({
     comment: '포스트 추천자 IP',
-    select: false,
   })
   @ApiProperty({
     description: '포스트 추천자 IP',
@@ -36,11 +35,11 @@ export class PostLike extends BaseEntity {
   })
   regDate?: Date;
 
-  @ManyToOne(() => Post, post => post.postLike)
+  @ManyToOne(() => PostEntity, post => post.postLike)
   @JoinColumn({ name: 'post_id' })
   @ApiProperty({
     description: '포스트'
   })
-  post?: Post;
+  post?: PostEntity;
   
 }

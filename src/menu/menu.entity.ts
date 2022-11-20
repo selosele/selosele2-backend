@@ -1,9 +1,9 @@
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { MenuRole } from './menu-role.entity';
+import { MenuRoleEntity } from './menu-role.entity';
 
 @Entity('menu')
-export class Menu extends BaseEntity {
+export class MenuEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   @ApiProperty({
@@ -59,17 +59,17 @@ export class Menu extends BaseEntity {
   })
   useYn?: string;
   
-  @ManyToOne(() => Menu, (menu) => menu.children)
-  parent: Menu;
+  @ManyToOne(() => MenuEntity, (menu) => menu.children)
+  parent: MenuEntity;
 
-  @OneToMany(() => Menu, (menu) => menu.parent)
-  children: Menu[];
+  @OneToMany(() => MenuEntity, (menu) => menu.parent)
+  children: MenuEntity[];
 
-  @OneToMany(() => MenuRole, menuRole => menuRole.menu)
+  @OneToMany(() => MenuRoleEntity, menuRole => menuRole.menu)
   @JoinColumn({ referencedColumnName: 'id' })
   @ApiProperty({
     description: '메뉴 권한'
   })
-  menuRole?: MenuRole[];
+  menuRole?: MenuRoleEntity[];
   
 }

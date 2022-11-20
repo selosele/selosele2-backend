@@ -1,19 +1,19 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { DeleteResult, Repository } from 'typeorm';
-import { Code } from './code.entity';
+import { CodeEntity } from './code.entity';
 
-@CustomRepository(Code)
-export class CodeRepository extends Repository<Code> {
+@CustomRepository(CodeEntity)
+export class CodeRepository extends Repository<CodeEntity> {
 
   // 코드 접두어와 매칭되는 공통코드 목록을 조회한다.
-  async listCodeByPrefix(prefix: string): Promise<Code[]> {
+  async listCodeByPrefix(prefix: string): Promise<CodeEntity[]> {
     return await this.find({
       where: { prefix },
     });
   }
 
   // 공통코드 목록을 조회한다.
-  async listCode(): Promise<Code[]> {
+  async listCode(): Promise<CodeEntity[]> {
     return await this.find({
       order: {
         id: 'ASC',

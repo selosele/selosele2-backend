@@ -2,7 +2,7 @@ import { Body, Query, Controller, ForbiddenException, Post, Get, ValidationPipe,
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { InsertResult } from 'typeorm';
 import { AddSatisfactiontDto } from './dto/add-satisfaction.dto';
-import { Satisfaction } from './satisfaction.entity';
+import { SatisfactionEntity } from './satisfaction.entity';
 import { SatisfactionService } from './satisfaction.service';
 import { RealIP } from 'nestjs-real-ip';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
@@ -26,7 +26,7 @@ export class SatisfactionController {
     description: '만족도조사에 참여한다.',
   })
   @ApiCreatedResponse({
-    type: Satisfaction,
+    type: SatisfactionEntity,
     description: '만족도조사에 참여한다.',
   })
   @ApiBody({
@@ -53,7 +53,7 @@ export class SatisfactionController {
     description: '만족도조사 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: Satisfaction,
+    type: SatisfactionEntity,
     description: '만족도조사 목록을 조회한다.',
   })
   @ApiQuery({
@@ -61,7 +61,7 @@ export class SatisfactionController {
     name: 'searchSatisfactiontDto',
     description: '만족도조사 검색 DTO',
   })
-  listSatisfaction(@Query(ValidationPipe) searchSatisfactiontDto: SearchSatisfactiontDto): Promise<Satisfaction[]> {
+  listSatisfaction(@Query(ValidationPipe) searchSatisfactiontDto: SearchSatisfactiontDto): Promise<SatisfactionEntity[]> {
     return this.satisfactionService.listSatisfaction(searchSatisfactiontDto);
   }
 

@@ -1,7 +1,7 @@
 import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ListWidgetDto } from './dto/list-widget.dto';
-import { Widget } from './widget.entity';
+import { WidgetEntity } from './widget.entity';
 import { WidgetService } from './widget.service';
 
 @Controller('api/widget')
@@ -18,14 +18,14 @@ export class WidgetController {
     description: '위젯 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Widget,
+    type: WidgetEntity,
     description: '위젯 목록을 조회한다.',
   })
   @ApiQuery({
     type: ListWidgetDto,
     description: '위젯 목록 조회 DTO',
   })
-  listWidget(@Query(ValidationPipe) listWidgetDto: ListWidgetDto): Promise<Widget[]> {
+  listWidget(@Query(ValidationPipe) listWidgetDto: ListWidgetDto): Promise<WidgetEntity[]> {
     return this.widgetService.listWidget(listWidgetDto);
   }
 

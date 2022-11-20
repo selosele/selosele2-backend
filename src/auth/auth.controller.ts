@@ -10,7 +10,7 @@ import {
   ParseIntPipe
 } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { InsertResult } from 'typeorm';
@@ -31,7 +31,7 @@ export class AuthController {
     description: '사용자를 조회한다.',
   })
   @ApiCreatedResponse({
-    type: User,
+    type: UserEntity,
     description: '사용자를 조회한다.',
   })
   @ApiParam({
@@ -39,7 +39,7 @@ export class AuthController {
     name: 'userSn',
     description: '사용자 일련번호',
   })
-  getUser(@Param('userSn', ParseIntPipe) userSn: number): Promise<User> {
+  getUser(@Param('userSn', ParseIntPipe) userSn: number): Promise<UserEntity> {
     return this.authService.getUser(userSn);
   }
 

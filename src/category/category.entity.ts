@@ -1,9 +1,9 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { PostCategory } from './post-category.entity';
+import { PostCategoryEntity } from './post-category.entity';
 
 @Entity('category')
-export class Category extends BaseEntity {
+export class CategoryEntity extends BaseEntity {
 
   @PrimaryColumn()
   @ApiProperty({
@@ -27,11 +27,11 @@ export class Category extends BaseEntity {
   })
   regDate?: Date;
 
-  @OneToMany(() => PostCategory, postCategory => postCategory.category)
+  @OneToMany(() => PostCategoryEntity, postCategory => postCategory.category)
   @JoinColumn({ referencedColumnName: 'category_id' })
   @ApiProperty({
     description: '포스트 카테고리'
   })
-  postCategory?: PostCategory[];
+  postCategory?: PostCategoryEntity[];
   
 }

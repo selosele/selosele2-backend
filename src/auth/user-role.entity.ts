@@ -1,10 +1,10 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { BaseEntity, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
-import { User } from "./user.entity";
-import { Role } from "./role.entity";
+import { UserEntity } from "./user.entity";
+import { RoleEntity } from "./role.entity";
 
 @Entity('user_role')
-export class UserRole extends BaseEntity {
+export class UserRoleEntity extends BaseEntity {
 
   @PrimaryColumn()
   @ApiProperty({
@@ -24,18 +24,18 @@ export class UserRole extends BaseEntity {
   })
   roleId?: string;
 
-  @ManyToOne(() => User, user => user.userRole)
+  @ManyToOne(() => UserEntity, user => user.userRole)
   @JoinColumn({ name: 'user_id' })
   @ApiProperty({
     description: '사용자'
   })
-  user?: User;
+  user?: UserEntity;
 
-  @ManyToOne(() => Role, role => role.userRole)
+  @ManyToOne(() => RoleEntity, role => role.userRole)
   @JoinColumn({ name: 'role_id' })
   @ApiProperty({
     description: '권한'
   })
-  role?: Role;
+  role?: RoleEntity;
 
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ListMenuDto } from './dto/list-menu.dto';
-import { Menu } from './menu.entity';
+import { MenuEntity } from './menu.entity';
 import { MenuRepository } from './menu.repository';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class MenuService {
   ) {}
 
   // 메뉴 목록을 조회한다.
-  async listMenu(listMenuDto: ListMenuDto): Promise<Menu[]> {
+  async listMenu(listMenuDto: ListMenuDto): Promise<MenuEntity[]> {
     return await this.menuRepository.listMenu(listMenuDto);
   }
 

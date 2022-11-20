@@ -1,7 +1,7 @@
 import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
-import { Guestbook } from './guestbook.entity';
+import { GuestbookEntity } from './guestbook.entity';
 import { GuestbookService } from './guestbook.service';
 
 @Controller('api/guestbook')
@@ -18,7 +18,7 @@ export class GuestbookController {
     description: '방명록 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: Guestbook,
+    type: GuestbookEntity,
     description: '방명록 목록을 조회한다.',
   })
   @ApiQuery({
@@ -26,7 +26,7 @@ export class GuestbookController {
     name: 'paginationDto',
     description: '페이지네이션 DTO',
   })
-  listGuestbook(@Query(ValidationPipe) paginationDto: PaginationDto): Promise<[Guestbook[], number]> {
+  listGuestbook(@Query(ValidationPipe) paginationDto: PaginationDto): Promise<[GuestbookEntity[], number]> {
     return this.guestbookService.listGuestbook(paginationDto);
   }
 

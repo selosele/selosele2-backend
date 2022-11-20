@@ -4,12 +4,12 @@ import { MenuController } from './menu.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
 import { MenuRepository } from './menu.repository';
-import { Menu } from './menu.entity';
-import { MenuRole } from './menu-role.entity';
+import { MenuEntity } from './menu.entity';
+import { MenuRoleEntity } from './menu-role.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Menu, MenuRole]),
+    TypeOrmModule.forFeature([MenuEntity, MenuRoleEntity]),
     CustomTypeOrmModule.forCustomRepository([MenuRepository]),
   ],
   controllers: [MenuController],

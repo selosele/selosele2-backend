@@ -1,11 +1,11 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { PostCategory } from 'src/category/post-category.entity';
-import { PostTag } from 'src/tag/post-tag.entity';
-import { PostLike } from './post-like.entity';
+import { PostCategoryEntity } from 'src/category/post-category.entity';
+import { PostTagEntity } from 'src/tag/post-tag.entity';
+import { PostLikeEntity } from './post-like.entity';
 
 @Entity('post')
-export class Post extends BaseEntity {
+export class PostEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   @ApiProperty({
@@ -109,25 +109,25 @@ export class Post extends BaseEntity {
   })
   pinYn?: string;
 
-  @OneToMany(() => PostCategory, postCategory => postCategory.post)
+  @OneToMany(() => PostCategoryEntity, postCategory => postCategory.post)
   @JoinColumn({ referencedColumnName: 'post_id' })
   @ApiProperty({
     description: '포스트 카테고리'
   })
-  postCategory?: PostCategory[];
+  postCategory?: PostCategoryEntity[];
 
-  @OneToMany(() => PostTag, postTag => postTag.post)
+  @OneToMany(() => PostTagEntity, postTag => postTag.post)
   @JoinColumn({ referencedColumnName: 'post_id' })
   @ApiProperty({
     description: '포스트 태그'
   })
-  postTag?: PostTag[];
+  postTag?: PostTagEntity[];
 
-  @OneToMany(() => PostLike, postLike => postLike.post)
+  @OneToMany(() => PostLikeEntity, postLike => postLike.post)
   @JoinColumn({ referencedColumnName: 'post_id' })
   @ApiProperty({
     description: '포스트 추천'
   })
-  postLike?: PostLike[];
+  postLike?: PostLikeEntity[];
   
 }

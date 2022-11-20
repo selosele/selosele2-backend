@@ -2,7 +2,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDate
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('cmmn_code')
-export class Code extends BaseEntity {
+export class CodeEntity extends BaseEntity {
 
   @PrimaryColumn()
   @ApiProperty({

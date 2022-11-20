@@ -2,15 +2,15 @@ import { CustomRepository } from "src/configs/CustomRepository";
 import { ListPostDto } from "src/post/dto/list-post.dto";
 import { SearchPostDto } from "src/post/dto/search-post.dto";
 import { PaginationDto } from "src/shared/dto/pagination.dto";
-import { PostTag } from "src/tag/post-tag.entity";
+import { PostTagEntity } from "src/tag/post-tag.entity";
 import { Brackets, Repository } from "typeorm";
-import { PostCategory } from "./post-category.entity";
+import { PostCategoryEntity } from "./post-category.entity";
 
-@CustomRepository(PostCategory)
-export class PostCategoryRepository extends Repository<PostCategory> {
+@CustomRepository(PostCategoryEntity)
+export class PostCategoryRepository extends Repository<PostCategoryEntity> {
 
   // 포스트 목록 조회 시 카테고리를 조회한다.
-  async listPostCategory(listPostDto: ListPostDto): Promise<PostCategory[]> {
+  async listPostCategory(listPostDto: ListPostDto): Promise<PostCategoryEntity[]> {
     let query = this.createQueryBuilder('postCategory')
       .leftJoin("postCategory.post", "post", "post.id = postCategory.post_id")
       .leftJoinAndSelect("postCategory.category", "category", "category.id = postCategory.category_id");
@@ -32,10 +32,10 @@ export class PostCategoryRepository extends Repository<PostCategory> {
   async listPostCategorySearch(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto
-  ): Promise<PostCategory[]> {
+  ): Promise<PostCategoryEntity[]> {
     let query = this.createQueryBuilder('postCategory')
       .leftJoin("postCategory.post", "post", "post.id = postCategory.post_id")
-      .leftJoin(PostTag, "postTag", "postTag.post_id = post.id")
+      .leftJoin(PostTagEntity, "postTag", "postTag.post_id = post.id")
       .leftJoinAndSelect("postCategory.category", "category", "category.id = postCategory.category_id")
       .leftJoinAndSelect("postTag.tag", "tag", "tag.id = postTag.tag_id")
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
-import { Code } from './code.entity';
+import { CodeEntity } from './code.entity';
 import { CodeRepository } from './code.repository';
 import { RemoveCodetDto } from './dto/remove-code.dto';
 
@@ -14,12 +14,12 @@ export class CodeService {
   ) {}
 
   // 코드 접두어와 매칭되는 공통코드 목록을 조회한다.
-  async listCodeByPrefix(prefix: string): Promise<Code[]> {
+  async listCodeByPrefix(prefix: string): Promise<CodeEntity[]> {
     return await this.codeRepository.listCodeByPrefix(prefix);
   }
 
   // 공통코드 목록을 조회한다.
-  async listCode(): Promise<Code[]> {
+  async listCode(): Promise<CodeEntity[]> {
     return await this.codeRepository.listCode();
   }
 

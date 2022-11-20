@@ -1,13 +1,13 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { InsertResult, Repository } from 'typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 
-@CustomRepository(User)
-export class UserRepository extends Repository<User> {
+@CustomRepository(UserEntity)
+export class UserRepository extends Repository<UserEntity> {
 
   // 사용자를 조회한다.
-  async getUser(userKey: number | string): Promise<User> {
+  async getUser(userKey: number | string): Promise<UserEntity> {
     return await this.findOne({
       relations: ['userRole'],
       select: {

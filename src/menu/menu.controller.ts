@@ -4,7 +4,7 @@ import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/role.entity';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
 import { ListMenuDto } from './dto/list-menu.dto';
-import { Menu } from './menu.entity';
+import { MenuEntity } from './menu.entity';
 import { MenuService } from './menu.service';
 
 @Controller('api/menu')
@@ -21,7 +21,7 @@ export class MenuController {
     description: '메뉴 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: Menu,
+    type: MenuEntity,
     description: '메뉴 목록을 조회한다.',
   })
   @ApiQuery({
@@ -32,7 +32,7 @@ export class MenuController {
   listMenu(
     @IsAuthenticated() isAuthenticated: boolean,
     @Query(ValidationPipe) listMenuDto: ListMenuDto,
-  ): Promise<Menu[]> {
+  ): Promise<MenuEntity[]> {
     const dto: ListMenuDto = Builder(ListMenuDto)
       .useYn(listMenuDto?.useYn)
       .roleIds(isAuthenticated ? [RoleEnum.ROLE_ADMIN] : [RoleEnum.ROLE_ANONYMOUS])

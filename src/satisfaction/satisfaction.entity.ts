@@ -2,7 +2,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } 
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('satisfaction')
-export class Satisfaction extends BaseEntity {
+export class SatisfactionEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   @ApiProperty({

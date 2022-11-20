@@ -2,10 +2,10 @@ import { CustomRepository } from "src/configs/CustomRepository";
 import { InsertResult, Repository } from "typeorm";
 import { AddSatisfactiontDto } from "./dto/add-satisfaction.dto";
 import { SearchSatisfactiontDto } from "./dto/search-satisfaction.dto";
-import { Satisfaction } from "./satisfaction.entity";
+import { SatisfactionEntity } from "./satisfaction.entity";
 
-@CustomRepository(Satisfaction)
-export class SatisfactionRepository extends Repository<Satisfaction> {
+@CustomRepository(SatisfactionEntity)
+export class SatisfactionRepository extends Repository<SatisfactionEntity> {
 
   // 만족도조사에 참여한다.
   async addSatisfaction(addSatisfactiontDto: AddSatisfactiontDto): Promise<InsertResult> {
@@ -22,7 +22,7 @@ export class SatisfactionRepository extends Repository<Satisfaction> {
   }
 
   // 만족도조사 목록을 조회한다.
-  async listSatisfaction(searchSatisfactiontDto: SearchSatisfactiontDto): Promise<Satisfaction[]> {
+  async listSatisfaction(searchSatisfactiontDto: SearchSatisfactiontDto): Promise<SatisfactionEntity[]> {
     let query = this.createQueryBuilder('satisfaction')
 
     if ('Y' === searchSatisfactiontDto.isToday) {

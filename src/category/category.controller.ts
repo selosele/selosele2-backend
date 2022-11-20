@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
-import { Category } from './category.entity';
+import { CategoryEntity } from './category.entity';
 import { CategoryService } from './category.service';
 import { ListCategoryDto } from './dto/list-category.dto';
 
@@ -20,10 +20,10 @@ export class CategoryController {
     description: '카테고리 목록 및 개수를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Category,
+    type: CategoryEntity,
     description: '카테고리 목록 및 개수를 조회한다.',
   })
-  listCategoryAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<Category[]> {
+  listCategoryAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<CategoryEntity[]> {
     const listCategoryDto: ListCategoryDto = Builder(ListCategoryDto)
       .isLogin(isAuthenticated ? 'Y' : 'N')
       .build();

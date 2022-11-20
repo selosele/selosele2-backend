@@ -1,6 +1,6 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { Repository } from 'typeorm';
-import { Role } from './role.entity';
+import { RoleEntity } from './role.entity';
 
-@CustomRepository(Role)
-export class RoleRepository extends Repository<Role> {}
+@CustomRepository(RoleEntity)
+export class RoleRepository extends Repository<RoleEntity> {}

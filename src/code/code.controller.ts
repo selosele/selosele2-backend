@@ -1,7 +1,7 @@
 import { Controller, Delete, Get, Body, Param, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { DeleteResult } from 'typeorm';
-import { Code } from './code.entity';
+import { CodeEntity } from './code.entity';
 import { CodeService } from './code.service';
 import { RemoveCodetDto } from './dto/remove-code.dto';
 
@@ -19,7 +19,7 @@ export class CodeController {
     description: '코드 접두어와 매칭되는 공통코드 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: Code,
+    type: CodeEntity,
     description: '코드 접두어와 매칭되는 공통코드 목록을 조회한다.',
   })
   @ApiParam({
@@ -27,7 +27,7 @@ export class CodeController {
     name: 'prefix',
     description: '코드 접두어',
   })
-  listCodeByPrefix(@Param('prefix') prefix: string): Promise<Code[]> {
+  listCodeByPrefix(@Param('prefix') prefix: string): Promise<CodeEntity[]> {
     return this.codeService.listCodeByPrefix(prefix);
   }
 
@@ -37,10 +37,10 @@ export class CodeController {
     description: '공통코드 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Code,
+    type: CodeEntity,
     description: '공통코드 목록을 조회한다.',
   })
-  listCode(): Promise<Code[]> {
+  listCode(): Promise<CodeEntity[]> {
     return this.codeService.listCode();
   }
 

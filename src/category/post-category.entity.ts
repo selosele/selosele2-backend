@@ -1,10 +1,10 @@
 import { BaseEntity, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Post } from 'src/post/post.entity';
-import { Category } from './category.entity';
+import { PostEntity } from 'src/post/post.entity';
+import { CategoryEntity } from './category.entity';
 
 @Entity('post_category')
-export class PostCategory extends BaseEntity {
+export class PostCategoryEntity extends BaseEntity {
 
   @PrimaryColumn()
   @ApiProperty({
@@ -18,18 +18,18 @@ export class PostCategory extends BaseEntity {
   })
   categoryId?: number;
 
-  @ManyToOne(() => Post, post => post.postCategory)
+  @ManyToOne(() => PostEntity, post => post.postCategory)
   @JoinColumn({ name: 'post_id' })
   @ApiProperty({
     description: '포스트'
   })
-  post?: Post;
+  post?: PostEntity;
 
-  @ManyToOne(() => Category, category => category.postCategory)
+  @ManyToOne(() => CategoryEntity, category => category.postCategory)
   @JoinColumn({ name: 'category_id' })
   @ApiProperty({
     description: '카테고리'
   })
-  category?: Category;
+  category?: CategoryEntity;
   
 }

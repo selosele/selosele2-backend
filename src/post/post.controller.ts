@@ -1,20 +1,22 @@
-import { Controller, Get, Query, Param, ValidationPipe, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import { Post } from 'src/post/post.entity';
+import { PostEntity } from 'src/post/post.entity';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
+import { PostLikeService } from './post-like.service';
 import { PostService } from './post.service';
 
 @Controller('api/post')
 @ApiTags('포스트 API')
-export class PostsController {
+export class PostController {
   
   constructor(
     private readonly postService: PostService,
+    private readonly postLikeService: PostLikeService,
   ) {}
 
   @Get('list')
@@ -34,7 +36,7 @@ export class PostsController {
   listPost(
     @IsAuthenticated() isAuthenticated: boolean,
     @Query(ValidationPipe) listPostDto: ListPostDto,
-  ): Promise<[Post[], number]> {
+  ): Promise<[PostEntity[], number]> {
     if (isAuthenticated) {
       // 비밀글 조회를 위한 세팅
       listPostDto.isLogin = 'Y';
@@ -61,7 +63,7 @@ export class PostsController {
   listPostByLimit(
     @IsAuthenticated() isAuthenticated: boolean,
     @Param('limit', ParseIntPipe) limit: number
-  ): Promise<Post[]> {
+  ): Promise<PostEntity[]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
       .limit(limit)
       .isLogin(isAuthenticated ? 'Y' : 'N')
@@ -92,7 +94,7 @@ export class PostsController {
     @IsAuthenticated() isAuthenticated: boolean,
     @Query(ValidationPipe) searchPostDto: SearchPostDto,
     @Query(ValidationPipe) paginationDto: PaginationDto,
-  ): Promise<[Post[], number]> {
+  ): Promise<[PostEntity[], number]> {
     if (isAuthenticated) {
       // 비밀글 조회를 위한 세팅
       searchPostDto.isLogin = 'Y';
@@ -111,7 +113,7 @@ export class PostsController {
     type: Post,
     description: '포스트의 연도 및 개수를 조회한다.',
   })
-  listYearAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<Post[]> {
+  listYearAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<PostEntity[]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
       .isLogin(isAuthenticated ? 'Y' : 'N')
       .build();
@@ -140,7 +142,7 @@ export class PostsController {
     @IsAuthenticated() isAuthenticated: boolean,
     @Param('year') year: string,
     @Query() paginationDto: PaginationDto
-  ): Promise<[Post[], number]> {
+  ): Promise<[PostEntity[], number]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
       .year(year)
       .isLogin(isAuthenticated ? 'Y' : 'N')
@@ -170,7 +172,7 @@ export class PostsController {
     @IsAuthenticated() isAuthenticated: boolean,
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Query() paginationDto: PaginationDto
-  ): Promise<[Post[], number]> {
+  ): Promise<[PostEntity[], number]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
       .categoryId(categoryId)
       .isLogin(isAuthenticated ? 'Y' : 'N')
@@ -200,7 +202,7 @@ export class PostsController {
     @IsAuthenticated() isAuthenticated: boolean,
     @Param('tagId', ParseIntPipe) tagId: number,
     @Query() paginationDto: PaginationDto
-  ): Promise<[Post[], number]> {
+  ): Promise<[PostEntity[], number]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
       .tagId(tagId)
       .isLogin(isAuthenticated ? 'Y' : 'N')
@@ -208,7 +210,7 @@ export class PostsController {
     return this.postService.listPostByTag(listPostDto, paginationDto);
   }
 
-  @Get('prevNext/:id')
+  @Get('prevnext/:id')
   @ApiOperation({
     summary: '이전/다음 포스트 조회 API',
     description: '이전/다음 포스트를 조회한다.'
@@ -225,7 +227,7 @@ export class PostsController {
   listPrevAndNextPost(
     @IsAuthenticated() isAuthenticated: boolean,
     @Param('id', ParseIntPipe) id: number
-  ): Promise<Post[]> {
+  ): Promise<PostEntity[]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
       .id(id)
       .isLogin(isAuthenticated ? 'Y' : 'N')
@@ -250,7 +252,7 @@ export class PostsController {
   getPost(
     @IsAuthenticated() isAuthenticated: boolean,
     @Param('id', ParseIntPipe) id: number
-  ): Promise<Post> {
+  ): Promise<PostEntity> {
     const getPostDto: GetPostDto = Builder(GetPostDto)
       .id(id)
       .isLogin(isAuthenticated ? 'Y' : 'N')

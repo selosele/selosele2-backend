@@ -1,8 +1,8 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('widget')
-export class Widget extends BaseEntity {
+export class WidgetEntity extends BaseEntity {
 
   @PrimaryColumn()
   @ApiProperty({

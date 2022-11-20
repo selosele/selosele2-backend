@@ -1,21 +1,21 @@
-import { PostCategory } from "src/category/post-category.entity";
+import { PostCategoryEntity } from "src/category/post-category.entity";
 import { CustomRepository } from "src/configs/CustomRepository";
 import { SearchPostDto } from "src/post/dto/search-post.dto";
 import { PaginationDto } from "src/shared/dto/pagination.dto";
 import { Brackets, Repository } from "typeorm";
-import { PostTag } from "./post-tag.entity";
+import { PostTagEntity } from "./post-tag.entity";
 
-@CustomRepository(PostTag)
-export class PostTagRepository extends Repository<PostTag> {
+@CustomRepository(PostTagEntity)
+export class PostTagRepository extends Repository<PostTagEntity> {
 
   // 포스트 검색 시 태그를 조회한다.
   async listPostTagSearch(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto
-  ): Promise<PostTag[]> {
+  ): Promise<PostTagEntity[]> {
     let query = this.createQueryBuilder('postTag')
       .leftJoin("postTag.post", "post", "post.id = postTag.post_id")
-      .leftJoin(PostCategory, "postCategory", "postCategory.post_id = post.id")
+      .leftJoin(PostCategoryEntity, "postCategory", "postCategory.post_id = post.id")
       .leftJoinAndSelect("postCategory.category", "category", "category.id = postCategory.category_id")
       .leftJoinAndSelect("postTag.tag", "tag", "tag.id = postTag.tag_id")
 

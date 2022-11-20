@@ -3,12 +3,12 @@ import { WidgetService } from './widget.service';
 import { WidgetController } from './widget.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
-import { Widget } from './widget.entity';
+import { WidgetEntity } from './widget.entity';
 import { WidgetRepository } from './widget.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Widget]),
+    TypeOrmModule.forFeature([WidgetEntity]),
     CustomTypeOrmModule.forCustomRepository([WidgetRepository]),
   ],
   controllers: [WidgetController],
