@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
 import { GuestbookEntity } from './guestbook.entity';
 import { GuestbookRepository } from './guestbook.repository';
+import { GuestbookReplyEntity } from './guestbook-reply.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([GuestbookEntity]),
+    TypeOrmModule.forFeature([GuestbookEntity, GuestbookReplyEntity]),
     CustomTypeOrmModule.forCustomRepository([GuestbookRepository]),
   ],
   controllers: [GuestbookController],
