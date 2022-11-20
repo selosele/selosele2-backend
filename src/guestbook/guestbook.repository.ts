@@ -1,6 +1,7 @@
 import { CustomRepository } from "src/configs/CustomRepository";
 import { PaginationDto } from "src/shared/dto/pagination.dto";
 import { Repository } from "typeorm";
+import { AddGuestbookDto } from "./dto/add-guestbook.dto";
 import { GuestbookEntity } from "./guestbook.entity";
 
 @CustomRepository(GuestbookEntity)
@@ -34,6 +35,14 @@ export class GuestbookRepository extends Repository<GuestbookEntity> {
       take: paginationDto.pageSize,
       skip: paginationDto.getSkipSize(),
     });
+  }
+
+  // 방명록을 등록한다.
+  async addGuestbook(addGuestbookDto: AddGuestbookDto): Promise<GuestbookEntity> {
+    const guestbook = await this.save(addGuestbookDto);
+    guestbook.guestbookReply = [];
+    
+    return guestbook;
   }
 
 }

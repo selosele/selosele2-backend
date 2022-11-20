@@ -1,6 +1,8 @@
-import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, ValidationPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { RealIP } from 'nestjs-real-ip';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
+import { AddGuestbookDto } from './dto/add-guestbook.dto';
 import { GuestbookEntity } from './guestbook.entity';
 import { GuestbookService } from './guestbook.service';
 
@@ -12,7 +14,7 @@ export class GuestbookController {
     private readonly guestbookService: GuestbookService,
   ) {}
 
-  @Get('list')
+  @Get()
   @ApiOperation({
     summary: '방명록 목록 조회 API',
     description: '방명록 목록을 조회한다.',
@@ -28,6 +30,28 @@ export class GuestbookController {
   })
   listGuestbook(@Query(ValidationPipe) paginationDto: PaginationDto): Promise<[GuestbookEntity[], number]> {
     return this.guestbookService.listGuestbook(paginationDto);
+  }
+
+  @Post()
+  @ApiOperation({
+    summary: '방명록 등록 API',
+    description: '방명록을 등록한다.',
+  })
+  @ApiCreatedResponse({
+    type: GuestbookEntity,
+    description: '방명록을 등록한다.',
+  })
+  @ApiQuery({
+    type: AddGuestbookDto,
+    name: 'addGuestbookDto',
+    description: '방명록 등록 DTO',
+  })
+  addGuestbook(
+    @RealIP() ip: string,
+    @Body(ValidationPipe) addGuestbookDto: AddGuestbookDto
+  ): Promise<GuestbookEntity> {
+    addGuestbookDto.ip = ip;
+    return this.guestbookService.addGuestbook(addGuestbookDto);
   }
 
 }
