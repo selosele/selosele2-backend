@@ -93,7 +93,8 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
     query = query
       .groupBy("post.id")
         .addGroupBy("postCategory.post_id")
-        .addGroupBy("category.id")
+        .addGroupBy("postCategory.category_id")
+        .addGroupBy("postTag.tag_id")
       .orderBy("post.reg_date", "DESC")
       .limit(paginationDto.pageSize)
       .offset(paginationDto.getSkipSize());
