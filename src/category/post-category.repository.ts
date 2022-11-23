@@ -22,6 +22,7 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
 
     query = query
       .groupBy("post.id")
+        .addGroupBy("postCategory.post_id")
         .addGroupBy("postCategory.category_id")
       .orderBy("post.reg_date", "DESC");
 
