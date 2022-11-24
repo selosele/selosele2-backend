@@ -78,12 +78,10 @@ export class PostRepository extends Repository<PostEntity> {
         .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
         .leftJoin("post.postTag", "postTag", "postTag.post_id = post.id")
         .leftJoin("postCategory.category", "category", "category.id = postCategory.category_id")
-        .leftJoin("postTag.tag", "tag", "tag.id = postTag.tag_id")
         .where(new Brackets(qb => {
           qb.where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` })
             .orWhere(caseSensitive + "post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` })
             .orWhere(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
-            .orWhere(caseSensitive + "tag.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
         }));
     }
     
@@ -110,16 +108,6 @@ export class PostRepository extends Repository<PostEntity> {
         .leftJoin("postCategory.category", "category", "category.id = postCategory.category_id")
         .where(new Brackets(qb => {
           qb.where(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` });
-        }));
-    }
-
-    // 태그로 검색
-    if ('005' === searchPostDto.t) {
-      query = query
-        .leftJoin("post.postTag", "postTag", "postTag.post_id = post.id")
-        .leftJoin("postTag.tag", "tag", "tag.id = postTag.tag_id")
-        .where(new Brackets(qb => {
-          qb.where(caseSensitive + "tag.nm LIKE :nm", { nm: `%${searchPostDto.q}%` });
         }));
     }
 
