@@ -71,8 +71,9 @@ export class AuthService {
     const { userId, userPw } = authCredentialsDto;
 
     const user: UserEntity = await this.getUser(userId);
+    const matchPw = await bcrypt.compare(userPw, user.userPw);
 
-    if (user && (await bcrypt.compare(userPw, user.userPw))) {
+    if (user && matchPw) {
       // 사용자 토큰 생성
       const payload = {
         userSn: user.userSn,

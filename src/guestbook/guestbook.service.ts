@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { AddGuestbookDto } from './dto/add-guestbook.dto';
@@ -6,6 +6,7 @@ import { GuestbookEntity } from './guestbook.entity';
 import { GuestbookRepository } from './guestbook.repository';
 import * as bcrypt from 'bcrypt';
 import * as sanitizeHtml from 'sanitize-html';
+import { RemoveGuestbookDto } from './dto/remove-guestbook.dto';
 
 @Injectable()
 export class GuestbookService {
@@ -18,6 +19,11 @@ export class GuestbookService {
   // 방명록 목록을 조회한다.
   async listGuestbook(paginationDto: PaginationDto): Promise<[GuestbookEntity[], number]> {
     return await this.guestbookRepository.listGuestbook(paginationDto);
+  }
+
+  // 방명록을 조회한다.
+  async getGuestbook(id: number): Promise<GuestbookEntity> {
+    return await this.guestbookRepository.getGuestbook(id);
   }
 
   // 방명록을 등록한다.
@@ -36,6 +42,20 @@ export class GuestbookService {
     guestbook.guestbookReply = [];
     
     return guestbook;
+  }
+
+  // 방명록을 삭제한다.
+  async removeGuestbook(removeGuestbookDto: RemoveGuestbookDto): Promise<GuestbookEntity> {
+    const { id, authorPw } = removeGuestbookDto;
+
+    const guestbook: GuestbookEntity = await this.getGuestbook(id);
+    const matchPw = await bcrypt.compare(authorPw, guestbook.authorPw);
+
+    if (!matchPw) {
+      throw new ForbiddenException('비밀번호를 확인하세요.');
+    }
+    
+    return this.guestbookRepository.removeGuestbook(<GuestbookEntity>removeGuestbookDto);
   }
 
 }

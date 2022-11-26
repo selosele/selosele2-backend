@@ -37,9 +37,21 @@ export class GuestbookRepository extends Repository<GuestbookEntity> {
     });
   }
 
+  // 방명록을 조회한다.
+  async getGuestbook(id: number): Promise<GuestbookEntity> {
+    return await this.findOne({
+      where: { id },
+    });
+  }
+
   // 방명록을 등록한다.
   async addGuestbook(addGuestbookDto: AddGuestbookDto): Promise<GuestbookEntity> {
     return await this.save(addGuestbookDto);
+  }
+
+  // 방명록을 삭제한다.
+  async removeGuestbook(removeGuestbookDto: GuestbookEntity): Promise<GuestbookEntity> {
+    return await this.remove(removeGuestbookDto);
   }
 
 }
