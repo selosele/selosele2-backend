@@ -2,6 +2,7 @@ import { CustomRepository } from "src/configs/CustomRepository";
 import { PaginationDto } from "src/shared/dto/pagination.dto";
 import { Repository } from "typeorm";
 import { AddGuestbookDto } from "./dto/add-guestbook.dto";
+import { UpdateGuestbookDto } from "./dto/update-guestbook.dto";
 import { GuestbookEntity } from "./guestbook.entity";
 
 @CustomRepository(GuestbookEntity)
@@ -47,6 +48,11 @@ export class GuestbookRepository extends Repository<GuestbookEntity> {
   // 방명록을 등록한다.
   async addGuestbook(addGuestbookDto: AddGuestbookDto): Promise<GuestbookEntity> {
     return await this.save(addGuestbookDto);
+  }
+
+  // 방명록을 수정한다.
+  async updateGuestbook(updateGuestbookDto: UpdateGuestbookDto): Promise<GuestbookEntity> {
+    return await this.save(updateGuestbookDto);
   }
 
   // 방명록을 삭제한다.

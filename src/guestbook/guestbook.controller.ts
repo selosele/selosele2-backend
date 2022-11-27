@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Post, Query, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { RealIP } from 'nestjs-real-ip';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { AddGuestbookDto } from './dto/add-guestbook.dto';
 import { RemoveGuestbookDto } from './dto/remove-guestbook.dto';
+import { UpdateGuestbookDto } from './dto/update-guestbook.dto';
 import { GuestbookEntity } from './guestbook.entity';
 import { GuestbookService } from './guestbook.service';
 
@@ -52,6 +53,25 @@ export class GuestbookController {
   ): Promise<GuestbookEntity> {
     addGuestbookDto.ip = ip;
     return this.guestbookService.addGuestbook(addGuestbookDto);
+  }
+
+  @Put(':id')
+  @ApiOperation({
+    summary: '방명록 수정 API',
+    description: '방명록을 수정한다.',
+  })
+  @ApiCreatedResponse({
+    type: GuestbookEntity,
+    description: '방명록을 수정한다.',
+  })
+  @ApiBody({
+    type: AddGuestbookDto,
+    description: '방명록 수정 DTO',
+  })
+  updateGuestbook(
+    @Body(ValidationPipe) updateGuestbookDto: UpdateGuestbookDto
+  ): Promise<GuestbookEntity> {
+    return this.guestbookService.updateGuestbook(updateGuestbookDto);
   }
 
   @Delete(':id')
