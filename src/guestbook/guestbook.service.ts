@@ -74,11 +74,13 @@ export class GuestbookService {
   async removeGuestbook(removeGuestbookDto: RemoveGuestbookDto): Promise<GuestbookEntity> {
     const { id, authorPw } = removeGuestbookDto;
 
-    const foundGuestbook: GuestbookEntity = await this.getGuestbook(id);
-    const matchPw = await bcrypt.compare(authorPw, foundGuestbook.authorPw);
-
-    if (!matchPw) {
-      throw new ForbiddenException('비밀번호를 확인하세요.');
+    if ('N' === removeGuestbookDto.isLogin) {
+      const foundGuestbook: GuestbookEntity = await this.getGuestbook(id);
+      const matchPw = await bcrypt.compare(authorPw, foundGuestbook.authorPw);
+  
+      if (!matchPw) {
+        throw new ForbiddenException('비밀번호를 확인하세요.');
+      }
     }
     
     return this.guestbookRepository.removeGuestbook(<GuestbookEntity>removeGuestbookDto);

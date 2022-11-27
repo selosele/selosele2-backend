@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 
 // 방명록 삭제 DTO
 export class RemoveGuestbookDto {
@@ -11,7 +11,11 @@ export class RemoveGuestbookDto {
   id?: number;
 
   // 방명록 작성자 비밀번호
-  @IsNotEmpty()
+  @IsOptional()
   authorPw?: string;
+
+  // 로그인 여부
+  @IsOptional()
+  isLogin?: string;
 
 }

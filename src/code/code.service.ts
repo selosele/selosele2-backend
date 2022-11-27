@@ -4,6 +4,7 @@ import { DeleteResult } from 'typeorm';
 import { CodeEntity } from './code.entity';
 import { CodeRepository } from './code.repository';
 import { RemoveCodetDto } from './dto/remove-code.dto';
+import { SaveCodetDto } from './dto/save-code.dto';
 
 @Injectable()
 export class CodeService {
@@ -13,14 +14,19 @@ export class CodeService {
     private readonly codeRepository: CodeRepository,
   ) {}
 
-  // 코드 접두어와 매칭되는 공통코드 목록을 조회한다.
-  async listCodeByPrefix(prefix: string): Promise<CodeEntity[]> {
-    return await this.codeRepository.listCodeByPrefix(prefix);
+  // 공통코드 목록을 조회한다.
+  async listCode(prefix?: string): Promise<CodeEntity[]> {
+    return await this.codeRepository.listCode(prefix);
   }
 
-  // 공통코드 목록을 조회한다.
-  async listCode(): Promise<CodeEntity[]> {
-    return await this.codeRepository.listCode();
+  // 공통코드를 조회한다.
+  async getCode(id: string): Promise<CodeEntity> {
+    return await this.codeRepository.getCode(id);
+  }
+
+  // 공통코드를 추가/수정한다.
+  async saveCode(saveCodeDto: SaveCodetDto): Promise<CodeEntity> {
+    return await this.codeRepository.saveCode(saveCodeDto);
   }
 
   // 공통코드를 삭제한다.
