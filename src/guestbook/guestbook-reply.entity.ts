@@ -79,6 +79,7 @@ export class GuestbookReplyEntity extends BaseEntity {
   @ManyToOne(() => GuestbookEntity, guestbook => guestbook.guestbookReply)
   @JoinColumn({ name: 'parent_id' })
   @ApiProperty({
+    type: () => GuestbookEntity,
     description: '방명록',
   })
   guestbook?: GuestbookEntity;
