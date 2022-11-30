@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { isEmpty } from 'src/shared/util/util';
 import { DeleteResult } from 'typeorm';
 import { CodeEntity } from './code.entity';
 import { CodeRepository } from './code.repository';
@@ -26,6 +27,10 @@ export class CodeService {
 
   // 공통코드를 추가/수정한다.
   async saveCode(saveCodeDto: SaveCodetDto): Promise<CodeEntity> {
+    if (isEmpty(saveCodeDto?.id)) {
+      const { prefix, val } = saveCodeDto;
+      saveCodeDto.id = prefix + val;
+    }
     return await this.codeRepository.saveCode(saveCodeDto);
   }
 
