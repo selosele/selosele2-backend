@@ -4,7 +4,7 @@ import { RoleEnum } from 'src/auth/role.entity';
 import { Roles } from 'src/shared/decorator/auth/roles.decorator';
 import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
 import { RoleGuard } from 'src/shared/guard/role.guard';
-import { DeleteResult } from 'typeorm';
+import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
 import { CodeEntity } from './code.entity';
 import { CodeService } from './code.service';
 import { RemoveCodetDto } from './dto/remove-code.dto';
@@ -75,14 +75,14 @@ export class CodeController {
     description: '공통코드를 추가한다.'
   })
   @ApiCreatedResponse({
-    type: CodeEntity,
+    type: InsertResult,
     description: '공통코드를 추가한다.',
   })
   @ApiBody({
     type: SaveCodetDto,
     description: '공통코드 추가/수정 DTO',
   })
-  addCode(@Body(ValidationPipe) saveCodetDto: SaveCodetDto): Promise<CodeEntity> {
+  addCode(@Body(ValidationPipe) saveCodetDto: SaveCodetDto): Promise<InsertResult | UpdateResult> {
     return this.codeService.saveCode(saveCodetDto);
   }
 
@@ -94,14 +94,14 @@ export class CodeController {
     description: '공통코드를 수정한다.'
   })
   @ApiCreatedResponse({
-    type: CodeEntity,
+    type: UpdateResult,
     description: '공통코드를 수정한다.',
   })
   @ApiBody({
     type: SaveCodetDto,
     description: '공통코드 추가/수정 DTO',
   })
-  updateCode(@Body(ValidationPipe) saveCodetDto: SaveCodetDto): Promise<CodeEntity> {
+  updateCode(@Body(ValidationPipe) saveCodetDto: SaveCodetDto): Promise<InsertResult | UpdateResult> {
     return this.codeService.saveCode(saveCodetDto);
   }
 

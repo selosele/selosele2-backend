@@ -1,6 +1,6 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { isNotEmpty } from 'src/shared/util/util';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, InsertResult, Repository, UpdateResult } from 'typeorm';
 import { CodeEntity } from './code.entity';
 import { SaveCodetDto } from './dto/save-code.dto';
 
@@ -26,9 +26,16 @@ export class CodeRepository extends Repository<CodeEntity> {
     });
   }
 
-  // 공통코드를 추가/수정한다.
-  async saveCode(saveCodeDto: SaveCodetDto): Promise<CodeEntity> {
-    return await this.save(saveCodeDto);
+  // 공통코드를 추가한다.
+  async addCode(saveCodeDto: SaveCodetDto): Promise<InsertResult> {
+    return await this.insert(saveCodeDto);
+  }
+
+  // 공통코드를 수정한다.
+  async updateCode(saveCodeDto: SaveCodetDto): Promise<UpdateResult> {
+    return await this.update({
+      id: saveCodeDto.id
+    }, saveCodeDto);
   }
 
   // 공통코드를 삭제한다.

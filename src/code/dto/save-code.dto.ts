@@ -3,6 +3,10 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 // 공통코드 추가/수정 DTO
 export class SaveCodetDto {
 
+  // 기존 코드 ID
+  @IsOptional()
+  originId?: string;
+
   // 코드 ID
   @IsOptional()
   id?: string;
