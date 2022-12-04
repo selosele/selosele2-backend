@@ -40,7 +40,7 @@ export class CodeService {
 
   // 공통코드를 삭제한다.
   async removeCode(removeCodetDto: RemoveCodetDto[]): Promise<DeleteResult> {
-    let idList = [];
+    let idList: string[] = [];
 
     removeCodetDto.forEach(d => {
       idList.push(d.id);

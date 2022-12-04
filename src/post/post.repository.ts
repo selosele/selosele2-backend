@@ -1,5 +1,6 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
+import { isNotEmpty } from 'src/shared/util/util';
 import { Brackets, Repository } from 'typeorm';
 import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
@@ -25,9 +26,17 @@ export class PostRepository extends Repository<PostEntity> {
       .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
       .leftJoin("post.postLike", "postLike", "postLike.post_id = post.id");
 
+    query = query
+      .where("1=1")
+
     if ('N' === listPostDto?.isLogin) {
       query = query
-        .where("post.secret_yn = 'N'");
+        .andWhere("post.secret_yn = 'N'");
+    }
+
+    if (isNotEmpty(listPostDto?.categoryId) && 0 < listPostDto?.categoryId) {
+      query = query
+        .andWhere("postCategory.category_id = :category_id", { category_id: listPostDto.categoryId });
     }
 
     query = query
