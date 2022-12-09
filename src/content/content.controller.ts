@@ -26,7 +26,7 @@ export class ContentController {
     type: ContentEntity,
     description: '콘텐츠 목록을 조회한다.',
   })
-  listPost(): Promise<ContentEntity[]> {
+  listContent(): Promise<ContentEntity[]> {
     return this.contentService.listContent();
   }
 

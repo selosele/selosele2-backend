@@ -1,5 +1,6 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { BizException } from "src/shared/exception/biz.exception";
 import { isEmpty } from "src/shared/util/util";
 import { DeleteResult, InsertResult } from "typeorm";
 import { GetPostLikeDto } from "./dto/get-post-like.dto";
@@ -23,7 +24,7 @@ export class PostLikeService {
   // 포스트를 추천/추천 해제한다.
   async savePostLike(savePostLikeDto: SavePostLikeDto): Promise<number> {
     if ('Y' === savePostLikeDto.isLogin) {
-      throw new ForbiddenException('관리자는 추천할 수 없습니다.');
+      throw new BizException('관리자는 추천할 수 없습니다.');
     }
 
     // 추천 이력 조회

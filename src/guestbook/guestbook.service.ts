@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { AddGuestbookDto } from './dto/add-guestbook.dto';
@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import * as sanitizeHtml from 'sanitize-html';
 import { RemoveGuestbookDto } from './dto/remove-guestbook.dto';
 import { UpdateGuestbookDto } from './dto/update-guestbook.dto';
+import { BizException } from 'src/shared/exception/biz.exception';
 
 @Injectable()
 export class GuestbookService {
@@ -53,7 +54,7 @@ export class GuestbookService {
     const matchPw = await bcrypt.compare(authorPw, foundGuestbook.authorPw);
 
     if (!matchPw) {
-      throw new ForbiddenException('비밀번호를 확인하세요.');
+      throw new BizException('비밀번호를 확인하세요.');
     }
 
     // 비밀번호 암호화
@@ -79,7 +80,7 @@ export class GuestbookService {
       const matchPw = await bcrypt.compare(authorPw, foundGuestbook.authorPw);
   
       if (!matchPw) {
-        throw new ForbiddenException('비밀번호를 확인하세요.');
+        throw new BizException('비밀번호를 확인하세요.');
       }
     }
     

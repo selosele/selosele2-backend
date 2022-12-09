@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InsertResult } from 'typeorm';
 import { AddSatisfactiontDto } from './dto/add-satisfaction.dto';
@@ -6,6 +6,7 @@ import { SatisfactionRepository } from './satisfaction.repository';
 import * as sanitizeHtml from 'sanitize-html';
 import { SatisfactionEntity } from './satisfaction.entity';
 import { SearchSatisfactiontDto } from './dto/search-satisfaction.dto';
+import { BizException } from 'src/shared/exception/biz.exception';
 
 @Injectable()
 export class SatisfactionService {
@@ -19,7 +20,7 @@ export class SatisfactionService {
   async addSatisfaction(addSatisfactiontDto: AddSatisfactiontDto): Promise<InsertResult> {
     const foundCount: number = await this.countSatisfaction(addSatisfactiontDto);
     if (0 < foundCount) {
-      throw new BadRequestException('페이지별 하루에 한 번 참여할 수 있습니다.');
+      throw new BizException('페이지별 하루에 한 번 참여할 수 있습니다.');
     }
 
     // HTML Escape

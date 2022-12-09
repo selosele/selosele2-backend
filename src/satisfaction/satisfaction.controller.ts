@@ -1,4 +1,4 @@
-import { Body, Query, Controller, ForbiddenException, Post, Get, ValidationPipe, UseGuards } from '@nestjs/common';
+import { Body, Query, Controller, Post, Get, ValidationPipe, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { InsertResult } from 'typeorm';
 import { AddSatisfactiontDto } from './dto/add-satisfaction.dto';
@@ -11,6 +11,7 @@ import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
 import { RoleGuard } from 'src/shared/guard/role.guard';
 import { RoleEnum } from 'src/auth/role.entity';
 import { SearchSatisfactiontDto } from './dto/search-satisfaction.dto';
+import { BizException } from 'src/shared/exception/biz.exception';
 
 @Controller('api/satisfaction')
 @ApiTags('만족도조사 API')
@@ -59,7 +60,7 @@ export class SatisfactionController {
     @IsAuthenticated() isAuthenticated: boolean
   ): Promise<InsertResult> {
     if (isAuthenticated) {
-      throw new ForbiddenException('관리자는 참여할 수 없습니다.');
+      throw new BizException('관리자는 참여할 수 없습니다.');
     }
     addSatisfactiontDto.ip = ip;
     return this.satisfactionService.addSatisfaction(addSatisfactiontDto);

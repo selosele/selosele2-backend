@@ -2,7 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from 'src/category/post-category.repository';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
-import { isEmpty } from 'src/shared/util/util';
+import { BizException } from 'src/shared/exception/biz.exception';
+import { isEmpty, isNotEmpty } from 'src/shared/util/util';
 import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
@@ -23,9 +24,9 @@ export class PostService {
   async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
     const [post, postCategory] = await Promise.all([
       // 포스트 조회
-      await this.postRepository.listPost(listPostDto),
+      this.postRepository.listPost(listPostDto),
       // 카테고리 조회
-      await this.postCategoryRepository.listPostCategory(listPostDto),
+      this.postCategoryRepository.listPostCategory(listPostDto),
     ]);
 
     // 포스트 데이타에 카테고리 데이타를 넣어준다.
@@ -48,9 +49,9 @@ export class PostService {
   ): Promise<[PostEntity[], number]> {
     const [post, postCategory] = await Promise.all([
       // 포스트 조회
-      await this.postRepository.listPostSearch(searchPostDto, paginationDto),
+      this.postRepository.listPostSearch(searchPostDto, paginationDto),
       // 카테고리 조회
-      await this.postCategoryRepository.listPostCategorySearch(searchPostDto, paginationDto),
+      this.postCategoryRepository.listPostCategorySearch(searchPostDto, paginationDto),
     ]);
 
     // 포스트 데이타에 카테고리 데이타를 넣어준다.
@@ -98,9 +99,15 @@ export class PostService {
   // 포스트를 조회한다.
   async getPost(getPostDto: GetPostDto): Promise<PostEntity> {
     const post = await this.postRepository.getPost(getPostDto);
+
     if (isEmpty(post)) {
       throw new NotFoundException();
     }
+
+    if (isNotEmpty(post) && 'N' === getPostDto.isLogin && 'Y' === post.secretYn) {
+      throw new BizException('비밀글은 조회할 수 없습니다.');
+    }
+
     return post;
   }
 

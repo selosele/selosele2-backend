@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthCredentialsDto, AuthCredentialsRoleDto } from './dto/auth-credentials.dto';
 import { UserRepository } from './user.repository';
@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from './user.entity';
 import { RoleEnum } from './role.entity';
+import { BizException } from 'src/shared/exception/biz.exception';
 
 @Injectable()
 export class AuthService {
@@ -33,7 +34,7 @@ export class AuthService {
     // ID 중복 체크
     const foundUser: UserEntity = await this.userRepository.findOne({ where: { userId } });
     if (foundUser) {
-      throw new ConflictException('중복된 사용자 ID입니다.');
+      throw new BizException('중복된 사용자 ID입니다.');
     }
 
     // 비밀번호 암호화
@@ -71,6 +72,11 @@ export class AuthService {
     const { userId, userPw } = authCredentialsDto;
 
     const user: UserEntity = await this.getUser(userId);
+
+    if (!user) {
+      throw new BizException('로그인에 실패했습니다.');
+    }
+
     const matchPw = await bcrypt.compare(userPw, user.userPw);
 
     if (user && matchPw) {
@@ -83,7 +89,8 @@ export class AuthService {
 
       return { accessToken };
     }
-    throw new UnauthorizedException('로그인에 실패했습니다.');
+    
+    throw new BizException('로그인에 실패했습니다.');
   }
 
 }

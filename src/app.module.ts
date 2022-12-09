@@ -15,6 +15,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { GuestbookModule } from './guestbook/guestbook.module';
 import { ContentModule } from './content/content.module';
+import { APP_FILTER } from '@nestjs/core';
+import { BizExceptionFilter } from './shared/exception/biz-exception.filter';
 
 @Module({
   imports: [
@@ -37,6 +39,11 @@ import { ContentModule } from './content/content.module';
     GuestbookModule,
     ContentModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: BizExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
