@@ -45,8 +45,8 @@ export class PostRepository extends Repository<PostEntity> {
       .orderBy("post.reg_date", "DESC");
 
     return await Promise.all([
-      await query.getRawMany(),
-      await query.getCount(),
+      query.getRawMany(),
+      query.getCount(),
     ]);
   }
 
@@ -132,8 +132,8 @@ export class PostRepository extends Repository<PostEntity> {
       .offset(paginationDto.getSkipSize());
 
     return await Promise.all([
-      await query.getRawMany(),
-      await query.getCount(),
+      query.getRawMany(),
+      query.getCount(),
     ]);
   }
 
