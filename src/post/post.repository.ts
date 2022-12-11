@@ -1,7 +1,7 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { isNotEmpty } from 'src/shared/util/util';
-import { Brackets, Repository } from 'typeorm';
+import { Brackets, DeleteResult, Repository } from 'typeorm';
 import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
@@ -340,6 +340,16 @@ export class PostRepository extends Repository<PostEntity> {
         id: getPostDto?.id
       },
     });
+  }
+
+  // 포스트 다건을 삭제한다.
+  async removePosts(idList: number[]): Promise<DeleteResult> {
+    return await this.delete(idList);
+  }
+
+  // 포스트를 삭제한다.
+  async removePost(id: number): Promise<DeleteResult> {
+    return await this.delete(id);
   }
 
 }

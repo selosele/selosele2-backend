@@ -4,8 +4,10 @@ import { PostCategoryRepository } from 'src/category/post-category.repository';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { BizException } from 'src/shared/exception/biz.exception';
 import { isEmpty, isNotEmpty } from 'src/shared/util/util';
+import { DeleteResult } from 'typeorm';
 import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
+import { RemovePostDto } from './dto/remove-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
 import { PostEntity } from './post.entity';
 import { PostRepository } from './post.repository';
@@ -109,6 +111,22 @@ export class PostService {
     }
 
     return post;
+  }
+
+  // 포스트 다건을 삭제한다.
+  async removePosts(removePostDto: RemovePostDto[]): Promise<DeleteResult> {
+    let idList: number[] = [];
+
+    removePostDto.forEach(d => {
+      idList.push(d.id);
+    });
+
+    return await this.postRepository.removePosts(idList);
+  }
+
+  // 포스트를 삭제한다.
+  async removePost(id: number): Promise<DeleteResult> {
+    return await this.postRepository.removePost(id);
   }
 
 }

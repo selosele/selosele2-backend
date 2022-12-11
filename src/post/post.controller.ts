@@ -1,11 +1,17 @@
-import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Delete, UseGuards, Body } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
+import { RoleEnum } from 'src/auth/role.entity';
 import { PostEntity } from 'src/post/post.entity';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
+import { Roles } from 'src/shared/decorator/auth/roles.decorator';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
+import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
+import { RoleGuard } from 'src/shared/guard/role.guard';
+import { DeleteResult } from 'typeorm';
 import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
+import { RemovePostDto } from './dto/remove-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
 import { PostLikeService } from './post-like.service';
 import { PostService } from './post.service';
@@ -258,6 +264,45 @@ export class PostController {
       .isLogin(isAuthenticated ? 'Y' : 'N')
       .build();
     return this.postService.getPost(getPostDto);
+  }
+
+  @Delete()
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(RoleEnum.ROLE_ADMIN)
+  @ApiOperation({
+    summary: '포스트 다건 삭제 API',
+    description: '포스트 다건을 삭제한다.'
+  })
+  @ApiCreatedResponse({
+    type: DeleteResult,
+    description: '포스트 다건을 삭제한다.',
+  })
+  @ApiBody({
+    type: RemovePostDto,
+    description: '포스트 삭제 DTO',
+  })
+  removePosts(@Body(ValidationPipe) removePostDto: RemovePostDto[]): Promise<DeleteResult> {
+    return this.postService.removePosts(removePostDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(RoleEnum.ROLE_ADMIN)
+  @ApiOperation({
+    summary: '포스트 삭제 API',
+    description: '포스트를 삭제한다.'
+  })
+  @ApiCreatedResponse({
+    type: DeleteResult,
+    description: '포스트를 삭제한다.',
+  })
+  @ApiParam({
+    type: Number,
+    name: 'id',
+    description: '포스트 ID',
+  })
+  removePost(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
+    return this.postService.removePost(id);
   }
 
 }
