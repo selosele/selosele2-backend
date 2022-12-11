@@ -1,7 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 
 // 공통코드 삭제 DTO
-export class RemoveCodetDto {
+export class RemoveCodeDto {
 
   // 코드 ID
   @IsNotEmpty()

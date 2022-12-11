@@ -3,8 +3,7 @@ import {
   Post,
   Body,
   ValidationPipe,
-  UseGuards,
-  ForbiddenException,
+  NotFoundException,
   Get,
   Param,
   ParseIntPipe
@@ -58,7 +57,7 @@ export class AuthController {
   })
   signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
     if ('production' === this.config.get<string>('NODE_ENV')) {
-      throw new ForbiddenException();
+      throw new NotFoundException();
     }
     return this.authService.addUser(authCredentialsDto);
   }

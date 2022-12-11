@@ -38,9 +38,9 @@ export class CodeRepository extends Repository<CodeEntity> {
     }, saveCodeDto);
   }
 
-  // 공통코드를 삭제한다.
-  async removeCode(id: string[]): Promise<DeleteResult> {
-    return await this.delete(id);
+  // 공통코드 다건을 삭제한다.
+  async removeCodes(idList: string[]): Promise<DeleteResult> {
+    return await this.delete(idList);
   }
 
 }

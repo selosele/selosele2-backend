@@ -4,7 +4,7 @@ import { isEmpty } from 'src/shared/util/util';
 import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
 import { CodeEntity } from './code.entity';
 import { CodeRepository } from './code.repository';
-import { RemoveCodetDto } from './dto/remove-code.dto';
+import { RemoveCodeDto } from './dto/remove-code.dto';
 import { SaveCodetDto } from './dto/save-code.dto';
 
 @Injectable()
@@ -38,15 +38,15 @@ export class CodeService {
     return await this.codeRepository.updateCode(saveCodeDto);
   }
 
-  // 공통코드를 삭제한다.
-  async removeCode(removeCodetDto: RemoveCodetDto[]): Promise<DeleteResult> {
+  // 공통코드 다건을 삭제한다.
+  async removeCodes(removeCodeDto: RemoveCodeDto[]): Promise<DeleteResult> {
     let idList: string[] = [];
 
-    removeCodetDto.forEach(d => {
+    removeCodeDto.forEach(d => {
       idList.push(d.id);
     });
     
-    return await this.codeRepository.removeCode(idList);
+    return await this.codeRepository.removeCodes(idList);
   }
 
 }

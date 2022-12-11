@@ -15,9 +15,9 @@ export class ContentRepository extends Repository<ContentEntity> {
     });
   }
 
-  // 콘텐츠를 삭제한다.
-  async removeContent(id: number[]): Promise<DeleteResult> {
-    return await this.delete(id);
+  // 콘텐츠 다건을 삭제한다.
+  async removeContents(idList: number[]): Promise<DeleteResult> {
+    return await this.delete(idList);
   }
 
 }

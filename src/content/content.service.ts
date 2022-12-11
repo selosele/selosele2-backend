@@ -19,14 +19,14 @@ export class ContentService {
   }
 
   // 콘텐츠를 삭제한다.
-  async removeContent(removeContentDto: RemoveContentDto[]): Promise<DeleteResult> {
+  async removeContents(removeContentDto: RemoveContentDto[]): Promise<DeleteResult> {
     let idList: number[] = [];
 
     removeContentDto.forEach(d => {
       idList.push(d.id);
     });
     
-    return await this.contentRepository.removeContent(idList);
+    return await this.contentRepository.removeContents(idList);
   }
 
 }

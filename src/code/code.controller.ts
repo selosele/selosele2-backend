@@ -7,7 +7,7 @@ import { RoleGuard } from 'src/shared/guard/role.guard';
 import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
 import { CodeEntity } from './code.entity';
 import { CodeService } from './code.service';
-import { RemoveCodetDto } from './dto/remove-code.dto';
+import { RemoveCodeDto } from './dto/remove-code.dto';
 import { SaveCodetDto } from './dto/save-code.dto';
 
 @Controller('api/code')
@@ -109,19 +109,19 @@ export class CodeController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
-    summary: '공통코드 삭제 API',
-    description: '공통코드를 삭제한다.'
+    summary: '공통코드 다건 삭제 API',
+    description: '공통코드 다건을 삭제한다.'
   })
   @ApiCreatedResponse({
     type: DeleteResult,
-    description: '공통코드를 삭제한다.',
+    description: '공통코드 다건을 삭제한다.',
   })
   @ApiBody({
-    type: RemoveCodetDto,
+    type: RemoveCodeDto,
     description: '공통코드 삭제 DTO',
   })
-  removeCode(@Body(ValidationPipe) removeCodetDto: RemoveCodetDto[]): Promise<DeleteResult> {
-    return this.codeService.removeCode(removeCodetDto);
+  removeCodes(@Body(ValidationPipe) removeCodeDto: RemoveCodeDto[]): Promise<DeleteResult> {
+    return this.codeService.removeCodes(removeCodeDto);
   }
 
 }

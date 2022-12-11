@@ -34,19 +34,19 @@ export class ContentController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
-    summary: '콘텐츠 삭제 API',
-    description: '콘텐츠를 삭제한다.'
+    summary: '콘텐츠 다건 삭제 API',
+    description: '콘텐츠 다건을 삭제한다.'
   })
   @ApiCreatedResponse({
     type: DeleteResult,
-    description: '콘텐츠를 삭제한다.',
+    description: '콘텐츠 다건을 삭제한다.',
   })
   @ApiBody({
     type: RemoveContentDto,
     description: '콘텐츠 삭제 DTO',
   })
-  removeContent(@Body(ValidationPipe) removeContentDto: RemoveContentDto[]): Promise<DeleteResult> {
-    return this.contentService.removeContent(removeContentDto);
+  removeContents(@Body(ValidationPipe) removeContentDto: RemoveContentDto[]): Promise<DeleteResult> {
+    return this.contentService.removeContents(removeContentDto);
   }
 
 }
