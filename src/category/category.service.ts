@@ -17,4 +17,9 @@ export class CategoryService {
     return await this.categoryRepository.listCategoryAndCount(listCategoryDto);
   }
 
+  /** 카테고리-포스트 계층형 구조를 조회한다. */
+  async listTreeCategoryAndPost(): Promise<CategoryEntity[]> {
+    return await this.categoryRepository.listTreeCategoryAndPost();
+  }
+
 }

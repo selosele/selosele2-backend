@@ -30,4 +30,14 @@ export class TagRepository extends Repository<TagEntity> {
     return await query.getRawMany();
   }
 
+  /** 태그-포스트 계층형 구조를 조회한다. */
+  async listTreeTagAndPost(): Promise<TagEntity[]> {
+    return await this.createQueryBuilder('tag')
+      .leftJoinAndSelect("tag.postTag", "postTag")
+      .leftJoinAndSelect("postTag.post", "post")
+      .orderBy("postTag.tag_id")
+        .addOrderBy("post.reg_date", "DESC")
+      .getMany();
+  }
+
 }

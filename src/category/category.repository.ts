@@ -30,4 +30,14 @@ export class CategoryRepository extends Repository<CategoryEntity> {
     return await query.getRawMany();
   }
 
+  /** 카테고리-포스트 계층형 구조를 조회한다. */
+  async listTreeCategoryAndPost(): Promise<CategoryEntity[]> {
+    return await this.createQueryBuilder('category')
+      .leftJoinAndSelect("category.postCategory", "postCategory")
+      .leftJoinAndSelect("postCategory.post", "post")
+      .orderBy("postCategory.category_id")
+        .addOrderBy("post.reg_date", "DESC")
+      .getMany();
+  }
+
 }

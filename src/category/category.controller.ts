@@ -1,7 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common/decorators';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
+import { RoleEnum } from 'src/auth/role.entity';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
+import { Roles } from 'src/shared/decorator/auth/roles.decorator';
+import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
+import { RoleGuard } from 'src/shared/guard/role.guard';
 import { CategoryEntity } from './category.entity';
 import { CategoryService } from './category.service';
 import { ListCategoryDto } from './dto/list-category.dto';
@@ -28,6 +33,21 @@ export class CategoryController {
       .isLogin(isAuthenticated ? 'Y' : 'N')
       .build();
     return this.categoryService.listCategoryAndCount(listCategoryDto);
+  }
+
+  @Get('tree')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(RoleEnum.ROLE_ADMIN)
+  @ApiOperation({
+    summary: '카테고리-포스트 계층형 구조 조회 API',
+    description: '카테고리-포스트 계층형 구조를 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: CategoryEntity,
+    description: '카테고리-포스트 계층형 구조를 조회한다.',
+  })
+  listTreeCategoryAndPost(): Promise<CategoryEntity[]> {
+    return this.categoryService.listTreeCategoryAndPost();
   }
 
 }
