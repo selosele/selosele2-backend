@@ -10,7 +10,7 @@ import { PostEntity } from './post.entity';
 @CustomRepository(PostEntity)
 export class PostRepository extends Repository<PostEntity> {
 
-  // 포스트 목록을 조회한다.
+  /** 포스트 목록을 조회한다. */
   async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
     let query = this.createQueryBuilder('post')
       .select("post.id", "id")
@@ -50,7 +50,7 @@ export class PostRepository extends Repository<PostEntity> {
     ]);
   }
 
-  // 개수별 포스트 목록을 조회한다.
+  /** 개수별 포스트 목록을 조회한다. */
   async listPostByLimit(listPostDto: ListPostDto): Promise<PostEntity[]> {
     return await this.find({
       select: ['id', 'title', 'ogImgUrl'],
@@ -64,7 +64,7 @@ export class PostRepository extends Repository<PostEntity> {
     });
   }
 
-  // 포스트를 검색한다.
+  /** 포스트를 검색한다. */
   async listPostSearch(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto,
@@ -137,7 +137,7 @@ export class PostRepository extends Repository<PostEntity> {
     ]);
   }
 
-  // 포스트의 연도 및 개수를 조회한다.
+  /** 포스트의 연도 및 개수를 조회한다. */
   async listYearAndCount(listPostDto: ListPostDto): Promise<PostEntity[]> {
     let query = this.createQueryBuilder('post')
       .select("YEAR(reg_date)", "year")
@@ -156,7 +156,7 @@ export class PostRepository extends Repository<PostEntity> {
     return await query.getRawMany();
   }
 
-  // 연도별 포스트 목록을 조회한다.
+  /** 연도별 포스트 목록을 조회한다. */
   async listPostByYear(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
@@ -177,7 +177,7 @@ export class PostRepository extends Repository<PostEntity> {
     return await query.getManyAndCount();
   }
 
-  // 카테고리별 포스트 목록을 조회한다.
+  /** 카테고리별 포스트 목록을 조회한다. */
   async listPostByCategory(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
@@ -219,7 +219,7 @@ export class PostRepository extends Repository<PostEntity> {
     });
   }
 
-  // 태그별 포스트 목록을 조회한다.
+  /** 태그별 포스트 목록을 조회한다. */
   async listPostByTag(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
@@ -261,7 +261,7 @@ export class PostRepository extends Repository<PostEntity> {
     });
   }
 
-  // 이전/다음 포스트를 조회한다.
+  /** 이전/다음 포스트를 조회한다. */
   async listPrevAndNextPost(listPostDto: ListPostDto): Promise<PostEntity[]> {
     let query = this.createQueryBuilder('post')
       .select("post.id", "id")
@@ -309,7 +309,7 @@ export class PostRepository extends Repository<PostEntity> {
     return this.create(rawQuery);
   }
 
-  // 포스트를 조회한다.
+  /** 포스트를 조회한다. */
   async getPost(getPostDto: GetPostDto): Promise<PostEntity> {
     return await this.findOne({
       relations: {
@@ -342,12 +342,12 @@ export class PostRepository extends Repository<PostEntity> {
     });
   }
 
-  // 포스트 다건을 삭제한다.
+  /** 포스트 다건을 삭제한다. */
   async removePosts(idList: number[]): Promise<DeleteResult> {
     return await this.delete(idList);
   }
 
-  // 포스트를 삭제한다.
+  /** 포스트를 삭제한다. */
   async removePost(id: number): Promise<DeleteResult> {
     return await this.delete(id);
   }

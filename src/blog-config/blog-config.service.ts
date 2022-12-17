@@ -11,7 +11,7 @@ export class BlogConfigService {
     private readonly blogConfigRepository: BlogConfigRepository,
   ) {}
 
-  // 블로그 환경설정 정보를 조회한다.
+  /** 블로그 환경설정 정보를 조회한다. */
   async getBlogConfig(): Promise<BlogConfigEntity> {
     return await this.blogConfigRepository.getBlogConfig();
   }

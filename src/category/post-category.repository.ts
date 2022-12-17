@@ -9,7 +9,7 @@ import { PostCategoryEntity } from "./post-category.entity";
 @CustomRepository(PostCategoryEntity)
 export class PostCategoryRepository extends Repository<PostCategoryEntity> {
 
-  // 포스트 목록 조회 시 카테고리를 조회한다.
+  /** 포스트 목록 조회 시 카테고리를 조회한다. */
   async listPostCategory(listPostDto: ListPostDto): Promise<PostCategoryEntity[]> {
     let query = this.createQueryBuilder('postCategory')
       .leftJoin("postCategory.post", "post", "post.id = postCategory.post_id")
@@ -29,7 +29,7 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
     return await query.getMany();
   }
 
-  // 포스트 검색 시 카테고리를 조회한다.
+  /** 포스트 검색 시 카테고리를 조회한다. */
   async listPostCategorySearch(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto

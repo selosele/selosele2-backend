@@ -37,16 +37,16 @@ export class GuestbookController {
 
   @Post()
   @ApiOperation({
-    summary: '방명록 등록 API',
-    description: '방명록을 등록한다.',
+    summary: '방명록 추가 API',
+    description: '방명록을 추가한다.',
   })
   @ApiCreatedResponse({
     type: GuestbookEntity,
-    description: '방명록을 등록한다.',
+    description: '방명록을 추가한다.',
   })
   @ApiBody({
     type: AddGuestbookDto,
-    description: '방명록 등록 DTO',
+    description: '방명록 추가 DTO',
   })
   addGuestbook(
     @RealIP() ip: string,

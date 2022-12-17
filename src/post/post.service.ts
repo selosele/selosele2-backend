@@ -22,7 +22,7 @@ export class PostService {
     private readonly postCategoryRepository: PostCategoryRepository,
   ) {}
 
-  // 포스트 목록을 조회한다.
+  /** 포스트 목록을 조회한다. */
   async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
     const [post, postCategory] = await Promise.all([
       // 포스트 조회
@@ -39,12 +39,12 @@ export class PostService {
     return [post[0], post[1]];
   }
 
-  // 개수별 포스트 목록을 조회한다.
+  /** 개수별 포스트 목록을 조회한다. */
   async listPostByLimit(listPostDto: ListPostDto): Promise<PostEntity[]> {
     return await this.postRepository.listPostByLimit(listPostDto);
   }
 
-  // 포스트를 검색한다.
+  /** 포스트를 검색한다. */
   async listPostSearch(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto
@@ -64,12 +64,12 @@ export class PostService {
     return [post[0], post[1]];
   }
 
-  // 포스트의 연도 및 개수를 조회한다.
+  /** 포스트의 연도 및 개수를 조회한다. */
   async listYearAndCount(listPostDto: ListPostDto): Promise<PostEntity[]> {
     return await this.postRepository.listYearAndCount(listPostDto);
   }
 
-  // 연도별 포스트 목록을 조회한다.
+  /** 연도별 포스트 목록을 조회한다. */
   async listPostByYear(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
@@ -77,7 +77,7 @@ export class PostService {
     return await this.postRepository.listPostByYear(listPostDto, paginationDto);
   }
 
-  // 카테고리별 포스트 목록을 조회한다.
+  /** 카테고리별 포스트 목록을 조회한다. */
   async listPostByCategory(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
@@ -85,7 +85,7 @@ export class PostService {
     return await this.postRepository.listPostByCategory(listPostDto, paginationDto);
   }
 
-  // 태그별 포스트 목록을 조회한다.
+  /** 태그별 포스트 목록을 조회한다. */
   async listPostByTag(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
@@ -93,12 +93,12 @@ export class PostService {
     return await this.postRepository.listPostByTag(listPostDto, paginationDto);
   }
 
-  // 이전/다음 포스트를 조회한다.
+  /** 이전/다음 포스트를 조회한다. */
   async listPrevAndNextPost(listPostDto: ListPostDto): Promise<PostEntity[]> {
     return await this.postRepository.listPrevAndNextPost(listPostDto);
   }
 
-  // 포스트를 조회한다.
+  /** 포스트를 조회한다. */
   async getPost(getPostDto: GetPostDto): Promise<PostEntity> {
     const post = await this.postRepository.getPost(getPostDto);
 
@@ -113,7 +113,7 @@ export class PostService {
     return post;
   }
 
-  // 포스트 다건을 삭제한다.
+  /** 포스트 다건을 삭제한다. */
   async removePosts(removePostDto: RemovePostDto[]): Promise<DeleteResult> {
     let idList: number[] = [];
 
@@ -124,7 +124,7 @@ export class PostService {
     return await this.postRepository.removePosts(idList);
   }
 
-  // 포스트를 삭제한다.
+  /** 포스트를 삭제한다. */
   async removePost(id: number): Promise<DeleteResult> {
     return await this.postRepository.removePost(id);
   }

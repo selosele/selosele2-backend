@@ -12,7 +12,7 @@ export class MenuService {
     private readonly menuRepository: MenuRepository,
   ) {}
 
-  // 메뉴 목록을 조회한다.
+  /** 메뉴 목록을 조회한다. */
   async listMenu(listMenuDto: ListMenuDto): Promise<MenuEntity[]> {
     return await this.menuRepository.listMenu(listMenuDto);
   }

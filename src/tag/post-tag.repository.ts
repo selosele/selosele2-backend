@@ -8,7 +8,7 @@ import { PostTagEntity } from "./post-tag.entity";
 @CustomRepository(PostTagEntity)
 export class PostTagRepository extends Repository<PostTagEntity> {
 
-  // 포스트 검색 시 태그를 조회한다.
+  /** 포스트 검색 시 태그를 조회한다. */
   async listPostTagSearch(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto

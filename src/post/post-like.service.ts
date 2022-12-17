@@ -16,12 +16,12 @@ export class PostLikeService {
     private readonly postLikeRepository: PostLikeRepository,
   ) {}
 
-  // 포스트 추천 정보를 조회한다.
+  /** 포스트 추천 정보를 조회한다. */
   async getPostLike(getPostLikeDto: GetPostLikeDto): Promise<PostLikeEntity> {
     return await this.postLikeRepository.getPostLike(getPostLikeDto);
   }
 
-  // 포스트를 추천/추천 해제한다.
+  /** 포스트를 추천/추천 해제한다. */
   async savePostLike(savePostLikeDto: SavePostLikeDto): Promise<number> {
     if ('Y' === savePostLikeDto.isLogin) {
       throw new BizException('관리자는 추천할 수 없습니다.');

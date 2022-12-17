@@ -8,7 +8,7 @@ import { PostCategoryEntity } from './post-category.entity';
 @CustomRepository(CategoryEntity)
 export class CategoryRepository extends Repository<CategoryEntity> {
 
-  // 카테고리 목록 및 개수를 조회한다.
+  /** 카테고리 목록 및 개수를 조회한다. */
   async listCategoryAndCount(listCategoryDto: ListCategoryDto): Promise<CategoryEntity[]> {
     let query = this.createQueryBuilder('category')
       .select("COUNT(*)", "count")

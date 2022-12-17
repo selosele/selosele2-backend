@@ -6,7 +6,7 @@ import { PostLikeEntity } from "./post-like.entity";
 @CustomRepository(PostLikeEntity)
 export class PostLikeRepository extends Repository<PostLikeEntity> {
 
-  // 포스트 추천 정보를 조회한다.
+  /** 포스트 추천 정보를 조회한다. */
   async getPostLike(savePostLikeDto: SavePostLikeDto): Promise<PostLikeEntity> {
     return await this.findOne({
       where: {
@@ -16,12 +16,12 @@ export class PostLikeRepository extends Repository<PostLikeEntity> {
     });
   }
 
-  // 포스트를 추천한다.
+  /** 포스트를 추천한다. */
   async addPostLike(savePostLikeDto: SavePostLikeDto): Promise<InsertResult> {
     return await this.insert(savePostLikeDto);
   }
 
-  // 포스트를 추천 해제한다.
+  /** 포스트를 추천 해제한다. */
   async removePostLike(savePostLikeDto: SavePostLikeDto): Promise<DeleteResult> {
     return await this.delete(savePostLikeDto.id);
   }

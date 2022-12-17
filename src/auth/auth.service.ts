@@ -22,12 +22,12 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  // 사용자를 조회한다.
+  /** 사용자를 조회한다. */
   async getUser(userKey: number | string): Promise<UserEntity> {
     return await this.userRepository.getUser(userKey);
   }
   
-  // 사용자를 생성한다.
+  /** 사용자를 생성한다. */
   async addUser(authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
     const { userId, userPw } = authCredentialsDto;
 
@@ -62,12 +62,12 @@ export class AuthService {
     }
   }
 
-  // 사용자 권한을 생성한다.
+  /** 사용자 권한을 생성한다. */
   async addUserRole(authCredentialsRoleDto: AuthCredentialsRoleDto): Promise<InsertResult> {
     return await this.userRoleRepository.addUserRole(authCredentialsRoleDto);
   }
 
-  // 로그인을 한다.
+  /** 로그인을 한다. */
   async signIn(authCredentialsDto: AuthCredentialsDto): Promise<{accessToken: string}> {
     const { userId, userPw } = authCredentialsDto;
 

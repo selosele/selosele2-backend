@@ -14,7 +14,7 @@ export class GuestbookReplyService {
     private readonly guestbookReplyRepository: GuestbookReplyRepository,
   ) {}
 
-  // 방명록 댓글을 등록한다.
+  /** 방명록 댓글을 등록한다. */
   async addGuestbookReply(addGuestbookReplyDto: AddGuestbookReplyDto): Promise<GuestbookReplyEntity> {
     const { authorPw, cont } = addGuestbookReplyDto;
 

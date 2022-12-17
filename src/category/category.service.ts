@@ -12,7 +12,7 @@ export class CategoryService {
     private readonly categoryRepository: CategoryRepository,
   ) {}
 
-  // 카테고리 목록 및 개수를 조회한다.
+  /** 카테고리 목록 및 개수를 조회한다. */
   async listCategoryAndCount(listCategoryDto: ListCategoryDto): Promise<CategoryEntity[]> {
     return await this.categoryRepository.listCategoryAndCount(listCategoryDto);
   }

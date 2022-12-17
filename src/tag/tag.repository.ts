@@ -8,7 +8,7 @@ import { TagEntity } from './tag.entity';
 @CustomRepository(TagEntity)
 export class TagRepository extends Repository<TagEntity> {
 
-  // 태그 목록 및 개수를 조회한다.
+  /** 태그 목록 및 개수를 조회한다. */
   async listTagAndCount(listTagDto: ListTagDto): Promise<TagEntity[]> {
     let query = this.createQueryBuilder('tag')
       .select("COUNT(*)", "count")

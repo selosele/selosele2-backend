@@ -6,7 +6,7 @@ import { MenuEntity } from './menu.entity';
 @CustomRepository(MenuEntity)
 export class MenuRepository extends Repository<MenuEntity> {
 
-  // 메뉴 목록을 조회한다.
+  /** 메뉴 목록을 조회한다. */
   async listMenu(listMenuDto: ListMenuDto): Promise<MenuEntity[]> {
     return await this.createQueryBuilder('menu')
       .leftJoinAndSelect("menu.children", "parent")

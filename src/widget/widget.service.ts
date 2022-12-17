@@ -12,7 +12,7 @@ export class WidgetService {
     private readonly widgetRepository: WidgetRepository,
   ) {}
 
-  // 위젯 목록을 조회한다.
+  /** 위젯 목록을 조회한다. */
   async listWidget(listWidgetDto: ListWidgetDto): Promise<WidgetEntity[]> {
     return await this.widgetRepository.listWidget(listWidgetDto);
   }

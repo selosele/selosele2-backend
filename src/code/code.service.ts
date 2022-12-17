@@ -15,17 +15,17 @@ export class CodeService {
     private readonly codeRepository: CodeRepository,
   ) {}
 
-  // 공통코드 목록을 조회한다.
+  /** 공통코드 목록을 조회한다. */
   async listCode(prefix?: string): Promise<CodeEntity[]> {
     return await this.codeRepository.listCode(prefix);
   }
 
-  // 공통코드를 조회한다.
+  /** 공통코드를 조회한다. */
   async getCode(id: string): Promise<CodeEntity> {
     return await this.codeRepository.getCode(id);
   }
 
-  // 공통코드를 추가/수정한다.
+  /** 공통코드를 추가/수정한다. */
   async saveCode(saveCodeDto: SaveCodetDto): Promise<InsertResult | UpdateResult> {
     if (isEmpty(saveCodeDto?.originId)) {
       saveCodeDto.id = saveCodeDto.prefix + saveCodeDto.val;
@@ -38,7 +38,7 @@ export class CodeService {
     return await this.codeRepository.updateCode(saveCodeDto);
   }
 
-  // 공통코드 다건을 삭제한다.
+  /** 공통코드 다건을 삭제한다. */
   async removeCodes(removeCodeDto: RemoveCodeDto[]): Promise<DeleteResult> {
     let idList: string[] = [];
 

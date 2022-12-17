@@ -33,7 +33,7 @@ export class RoleGuard implements CanActivate {
 
 }
 
-// 권한을 검증한다.
+/** 권한을 검증한다. */
 const hasRole = (roles: string[], userRoles: string[]): boolean => {
   return roles.some((role) => userRoles.includes(role));
 };

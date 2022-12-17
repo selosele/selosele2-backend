@@ -16,7 +16,7 @@ export class SatisfactionService {
     private readonly satisfactionRepository: SatisfactionRepository,
   ) {}
 
-  // 만족도조사에 참여한다.
+  /** 만족도조사에 참여한다. */
   async addSatisfaction(addSatisfactiontDto: AddSatisfactiontDto): Promise<InsertResult> {
     const foundCount: number = await this.countSatisfaction(addSatisfactiontDto);
     if (0 < foundCount) {
@@ -28,12 +28,12 @@ export class SatisfactionService {
     return await this.satisfactionRepository.addSatisfaction(addSatisfactiontDto);
   }
 
-  // 만족도조사 참여 여부를 조회한다.
+  /** 만족도조사 참여 여부를 조회한다. */
   async countSatisfaction(addSatisfactiontDto: AddSatisfactiontDto): Promise<number> {
     return await this.satisfactionRepository.countSatisfaction(addSatisfactiontDto);
   }
 
-  // 만족도조사 목록을 조회한다.
+  /** 만족도조사 목록을 조회한다. */
   async listSatisfaction(searchSatisfactiontDto: SearchSatisfactiontDto): Promise<SatisfactionEntity[]> {
     return await this.satisfactionRepository.listSatisfaction(searchSatisfactiontDto);
   }

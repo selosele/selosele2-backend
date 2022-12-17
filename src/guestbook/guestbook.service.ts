@@ -18,17 +18,17 @@ export class GuestbookService {
     private readonly guestbookRepository: GuestbookRepository,
   ) {}
 
-  // 방명록 목록을 조회한다.
+  /** 방명록 목록을 조회한다. */
   async listGuestbook(paginationDto: PaginationDto): Promise<[GuestbookEntity[], number]> {
     return await this.guestbookRepository.listGuestbook(paginationDto);
   }
 
-  // 방명록을 조회한다.
+  /** 방명록을 조회한다. */
   async getGuestbook(id: number): Promise<GuestbookEntity> {
     return await this.guestbookRepository.getGuestbook(id);
   }
 
-  // 방명록을 등록한다.
+  /** 방명록을 추가한다. */
   async addGuestbook(addGuestbookDto: AddGuestbookDto): Promise<GuestbookEntity> {
     const { authorPw, cont } = addGuestbookDto;
 
@@ -39,14 +39,14 @@ export class GuestbookService {
     // HTML Escape
     addGuestbookDto.cont = sanitizeHtml(cont);
 
-    // 방명록 등록
+    // 방명록 추가
     const guestbook: GuestbookEntity = await this.guestbookRepository.addGuestbook(addGuestbookDto);
     guestbook.guestbookReply = [];
     
     return guestbook;
   }
 
-  // 방명록을 수정한다.
+  /** 방명록을 수정한다. */
   async updateGuestbook(updateGuestbookDto: UpdateGuestbookDto): Promise<GuestbookEntity> {
     const { id, authorPw, cont } = updateGuestbookDto;
 
@@ -71,7 +71,7 @@ export class GuestbookService {
     return guestbook;
   }
 
-  // 방명록을 삭제한다.
+  /** 방명록을 삭제한다. */
   async removeGuestbook(removeGuestbookDto: RemoveGuestbookDto): Promise<GuestbookEntity> {
     const { id, authorPw } = removeGuestbookDto;
 
