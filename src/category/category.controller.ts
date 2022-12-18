@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
-import { UseGuards } from '@nestjs/common/decorators';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, ParseIntPipe } from '@nestjs/common';
+import { Param, UseGuards } from '@nestjs/common/decorators';
+import { ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/role.entity';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
@@ -35,7 +35,27 @@ export class CategoryController {
     return this.categoryService.listCategoryAndCount(listCategoryDto);
   }
 
-  @Get('tree')
+  @Get(':id')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(RoleEnum.ROLE_ADMIN)
+  @ApiOperation({
+    summary: '카테고리 조회 API',
+    description: '카테고리를 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: CategoryEntity,
+    description: '카테고리를 조회한다.',
+  })
+  @ApiParam({
+    type: Number,
+    name: 'id',
+    description: '카테고리 ID',
+  })
+  getCategory(@Param('id', ParseIntPipe) id: number): Promise<CategoryEntity> {
+    return this.categoryService.getCategory(id);
+  }
+
+  @Get('list/tree')
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(RoleEnum.ROLE_ADMIN)
   @ApiOperation({

@@ -1,15 +1,15 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { PostTagEntity } from './post-tag.entity';
 
 @Entity('tag')
 export class TagEntity extends BaseEntity {
 
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   @ApiProperty({
     description: '태그 ID'
   })
-  id?: string;
+  id?: number;
 
   @Column({
     comment: '태그 명'

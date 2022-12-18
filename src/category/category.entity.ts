@@ -1,15 +1,15 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { PostCategoryEntity } from './post-category.entity';
 
 @Entity('category')
 export class CategoryEntity extends BaseEntity {
 
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   @ApiProperty({
     description: '카테고리 ID'
   })
-  id?: string;
+  id?: number;
 
   @Column({
     comment: '카테고리 명'

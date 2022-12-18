@@ -30,6 +30,13 @@ export class CategoryRepository extends Repository<CategoryEntity> {
     return await query.getRawMany();
   }
 
+  /** 카테고리를 조회한다. */
+  async getCategory(id: number): Promise<CategoryEntity> {
+    return await this.findOne({
+      where: { id },
+    });
+  }
+
   /** 카테고리-포스트 계층형 구조를 조회한다. */
   async listTreeCategoryAndPost(): Promise<CategoryEntity[]> {
     return await this.createQueryBuilder('category')

@@ -17,6 +17,11 @@ export class TagService {
     return await this.tagRepository.listTagAndCount(listTagDto);
   }
 
+  /** 태그를 조회한다. */
+  async getTag(id: number): Promise<TagEntity> {
+    return await this.tagRepository.getTag(id);
+  }
+
   /** 태그-포스트 계층형 구조를 조회한다. */
   async listTreeTagAndPost(): Promise<TagEntity[]> {
     return await this.tagRepository.listTreeTagAndPost();
