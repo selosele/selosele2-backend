@@ -1,8 +1,9 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { PostEntity } from 'src/post/post.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { CategoryEntity } from './category.entity';
 import { ListCategoryDto } from './dto/list-category.dto';
+import { SaveCategoryDto } from './dto/save-category.dto';
 import { PostCategoryEntity } from './post-category.entity';
 
 @CustomRepository(CategoryEntity)
@@ -37,12 +38,22 @@ export class CategoryRepository extends Repository<CategoryEntity> {
     });
   }
 
+  /** 카테고리를 추가/수정한다. */
+  async saveCategory(saveCategoryDto: SaveCategoryDto): Promise<CategoryEntity> {
+    return await this.save(saveCategoryDto);
+  }
+
+  /** 카테고리를 삭제한다. */
+  async removeCategory(id: number): Promise<DeleteResult> {
+    return await this.delete(id);
+  }
+
   /** 카테고리-포스트 계층형 구조를 조회한다. */
   async listTreeCategoryAndPost(): Promise<CategoryEntity[]> {
     return await this.createQueryBuilder('category')
       .leftJoinAndSelect("category.postCategory", "postCategory")
       .leftJoinAndSelect("postCategory.post", "post")
-      .orderBy("postCategory.category_id")
+      .orderBy("COUNT(postCategory.category_id) OVER (PARTITION BY postCategory.category_id)", "DESC")
         .addOrderBy("post.reg_date", "DESC")
       .getMany();
   }

@@ -1,7 +1,8 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { PostEntity } from 'src/post/post.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { ListTagDto } from './dto/list-tag.dto';
+import { SaveTagDto } from './dto/save-tag.dto';
 import { PostTagEntity } from './post-tag.entity';
 import { TagEntity } from './tag.entity';
 
@@ -37,12 +38,22 @@ export class TagRepository extends Repository<TagEntity> {
     });
   }
 
+  /** 태그를 추가/수정한다. */
+  async saveTag(saveTagDto: SaveTagDto): Promise<TagEntity> {
+    return await this.save(saveTagDto);
+  }
+
+  /** 태그를 삭제한다. */
+  async removeTag(id: number): Promise<DeleteResult> {
+    return await this.delete(id);
+  }
+
   /** 태그-포스트 계층형 구조를 조회한다. */
   async listTreeTagAndPost(): Promise<TagEntity[]> {
     return await this.createQueryBuilder('tag')
       .leftJoinAndSelect("tag.postTag", "postTag")
       .leftJoinAndSelect("postTag.post", "post")
-      .orderBy("postTag.tag_id")
+      .orderBy("COUNT(postTag.tag_id) OVER (PARTITION BY postTag.tag_id)", "DESC")
         .addOrderBy("post.reg_date", "DESC")
       .getMany();
   }

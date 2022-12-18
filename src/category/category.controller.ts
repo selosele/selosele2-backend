@@ -1,15 +1,18 @@
-import { Controller, Get, ParseIntPipe } from '@nestjs/common';
-import { Param, UseGuards } from '@nestjs/common/decorators';
-import { ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Put, Body, ParseIntPipe } from '@nestjs/common';
+import { Delete, Param, UseGuards } from '@nestjs/common/decorators';
+import { ValidationPipe } from '@nestjs/common/pipes';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/role.entity';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
 import { Roles } from 'src/shared/decorator/auth/roles.decorator';
 import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
 import { RoleGuard } from 'src/shared/guard/role.guard';
+import { DeleteResult } from 'typeorm';
 import { CategoryEntity } from './category.entity';
 import { CategoryService } from './category.service';
 import { ListCategoryDto } from './dto/list-category.dto';
+import { SaveCategoryDto } from './dto/save-category.dto';
 
 @Controller('api/category')
 @ApiTags('카테고리 API')
@@ -53,6 +56,60 @@ export class CategoryController {
   })
   getCategory(@Param('id', ParseIntPipe) id: number): Promise<CategoryEntity> {
     return this.categoryService.getCategory(id);
+  }
+
+  @Post()
+  @ApiOperation({
+    summary: '카테고리 추가 API',
+    description: '카테고리를 추가한다.',
+  })
+  @ApiCreatedResponse({
+    type: CategoryEntity,
+    description: '카테고리를 추가한다.',
+  })
+  @ApiBody({
+    type: SaveCategoryDto,
+    description: '카테고리 추가/수정 DTO',
+  })
+  addCategory(@Body(ValidationPipe) saveCategoryDto: SaveCategoryDto): Promise<CategoryEntity> {
+    return this.categoryService.saveCategory(saveCategoryDto);
+  }
+
+  @Put()
+  @ApiOperation({
+    summary: '카테고리 수정 API',
+    description: '카테고리를 수정한다.',
+  })
+  @ApiCreatedResponse({
+    type: CategoryEntity,
+    description: '카테고리를 수정한다.',
+  })
+  @ApiBody({
+    type: SaveCategoryDto,
+    description: '카테고리 추가/수정 DTO',
+  })
+  updateCategory(@Body(ValidationPipe) saveCategoryDto: SaveCategoryDto): Promise<CategoryEntity> {
+    return this.categoryService.saveCategory(saveCategoryDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(RoleEnum.ROLE_ADMIN)
+  @ApiOperation({
+    summary: '카테고리 삭제 API',
+    description: '카테고리를 삭제한다.'
+  })
+  @ApiCreatedResponse({
+    type: DeleteResult,
+    description: '카테고리를 삭제한다.',
+  })
+  @ApiParam({
+    type: Number,
+    name: 'id',
+    description: '카테고리 ID',
+  })
+  removeCategory(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
+    return this.categoryService.removeCategory(id);
   }
 
   @Get('list/tree')

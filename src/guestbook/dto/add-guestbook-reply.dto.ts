@@ -5,7 +5,6 @@ import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 export class AddGuestbookReplyDto {
 
   /** 상위 방명록 ID */
-  @IsNotEmpty()
   @Type(() => Number)
   @IsInt()
   @IsNotEmpty()

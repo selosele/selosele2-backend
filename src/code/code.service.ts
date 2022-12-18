@@ -5,7 +5,7 @@ import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
 import { CodeEntity } from './code.entity';
 import { CodeRepository } from './code.repository';
 import { RemoveCodeDto } from './dto/remove-code.dto';
-import { SaveCodetDto } from './dto/save-code.dto';
+import { SaveCodeDto } from './dto/save-code.dto';
 
 @Injectable()
 export class CodeService {
@@ -26,7 +26,7 @@ export class CodeService {
   }
 
   /** 공통코드를 추가/수정한다. */
-  async saveCode(saveCodeDto: SaveCodetDto): Promise<InsertResult | UpdateResult> {
+  async saveCode(saveCodeDto: SaveCodeDto): Promise<InsertResult | UpdateResult> {
     if (isEmpty(saveCodeDto?.originId)) {
       saveCodeDto.id = saveCodeDto.prefix + saveCodeDto.val;
       return await this.codeRepository.addCode(saveCodeDto);

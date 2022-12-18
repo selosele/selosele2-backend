@@ -8,7 +8,7 @@ import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
 import { CodeEntity } from './code.entity';
 import { CodeService } from './code.service';
 import { RemoveCodeDto } from './dto/remove-code.dto';
-import { SaveCodetDto } from './dto/save-code.dto';
+import { SaveCodeDto } from './dto/save-code.dto';
 
 @Controller('api/code')
 @ApiTags('공통코드 API')
@@ -79,14 +79,14 @@ export class CodeController {
     description: '공통코드를 추가한다.',
   })
   @ApiBody({
-    type: SaveCodetDto,
+    type: SaveCodeDto,
     description: '공통코드 추가/수정 DTO',
   })
-  addCode(@Body(ValidationPipe) saveCodetDto: SaveCodetDto): Promise<InsertResult | UpdateResult> {
-    return this.codeService.saveCode(saveCodetDto);
+  addCode(@Body(ValidationPipe) SaveCodeDto: SaveCodeDto): Promise<InsertResult | UpdateResult> {
+    return this.codeService.saveCode(SaveCodeDto);
   }
 
-  @Put(':id')
+  @Put()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
@@ -98,11 +98,11 @@ export class CodeController {
     description: '공통코드를 수정한다.',
   })
   @ApiBody({
-    type: SaveCodetDto,
+    type: SaveCodeDto,
     description: '공통코드 추가/수정 DTO',
   })
-  updateCode(@Body(ValidationPipe) saveCodetDto: SaveCodetDto): Promise<InsertResult | UpdateResult> {
-    return this.codeService.saveCode(saveCodetDto);
+  updateCode(@Body(ValidationPipe) SaveCodeDto: SaveCodeDto): Promise<InsertResult | UpdateResult> {
+    return this.codeService.saveCode(SaveCodeDto);
   }
 
   @Delete()

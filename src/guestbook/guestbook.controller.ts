@@ -56,7 +56,7 @@ export class GuestbookController {
     return this.guestbookService.addGuestbook(addGuestbookDto);
   }
 
-  @Put(':id')
+  @Put()
   @ApiOperation({
     summary: '방명록 수정 API',
     description: '방명록을 수정한다.',
@@ -69,9 +69,7 @@ export class GuestbookController {
     type: AddGuestbookDto,
     description: '방명록 수정 DTO',
   })
-  updateGuestbook(
-    @Body(ValidationPipe) updateGuestbookDto: UpdateGuestbookDto
-  ): Promise<GuestbookEntity> {
+  updateGuestbook(@Body(ValidationPipe) updateGuestbookDto: UpdateGuestbookDto): Promise<GuestbookEntity> {
     return this.guestbookService.updateGuestbook(updateGuestbookDto);
   }
 
