@@ -18,7 +18,7 @@ export class BizExceptionFilter implements ExceptionFilter {
         timestamp: new Date().toISOString(),
         path: request.url,
         message: exception.getMessage(),
-        type: 'BIZ'
+        type: 'biz'
       });
   }
   
