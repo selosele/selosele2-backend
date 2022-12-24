@@ -2,7 +2,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 export const typeORMConfig: TypeOrmModuleOptions = {
-  type: 'production' === process.env.NODE_ENV ? 'mysql' : 'mariadb',
+  type: 'mariadb',
   host: 'production' === process.env.NODE_ENV ? process.env.DB_HOST_PROD : process.env.DB_HOST,
   port: 'production' === process.env.NODE_ENV ? +process.env.DB_PORT_PROD : +process.env.DB_PORT,
   username: 'production' === process.env.NODE_ENV ? process.env.DB_USERNAME_PROD : process.env.DB_USERNAME,
