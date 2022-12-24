@@ -22,7 +22,7 @@ import { BizExceptionFilter } from './shared/exception/biz-exception.filter';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      //ignoreEnvFile: 'production' === process.env.NODE_ENV,
+      ignoreEnvFile: 'production' === process.env.NODE_ENV,
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
