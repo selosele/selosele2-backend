@@ -21,6 +21,8 @@ async function bootstrap() {
     setupSwagger(app);
   }
 
+  console.log('>>> NODE_ENV', process.env.NODE_ENV);
+
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
