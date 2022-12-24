@@ -1,10 +1,13 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express/interfaces/nest-express-application.interface';
 import { AppModule } from './app.module';
 import { setupSwagger } from './shared/util/swagger/swagger.util';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.disable('x-powered-by');
 
   app.useGlobalPipes(
     new ValidationPipe({
