@@ -1,52 +1,22 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
-import { isNotEmpty } from 'src/shared/util/util';
 import { Brackets, DeleteResult, Repository } from 'typeorm';
 import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
 import { PostEntity } from './post.entity';
+import { listPostSql } from './sql/post.sql';
 
 @CustomRepository(PostEntity)
 export class PostRepository extends Repository<PostEntity> {
 
   /** 포스트 목록을 조회한다. */
   async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
-    let query = this.createQueryBuilder('post')
-      .select("post.id", "id")
-          .distinct(true)
-        .addSelect("COUNT(postLike.id)", "likeCnt")
-        .addSelect("post.title", "title")
-        .addSelect("post.reg_date", "regDate")
-        .addSelect("post.reply_cnt", "replyCnt")
-        .addSelect("SUBSTR(post.raw_text, 1, 180)", "rawText")
-        .addSelect("post.og_img_url", "ogImgUrl")
-        .addSelect("post.secret_yn", "secretYn")
-        .addSelect("post.pin_yn", "pinYn")
-      .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
-      .leftJoin("post.postLike", "postLike", "postLike.post_id = post.id");
-
-    query = query
-      .where("1=1")
-
-    if ('N' === listPostDto?.isLogin) {
-      query = query
-        .andWhere("post.secret_yn = 'N'");
-    }
-
-    if (isNotEmpty(listPostDto?.categoryId) && 0 < listPostDto?.categoryId) {
-      query = query
-        .andWhere("postCategory.category_id = :category_id", { category_id: listPostDto.categoryId });
-    }
-
-    query = query
-      .groupBy("post.id")
-        .addGroupBy("postCategory.category_id")
-      .orderBy("post.reg_date", "DESC");
+    const res = await listPostSql(this.manager, { listPostDto });
 
     return await Promise.all([
-      query.getRawMany(),
-      query.getCount(),
+      res,
+      res.length
     ]);
   }
 
