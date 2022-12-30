@@ -4,8 +4,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 /** Swagger 유틸 */
 export function setupSwagger(app: INestApplication): void {
   const options = new DocumentBuilder()
-    .setTitle('Selosele2 API 문서')
-    .setDescription('Selosele2 API에 대한 상세정보를 조회할 수 있다.')
+    .setTitle('selosele2 API 문서')
+    .setDescription('selosele2 API에 대한 상세정보를 조회할 수 있다.')
     .setVersion('1.0.0')
     .build();
 
