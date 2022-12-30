@@ -8,7 +8,7 @@ import * as bcrypt from 'bcrypt';
 import * as sanitizeHtml from 'sanitize-html';
 import { RemoveGuestbookDto } from './dto/remove-guestbook.dto';
 import { UpdateGuestbookDto } from './dto/update-guestbook.dto';
-import { BizException } from 'src/shared/exception/biz.exception';
+import { BizException } from 'src/shared/exceptions/biz.exception';
 
 @Injectable()
 export class GuestbookService {

@@ -3,11 +3,11 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags 
 import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/entities/role.entity';
 import { PostEntity } from 'src/post/entities/post.entity';
-import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
-import { Roles } from 'src/shared/decorator/auth/roles.decorator';
+import { IsAuthenticated } from 'src/shared/decorators/auth/is-authenticated.decorator';
+import { Roles } from 'src/shared/decorators/auth/roles.decorator';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
-import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
-import { RoleGuard } from 'src/shared/guard/role.guard';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { RoleGuard } from 'src/shared/guards/role.guard';
 import { DeleteResult } from 'typeorm';
 import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';

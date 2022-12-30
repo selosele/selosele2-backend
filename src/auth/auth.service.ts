@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from './entities/user.entity';
 import { RoleEnum } from './entities/role.entity';
-import { BizException } from 'src/shared/exception/biz.exception';
+import { BizException } from 'src/shared/exceptions/biz.exception';
 
 @Injectable()
 export class AuthService {

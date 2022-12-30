@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { isEmpty } from 'src/shared/util/util';
+import { isEmpty } from 'src/shared/utils/util';
 import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
 import { CodeEntity } from './entities/code.entity';
 import { CodeRepository } from './code.repository';

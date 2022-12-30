@@ -2,7 +2,7 @@ import { Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { Builder } from "builder-pattern";
 import { RealIP } from "nestjs-real-ip";
-import { IsAuthenticated } from "src/shared/decorator/auth/is-authenticated.decorator";
+import { IsAuthenticated } from "src/shared/decorators/auth/is-authenticated.decorator";
 import { GetPostLikeDto } from "./dto/get-post-like.dto";
 import { SavePostLikeDto } from "./dto/save-post-like.dto";
 import { PostLikeEntity } from "./entities/post-like.entity";

@@ -5,13 +5,13 @@ import { AddSatisfactiontDto } from './dto/add-satisfaction.dto';
 import { SatisfactionEntity } from './entities/satisfaction.entity';
 import { SatisfactionService } from './satisfaction.service';
 import { RealIP } from 'nestjs-real-ip';
-import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
-import { Roles } from 'src/shared/decorator/auth/roles.decorator';
-import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
-import { RoleGuard } from 'src/shared/guard/role.guard';
+import { IsAuthenticated } from 'src/shared/decorators/auth/is-authenticated.decorator';
+import { Roles } from 'src/shared/decorators/auth/roles.decorator';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { RoleGuard } from 'src/shared/guards/role.guard';
 import { RoleEnum } from 'src/auth/entities/role.entity';
 import { SearchSatisfactiontDto } from './dto/search-satisfaction.dto';
-import { BizException } from 'src/shared/exception/biz.exception';
+import { BizException } from 'src/shared/exceptions/biz.exception';
 
 @Controller('api/satisfaction')
 @ApiTags('만족도조사 API')

@@ -6,7 +6,7 @@ import { SatisfactionRepository } from './satisfaction.repository';
 import * as sanitizeHtml from 'sanitize-html';
 import { SatisfactionEntity } from './entities/satisfaction.entity';
 import { SearchSatisfactiontDto } from './dto/search-satisfaction.dto';
-import { BizException } from 'src/shared/exception/biz.exception';
+import { BizException } from 'src/shared/exceptions/biz.exception';
 
 @Injectable()
 export class SatisfactionService {

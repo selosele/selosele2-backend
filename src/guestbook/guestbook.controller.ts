@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { RealIP } from 'nestjs-real-ip';
-import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
+import { IsAuthenticated } from 'src/shared/decorators/auth/is-authenticated.decorator';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { AddGuestbookDto } from './dto/add-guestbook.dto';
 import { RemoveGuestbookDto } from './dto/remove-guestbook.dto';

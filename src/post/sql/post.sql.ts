@@ -1,4 +1,4 @@
-import { isNotEmpty } from "src/shared/util/util";
+import { isNotEmpty } from "src/shared/utils/util";
 import { EntityManager } from "typeorm";
 import { ListPostDto } from "../dto/list-post.dto";
 import { PostEntity } from "../entities/post.entity";
