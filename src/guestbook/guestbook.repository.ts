@@ -3,7 +3,7 @@ import { PaginationDto } from "src/shared/dto/pagination.dto";
 import { Repository } from "typeorm";
 import { AddGuestbookDto } from "./dto/add-guestbook.dto";
 import { UpdateGuestbookDto } from "./dto/update-guestbook.dto";
-import { GuestbookEntity } from "./guestbook.entity";
+import { GuestbookEntity } from "./entities/guestbook.entity";
 
 @CustomRepository(GuestbookEntity)
 export class GuestbookRepository extends Repository<GuestbookEntity> {

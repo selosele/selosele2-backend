@@ -2,9 +2,8 @@ import { CustomRepository } from "src/configs/CustomRepository";
 import { ListPostDto } from "src/post/dto/list-post.dto";
 import { SearchPostDto } from "src/post/dto/search-post.dto";
 import { PaginationDto } from "src/shared/dto/pagination.dto";
-import { PostTagEntity } from "src/tag/post-tag.entity";
 import { Brackets, Repository } from "typeorm";
-import { PostCategoryEntity } from "./post-category.entity";
+import { PostCategoryEntity } from "./entities/post-category.entity";
 
 @CustomRepository(PostCategoryEntity)
 export class PostCategoryRepository extends Repository<PostCategoryEntity> {

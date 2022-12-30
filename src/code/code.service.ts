@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { isEmpty } from 'src/shared/util/util';
 import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
-import { CodeEntity } from './code.entity';
+import { CodeEntity } from './entities/code.entity';
 import { CodeRepository } from './code.repository';
 import { RemoveCodeDto } from './dto/remove-code.dto';
 import { SaveCodeDto } from './dto/save-code.dto';

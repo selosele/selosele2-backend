@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
-import { CategoryEntity } from './category.entity';
+import { CategoryEntity } from './entities/category.entity';
 import { CategoryRepository } from './category.repository';
 import { ListCategoryDto } from './dto/list-category.dto';
 import { SaveCategoryDto } from './dto/save-category.dto';

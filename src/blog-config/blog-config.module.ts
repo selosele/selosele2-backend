@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
 import { BlogConfigController } from './blog-config.controller';
-import { BlogConfigEntity } from './blog-config.entity';
+import { BlogConfigEntity } from './entities/blog-config.entity';
 import { BlogConfigRepository } from './blog-config.repository';
 import { BlogConfigService } from './blog-config.service';
 

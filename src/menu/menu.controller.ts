@@ -1,10 +1,10 @@
 import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import { RoleEnum } from 'src/auth/role.entity';
+import { RoleEnum } from 'src/auth/entities/role.entity';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
 import { ListMenuDto } from './dto/list-menu.dto';
-import { MenuEntity } from './menu.entity';
+import { MenuEntity } from './entities/menu.entity';
 import { MenuService } from './menu.service';
 
 @Controller('api/menu')

@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Delete, UseGuards, Body } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import { RoleEnum } from 'src/auth/role.entity';
-import { PostEntity } from 'src/post/post.entity';
+import { RoleEnum } from 'src/auth/entities/role.entity';
+import { PostEntity } from 'src/post/entities/post.entity';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
 import { Roles } from 'src/shared/decorator/auth/roles.decorator';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';

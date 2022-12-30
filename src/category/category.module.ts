@@ -3,9 +3,9 @@ import { CategoryService } from './category.service';
 import { CategoryController } from './category.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
-import { CategoryEntity } from './category.entity';
+import { CategoryEntity } from './entities/category.entity';
 import { CategoryRepository } from './category.repository';
-import { PostCategoryEntity } from './post-category.entity';
+import { PostCategoryEntity } from './entities/post-category.entity';
 import { PostCategoryRepository } from './post-category.repository';
 
 @Module({

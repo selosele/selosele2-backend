@@ -1,7 +1,7 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { Repository } from 'typeorm';
 import { ListWidgetDto } from './dto/list-widget.dto';
-import { WidgetEntity } from './widget.entity';
+import { WidgetEntity } from './entities/widget.entity';
 
 @CustomRepository(WidgetEntity)
 export class WidgetRepository extends Repository<WidgetEntity> {

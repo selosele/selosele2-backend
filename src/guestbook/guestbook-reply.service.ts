@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { AddGuestbookReplyDto } from './dto/add-guestbook-reply.dto';
-import { GuestbookReplyEntity } from './guestbook-reply.entity';
+import { GuestbookReplyEntity } from './entities/guestbook-reply.entity';
 import { GuestbookReplyRepository } from './guestbook-reply.repository';
 import * as bcrypt from 'bcrypt';
 import * as sanitizeHtml from 'sanitize-html';

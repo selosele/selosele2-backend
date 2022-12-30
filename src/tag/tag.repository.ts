@@ -1,10 +1,10 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
-import { PostEntity } from 'src/post/post.entity';
+import { PostEntity } from 'src/post/entities/post.entity';
 import { DeleteResult, Repository } from 'typeorm';
 import { ListTagDto } from './dto/list-tag.dto';
 import { SaveTagDto } from './dto/save-tag.dto';
-import { PostTagEntity } from './post-tag.entity';
-import { TagEntity } from './tag.entity';
+import { PostTagEntity } from './entities/post-tag.entity';
+import { TagEntity } from './entities/tag.entity';
 
 @CustomRepository(TagEntity)
 export class TagRepository extends Repository<TagEntity> {

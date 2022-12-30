@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ListMenuDto } from './dto/list-menu.dto';
-import { MenuEntity } from './menu.entity';
+import { MenuEntity } from './entities/menu.entity';
 import { MenuRepository } from './menu.repository';
 
 @Injectable()

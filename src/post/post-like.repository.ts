@@ -1,7 +1,7 @@
 import { CustomRepository } from "src/configs/CustomRepository";
 import { DeleteResult, InsertResult, Repository } from "typeorm";
 import { SavePostLikeDto } from "./dto/save-post-like.dto";
-import { PostLikeEntity } from "./post-like.entity";
+import { PostLikeEntity } from "./entities/post-like.entity";
 
 @CustomRepository(PostLikeEntity)
 export class PostLikeRepository extends Repository<PostLikeEntity> {

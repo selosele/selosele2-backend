@@ -2,7 +2,7 @@ import { CustomRepository } from "src/configs/CustomRepository";
 import { InsertResult, Repository } from "typeorm";
 import { AddSatisfactiontDto } from "./dto/add-satisfaction.dto";
 import { SearchSatisfactiontDto } from "./dto/search-satisfaction.dto";
-import { SatisfactionEntity } from "./satisfaction.entity";
+import { SatisfactionEntity } from "./entities/satisfaction.entity";
 
 @CustomRepository(SatisfactionEntity)
 export class SatisfactionRepository extends Repository<SatisfactionEntity> {

@@ -1,6 +1,6 @@
 import { CustomRepository } from "src/configs/CustomRepository";
 import { DeleteResult, Repository } from "typeorm";
-import { ContentEntity } from "./content.entity";
+import { ContentEntity } from "./entities/content.entity";
 
 @CustomRepository(ContentEntity)
 export class ContentRepository extends Repository<ContentEntity> {

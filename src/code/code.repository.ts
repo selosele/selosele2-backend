@@ -1,7 +1,7 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { isNotEmpty } from 'src/shared/util/util';
 import { DeleteResult, InsertResult, Repository, UpdateResult } from 'typeorm';
-import { CodeEntity } from './code.entity';
+import { CodeEntity } from './entities/code.entity';
 import { SaveCodeDto } from './dto/save-code.dto';
 
 @CustomRepository(CodeEntity)

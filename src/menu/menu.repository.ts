@@ -1,7 +1,7 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { Repository } from 'typeorm';
 import { ListMenuDto } from './dto/list-menu.dto';
-import { MenuEntity } from './menu.entity';
+import { MenuEntity } from './entities/menu.entity';
 
 @CustomRepository(MenuEntity)
 export class MenuRepository extends Repository<MenuEntity> {

@@ -6,7 +6,7 @@ import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { AddGuestbookDto } from './dto/add-guestbook.dto';
 import { RemoveGuestbookDto } from './dto/remove-guestbook.dto';
 import { UpdateGuestbookDto } from './dto/update-guestbook.dto';
-import { GuestbookEntity } from './guestbook.entity';
+import { GuestbookEntity } from './entities/guestbook.entity';
 import { GuestbookService } from './guestbook.service';
 
 @Controller('api/guestbook')

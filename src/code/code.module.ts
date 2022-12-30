@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CodeService } from './code.service';
 import { CodeController } from './code.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CodeEntity } from './code.entity';
+import { CodeEntity } from './entities/code.entity';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
 import { CodeRepository } from './code.repository';
 

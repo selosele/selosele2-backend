@@ -2,7 +2,7 @@ import { Controller, Get, Post, Put, Body, ValidationPipe, ParseIntPipe } from '
 import { Delete, Param, UseGuards } from '@nestjs/common/decorators';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import { RoleEnum } from 'src/auth/role.entity';
+import { RoleEnum } from 'src/auth/entities/role.entity';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
 import { Roles } from 'src/shared/decorator/auth/roles.decorator';
 import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
@@ -10,7 +10,7 @@ import { RoleGuard } from 'src/shared/guard/role.guard';
 import { DeleteResult } from 'typeorm';
 import { ListTagDto } from './dto/list-tag.dto';
 import { SaveTagDto } from './dto/save-tag.dto';
-import { TagEntity } from './tag.entity';
+import { TagEntity } from './entities/tag.entity';
 import { TagService } from './tag.service';
 
 @Controller('api/tag')

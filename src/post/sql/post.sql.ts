@@ -1,7 +1,7 @@
 import { isNotEmpty } from "src/shared/util/util";
 import { EntityManager } from "typeorm";
 import { ListPostDto } from "../dto/list-post.dto";
-import { PostEntity } from "../post.entity";
+import { PostEntity } from "../entities/post.entity";
 
 /** 포스트 목록을 조회한다. */
 export const listPostSql = async (

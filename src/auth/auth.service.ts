@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthCredentialsDto, AuthCredentialsRoleDto } from './dto/auth-credentials.dto';
 import { UserRepository } from './user.repository';
@@ -7,8 +7,8 @@ import { UserRoleRepository } from './user-role.repository';
 import { Builder } from 'builder-pattern';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserEntity } from './user.entity';
-import { RoleEnum } from './role.entity';
+import { UserEntity } from './entities/user.entity';
+import { RoleEnum } from './entities/role.entity';
 import { BizException } from 'src/shared/exception/biz.exception';
 
 @Injectable()

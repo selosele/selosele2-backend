@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
-import { ContentEntity } from './content.entity';
+import { ContentEntity } from './entities/content.entity';
 import { ContentRepository } from './content.repository';
 import { RemoveContentDto } from './dto/remove-content.dto';
 

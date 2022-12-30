@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BlogConfigEntity } from './blog-config.entity';
+import { BlogConfigEntity } from './entities/blog-config.entity';
 import { BlogConfigRepository } from './blog-config.repository';
 
 @Injectable()

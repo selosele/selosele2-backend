@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { BlogConfigService } from './blog-config.service';
 import { ApiTags, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
-import { BlogConfigEntity } from './blog-config.entity';
+import { BlogConfigEntity } from './entities/blog-config.entity';
 
 @Controller('api/blogconfig')
 @ApiTags('블로그 환경설정 API')

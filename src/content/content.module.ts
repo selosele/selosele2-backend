@@ -4,7 +4,7 @@ import { ContentController } from './content.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
 import { ContentRepository } from './content.repository';
-import { ContentEntity } from './content.entity';
+import { ContentEntity } from './entities/content.entity';
 
 @Module({
   imports: [

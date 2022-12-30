@@ -4,7 +4,7 @@ import { Brackets, DeleteResult, Repository } from 'typeorm';
 import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
-import { PostEntity } from './post.entity';
+import { PostEntity } from './entities/post.entity';
 import { listPostSql } from './sql/post.sql';
 
 @CustomRepository(PostEntity)

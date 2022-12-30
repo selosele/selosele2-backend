@@ -9,7 +9,7 @@ import {
   ParseIntPipe
 } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { UserEntity } from './user.entity';
+import { UserEntity } from './entities/user.entity';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { InsertResult } from 'typeorm';

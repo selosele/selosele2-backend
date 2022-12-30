@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
 import { ListTagDto } from './dto/list-tag.dto';
 import { SaveTagDto } from './dto/save-tag.dto';
-import { TagEntity } from './tag.entity';
+import { TagEntity } from './entities/tag.entity';
 import { TagRepository } from './tag.repository';
 
 @Injectable()

@@ -1,7 +1,7 @@
 import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ListWidgetDto } from './dto/list-widget.dto';
-import { WidgetEntity } from './widget.entity';
+import { WidgetEntity } from './entities/widget.entity';
 import { WidgetService } from './widget.service';
 
 @Controller('api/widget')

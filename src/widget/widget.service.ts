@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ListWidgetDto } from './dto/list-widget.dto';
-import { WidgetEntity } from './widget.entity';
+import { WidgetEntity } from './entities/widget.entity';
 import { WidgetRepository } from './widget.repository';
 
 @Injectable()

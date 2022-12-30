@@ -5,7 +5,7 @@ import { isEmpty } from "src/shared/util/util";
 import { DeleteResult, InsertResult } from "typeorm";
 import { GetPostLikeDto } from "./dto/get-post-like.dto";
 import { SavePostLikeDto } from "./dto/save-post-like.dto";
-import { PostLikeEntity } from "./post-like.entity";
+import { PostLikeEntity } from "./entities/post-like.entity";
 import { PostLikeRepository } from "./post-like.repository";
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
 import { Repository } from 'typeorm';
-import { BlogConfigEntity } from './blog-config.entity';
+import { BlogConfigEntity } from './entities/blog-config.entity';
 
 @CustomRepository(BlogConfigEntity)
 export class BlogConfigRepository extends Repository<BlogConfigEntity> {

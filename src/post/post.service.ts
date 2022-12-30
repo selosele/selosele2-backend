@@ -9,7 +9,7 @@ import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
 import { RemovePostDto } from './dto/remove-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
-import { PostEntity } from './post.entity';
+import { PostEntity } from './entities/post.entity';
 import { PostRepository } from './post.repository';
 
 @Injectable()

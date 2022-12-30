@@ -1,10 +1,10 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
-import { PostEntity } from 'src/post/post.entity';
+import { PostEntity } from 'src/post/entities/post.entity';
 import { DeleteResult, Repository } from 'typeorm';
-import { CategoryEntity } from './category.entity';
+import { CategoryEntity } from './entities/category.entity';
 import { ListCategoryDto } from './dto/list-category.dto';
 import { SaveCategoryDto } from './dto/save-category.dto';
-import { PostCategoryEntity } from './post-category.entity';
+import { PostCategoryEntity } from './entities/post-category.entity';
 
 @CustomRepository(CategoryEntity)
 export class CategoryRepository extends Repository<CategoryEntity> {

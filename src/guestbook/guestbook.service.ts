@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { AddGuestbookDto } from './dto/add-guestbook.dto';
-import { GuestbookEntity } from './guestbook.entity';
+import { GuestbookEntity } from './entities/guestbook.entity';
 import { GuestbookRepository } from './guestbook.repository';
 import * as bcrypt from 'bcrypt';
 import * as sanitizeHtml from 'sanitize-html';

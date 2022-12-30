@@ -5,7 +5,7 @@ import { RealIP } from "nestjs-real-ip";
 import { IsAuthenticated } from "src/shared/decorator/auth/is-authenticated.decorator";
 import { GetPostLikeDto } from "./dto/get-post-like.dto";
 import { SavePostLikeDto } from "./dto/save-post-like.dto";
-import { PostLikeEntity } from "./post-like.entity";
+import { PostLikeEntity } from "./entities/post-like.entity";
 import { PostLikeService } from "./post-like.service";
 
 @Controller('api/post/like')

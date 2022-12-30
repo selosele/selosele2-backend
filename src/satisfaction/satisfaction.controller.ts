@@ -2,14 +2,14 @@ import { Body, Query, Controller, Post, Get, ValidationPipe, UseGuards } from '@
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { InsertResult } from 'typeorm';
 import { AddSatisfactiontDto } from './dto/add-satisfaction.dto';
-import { SatisfactionEntity } from './satisfaction.entity';
+import { SatisfactionEntity } from './entities/satisfaction.entity';
 import { SatisfactionService } from './satisfaction.service';
 import { RealIP } from 'nestjs-real-ip';
 import { IsAuthenticated } from 'src/shared/decorator/auth/is-authenticated.decorator';
 import { Roles } from 'src/shared/decorator/auth/roles.decorator';
 import { JwtAuthGuard } from 'src/shared/guard/jwt-auth.guard';
 import { RoleGuard } from 'src/shared/guard/role.guard';
-import { RoleEnum } from 'src/auth/role.entity';
+import { RoleEnum } from 'src/auth/entities/role.entity';
 import { SearchSatisfactiontDto } from './dto/search-satisfaction.dto';
 import { BizException } from 'src/shared/exception/biz.exception';
 

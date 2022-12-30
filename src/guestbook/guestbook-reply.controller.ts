@@ -2,7 +2,7 @@ import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RealIP } from 'nestjs-real-ip';
 import { AddGuestbookReplyDto } from './dto/add-guestbook-reply.dto';
-import { GuestbookReplyEntity } from './guestbook-reply.entity';
+import { GuestbookReplyEntity } from './entities/guestbook-reply.entity';
 import { GuestbookReplyService } from "./guestbook-reply.service";
 
 @Controller('api/guestbookreply')
