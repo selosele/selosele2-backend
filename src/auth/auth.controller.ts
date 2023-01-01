@@ -6,14 +6,22 @@ import {
   NotFoundException,
   Get,
   Param,
-  ParseIntPipe
+  ParseIntPipe,
+  Query,
+  UseGuards,
+  Patch
 } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { InsertResult } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
+import { RoleEntity, RoleEnum } from './entities/role.entity';
+import { ListRoleDto } from './dto/list-role.dto';
+import { Roles } from 'src/shared/decorators/auth/roles.decorator';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { RoleGuard } from 'src/shared/guards/role.guard';
 
 @Controller('api/auth')
 @ApiTags('인증·인가 API')
@@ -77,6 +85,31 @@ export class AuthController {
   })
   signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
     return this.authService.signIn(authCredentialsDto);
+  }
+
+  @Get('role')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(RoleEnum.ROLE_ADMIN)
+  @ApiOperation({
+    summary: '권한 목록 조회 API',
+    description: '권한 목록을 조회한다.',
+  })
+  @ApiCreatedResponse({
+    type: RoleEntity,
+    description: '권한 목록을 조회한다.',
+  })
+  @ApiQuery({
+    type: ListRoleDto,
+    name: 'listRoleDto',
+    description: '권한 목록 조회 DTO',
+  })
+  listRole(@Query(ValidationPipe) listRoleDto: ListRoleDto): Promise<RoleEntity[]> {
+    return this.authService.listRole(listRoleDto);
+  }
+
+  @Patch('test')
+  apiTest() {
+    return 'hi';
   }
 
 }
