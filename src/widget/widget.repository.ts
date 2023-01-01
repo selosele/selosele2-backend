@@ -13,7 +13,7 @@ export class WidgetRepository extends Repository<WidgetEntity> {
         useYn: listWidgetDto.useYn,
       },
       order: {
-        position: 'ASC',
+        sort: 'ASC',
       },
     });
   }

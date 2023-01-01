@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('widget')
@@ -14,7 +14,7 @@ export class WidgetEntity extends BaseEntity {
     comment: '위젯명'
   })
   @ApiProperty({
-    description: '위젯명'
+    description: '위젯 명'
   })
   title?: string;
 
@@ -27,12 +27,12 @@ export class WidgetEntity extends BaseEntity {
   icon?: string;
 
   @Column({
-    comment: '위젯 위치 값'
+    comment: '위젯 정렬 순서'
   })
   @ApiProperty({
-    description: '위젯 위치 값'
+    description: '위젯 정렬 순서'
   })
-  position?: string;
+  sort?: string;
 
   @Column({
     comment: '위젯 사용여부'
@@ -41,5 +41,21 @@ export class WidgetEntity extends BaseEntity {
     description: '위젯 사용여부'
   })
   useYn?: string;
+
+  @CreateDateColumn({
+    comment: '위젯 등록일시'
+  })
+  @ApiProperty({
+    description: '위젯 등록일시'
+  })
+  regDate?: Date;
+
+  @UpdateDateColumn({
+    comment: '위젯 수정일시'
+  })
+  @ApiProperty({
+    description: '위젯 수정일시'
+  })
+  modDate?: Date;
   
 }
