@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { MenuRoleEntity } from './menu-role.entity';
 
@@ -44,20 +44,28 @@ export class MenuEntity extends BaseEntity {
   sort?: number;
 
   @Column({
-    comment: '하위 메뉴 존재 여부'
-  })
-  @ApiProperty({
-    description: '하위 메뉴 존재 여부'
-  })
-  hasChildren?: string;
-
-  @Column({
     comment: '메뉴 사용 여부'
   })
   @ApiProperty({
     description: '메뉴 사용 여부'
   })
   useYn?: string;
+
+  @CreateDateColumn({
+    comment: '메뉴 등록일시'
+  })
+  @ApiProperty({
+    description: '메뉴 등록일시'
+  })
+  regDate?: Date;
+
+  @UpdateDateColumn({
+    comment: '메뉴 수정일시'
+  })
+  @ApiProperty({
+    description: '메뉴 수정일시'
+  })
+  modDate?: Date;
   
   @ManyToOne(() => MenuEntity, (menu) => menu.children)
   parent: MenuEntity;

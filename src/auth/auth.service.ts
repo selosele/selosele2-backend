@@ -8,8 +8,10 @@ import { Builder } from 'builder-pattern';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from './entities/user.entity';
-import { RoleEnum } from './entities/role.entity';
+import { RoleEntity, RoleEnum } from './entities/role.entity';
 import { BizException } from 'src/shared/exceptions/biz.exception';
+import { ListRoleDto } from './dto/list-role.dto';
+import { RoleRepository } from './role.repository';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +21,8 @@ export class AuthService {
     private readonly userRepository: UserRepository,
     @InjectRepository(UserRoleRepository)
     private readonly userRoleRepository: UserRoleRepository,
+    @InjectRepository(RoleRepository)
+    private readonly roleRepository: RoleRepository,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -91,6 +95,11 @@ export class AuthService {
     }
     
     throw new BizException('로그인에 실패했습니다.');
+  }
+
+  /** 권한 목록을 조회한다. */
+  async listRole(listRoleDto?: ListRoleDto): Promise<RoleEntity[]> {
+    return await this.roleRepository.listRole(listRoleDto);
   }
 
 }
