@@ -3,10 +3,6 @@ import { INestApplication, NotFoundException } from '@nestjs/common';
 /** Cors 유틸 */
 export const setupCors = (app: INestApplication): void => {
   const whitelist = [process.env.LOC_ORIGIN];
-  
-  if ('development' === process.env.NODE_ENV) {
-    whitelist.push('http://localhost:8080');
-  }
 
   app.enableCors({
     origin: (origin, callback) => {
@@ -16,8 +12,8 @@ export const setupCors = (app: INestApplication): void => {
         callback(new NotFoundException());
       }
     },
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization'], // 허용할 Header
     methods: 'GET,POST,PUT,DELETE', // 허용할 Request Method
-    credentials: true,
+    credentials: true, // 요청에 인증 정보를 담아서 보낼지 여부
   });
 };

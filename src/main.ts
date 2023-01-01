@@ -14,13 +14,13 @@ async function bootstrap() {
     setupCors(app);
   }
 
-  /** 유효성 검증 설정 */
-  setupValidation(app);
-
   if ('development' === process.env.NODE_ENV) {
     /** Swagger 설정 */
     setupSwagger(app);
   }
+
+  /** 유효성 검증 설정 */
+  setupValidation(app);
 
   await app.listen(process.env.PORT || 3000);
 }
