@@ -1,26 +1,22 @@
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express/interfaces/nest-express-application.interface';
 import { AppModule } from './app.module';
-import { setupSwagger } from './shared/utils/swagger/swagger.util';
+import { setupCors, setupSwagger, setupValidation } from './shared/utils/utils';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  /** x-powered-by 헤더 삭제 */
   app.disable('x-powered-by');
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      // 검증을 통과한 뒤, 대상 객체에서 검증 규칙이 정의되어있지 않은 프로퍼티를 모두 제거해주는 옵션
-      whitelist: true,
-      // 대상 객체에 검증 규칙이 정의되어 있지 않은 프로퍼티가 있다면 오류를 내게 하는 옵션
-      forbidNonWhitelisted: false,
-      // auto-transformation을 가능하게 해주는 옵션
-      transform: true,
-    })
-  );
+  /** Cors 설정 */
+  setupCors(app);
+
+  /** 유효성 검증 설정 */
+  setupValidation(app);
 
   if ('development' === process.env.NODE_ENV) {
+    /** Swagger 설정 */
     setupSwagger(app);
   }
 

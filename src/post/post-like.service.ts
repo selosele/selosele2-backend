@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { BizException } from "src/shared/exceptions/biz.exception";
-import { isEmpty } from "src/shared/utils/util";
+import { isEmpty } from "src/shared/utils/common/common.util";
 import { DeleteResult, InsertResult } from "typeorm";
 import { GetPostLikeDto } from "./dto/get-post-like.dto";
 import { SavePostLikeDto } from "./dto/save-post-like.dto";

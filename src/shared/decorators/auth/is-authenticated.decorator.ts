@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { isNotEmpty } from "src/shared/utils/util";
+import { isNotEmpty } from "src/shared/utils/common/common.util";
 
 /** 유효한 요청인지 확인하는 데코레이터 */
 export const IsAuthenticated = createParamDecorator((data, context: ExecutionContext): boolean => {

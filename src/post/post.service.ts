@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from 'src/category/post-category.repository';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { BizException } from 'src/shared/exceptions/biz.exception';
-import { isEmpty, isNotEmpty } from 'src/shared/utils/util';
+import { isEmpty, isNotEmpty } from 'src/shared/utils/utils';
 import { DeleteResult } from 'typeorm';
 import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
