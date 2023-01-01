@@ -9,8 +9,10 @@ async function bootstrap() {
   /** x-powered-by 헤더 삭제 */
   app.disable('x-powered-by');
 
-  /** Cors 설정 */
-  setupCors(app);
+  if ('production' === process.env.NODE_ENV) {
+    /** Cors 설정 */
+    setupCors(app);
+  }
 
   /** 유효성 검증 설정 */
   setupValidation(app);

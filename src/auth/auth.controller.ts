@@ -1,16 +1,4 @@
-import { 
-  Controller,
-  Post,
-  Body,
-  ValidationPipe,
-  NotFoundException,
-  Get,
-  Param,
-  ParseIntPipe,
-  Query,
-  UseGuards,
-  Patch
-} from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Query, UseGuards, Patch } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { AuthService } from './auth.service';
@@ -110,6 +98,11 @@ export class AuthController {
   @Patch('test')
   apiTest() {
     return 'hi';
+  }
+
+  @Get('test')
+  apiTest2() {
+    return 'hello';
   }
 
 }
