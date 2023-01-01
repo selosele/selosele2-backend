@@ -1,4 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 export const typeORMConfig: TypeOrmModuleOptions = {
@@ -14,3 +15,17 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   timezone: '+09:00', //'Asia/Seoul'
   //logging: 'development' === process.env.NODE_ENV,
 };
+
+export const dataSorce: DataSource = new DataSource({
+  type: 'mariadb',
+  host: typeORMConfig.host,
+  port: typeORMConfig.port,
+  username: typeORMConfig.username,
+  password: typeORMConfig.password,
+  database: typeORMConfig.database,
+  entities: typeORMConfig.entities,
+  synchronize: typeORMConfig.synchronize,
+  namingStrategy: typeORMConfig.namingStrategy,
+  timezone: typeORMConfig.timezone,
+  //logging: typeORMConfig.logging,
+});
