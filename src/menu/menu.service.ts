@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Builder } from 'builder-pattern';
 import { RoleRepository } from 'src/auth/role.repository';
-import { initTransaction } from 'src/shared/utils/utils';
+import { initTransaction } from 'src/shared/utils';
 import { EntityManager } from 'typeorm';
 import { ListMenuDto } from './dto/list-menu.dto';
 import { SaveMenuRoleDto } from './dto/save-menu-role.dto';

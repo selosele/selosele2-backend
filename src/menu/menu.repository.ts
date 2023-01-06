@@ -1,5 +1,5 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
-import { isNotEmpty } from 'src/shared/utils/utils';
+import { isNotEmpty } from 'src/shared/utils';
 import { Repository } from 'typeorm';
 import { ListMenuDto } from './dto/list-menu.dto';
 import { SaveMenuDto } from './dto/save-menu.dto';

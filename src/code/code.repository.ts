@@ -1,5 +1,5 @@
 import { CustomRepository } from 'src/configs/CustomRepository';
-import { isNotEmpty } from 'src/shared/utils/utils';
+import { isNotEmpty } from 'src/shared/utils';
 import { DeleteResult, InsertResult, Repository, UpdateResult } from 'typeorm';
 import { CodeEntity } from './entities/code.entity';
 import { SaveCodeDto } from './dto/save-code.dto';
