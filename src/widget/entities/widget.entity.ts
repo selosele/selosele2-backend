@@ -8,7 +8,7 @@ export class WidgetEntity extends BaseEntity {
   @ApiProperty({
     description: '위젯 ID'
   })
-  id?: string;
+  id?: number;
 
   @Column({
     comment: '위젯명'
@@ -32,7 +32,7 @@ export class WidgetEntity extends BaseEntity {
   @ApiProperty({
     description: '위젯 정렬 순서'
   })
-  sort?: string;
+  sort?: number;
 
   @Column({
     comment: '위젯 사용여부'
