@@ -5,6 +5,6 @@ export class UpdateWidgetUseYnDto {
 
   /** 위젯 ID 목록 */
   @IsNotEmpty()
-  useWidgetId?: number[];
+  id?: number[];
 
 }

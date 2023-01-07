@@ -26,9 +26,9 @@ export class WidgetService {
 
   /** 위젯 사용여부를 수정한다. */
   async updateWidgetUseYn(updateWidgetUseYnDto: UpdateWidgetUseYnDto): Promise<number> {
-    let cnt = 0;
+    let cnt: number = 0;
 
-    for (const dto of updateWidgetUseYnDto.useWidgetId) {
+    for (const dto of updateWidgetUseYnDto.id) {
       const updated = await this.widgetRepository.updateWidgetUseYn(dto);
       cnt += updated.affected;
     }
