@@ -5,6 +5,7 @@ import { BlogConfigController } from './blog-config.controller';
 import { BlogConfigEntity } from './entities/blog-config.entity';
 import { BlogConfigRepository } from './blog-config.repository';
 import { BlogConfigService } from './blog-config.service';
+import { FileUploaderService } from 'src/file-uploader/file-uploader.service';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { BlogConfigService } from './blog-config.service';
     BlogConfigController
   ],
   providers: [
-    BlogConfigService
+    BlogConfigService,
+    FileUploaderService
   ],
 })
 export class BlogConfigModule {}

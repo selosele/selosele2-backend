@@ -35,7 +35,11 @@ export class BlogConfigEntity extends BaseEntity {
   description?: string;
 
   @Column({
-    comment: '블로그 아바타 이미지'
+    comment: '블로그 아바타 이미지',
+    transformer: {
+      to: (value: string) => Buffer.from(value),
+      from: (value: Buffer) => value.toString()
+    },
   })
   @ApiProperty({
     description: '블로그 아바타 이미지'
@@ -51,15 +55,19 @@ export class BlogConfigEntity extends BaseEntity {
   avatarImgUrl?: string;
 
   @Column({
-    comment: '블로그 아바타 이미지 용량'
+    comment: '블로그 아바타 이미지 용량',
   })
   @ApiProperty({
     description: '블로그 아바타 이미지 용량'
   })
-  avatarImgSize?: string;
+  avatarImgSize?: number;
 
   @Column({
-    comment: '블로그 대표 이미지'
+    comment: '블로그 대표 이미지',
+    transformer: {
+      to: (value: string) => Buffer.from(value),
+      from: (value: Buffer) => value.toString()
+    },
   })
   @ApiProperty({
     description: '블로그 대표 이미지'

@@ -17,6 +17,7 @@ import { GuestbookModule } from './guestbook/guestbook.module';
 import { ContentModule } from './content/content.module';
 import { APP_FILTER } from '@nestjs/core';
 import { BizExceptionFilter } from './shared/exceptions/biz-exception.filter';
+import { FileUploaderModule } from './file-uploader/file-uploader.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { BizExceptionFilter } from './shared/exceptions/biz-exception.filter';
       rootPath: join(__dirname, '..', 'client'),
     }),
     TypeOrmModule.forRoot(typeORMConfig),
+    FileUploaderModule,
     AuthModule,
     CodeModule,
     BlogConfigModule,
