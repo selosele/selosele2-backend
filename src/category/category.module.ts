@@ -10,8 +10,14 @@ import { PostCategoryRepository } from './post-category.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([CategoryEntity, PostCategoryEntity]),
-    CustomTypeOrmModule.forCustomRepository([CategoryRepository, PostCategoryRepository]),
+    TypeOrmModule.forFeature([
+      CategoryEntity,
+      PostCategoryEntity
+    ]),
+    CustomTypeOrmModule.forCustomRepository([
+      CategoryRepository,
+      PostCategoryRepository
+    ]),
   ],
   controllers: [CategoryController],
   providers: [CategoryService]

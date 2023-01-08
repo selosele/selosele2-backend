@@ -8,8 +8,12 @@ import { CodeRepository } from './code.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([CodeEntity]),
-    CustomTypeOrmModule.forCustomRepository([CodeRepository]),
+    TypeOrmModule.forFeature([
+      CodeEntity
+    ]),
+    CustomTypeOrmModule.forCustomRepository([
+      CodeRepository
+    ]),
   ],
   controllers: [CodeController],
   providers: [CodeService]

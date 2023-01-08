@@ -8,8 +8,12 @@ import { SatisfactionRepository } from './satisfaction.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([SatisfactionEntity]),
-    CustomTypeOrmModule.forCustomRepository([SatisfactionRepository]),
+    TypeOrmModule.forFeature([
+      SatisfactionEntity
+    ]),
+    CustomTypeOrmModule.forCustomRepository([
+      SatisfactionRepository
+    ]),
   ],
   controllers: [SatisfactionController],
   providers: [SatisfactionService]

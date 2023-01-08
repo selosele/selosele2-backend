@@ -10,8 +10,14 @@ import { PostTagRepository } from './post-tag.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([TagEntity, PostTagEntity]),
-    CustomTypeOrmModule.forCustomRepository([TagRepository, PostTagRepository]),
+    TypeOrmModule.forFeature([
+      TagEntity,
+      PostTagEntity
+    ]),
+    CustomTypeOrmModule.forCustomRepository([
+      TagRepository,
+      PostTagRepository
+    ]),
   ],
   controllers: [TagController],
   providers: [TagService]

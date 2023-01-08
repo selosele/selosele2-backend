@@ -8,7 +8,9 @@ import { ContentEntity } from './entities/content.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ContentEntity]),
+    TypeOrmModule.forFeature([
+      ContentEntity
+    ]),
     CustomTypeOrmModule.forCustomRepository([
       ContentRepository,
     ]),

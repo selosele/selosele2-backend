@@ -8,8 +8,12 @@ import { WidgetRepository } from './widget.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([WidgetEntity]),
-    CustomTypeOrmModule.forCustomRepository([WidgetRepository]),
+    TypeOrmModule.forFeature([
+      WidgetEntity
+    ]),
+    CustomTypeOrmModule.forCustomRepository([
+      WidgetRepository
+    ]),
   ],
   controllers: [WidgetController],
   providers: [WidgetService]

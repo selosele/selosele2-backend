@@ -8,8 +8,12 @@ import { BlogConfigService } from './blog-config.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([BlogConfigEntity]),
-    CustomTypeOrmModule.forCustomRepository([BlogConfigRepository]),
+    TypeOrmModule.forFeature([
+      BlogConfigEntity
+    ]),
+    CustomTypeOrmModule.forCustomRepository([
+      BlogConfigRepository
+    ]),
   ],
   controllers: [BlogConfigController],
   providers: [BlogConfigService],

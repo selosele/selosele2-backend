@@ -12,8 +12,14 @@ import { GuestbookReplyController } from './guestbook-reply.controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([GuestbookEntity, GuestbookReplyEntity]),
-    CustomTypeOrmModule.forCustomRepository([GuestbookRepository, GuestbookReplyRepository]),
+    TypeOrmModule.forFeature([
+      GuestbookEntity,
+      GuestbookReplyEntity
+    ]),
+    CustomTypeOrmModule.forCustomRepository([
+      GuestbookRepository,
+      GuestbookReplyRepository
+    ]),
   ],
   controllers: [GuestbookController, GuestbookReplyController],
   providers: [GuestbookService, GuestbookReplyService]

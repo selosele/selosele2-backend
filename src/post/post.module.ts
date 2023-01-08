@@ -11,10 +11,16 @@ import { PostLikeEntity } from './entities/post-like.entity';
 import { PostLikeRepository } from './post-like.repository';
 import { PostLikeService } from './post-like.service';
 import { PostLikeController } from './post-like.controller';
+import { PostReplyEntity } from './entities/post-reply.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PostEntity, PostCategoryEntity, PostLikeEntity]),
+    TypeOrmModule.forFeature([
+      PostEntity,
+      PostCategoryEntity,
+      PostLikeEntity,
+      PostReplyEntity
+    ]),
     CustomTypeOrmModule.forCustomRepository([
       PostRepository,
       PostCategoryRepository,

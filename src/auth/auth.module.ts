@@ -22,15 +22,23 @@ dotenv.config();
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('JWT_SECRET_KEY'),
+        secret: config.get<string>('JWT_ACCESS_SECRET_KEY'),
         signOptions: {
-          expiresIn: +config.get<number>('JWT_EXPIRATION_TIME'),
+          expiresIn: +config.get<number>('JWT_ACCESS_EXPIRATION_TIME'),
         }
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([UserEntity, UserRoleEntity, RoleEntity]),
-    CustomTypeOrmModule.forCustomRepository([UserRepository, UserRoleRepository, RoleRepository]),
+    TypeOrmModule.forFeature([
+      UserEntity,
+      UserRoleEntity,
+      RoleEntity
+    ]),
+    CustomTypeOrmModule.forCustomRepository([
+      UserRepository,
+      UserRoleRepository,
+      RoleRepository
+    ]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

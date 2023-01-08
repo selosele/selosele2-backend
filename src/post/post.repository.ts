@@ -43,7 +43,6 @@ export class PostRepository extends Repository<PostEntity> {
       .select("post.id", "id")
         .addSelect("post.title", "title")
         .addSelect("post.reg_date", "regDate")
-        .addSelect("post.reply_cnt", "replyCnt")
         .addSelect("SUBSTR(post.raw_text, 1, 180)", "rawText")
         .addSelect("post.og_img_url", "ogImgUrl")
         .addSelect("post.secret_yn", "secretYn")

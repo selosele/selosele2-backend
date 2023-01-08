@@ -13,7 +13,11 @@ import { RoleEntity } from 'src/auth/entities/role.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([MenuEntity, MenuRoleEntity, RoleEntity]),
+    TypeOrmModule.forFeature([
+      MenuEntity,
+      MenuRoleEntity,
+      RoleEntity
+    ]),
     CustomTypeOrmModule.forCustomRepository([
       MenuRepository,
       MenuRoleRepository,
