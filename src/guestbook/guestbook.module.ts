@@ -21,7 +21,13 @@ import { GuestbookReplyController } from './guestbook-reply.controller';
       GuestbookReplyRepository
     ]),
   ],
-  controllers: [GuestbookController, GuestbookReplyController],
-  providers: [GuestbookService, GuestbookReplyService]
+  controllers: [
+    GuestbookController,
+    GuestbookReplyController
+  ],
+  providers: [
+    GuestbookService,
+    GuestbookReplyService
+  ]
 })
 export class GuestbookModule {}

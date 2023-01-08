@@ -15,7 +15,11 @@ import { ContentEntity } from './entities/content.entity';
       ContentRepository,
     ]),
   ],
-  controllers: [ContentController],
-  providers: [ContentService]
+  controllers: [
+    ContentController
+  ],
+  providers: [
+    ContentService
+  ]
 })
 export class ContentModule {}

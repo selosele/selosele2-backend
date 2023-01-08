@@ -24,7 +24,12 @@ import { RoleEntity } from 'src/auth/entities/role.entity';
       RoleRepository,
     ]),
   ],
-  controllers: [MenuController],
-  providers: [MenuService, MenuRoleService]
+  controllers: [
+    MenuController
+  ],
+  providers: [
+    MenuService,
+    MenuRoleService
+  ]
 })
 export class MenuModule {}

@@ -15,7 +15,11 @@ import { CodeRepository } from './code.repository';
       CodeRepository
     ]),
   ],
-  controllers: [CodeController],
-  providers: [CodeService]
+  controllers: [
+    CodeController
+  ],
+  providers: [
+    CodeService
+  ]
 })
 export class CodeModule {}

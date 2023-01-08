@@ -15,7 +15,11 @@ import { WidgetRepository } from './widget.repository';
       WidgetRepository
     ]),
   ],
-  controllers: [WidgetController],
-  providers: [WidgetService]
+  controllers: [
+    WidgetController
+  ],
+  providers: [
+    WidgetService
+  ]
 })
 export class WidgetModule {}

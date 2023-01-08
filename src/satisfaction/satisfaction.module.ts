@@ -15,7 +15,11 @@ import { SatisfactionRepository } from './satisfaction.repository';
       SatisfactionRepository
     ]),
   ],
-  controllers: [SatisfactionController],
-  providers: [SatisfactionService]
+  controllers: [
+    SatisfactionController
+  ],
+  providers: [
+    SatisfactionService
+  ]
 })
 export class SatisfactionModule {}

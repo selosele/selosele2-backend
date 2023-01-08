@@ -19,7 +19,11 @@ import { PostCategoryRepository } from './post-category.repository';
       PostCategoryRepository
     ]),
   ],
-  controllers: [CategoryController],
-  providers: [CategoryService]
+  controllers: [
+    CategoryController
+  ],
+  providers: [
+    CategoryService
+  ]
 })
 export class CategoryModule {}

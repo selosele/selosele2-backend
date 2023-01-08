@@ -15,7 +15,11 @@ import { BlogConfigService } from './blog-config.service';
       BlogConfigRepository
     ]),
   ],
-  controllers: [BlogConfigController],
-  providers: [BlogConfigService],
+  controllers: [
+    BlogConfigController
+  ],
+  providers: [
+    BlogConfigService
+  ],
 })
 export class BlogConfigModule {}

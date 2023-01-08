@@ -19,7 +19,11 @@ import { PostTagRepository } from './post-tag.repository';
       PostTagRepository
     ]),
   ],
-  controllers: [TagController],
-  providers: [TagService]
+  controllers: [
+    TagController
+  ],
+  providers: [
+    TagService
+  ]
 })
 export class TagModule {}

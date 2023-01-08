@@ -12,6 +12,9 @@ import { PostLikeRepository } from './post-like.repository';
 import { PostLikeService } from './post-like.service';
 import { PostLikeController } from './post-like.controller';
 import { PostReplyEntity } from './entities/post-reply.entity';
+import { PostReplyRepository } from './post-reply.repository';
+import { PostReplyService } from './post-reply.service';
+import { PostReplyController } from './post-reply.controller';
 
 @Module({
   imports: [
@@ -25,9 +28,18 @@ import { PostReplyEntity } from './entities/post-reply.entity';
       PostRepository,
       PostCategoryRepository,
       PostLikeRepository,
+      PostReplyRepository
     ]),
   ],
-  controllers: [PostController, PostLikeController],
-  providers: [PostService, PostLikeService]
+  controllers: [
+    PostController,
+    PostLikeController,
+    PostReplyController
+  ],
+  providers: [
+    PostService,
+    PostLikeService,
+    PostReplyService
+  ]
 })
 export class PostModule {}
