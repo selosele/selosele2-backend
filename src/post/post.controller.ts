@@ -13,7 +13,6 @@ import { GetPostDto } from './dto/get-post.dto';
 import { ListPostDto } from './dto/list-post.dto';
 import { RemovePostDto } from './dto/remove-post.dto';
 import { SearchPostDto } from './dto/search-post.dto';
-import { PostLikeService } from './post-like.service';
 import { PostService } from './post.service';
 
 @Controller('api/post')
@@ -22,7 +21,6 @@ export class PostController {
   
   constructor(
     private readonly postService: PostService,
-    private readonly postLikeService: PostLikeService,
   ) {}
 
   @Get()
