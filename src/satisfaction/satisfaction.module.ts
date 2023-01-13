@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { SatisfactionService } from './satisfaction.service';
-import { SatisfactionController } from './satisfaction.controller';
+import { SatisfactionService } from './services/satisfaction.service';
+import { SatisfactionController } from './controllers/satisfaction.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SatisfactionEntity } from './entities/satisfaction.entity';
+import { SatisfactionEntity } from './models';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
-import { SatisfactionRepository } from './satisfaction.repository';
+import { SatisfactionRepository } from './repositories/satisfaction.repository';
 
 @Module({
   imports: [

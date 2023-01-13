@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
-import { GuestbookService } from './guestbook.service';
-import { GuestbookController } from './guestbook.controller';
+import { GuestbookService } from './services/guestbook.service';
+import { GuestbookController } from './controllers/guestbook.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
-import { GuestbookEntity } from './entities/guestbook.entity';
-import { GuestbookRepository } from './guestbook.repository';
-import { GuestbookReplyEntity } from './entities/guestbook-reply.entity';
-import { GuestbookReplyRepository } from './guestbook-reply.repository';
-import { GuestbookReplyService } from './guestbook-reply.service';
-import { GuestbookReplyController } from './guestbook-reply.controller';
+import { GuestbookEntity, GuestbookReplyEntity } from './models';
+import { GuestbookRepository } from './repositories/guestbook.repository';
+import { GuestbookReplyRepository } from './repositories/guestbook-reply.repository';
+import { GuestbookReplyService } from './services/guestbook-reply.service';
+import { GuestbookReplyController } from './controllers/guestbook-reply.controller';
 
 @Module({
   imports: [

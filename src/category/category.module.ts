@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { CategoryService } from './category.service';
-import { CategoryController } from './category.controller';
+import { CategoryService } from './services/category.service';
+import { CategoryController } from './controllers/category.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
-import { CategoryEntity } from './entities/category.entity';
-import { CategoryRepository } from './category.repository';
-import { PostCategoryEntity } from './entities/post-category.entity';
-import { PostCategoryRepository } from './post-category.repository';
+import { CategoryRepository } from './repositories/category.repository';
+import { CategoryEntity, PostCategoryEntity } from './models';
+import { PostCategoryRepository } from './repositories/post-category.repository';
 
 @Module({
   imports: [

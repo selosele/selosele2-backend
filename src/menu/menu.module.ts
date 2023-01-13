@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
-import { MenuService } from './menu.service';
-import { MenuController } from './menu.controller';
+import { MenuService } from './services/menu.service';
+import { MenuController } from './controllers/menu.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
-import { MenuRepository } from './menu.repository';
-import { MenuEntity } from './entities/menu.entity';
-import { MenuRoleEntity } from './entities/menu-role.entity';
-import { MenuRoleRepository } from './menu-role.repository';
-import { MenuRoleService } from './menu-role.service';
-import { RoleRepository } from 'src/auth/role.repository';
-import { RoleEntity } from 'src/auth/entities/role.entity';
+import { MenuRepository } from './repositories/menu.repository';
+import { MenuEntity, MenuRoleEntity } from './models';
+import { MenuRoleRepository } from './repositories/menu-role.repository';
+import { MenuRoleService } from './services/menu-role.service';
+import { RoleRepository } from 'src/auth/repositories/role.repository';
+import { RoleEntity } from 'src/auth/models';
 
 @Module({
   imports: [

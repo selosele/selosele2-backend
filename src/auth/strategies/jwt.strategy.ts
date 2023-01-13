@@ -2,8 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { UserEntity } from '../entities/user.entity';
-import { UserRepository } from '../user.repository';
+import { UserEntity } from '../models';
+import { UserRepository } from '../repositories/user.repository';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ContentService } from './content.service';
-import { ContentController } from './content.controller';
+import { ContentService } from './services/content.service';
+import { ContentController } from './controllers/content.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
-import { ContentRepository } from './content.repository';
-import { ContentEntity } from './entities/content.entity';
+import { ContentRepository } from './repositories/content.repository';
+import { ContentEntity } from './models';
 
 @Module({
   imports: [

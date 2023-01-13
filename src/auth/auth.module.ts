@@ -1,18 +1,16 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
+import { AuthService } from './services/auth.service';
+import { AuthController } from './controllers/auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './entities/user.entity';
-import { UserRoleEntity } from './entities/user-role.entity';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
-import { UserRepository } from './user.repository';
-import { UserRoleRepository } from './user-role.repository';
+import { UserRepository } from './repositories/user.repository';
+import { UserRoleRepository } from './repositories/user-role.repository';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigService } from '@nestjs/config';
-import { RoleEntity } from './entities/role.entity';
-import { RoleRepository } from './role.repository';
+import { RoleEntity, UserRoleEntity, UserEntity } from './models';
+import { RoleRepository } from './repositories/role.repository';
 import * as dotenv from 'dotenv';
 
 dotenv.config();

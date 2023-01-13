@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { CodeService } from './code.service';
-import { CodeController } from './code.controller';
+import { CodeService } from './services/code.service';
+import { CodeController } from './controllers/code.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CodeEntity } from './entities/code.entity';
+import { CodeEntity } from './models';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
-import { CodeRepository } from './code.repository';
+import { CodeRepository } from './repositories/code.repository';
 
 @Module({
   imports: [

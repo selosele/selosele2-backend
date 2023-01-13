@@ -1,20 +1,18 @@
 import { Module } from '@nestjs/common';
-import { PostService } from './post.service';
-import { PostController } from './post.controller';
+import { PostService } from './services/post.service';
+import { PostController } from './controllers/post.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostEntity } from './entities/post.entity';
+import { PostEntity, PostLikeEntity, PostReplyEntity } from './models';
 import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
-import { PostRepository } from './post.repository';
-import { PostCategoryRepository } from 'src/category/post-category.repository';
-import { PostCategoryEntity } from 'src/category/entities/post-category.entity';
-import { PostLikeEntity } from './entities/post-like.entity';
-import { PostLikeRepository } from './post-like.repository';
-import { PostLikeService } from './post-like.service';
-import { PostLikeController } from './post-like.controller';
-import { PostReplyEntity } from './entities/post-reply.entity';
-import { PostReplyRepository } from './post-reply.repository';
-import { PostReplyService } from './post-reply.service';
-import { PostReplyController } from './post-reply.controller';
+import { PostRepository } from './repositories/post.repository';
+import { PostCategoryRepository } from 'src/category/repositories/post-category.repository';
+import { PostCategoryEntity } from 'src/category/models';
+import { PostLikeRepository } from './repositories/post-like.repository';
+import { PostLikeService } from './services/post-like.service';
+import { PostLikeController } from './controllers/post-like.controller';
+import { PostReplyRepository } from './repositories/post-reply.repository';
+import { PostReplyService } from './services/post-reply.service';
+import { PostReplyController } from './controllers/post-reply.controller';
 
 @Module({
   imports: [
