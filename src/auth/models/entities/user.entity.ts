@@ -29,6 +29,12 @@ export class UserEntity extends BaseEntity {
   })
   regDate?: Date;
 
+  @Column()
+  @ApiProperty({
+    description: '사용자 계정 활성화 여부'
+  })
+  enabled?: string;
+
   @OneToMany(() => UserRoleEntity, userRole => userRole.user)
   @JoinColumn({ referencedColumnName: 'user_id' })
   @ApiProperty({

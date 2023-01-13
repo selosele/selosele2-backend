@@ -14,6 +14,7 @@ export class UserRepository extends Repository<UserEntity> {
         userId: true,
         userPw: true,
         regDate: true,
+        enabled: true,
         userRole: {
           roleId: true,
         },
