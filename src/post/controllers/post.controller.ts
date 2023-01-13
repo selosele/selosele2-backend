@@ -2,9 +2,8 @@ import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Dele
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/models';
-import { IsAuthenticated, Roles } from 'src/shared/decorators';
+import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { PaginationDto } from 'src/shared/models';
-import { JwtAuthGuard, RoleGuard } from 'src/shared/guards';
 import { DeleteResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
 import { PostService } from '../services/post.service';
@@ -259,8 +258,7 @@ export class PostController {
   }
 
   @Delete()
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '포스트 다건 삭제 API',
     description: '포스트 다건을 삭제한다.'
@@ -278,8 +276,7 @@ export class PostController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '포스트 삭제 API',
     description: '포스트를 삭제한다.'

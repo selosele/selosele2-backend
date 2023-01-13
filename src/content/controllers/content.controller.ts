@@ -1,7 +1,7 @@
 import { Controller, Get, Delete, UseGuards, Body, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from 'src/auth/models';
-import { Roles } from 'src/shared/decorators';
+import { Auth, Roles } from 'src/shared/decorators';
 import { JwtAuthGuard, RoleGuard } from 'src/shared/guards';
 import { DeleteResult } from 'typeorm';
 import { RemoveContentDto, ContentEntity } from '../models';
@@ -29,8 +29,7 @@ export class ContentController {
   }
 
   @Delete()
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '콘텐츠 다건 삭제 API',
     description: '콘텐츠 다건을 삭제한다.'

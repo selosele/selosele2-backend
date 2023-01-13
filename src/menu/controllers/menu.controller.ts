@@ -5,8 +5,7 @@ import { Body } from '@nestjs/common/decorators/http/route-params.decorator';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/models';
-import { IsAuthenticated, Roles } from 'src/shared/decorators';
-import { JwtAuthGuard, RoleGuard } from 'src/shared/guards';
+import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { ListMenuDto, SaveMenuDto, MenuEntity } from '../models';
 import { MenuService } from '../services/menu.service';
 
@@ -44,8 +43,7 @@ export class MenuController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '메뉴 조회 API',
     description: '메뉴를 조회한다.',
@@ -64,8 +62,7 @@ export class MenuController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '메뉴 추가 API',
     description: '메뉴를 추가한다.',
@@ -83,8 +80,7 @@ export class MenuController {
   }
 
   @Put()
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '메뉴 수정 API',
     description: '메뉴를 수정한다.',
@@ -102,8 +98,7 @@ export class MenuController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '메뉴 삭제 API',
     description: '메뉴를 삭제한다.'

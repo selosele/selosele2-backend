@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common/pipes';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/models';
-import { IsAuthenticated, Roles } from 'src/shared/decorators';
+import { Auth, IsAuthenticated, Roles } from 'src/shared/decorators';
 import { JwtAuthGuard, RoleGuard } from 'src/shared/guards';
 import { DeleteResult } from 'typeorm';
 import { ListCategoryDto, SaveCategoryDto, CategoryEntity } from '../models';
@@ -35,8 +35,7 @@ export class CategoryController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '카테고리 조회 API',
     description: '카테고리를 조회한다.'
@@ -89,8 +88,7 @@ export class CategoryController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '카테고리 삭제 API',
     description: '카테고리를 삭제한다.'
@@ -109,8 +107,7 @@ export class CategoryController {
   }
 
   @Get('list/tree')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '카테고리-포스트 계층형 구조 조회 API',
     description: '카테고리-포스트 계층형 구조를 조회한다.'

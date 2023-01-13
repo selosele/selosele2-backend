@@ -4,8 +4,7 @@ import { InsertResult } from 'typeorm';
 import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
 import { SatisfactionService } from '../services/satisfaction.service';
 import { RealIP } from 'nestjs-real-ip';
-import { IsAuthenticated, Roles } from 'src/shared/decorators';
-import { JwtAuthGuard, RoleGuard } from 'src/shared/guards';
+import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { RoleEnum } from 'src/auth/models';
 import { BizException } from 'src/shared/exceptions/biz/biz.exception';
 
@@ -18,8 +17,7 @@ export class SatisfactionController {
   ) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '만족도조사 목록 조회 API',
     description: '만족도조사 목록을 조회한다.',

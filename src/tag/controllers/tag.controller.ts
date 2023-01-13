@@ -1,10 +1,9 @@
 import { Controller, Get, Post, Put, Body, ValidationPipe, ParseIntPipe } from '@nestjs/common';
-import { Delete, Param, UseGuards } from '@nestjs/common/decorators';
+import { Delete, Param } from '@nestjs/common/decorators';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/models';
-import { IsAuthenticated, Roles } from 'src/shared/decorators';
-import { JwtAuthGuard, RoleGuard } from 'src/shared/guards';
+import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { DeleteResult } from 'typeorm';
 import { ListTagDto, SaveTagDto, TagEntity } from '../models';
 import { TagService } from '../services/tag.service';
@@ -34,8 +33,7 @@ export class TagController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '태그 조회 API',
     description: '태그를 조회한다.'
@@ -88,8 +86,7 @@ export class TagController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '태그 삭제 API',
     description: '태그를 삭제한다.'
@@ -108,8 +105,7 @@ export class TagController {
   }
 
   @Get('list/tree')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '태그-포스트 계층형 구조 조회 API',
     description: '태그-포스트 계층형 구조를 조회한다.'

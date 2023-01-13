@@ -1,8 +1,7 @@
-import { Controller, Get, Query, ValidationPipe, Put, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, ValidationPipe, Put, Body } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from 'src/auth/models';
-import { Roles } from 'src/shared/decorators';
-import { JwtAuthGuard, RoleGuard } from 'src/shared/guards';
+import { Auth } from 'src/shared/decorators';
 import { ListWidgetDto, UpdateWidgetUseYnDto, UpdateWidgetDto, WidgetEntity } from '../models';
 import { WidgetService } from '../services/widget.service';
 
@@ -32,8 +31,7 @@ export class WidgetController {
   }
 
   @Put()
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '위젯 수정 API',
     description: '위젯을 수정한다.',
@@ -51,8 +49,7 @@ export class WidgetController {
   }
 
   @Put('use')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '위젯 사용여부 수정 API',
     description: '위젯 사용여부를 수정한다.',

@@ -4,8 +4,7 @@ import { AuthCredentialsDto, ListRoleDto, UserEntity, RoleEntity, RoleEnum } fro
 import { AuthService } from '../services/auth.service';
 import { InsertResult } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { Roles } from 'src/shared/decorators';
-import { JwtAuthGuard, RoleGuard } from 'src/shared/guards';
+import { Auth } from 'src/shared/decorators';
 
 @Controller('api/auth')
 @ApiTags('인증·인가 API')
@@ -72,8 +71,7 @@ export class AuthController {
   }
 
   @Get('role')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '권한 목록 조회 API',
     description: '권한 목록을 조회한다.',

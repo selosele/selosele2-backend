@@ -1,7 +1,7 @@
 import { Controller, Delete, Get, Body, Param, ValidationPipe, Put, Post, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from 'src/auth/models';
-import { Roles } from 'src/shared/decorators';
+import { Auth, Roles } from 'src/shared/decorators';
 import { JwtAuthGuard, RoleGuard } from 'src/shared/guards';
 import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
 import { RemoveCodeDto, SaveCodeDto, CodeEntity } from '../models';
@@ -65,8 +65,7 @@ export class CodeController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '공통코드 추가 API',
     description: '공통코드를 추가한다.'
@@ -84,8 +83,7 @@ export class CodeController {
   }
 
   @Put()
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '공통코드 수정 API',
     description: '공통코드를 수정한다.'
@@ -103,8 +101,7 @@ export class CodeController {
   }
 
   @Delete()
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '공통코드 다건 삭제 API',
     description: '공통코드 다건을 삭제한다.'
