@@ -109,6 +109,14 @@ export class PostEntity extends BaseEntity {
   })
   pinYn?: string;
 
+  @Column({
+    comment: '포스트 임시저장 여부'
+  })
+  @ApiProperty({
+    description: '포스트 임시저장 여부'
+  })
+  tmpYn?: string;
+
   @OneToMany(() => PostCategoryEntity, postCategory => postCategory.post)
   @JoinColumn({ referencedColumnName: 'post_id' })
   @ApiProperty({

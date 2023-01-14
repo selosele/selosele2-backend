@@ -15,9 +15,12 @@ export class TagRepository extends Repository<TagEntity> {
       .innerJoin(PostTagEntity, "postTag", "tag.id = postTag.tag_id")
       .innerJoin(PostEntity, "post", "postTag.post_id = post.id");
 
+    query = query
+      .where("post.tmp_yn = 'N'");
+
     if ('N' === listTagDto?.isLogin) {
       query = query
-        .where("post.secret_yn = 'N'");
+        .andWhere("post.secret_yn = 'N'");
     }
 
     query = query
@@ -50,6 +53,7 @@ export class TagRepository extends Repository<TagEntity> {
     return await this.createQueryBuilder('tag')
       .leftJoinAndSelect("tag.postTag", "postTag")
       .leftJoinAndSelect("postTag.post", "post")
+      .where("post.tmp_yn = 'N'")
       .orderBy("COUNT(postTag.tag_id) OVER (PARTITION BY postTag.tag_id)", "DESC")
         .addOrderBy("post.reg_date", "DESC")
       .getMany();

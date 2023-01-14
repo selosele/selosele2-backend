@@ -15,9 +15,12 @@ export class CategoryRepository extends Repository<CategoryEntity> {
       .innerJoin(PostCategoryEntity, "postCategory", "category.id = postCategory.category_id")
       .innerJoin(PostEntity, "post", "postCategory.post_id = post.id");
 
+    query = query
+      .where("post.tmp_yn = 'N'");
+
     if ('N' === listCategoryDto?.isLogin) {
       query = query
-        .where("post.secret_yn = 'N'");
+        .andWhere("post.secret_yn = 'N'");
     }
 
     query = query
@@ -50,6 +53,7 @@ export class CategoryRepository extends Repository<CategoryEntity> {
     return await this.createQueryBuilder('category')
       .leftJoinAndSelect("category.postCategory", "postCategory")
       .leftJoinAndSelect("postCategory.post", "post")
+      .where("post.tmp_yn = 'N'")
       .orderBy("COUNT(postCategory.category_id) OVER (PARTITION BY postCategory.category_id)", "DESC")
         .addOrderBy("post.reg_date", "DESC")
       .getMany();

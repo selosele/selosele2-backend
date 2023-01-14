@@ -70,6 +70,9 @@ export class PostTagRepository extends Repository<PostTagEntity> {
     }
 
     query = query
+      .andWhere("post.tmp_yn = 'N'");
+
+    query = query
       .groupBy("post.id")
         .addGroupBy("tag.id")
       .orderBy("post.reg_date", "DESC")

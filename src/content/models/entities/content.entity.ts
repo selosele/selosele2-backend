@@ -89,5 +89,13 @@ export class ContentEntity extends BaseEntity {
     description: '콘텐츠 내용 요약'
   })
   ogDesc?: string;
+
+  @Column({
+    comment: '콘텐츠 임시저장 여부'
+  })
+  @ApiProperty({
+    description: '콘텐츠 임시저장 여부'
+  })
+  tmpYn?: string;
   
 }

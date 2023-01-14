@@ -13,9 +13,12 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
       .leftJoin("postCategory.post", "post", "post.id = postCategory.post_id")
       .leftJoinAndSelect("postCategory.category", "category", "category.id = postCategory.category_id");
 
+    query = query
+      .where("post.tmp_yn = 'N'");
+
     if ('N' === listPostDto?.isLogin) {
       query = query
-        .where("post.secret_yn = :secret_yn", { secret_yn: 'N' });
+        .andWhere("post.secret_yn = :secret_yn", { secret_yn: 'N' });
     }
 
     query = query
@@ -74,8 +77,11 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
 
     if ('N' === searchPostDto?.isLogin) {
       query = query
-        .andWhere("post.secret_yn = :secret_yn", { secret_yn: 'N' })
+        .andWhere("post.secret_yn = :secret_yn", { secret_yn: 'N' });
     }
+
+    query = query
+      .andWhere("post.tmp_yn = 'N'");
 
     query = query
       .groupBy("post.id")

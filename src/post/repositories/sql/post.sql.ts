@@ -22,7 +22,8 @@ export const listPostSql = (params: { listPostDto: ListPostDto }): string => {
           LEFT JOIN post_category AS postCategory ON postCategory.post_id = post.id
           LEFT JOIN post_like AS postLike ON postLike.post_id = post.id
         WHERE 1=1
-          AND   post.pin_yn = 'Y'
+          AND post.tmp_yn = 'N'
+          AND post.pin_yn = 'Y'
           ${'N' === params.listPostDto?.isLogin ?
           "AND post.secret_yn = 'N'" : ""
           }
@@ -47,7 +48,8 @@ export const listPostSql = (params: { listPostDto: ListPostDto }): string => {
           LEFT JOIN post_category AS postCategory ON postCategory.post_id = post.id
           LEFT JOIN post_like AS postLike ON postLike.post_id = post.id
         WHERE 1=1
-          AND   post.pin_yn = 'N'
+          AND post.tmp_yn = 'N'
+          AND post.pin_yn = 'N'
           ${'N' === params.listPostDto?.isLogin ?
           "AND post.secret_yn = 'N'" : ""
           }

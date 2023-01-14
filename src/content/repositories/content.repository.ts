@@ -9,6 +9,9 @@ export class ContentRepository extends Repository<ContentEntity> {
   async listContent(): Promise<ContentEntity[]> {
     return this.find({
       select: ['id', 'link', 'title', 'regDate', 'modDate'],
+      where: {
+        tmpYn: 'N',
+      },
       order: {
         regDate: 'DESC',
       }

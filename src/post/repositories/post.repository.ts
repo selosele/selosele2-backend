@@ -25,6 +25,7 @@ export class PostRepository extends Repository<PostEntity> {
     return await this.find({
       select: ['id', 'title', 'ogImgUrl'],
       where: {
+        tmpYn: 'N',
         ...('N' === listPostDto?.isLogin && { secretYn: 'N' }),
       },
       order: {
@@ -95,6 +96,9 @@ export class PostRepository extends Repository<PostEntity> {
     }
 
     query = query
+      .andWhere("post.tmp_yn = 'N'");
+
+    query = query
       .groupBy("post.id")
       .orderBy("post.reg_date", "DESC")
       .limit(paginationDto.pageSize)
@@ -113,9 +117,12 @@ export class PostRepository extends Repository<PostEntity> {
           .distinct(true)
         .addSelect("COUNT('year')", "count");
 
+    query = query
+      .where("tmp_yn = 'N'");
+
     if ('N' === listPostDto?.isLogin) {
       query = query
-        .where("secret_yn = :secret_yn", { secret_yn: 'N' });
+        .andWhere("secret_yn = :secret_yn", { secret_yn: 'N' });
     }
 
     query = query
@@ -132,6 +139,9 @@ export class PostRepository extends Repository<PostEntity> {
   ): Promise<[PostEntity[], number]> {
     let query = this.createQueryBuilder('post')
       .where("YEAR(reg_date) = :year", { year: listPostDto?.year });
+
+    query = query
+      .where("tmp_yn = 'N'");
 
     if ('N' === listPostDto?.isLogin) {
       query = query
@@ -175,6 +185,7 @@ export class PostRepository extends Repository<PostEntity> {
         },
       },
       where: {
+        tmpYn: 'N',
         ...('N' === listPostDto?.isLogin && { secretYn: 'N' }),
         postCategory: {
           categoryId: listPostDto?.categoryId
@@ -217,6 +228,7 @@ export class PostRepository extends Repository<PostEntity> {
         },
       },
       where: {
+        tmpYn: 'N',
         ...('N' === listPostDto?.isLogin && { secretYn: 'N' }),
         postTag: {
           tagId: listPostDto?.tagId
@@ -240,7 +252,8 @@ export class PostRepository extends Repository<PostEntity> {
     let prevSubQuery = query.subQuery()
       .select("MAX(id)")
       .from(PostEntity, 'prev')
-      .where("1=1");
+      .where("1=1")
+      .andWhere("tmp_yn = 'N'");
 
     if ('N' === listPostDto?.isLogin) {
       prevSubQuery = prevSubQuery
@@ -253,7 +266,8 @@ export class PostRepository extends Repository<PostEntity> {
     let nextSubQuery = query.subQuery()
       .select("MIN(id)")
       .from(PostEntity, 'next')
-      .where("1=1");
+      .where("1=1")
+      .andWhere("tmp_yn = 'N'");
 
     if ('N' === listPostDto?.isLogin) {
       nextSubQuery = nextSubQuery
@@ -305,6 +319,7 @@ export class PostRepository extends Repository<PostEntity> {
         }
       },
       where: {
+        tmpYn: 'N',
         ...('N' === getPostDto?.isLogin && { secretYn: 'N' }),
         id: getPostDto?.id
       },
