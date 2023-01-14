@@ -1,4 +1,4 @@
-import { CustomRepository } from 'src/configs/CustomRepository';
+import { CustomRepository } from 'src/configs/database/CustomRepository';
 import { Repository } from 'typeorm';
 import { BlogConfigEntity } from '../models';
 

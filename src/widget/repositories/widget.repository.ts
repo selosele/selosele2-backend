@@ -1,4 +1,4 @@
-import { CustomRepository } from 'src/configs/CustomRepository';
+import { CustomRepository } from 'src/configs/database/CustomRepository';
 import { Repository, UpdateResult } from 'typeorm';
 import { ListWidgetDto, UpdateWidgetDto, WidgetEntity } from '../models';
 

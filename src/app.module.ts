@@ -6,7 +6,7 @@ import { BlogConfigModule } from './blog-config/blog-config.module';
 import { MenuModule } from './menu/menu.module';
 import { PostModule } from './post/post.module';
 import { ConfigModule } from '@nestjs/config';
-import { typeORMConfig } from './configs/typeorm.config';
+import { typeORMConfig } from './configs/database/typeorm.config';
 import { WidgetModule } from './widget/widget.module';
 import { CategoryModule } from './category/category.module';
 import { TagModule } from './tag/tag.module';

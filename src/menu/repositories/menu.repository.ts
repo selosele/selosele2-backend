@@ -1,4 +1,4 @@
-import { CustomRepository } from 'src/configs/CustomRepository';
+import { CustomRepository } from 'src/configs/database/CustomRepository';
 import { isNotEmpty } from 'src/shared/utils';
 import { Repository } from 'typeorm';
 import { ListMenuDto, SaveMenuDto, MenuEntity } from '../models';

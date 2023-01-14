@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UploadStream, v2 } from 'cloudinary';
 import toStream = require('buffer-to-stream');
-import { FileUploaderApi, FileUploaderRequest, FileUploaderResponse } from '../model/file-uploader.model';
+import { FileUploaderApi, FileUploaderRequest, FileUploaderResponse } from '../models/file-uploader.model';
 
 @Injectable()
 export class FileUploaderService implements FileUploaderApi {

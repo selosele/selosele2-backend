@@ -1,4 +1,4 @@
-import { CustomRepository } from "src/configs/CustomRepository";
+import { CustomRepository } from "src/configs/database/CustomRepository";
 import { ListPostDto, SearchPostDto } from "src/post/models";
 import { PaginationDto } from "src/shared/models";
 import { Brackets, Repository } from "typeorm";

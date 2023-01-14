@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
+import { CustomTypeOrmModule } from 'src/configs/database/CustomTypeOrmModule';
 import { BlogConfigController } from './controllers/blog-config.controller';
 import { BlogConfigEntity } from './models';
 import { BlogConfigRepository } from './repositories/blog-config.repository';

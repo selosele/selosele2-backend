@@ -1,4 +1,4 @@
-import { CustomRepository } from 'src/configs/CustomRepository';
+import { CustomRepository } from 'src/configs/database/CustomRepository';
 import { isNotEmpty } from 'src/shared/utils';
 import { DeleteResult, InsertResult, Repository, UpdateResult } from 'typeorm';
 import { SaveCodeDto, CodeEntity } from '../models';

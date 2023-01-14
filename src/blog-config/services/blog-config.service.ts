@@ -4,7 +4,7 @@ import { BlogConfigEntity } from '../models';
 import { BlogConfigRepository } from '../repositories/blog-config.repository';
 import { FileUploaderService } from 'src/file-uploader/services/file-uploader.service';
 import { BizException } from 'src/shared/exceptions/biz/biz.exception';
-import { FileUploaderRequest, FileUploaderResponse } from 'src/file-uploader/model/file-uploader.model';
+import { FileUploaderRequest, FileUploaderResponse } from 'src/file-uploader/models/file-uploader.model';
 
 @Injectable()
 export class BlogConfigService {

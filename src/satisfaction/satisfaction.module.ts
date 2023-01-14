@@ -3,7 +3,7 @@ import { SatisfactionService } from './services/satisfaction.service';
 import { SatisfactionController } from './controllers/satisfaction.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SatisfactionEntity } from './models';
-import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
+import { CustomTypeOrmModule } from 'src/configs/database/CustomTypeOrmModule';
 import { SatisfactionRepository } from './repositories/satisfaction.repository';
 
 @Module({

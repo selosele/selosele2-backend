@@ -1,13 +1,9 @@
 import { isNotEmpty } from "src/shared/utils/common/common.util";
-import { EntityManager } from "typeorm";
-import { ListPostDto, PostEntity } from "../../models";
+import { ListPostDto } from "../../models";
 
 /** 포스트 목록을 조회한다. */
-export const listPostSql = async (
-  manager: EntityManager,
-  params: { listPostDto: ListPostDto }
-): Promise<PostEntity[]> => {
-  return await manager.query(`
+export const listPostSql = (params: { listPostDto: ListPostDto }): string => {
+  return `
     SELECT *
     FROM (
       (
@@ -64,8 +60,5 @@ export const listPostSql = async (
     ) t
     GROUP BY id, categoryId
     ORDER BY pinYn DESC, regDate DESC
-  `, [
-      params.listPostDto?.categoryId,
-      params.listPostDto?.categoryId
-    ]) as PostEntity[];
+  `;
 };

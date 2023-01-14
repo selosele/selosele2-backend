@@ -3,7 +3,7 @@ import { PostService } from './services/post.service';
 import { PostController } from './controllers/post.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostEntity, PostLikeEntity, PostReplyEntity } from './models';
-import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
+import { CustomTypeOrmModule } from 'src/configs/database/CustomTypeOrmModule';
 import { PostRepository } from './repositories/post.repository';
 import { PostCategoryRepository } from 'src/category/repositories/post-category.repository';
 import { PostCategoryEntity } from 'src/category/models';

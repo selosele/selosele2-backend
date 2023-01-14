@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { GuestbookService } from './services/guestbook.service';
 import { GuestbookController } from './controllers/guestbook.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomTypeOrmModule } from 'src/configs/CustomTypeOrmModule';
+import { CustomTypeOrmModule } from 'src/configs/database/CustomTypeOrmModule';
 import { GuestbookEntity, GuestbookReplyEntity } from './models';
 import { GuestbookRepository } from './repositories/guestbook.repository';
 import { GuestbookReplyRepository } from './repositories/guestbook-reply.repository';
