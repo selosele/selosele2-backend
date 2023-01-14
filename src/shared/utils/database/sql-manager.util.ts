@@ -1,7 +1,8 @@
 import { EntityManager } from "typeorm";
+import { SqlManagerApi } from "./models/sql-manager.model";
 
 /** SQL 실행 유틸 */
-export function sqlManager(entityManager: EntityManager) {
+export function sqlManager(entityManager: EntityManager): SqlManagerApi {
 
   /** SQL을 실행한 결과를 반환한다. */
   const query = async <T>(sql: string, params?: any[]): Promise<T> => {
