@@ -21,7 +21,7 @@ export class UpdateBlogConfigDto {
 
   /** 블로그 소개 */
   @IsOptional()
-  description?: string;
+  desc?: string;
 
   /** 블로그 아바타 이미지, 대표 이미지 File */
   @IsOptional()
@@ -29,19 +29,13 @@ export class UpdateBlogConfigDto {
 
   /** 블로그 아바타 이미지 */
   @IsOptional()
-  hAvatarImg?: string;
-  @IsOptional()
   avatarImg?: string;
 
   /** 블로그 아바타 이미지 용량 */
   @IsOptional()
-  hAvatarImgSize?: number;
-  @IsOptional()
   avatarImgSize?: number;
 
   /** 블로그 아바타 이미지 URL */
-  @IsOptional()
-  hAvatarImgUrl?: string;
   @IsOptional()
   avatarImgUrl?: string;
 
@@ -51,19 +45,13 @@ export class UpdateBlogConfigDto {
 
   /** 블로그 대표 이미지 */
   @IsOptional()
-  hOgImg?: string;
-  @IsOptional()
   ogImg?: string;
 
   /** 블로그 대표 이미지 용량 */
   @IsOptional()
-  hOgImgSize?: number;
-  @IsOptional()
   ogImgSize?: number;
 
   /** 블로그 대표 이미지 URL */
-  @IsOptional()
-  hOgImgUrl?: string;
   @IsOptional()
   ogImgUrl?: string;
 

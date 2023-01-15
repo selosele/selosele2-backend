@@ -32,7 +32,7 @@ export class BlogConfigEntity extends BaseEntity {
   @ApiProperty({
     description: '블로그 소개'
   })
-  description?: string;
+  desc?: string;
 
   @Column({
     comment: '블로그 아바타 이미지',
