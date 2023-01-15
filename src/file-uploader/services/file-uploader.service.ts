@@ -6,6 +6,16 @@ import toStream = require('buffer-to-stream');
 @Injectable()
 export class FileUploaderService implements FileUploaderApi {
 
+  /** 파일 목록을 조회한다. */
+  listFile(): Promise<FileUploaderResponse[]> {
+    return new Promise((resolve, reject) => {
+      v2.api.resources({ type: 'upload', prefix: '' }, (error, result) => {
+        if (error) return reject(error);
+        resolve(result.resources);
+      });
+    });
+  }
+
   /** 이미지 파일을 업로드한다. */
   uploadImage(file: FileUploaderRequest): Promise<FileUploaderResponse> {
     return new Promise((resolve, reject) => {

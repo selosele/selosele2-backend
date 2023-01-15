@@ -3,6 +3,9 @@ import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 /** 이미지 업로더 API */
 export interface FileUploaderApi {
 
+  /** 이미지 목록을 조회한다. */
+  listFile(): Promise<FileUploaderResponse[]>;
+
   /** 이미지를 업로드한다. */
   uploadImage(file: FileUploaderRequest): Promise<FileUploaderResponse>;
   

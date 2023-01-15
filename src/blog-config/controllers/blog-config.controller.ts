@@ -5,9 +5,10 @@ import { BlogConfigEntity, UpdateBlogConfigDto } from '../models';
 import { Body, Put, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
 import { Auth } from 'src/shared/decorators';
 import { RoleEnum } from 'src/auth/models';
-import { ValidationPipe } from '@nestjs/common/pipes';
+import { ParseFilePipe, ValidationPipe } from '@nestjs/common/pipes';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
+import { FileTypeValidator, MaxFileSizeValidator } from 'src/shared/validator';
 
 @Controller('api/blogconfig')
 @ApiTags('블로그 환경설정 API')
@@ -47,7 +48,12 @@ export class BlogConfigController {
   })
   updateBlogConfig(
     @Body(ValidationPipe) updateBlogConfigDto: UpdateBlogConfigDto,
-    @UploadedFiles() files: FileUploaderRequest[],
+    @UploadedFiles(new ParseFilePipe({
+      validators: [
+        new MaxFileSizeValidator({ maxSize: 1000000 }),
+        new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
+      ],
+    })) files: FileUploaderRequest[],
   ): Promise<BlogConfigEntity> {
     updateBlogConfigDto.files = files;
     
