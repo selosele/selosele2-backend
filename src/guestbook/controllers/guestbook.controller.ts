@@ -46,10 +46,16 @@ export class GuestbookController {
     description: '방명록 추가 DTO',
   })
   addGuestbook(
+    @IsAuthenticated() isAuthenticated: boolean,
     @RealIP() ip: string,
     @Body(ValidationPipe) addGuestbookDto: AddGuestbookDto
   ): Promise<GuestbookEntity> {
+    if (isAuthenticated) {
+      addGuestbookDto.adminYn = 'Y';
+    }
+
     addGuestbookDto.ip = ip;
+
     return this.guestbookService.addGuestbook(addGuestbookDto);
   }
 

@@ -26,4 +26,8 @@ export class AddGuestbookReplyDto {
   @IsNotEmpty()
   cont?: string;
 
+  /** 관리자 계정 여부 */
+  @IsOptional()
+  adminYn?: string;
+
 }

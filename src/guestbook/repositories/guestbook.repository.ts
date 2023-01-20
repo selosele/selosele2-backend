@@ -16,6 +16,7 @@ export class GuestbookRepository extends Repository<GuestbookEntity> {
         id: true,
         author: true,
         cont: true,
+        adminYn: true,
         regDate: true,
         modDate: true,
         guestbookReply: {
@@ -24,6 +25,7 @@ export class GuestbookRepository extends Repository<GuestbookEntity> {
           depth: true,
           author: true,
           cont: true,
+          adminYn: true,
           regDate: true,
           modDate: true,
         },

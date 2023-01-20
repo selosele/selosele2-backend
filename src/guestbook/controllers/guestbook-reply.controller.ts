@@ -1,6 +1,7 @@
 import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RealIP } from 'nestjs-real-ip';
+import { IsAuthenticated } from 'src/shared/decorators';
 import { AddGuestbookReplyDto, GuestbookReplyEntity } from '../models';
 import { GuestbookReplyService } from "../services/guestbook-reply.service";
 
@@ -26,10 +27,16 @@ export class GuestbookReplyController {
     description: '방명록 댓글 등록 DTO',
   })
   addGuestbook(
+    @IsAuthenticated() isAuthenticated: boolean,
     @RealIP() ip: string,
     @Body(ValidationPipe) addGuestbookReplyDto: AddGuestbookReplyDto
   ): Promise<GuestbookReplyEntity> {
+    if (isAuthenticated) {
+      addGuestbookReplyDto.adminYn = 'Y';
+    }
+
     addGuestbookReplyDto.ip = ip;
+
     return this.guestbookReplyService.addGuestbookReply(addGuestbookReplyDto);
   }
 

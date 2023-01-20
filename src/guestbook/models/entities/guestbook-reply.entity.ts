@@ -60,6 +60,14 @@ export class GuestbookReplyEntity extends BaseEntity {
   })
   cont?: string;
 
+  @Column({
+    comment: '관리자 계정 여부',
+  })
+  @ApiProperty({
+    description: '관리자 계정 여부',
+  })
+  adminYn?: string;
+
   @CreateDateColumn({
     comment: '방명록 댓글 등록일시',
   })
