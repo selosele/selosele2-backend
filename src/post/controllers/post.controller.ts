@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Delete, UseGuards, Body } from '@nestjs/common';
+import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Delete, Body } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/models';
@@ -8,7 +8,7 @@ import { DeleteResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
 import { PostService } from '../services/post.service';
 
-@Controller('api/post')
+@Controller('post')
 @ApiTags('포스트 API')
 export class PostController {
   

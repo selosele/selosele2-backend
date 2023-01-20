@@ -1,12 +1,12 @@
-import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { AuthCredentialsDto, UserEntity, RoleEntity, RoleEnum } from '../models';
 import { AuthService } from '../services/auth.service';
 import { InsertResult } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Auth } from 'src/shared/decorators';
 
-@Controller('api/auth')
+@Controller('auth')
 @ApiTags('인증·인가 API')
 export class AuthController {
   

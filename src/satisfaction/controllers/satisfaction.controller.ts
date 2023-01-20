@@ -1,4 +1,4 @@
-import { Body, Query, Controller, Post, Get, ValidationPipe, UseGuards } from '@nestjs/common';
+import { Body, Query, Controller, Post, Get, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { InsertResult } from 'typeorm';
 import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
@@ -8,7 +8,7 @@ import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { RoleEnum } from 'src/auth/models';
 import { BizException } from 'src/shared/exceptions/biz/biz.exception';
 
-@Controller('api/satisfaction')
+@Controller('satisfaction')
 @ApiTags('만족도조사 API')
 export class SatisfactionController {
 

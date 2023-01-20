@@ -10,7 +10,7 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
 import { FileTypeValidator, MaxFileSizeValidator } from 'src/shared/utils';
 
-@Controller('api/blogconfig')
+@Controller('blogconfig')
 @ApiTags('블로그 환경설정 API')
 export class BlogConfigController {
   

@@ -8,7 +8,7 @@ import { DeleteResult } from 'typeorm';
 import { ListTagDto, SaveTagDto, TagEntity } from '../models';
 import { TagService } from '../services/tag.service';
 
-@Controller('api/tag')
+@Controller('tag')
 @ApiTags('태그 API')
 export class TagController {
 

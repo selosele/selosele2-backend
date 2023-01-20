@@ -1,13 +1,12 @@
-import { Controller, Delete, Get, Body, Param, ValidationPipe, Put, Post, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Body, Param, ValidationPipe, Put, Post } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from 'src/auth/models';
-import { Auth, Roles } from 'src/shared/decorators';
-import { JwtAuthGuard, RoleGuard } from 'src/shared/guards';
+import { Auth } from 'src/shared/decorators';
 import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
 import { RemoveCodeDto, SaveCodeDto, CodeEntity } from '../models';
 import { CodeService } from '../services/code.service';
 
-@Controller('api/code')
+@Controller('code')
 @ApiTags('공통코드 API')
 export class CodeController {
   

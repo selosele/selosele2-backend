@@ -1,4 +1,4 @@
-import { Controller, Get, ParseIntPipe, Query, UseGuards, ValidationPipe, Delete } from '@nestjs/common';
+import { Controller, Get, ParseIntPipe, Query, ValidationPipe, Delete } from '@nestjs/common';
 import { Param } from '@nestjs/common/decorators';
 import { Post, Put } from '@nestjs/common/decorators/http/request-mapping.decorator';
 import { Body } from '@nestjs/common/decorators/http/route-params.decorator';
@@ -9,7 +9,7 @@ import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { ListMenuDto, SaveMenuDto, MenuEntity } from '../models';
 import { MenuService } from '../services/menu.service';
 
-@Controller('api/menu')
+@Controller('menu')
 @ApiTags('메뉴 API')
 export class MenuController {
 

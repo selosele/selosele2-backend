@@ -5,7 +5,7 @@ import { Auth } from 'src/shared/decorators';
 import { ListWidgetDto, UpdateWidgetUseYnDto, UpdateWidgetDto, WidgetEntity } from '../models';
 import { WidgetService } from '../services/widget.service';
 
-@Controller('api/widget')
+@Controller('widget')
 @ApiTags('위젯 API')
 export class WidgetController {
 

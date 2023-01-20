@@ -3,7 +3,7 @@ import { ApiCreatedResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { FileUploaderService } from "../services/file-uploader.service";
 import { FileUploaderResponse } from '../models/file-uploader.model';
 
-@Controller('api/file')
+@Controller('file')
 @ApiTags('파일 업로더 API')
 export class FileUploaderController {
   

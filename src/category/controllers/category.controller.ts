@@ -1,16 +1,15 @@
 import { Controller, Get, Post, Put, Body, ParseIntPipe } from '@nestjs/common';
-import { Delete, Param, UseGuards } from '@nestjs/common/decorators';
+import { Delete, Param } from '@nestjs/common/decorators';
 import { ValidationPipe } from '@nestjs/common/pipes';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/models';
-import { Auth, IsAuthenticated, Roles } from 'src/shared/decorators';
-import { JwtAuthGuard, RoleGuard } from 'src/shared/guards';
+import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { DeleteResult } from 'typeorm';
 import { ListCategoryDto, SaveCategoryDto, CategoryEntity } from '../models';
 import { CategoryService } from '../services/category.service';
 
-@Controller('api/category')
+@Controller('category')
 @ApiTags('카테고리 API')
 export class CategoryController {
 

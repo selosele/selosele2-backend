@@ -4,7 +4,7 @@ import { RealIP } from 'nestjs-real-ip';
 import { AddGuestbookReplyDto, GuestbookReplyEntity } from '../models';
 import { GuestbookReplyService } from "../services/guestbook-reply.service";
 
-@Controller('api/guestbookreply')
+@Controller('guestbookreply')
 @ApiTags('방명록 댓글 API')
 export class GuestbookReplyController {
 

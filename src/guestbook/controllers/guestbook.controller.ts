@@ -6,7 +6,7 @@ import { PaginationDto } from 'src/shared/models';
 import { AddGuestbookDto, RemoveGuestbookDto, UpdateGuestbookDto, GuestbookEntity } from '../models';
 import { GuestbookService } from '../services/guestbook.service';
 
-@Controller('api/guestbook')
+@Controller('guestbook')
 @ApiTags('방명록 API')
 export class GuestbookController {
 

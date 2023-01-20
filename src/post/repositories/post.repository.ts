@@ -12,7 +12,7 @@ export class PostRepository extends Repository<PostEntity> {
   async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
     const sql: string = listPostSql({ listPostDto });
     
-    const params = [
+    const params: any[] = [
       listPostDto?.categoryId,
       listPostDto?.categoryId
     ];

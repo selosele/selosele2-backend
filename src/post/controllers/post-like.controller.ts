@@ -6,7 +6,7 @@ import { IsAuthenticated } from "src/shared/decorators";
 import { GetPostLikeDto, SavePostLikeDto, PostLikeEntity } from "../models";
 import { PostLikeService } from "../services/post-like.service";
 
-@Controller('api/post/like')
+@Controller('postlike')
 @ApiTags('포스트 추천 API')
 export class PostLikeController {
 

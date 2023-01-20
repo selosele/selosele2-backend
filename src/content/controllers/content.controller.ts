@@ -1,13 +1,12 @@
-import { Controller, Get, Delete, UseGuards, Body, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Delete, Body, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from 'src/auth/models';
-import { Auth, Roles } from 'src/shared/decorators';
-import { JwtAuthGuard, RoleGuard } from 'src/shared/guards';
+import { Auth } from 'src/shared/decorators';
 import { DeleteResult } from 'typeorm';
 import { RemoveContentDto, ContentEntity } from '../models';
 import { ContentService } from '../services/content.service';
 
-@Controller('api/content')
+@Controller('content')
 @ApiTags('콘텐츠 API')
 export class ContentController {
 
