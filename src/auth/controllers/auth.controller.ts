@@ -1,6 +1,6 @@
 import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { AuthCredentialsDto, ListRoleDto, UserEntity, RoleEntity, RoleEnum } from '../models';
+import { AuthCredentialsDto, UserEntity, RoleEntity, RoleEnum } from '../models';
 import { AuthService } from '../services/auth.service';
 import { InsertResult } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
@@ -80,13 +80,8 @@ export class AuthController {
     type: RoleEntity,
     description: '권한 목록을 조회한다.',
   })
-  @ApiQuery({
-    type: ListRoleDto,
-    name: 'listRoleDto',
-    description: '권한 목록 조회 DTO',
-  })
-  listRole(@Query(ValidationPipe) listRoleDto: ListRoleDto): Promise<RoleEntity[]> {
-    return this.authService.listRole(listRoleDto);
+  listRole(): Promise<RoleEntity[]> {
+    return this.authService.listRole();
   }
 
 }

@@ -44,6 +44,14 @@ export class MenuEntity extends BaseEntity {
   sort?: number;
 
   @Column({
+    comment: '메뉴 계층'
+  })
+  @ApiProperty({
+    description: '메뉴 계층'
+  })
+  depth?: number;
+
+  @Column({
     comment: '메뉴 사용 여부'
   })
   @ApiProperty({

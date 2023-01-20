@@ -30,6 +30,12 @@ export class SaveMenuDto {
   @IsNotEmpty()
   sort?: number;
 
+  /** 메뉴 계층 */
+  @Type(() => Number)
+  @IsInt()
+  @IsNotEmpty()
+  depth?: number;
+
   /** 메뉴 권한 */
   @IsNotEmpty()
   role: string;

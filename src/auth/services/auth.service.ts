@@ -7,7 +7,7 @@ import { Builder } from 'builder-pattern';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { BizException } from 'src/shared/exceptions/biz/biz.exception';
-import { AuthCredentialsDto, AuthCredentialsRoleDto, ListRoleDto, UserEntity, RoleEntity, RoleEnum } from '../models';
+import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, RoleEnum } from '../models';
 import { RoleRepository } from '../repositories/role.repository';
 
 @Injectable()
@@ -99,8 +99,8 @@ export class AuthService {
   }
 
   /** 권한 목록을 조회한다. */
-  async listRole(listRoleDto?: ListRoleDto): Promise<RoleEntity[]> {
-    return await this.roleRepository.listRole(listRoleDto);
+  async listRole(): Promise<RoleEntity[]> {
+    return await this.roleRepository.listRole();
   }
 
 }

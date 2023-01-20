@@ -29,12 +29,6 @@ export class RoleEntity extends BaseEntity {
   })
   modDate?: Date;
 
-  @Column()
-  @ApiProperty({
-    description: '권한 삭제여부'
-  })
-  delYn?: string;
-
   @OneToMany(() => UserRoleEntity, userRole => userRole.role)
   @JoinColumn({ referencedColumnName: 'role_id' })
   @ApiProperty({
