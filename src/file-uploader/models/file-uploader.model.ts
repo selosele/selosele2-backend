@@ -1,18 +1,18 @@
 import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 
-/** 이미지 업로더 API */
+/** 파일 업로더 API */
 export interface FileUploaderApi {
 
-  /** 이미지 목록을 조회한다. */
+  /** 파일 목록을 조회한다. */
   listFile(): Promise<FileUploaderResponse[]>;
 
-  /** 이미지를 업로드한다. */
+  /** 파일를 업로드한다. */
   uploadImage(file: FileUploaderRequest): Promise<FileUploaderResponse>;
   
 }
 
-/** 이미지 업로더 요청 Type */
+/** 파일 업로더 요청 Type */
 export type FileUploaderRequest = Express.Multer.File;
 
-/** 이미지 업로더 응답 Type */
+/** 파일 업로더 응답 Type */
 export type FileUploaderResponse = UploadApiResponse | UploadApiErrorResponse;

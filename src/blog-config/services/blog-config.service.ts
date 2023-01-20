@@ -32,13 +32,13 @@ export class BlogConfigService {
       const ogImgFile: FileUploaderRequest = updateBlogConfigDto.files.find(d => d.fieldname === 'ogImgFile');
 
       if (isNotEmpty(avatarImgFile)) {
-        updateBlogConfigDto.avatarImg = fileUploaderResponse['avatarImgFileResponse'].public_id;
+        updateBlogConfigDto.avatarImg = fileUploaderResponse['avatarImgFileResponse'].public_id + '.' + fileUploaderResponse['ogImgFileResponse'].format;
         updateBlogConfigDto.avatarImgUrl = fileUploaderResponse['avatarImgFileResponse'].url;
         updateBlogConfigDto.avatarImgSize = avatarImgFile.size;
       }
 
       if (isNotEmpty(ogImgFile)) {
-        updateBlogConfigDto.ogImg = fileUploaderResponse['ogImgFileResponse'].public_id;
+        updateBlogConfigDto.ogImg = fileUploaderResponse['ogImgFileResponse'].public_id + '.' + fileUploaderResponse['ogImgFileResponse'].format;
         updateBlogConfigDto.ogImgUrl = fileUploaderResponse['ogImgFileResponse'].url;
         updateBlogConfigDto.ogImgSize = ogImgFile.size;
       }
