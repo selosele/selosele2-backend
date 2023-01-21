@@ -56,7 +56,9 @@ export class SatisfactionController {
     if (isAuthenticated) {
       throw new BizException('관리자는 참여할 수 없습니다.');
     }
+
     addSatisfactiontDto.ip = ip;
+    
     return this.satisfactionService.addSatisfaction(addSatisfactiontDto);
   }
 

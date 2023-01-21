@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express/interfaces/nest-express-application.interface';
+import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { setupCors, setupSwagger, setupValidation } from './shared/utils';
 
@@ -8,6 +9,9 @@ async function bootstrap() {
 
   // API 호출 전역 접두사 설정
   app.setGlobalPrefix('api');
+
+  // cookieParser 사용 설정
+  app.use(cookieParser());
 
   // x-powered-by 헤더 삭제
   app.disable('x-powered-by');

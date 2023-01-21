@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../repositories/user.repository';
-import { InsertResult } from 'typeorm';
+import { EntityManager, InsertResult } from 'typeorm';
 import { UserRoleRepository } from '../repositories/user-role.repository';
 import { Builder } from 'builder-pattern';
 import { JwtService } from '@nestjs/jwt';
@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { BizException } from 'src/shared/exceptions/biz/biz.exception';
 import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, RoleEnum } from '../models';
 import { RoleRepository } from '../repositories/role.repository';
+import { initTransaction } from 'src/shared/utils';
 
 @Injectable()
 export class AuthService {
@@ -42,25 +43,31 @@ export class AuthService {
     const salt = await bcrypt.genSalt();
     authCredentialsDto.userPw = await bcrypt.hash(userPw, salt);
 
-    // 사용자 생성
-    const addUserRes: InsertResult = await this.userRepository.addUser(authCredentialsDto);
+    let addUserRoleRes: InsertResult = null;
 
-    // 사용자 권한 생성
-    if (addUserRes.identifiers[0].userId) {
-      let addUserRoleRes: InsertResult = null;
-      const roles: string[] = [RoleEnum.ROLE_ANONYMOUS, RoleEnum.ROLE_ADMIN];
+    // 트랜잭션을 시작한다.
+    await initTransaction(async (manager: EntityManager) => {
 
-      for (const role of roles) {
-        const dto: AuthCredentialsRoleDto = Builder(AuthCredentialsRoleDto)
-          .userSn(addUserRes.identifiers[0].userSn)
-          .userId(userId)
-          .roleId(role)
-          .build();
+      // 먼저 사용자를 생성하고
+      const addUserRes: InsertResult = await manager.withRepository(this.userRepository).addUser(authCredentialsDto);
 
-        addUserRoleRes = await this.addUserRole(dto);
+      // 사용자 권한을 생성한다.
+      if (addUserRes.identifiers[0].userId) {
+        const roles: string[] = [RoleEnum.ROLE_ANONYMOUS, RoleEnum.ROLE_ADMIN];
+
+        for (const role of roles) {
+          const dto: AuthCredentialsRoleDto = Builder(AuthCredentialsRoleDto)
+            .userSn(addUserRes.identifiers[0].userSn)
+            .userId(userId)
+            .roleId(role)
+            .build();
+
+          addUserRoleRes = await manager.withRepository(this.userRoleRepository).addUserRole(dto);
+        }
       }
-      return addUserRoleRes;
-    }
+    });
+
+    return addUserRoleRes;
   }
 
   /** 사용자 권한을 생성한다. */
@@ -90,6 +97,7 @@ export class AuthService {
         userSn: user.userSn,
         userRole: user.userRole,
       };
+      
       const accessToken: string = this.jwtService.sign(payload);
 
       return { accessToken };

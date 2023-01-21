@@ -11,9 +11,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigService } from '@nestjs/config';
 import { RoleEntity, UserRoleEntity, UserEntity } from './models';
 import { RoleRepository } from './repositories/role.repository';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
 
 @Module({
   imports: [
