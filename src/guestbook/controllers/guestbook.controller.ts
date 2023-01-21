@@ -72,7 +72,12 @@ export class GuestbookController {
     type: AddGuestbookDto,
     description: '방명록 수정 DTO',
   })
-  updateGuestbook(@Body(ValidationPipe) updateGuestbookDto: UpdateGuestbookDto): Promise<GuestbookEntity> {
+  updateGuestbook(
+    @RealIP() ip: string,
+    @Body(ValidationPipe) updateGuestbookDto: UpdateGuestbookDto
+  ): Promise<GuestbookEntity> {
+    updateGuestbookDto.ip = ip;
+
     return this.guestbookService.updateGuestbook(updateGuestbookDto);
   }
 
@@ -86,7 +91,7 @@ export class GuestbookController {
     description: '방명록을 삭제한다.',
   })
   @ApiBody({
-    type: AddGuestbookDto,
+    type: RemoveGuestbookDto,
     description: '방명록 삭제 DTO',
   })
   removeGuestbook(
@@ -94,6 +99,7 @@ export class GuestbookController {
     @Body(ValidationPipe) removeGuestbookDto: RemoveGuestbookDto
   ): Promise<GuestbookEntity> {
     removeGuestbookDto.isLogin = isAuthenticated ? 'Y' : 'N';
+    
     return this.guestbookService.removeGuestbook(removeGuestbookDto);
   }
 

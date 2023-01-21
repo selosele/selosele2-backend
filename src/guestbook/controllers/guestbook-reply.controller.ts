@@ -1,8 +1,12 @@
-import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Post, Body, ValidationPipe, Get, Query, Put, Delete } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { RealIP } from 'nestjs-real-ip';
 import { IsAuthenticated } from 'src/shared/decorators';
+import { PaginationDto } from 'src/shared/models';
 import { AddGuestbookReplyDto, GuestbookReplyEntity } from '../models';
+import { ListGuestbookReplyDto } from '../models/dto/list-guestbook-reply.dto';
+import { RemoveGuestbookReplyDto } from '../models/dto/remove-guestbook-reply.dto';
+import { UpdateGuestbookReplyDto } from '../models/dto/update-guestbook-reply.dto';
 import { GuestbookReplyService } from "../services/guestbook-reply.service";
 
 @Controller('guestbookreply')
@@ -13,18 +17,44 @@ export class GuestbookReplyController {
     private readonly guestbookReplyService: GuestbookReplyService,
   ) {}
 
-  @Post()
+  @Get()
   @ApiOperation({
-    summary: '방명록 댓글 등록 API',
-    description: '방명록 댓글을 등록한다.',
+    summary: '방명록 댓글 목록 조회 API',
+    description: '방명록 댓글 목록을 조회한다.',
   })
   @ApiCreatedResponse({
     type: GuestbookReplyEntity,
-    description: '방명록 댓글을 등록한다.',
+    description: '방명록 댓글 목록을 조회한다.',
+  })
+  @ApiQuery({
+    type: ListGuestbookReplyDto,
+    name: 'listGuestbookReplyDto',
+    description: '방명록 댓글 목록 조회 DTO',
+  })
+  @ApiQuery({
+    type: PaginationDto,
+    name: 'paginationDto',
+    description: '페이지네이션 DTO',
+  })
+  listGuestbookReply(
+    @Query(ValidationPipe) listGuestbookReplyDto: ListGuestbookReplyDto,
+    @Query(ValidationPipe) paginationDto: PaginationDto
+  ): Promise<[GuestbookReplyEntity[], number]> {
+    return this.guestbookReplyService.listGuestbookReply(listGuestbookReplyDto, paginationDto);
+  }
+
+  @Post()
+  @ApiOperation({
+    summary: '방명록 댓글 추가 API',
+    description: '방명록 댓글을 추가한다.',
+  })
+  @ApiCreatedResponse({
+    type: GuestbookReplyEntity,
+    description: '방명록 댓글을 추가한다.',
   })
   @ApiBody({
     type: AddGuestbookReplyDto,
-    description: '방명록 댓글 등록 DTO',
+    description: '방명록 댓글 추가 DTO',
   })
   addGuestbook(
     @IsAuthenticated() isAuthenticated: boolean,
@@ -38,6 +68,50 @@ export class GuestbookReplyController {
     addGuestbookReplyDto.ip = ip;
 
     return this.guestbookReplyService.addGuestbookReply(addGuestbookReplyDto);
+  }
+
+  @Put()
+  @ApiOperation({
+    summary: '방명록 댓글 수정 API',
+    description: '방명록 댓글을 수정한다.',
+  })
+  @ApiCreatedResponse({
+    type: GuestbookReplyEntity,
+    description: '방명록 댓글을 수정한다.',
+  })
+  @ApiBody({
+    type: UpdateGuestbookReplyDto,
+    description: '방명록 댓글 수정 DTO',
+  })
+  updateGuestbook(
+    @RealIP() ip: string,
+    @Body(ValidationPipe) updateGuestbookReplyDto: UpdateGuestbookReplyDto
+  ): Promise<GuestbookReplyEntity> {
+    updateGuestbookReplyDto.ip = ip;
+
+    return this.guestbookReplyService.updateGuestbookReply(updateGuestbookReplyDto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({
+    summary: '방명록 댓글 삭제 API',
+    description: '방명록 댓글을 삭제한다.',
+  })
+  @ApiCreatedResponse({
+    type: GuestbookReplyEntity,
+    description: '방명록 댓글을 삭제한다.',
+  })
+  @ApiBody({
+    type: RemoveGuestbookReplyDto,
+    description: '방명록 댓글 삭제 DTO',
+  })
+  removeGuestbookReply(
+    @IsAuthenticated() isAuthenticated: boolean,
+    @Body(ValidationPipe) removeGuestbookReplyDto: RemoveGuestbookReplyDto
+  ): Promise<GuestbookReplyEntity> {
+    removeGuestbookReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
+
+    return this.guestbookReplyService.removeGuestbookReply(removeGuestbookReplyDto);
   }
 
 }

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsOptional } from 'class-validator';
 
 /** 포스트 검색 DTO */
 export class SearchPostDto {
@@ -16,7 +16,7 @@ export class SearchPostDto {
   c?: string;
 
   /** 로그인 여부 */
-  @IsOptional()
+  @IsEmpty()
   isLogin?: string;
 
 }

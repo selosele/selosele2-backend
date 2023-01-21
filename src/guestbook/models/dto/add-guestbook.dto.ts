@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEmpty, IsNotEmpty } from 'class-validator';
 
 /** 방명록 추가 DTO */
 export class AddGuestbookDto {
@@ -12,7 +12,7 @@ export class AddGuestbookDto {
   authorPw?: string;
 
   /** 방명록 작성자 IP */
-  @IsOptional()
+  @IsEmpty()
   ip?: string;
 
   /** 방명록 내용 */
@@ -20,7 +20,7 @@ export class AddGuestbookDto {
   cont?: string;
 
   /** 관리자 계정 여부 */
-  @IsOptional()
+  @IsEmpty()
   adminYn?: string;
 
 }

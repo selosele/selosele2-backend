@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsEmpty, IsNotEmpty } from 'class-validator';
 
 /** 포스트 추천 정보 조회 DTO */
 export class GetPostLikeDto {
@@ -8,7 +8,7 @@ export class GetPostLikeDto {
   postId?: number;
 
   /** 포스트 추천자 IP */
-  @IsNotEmpty()
+  @IsEmpty()
   ip?: string;
 
 }

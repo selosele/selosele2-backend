@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsOptional } from 'class-validator';
 
 /** 만족도조사 참여 DTO */
 export class AddSatisfactiontDto {
@@ -16,7 +16,7 @@ export class AddSatisfactiontDto {
   comment?: string;
   
   /** 참여자 IP */
-  @IsOptional()
+  @IsEmpty()
   ip?: string;
 
 }

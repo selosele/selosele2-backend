@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEmpty, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 
-/** 방명록 댓글 등록 DTO */
+/** 방명록 댓글 추가 DTO */
 export class AddGuestbookReplyDto {
 
   /** 상위 방명록 ID */
@@ -19,7 +19,7 @@ export class AddGuestbookReplyDto {
   authorPw?: string;
 
   /** 방명록 댓글 작성자 IP */
-  @IsOptional()
+  @IsEmpty()
   ip?: string;
 
   /** 방명록 댓글 내용 */
@@ -27,7 +27,7 @@ export class AddGuestbookReplyDto {
   cont?: string;
 
   /** 관리자 계정 여부 */
-  @IsOptional()
+  @IsEmpty()
   adminYn?: string;
 
 }
