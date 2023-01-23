@@ -43,7 +43,7 @@ export class FileUploaderController {
       ],
     })) files: FileUploaderRequest[],
   ): void {
-    for (let file of files) {
+    for (const file of files) {
       this.fileUploaderService.uploadImage(file);
     }
   }

@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { PostCategoryEntity } from 'src/category/models';
 import { PostTagEntity } from 'src/tag/models';
 import { PostLikeEntity } from './post-like.entity';
+import { PostReplyEntity } from './post-reply.entity';
 
 @Entity('post')
 export class PostEntity extends BaseEntity {
@@ -134,5 +135,12 @@ export class PostEntity extends BaseEntity {
     description: '포스트 추천'
   })
   postLike?: PostLikeEntity[];
+
+  @OneToMany(() => PostReplyEntity, postReply => postReply.post)
+  @JoinColumn({ referencedColumnName: 'id' })
+  @ApiProperty({
+    description: '포스트 댓글'
+  })
+  postReply?: PostReplyEntity[];
   
 }

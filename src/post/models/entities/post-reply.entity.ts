@@ -1,5 +1,6 @@
-import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { PostEntity } from './post.entity';
 
 @Entity('post_reply')
 export class PostReplyEntity extends BaseEntity {
@@ -98,12 +99,19 @@ export class PostReplyEntity extends BaseEntity {
   })
   modDate?: Date;
 
-  @DeleteDateColumn({
-    comment: '포스트 댓글 수정일시'
+  @UpdateDateColumn({
+    comment: '포스트 댓글 삭제일시'
   })
   @ApiProperty({
-    description: '포스트 댓글 수정일시'
+    description: '포스트 댓글 삭제일시'
   })
   delDate?: Date;
+
+  @ManyToOne(() => PostEntity, post => post.postReply)
+  @JoinColumn({ name: 'parent_id' })
+  @ApiProperty({
+    description: '포스트',
+  })
+  post?: PostEntity;
   
 }

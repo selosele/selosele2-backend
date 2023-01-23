@@ -62,9 +62,9 @@ export class PostController {
     @Param('limit', ParseIntPipe) limit: number
   ): Promise<PostEntity[]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
-      .limit(limit)
-      .isLogin(isAuthenticated ? 'Y' : 'N')
-      .build();
+                                    .limit(limit)
+                                    .isLogin(isAuthenticated ? 'Y' : 'N')
+                                    .build();
     return this.postService.listPostByLimit(listPostDto);
   }
 
@@ -112,8 +112,8 @@ export class PostController {
   })
   listYearAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<PostEntity[]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
-      .isLogin(isAuthenticated ? 'Y' : 'N')
-      .build();
+                                    .isLogin(isAuthenticated ? 'Y' : 'N')
+                                    .build();
     return this.postService.listYearAndCount(listPostDto);
   }
 
@@ -141,9 +141,9 @@ export class PostController {
     @Query() paginationDto: PaginationDto
   ): Promise<[PostEntity[], number]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
-      .year(year)
-      .isLogin(isAuthenticated ? 'Y' : 'N')
-      .build();
+                                    .year(year)
+                                    .isLogin(isAuthenticated ? 'Y' : 'N')
+                                    .build();
     return this.postService.listPostByYear(listPostDto, paginationDto);
   }
 
@@ -171,9 +171,9 @@ export class PostController {
     @Query() paginationDto: PaginationDto
   ): Promise<[PostEntity[], number]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
-      .categoryId(categoryId)
-      .isLogin(isAuthenticated ? 'Y' : 'N')
-      .build();
+                                    .categoryId(categoryId)
+                                    .isLogin(isAuthenticated ? 'Y' : 'N')
+                                    .build();
     return this.postService.listPostByCategory(listPostDto, paginationDto);
   }
 
@@ -201,9 +201,9 @@ export class PostController {
     @Query() paginationDto: PaginationDto
   ): Promise<[PostEntity[], number]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
-      .tagId(tagId)
-      .isLogin(isAuthenticated ? 'Y' : 'N')
-      .build();
+                                    .tagId(tagId)
+                                    .isLogin(isAuthenticated ? 'Y' : 'N')
+                                    .build();
     return this.postService.listPostByTag(listPostDto, paginationDto);
   }
 
@@ -226,9 +226,9 @@ export class PostController {
     @Param('id', ParseIntPipe) id: number
   ): Promise<PostEntity[]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
-      .id(id)
-      .isLogin(isAuthenticated ? 'Y' : 'N')
-      .build();
+                                    .id(id)
+                                    .isLogin(isAuthenticated ? 'Y' : 'N')
+                                    .build();
     return this.postService.listPrevAndNextPost(listPostDto);
   }
 
@@ -251,9 +251,9 @@ export class PostController {
     @Param('id', ParseIntPipe) id: number
   ): Promise<PostEntity> {
     const getPostDto: GetPostDto = Builder(GetPostDto)
-      .id(id)
-      .isLogin(isAuthenticated ? 'Y' : 'N')
-      .build();
+                                  .id(id)
+                                  .isLogin(isAuthenticated ? 'Y' : 'N')
+                                  .build();
     return this.postService.getPost(getPostDto);
   }
 

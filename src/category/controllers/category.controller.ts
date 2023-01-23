@@ -28,8 +28,8 @@ export class CategoryController {
   })
   listCategoryAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<CategoryEntity[]> {
     const listCategoryDto: ListCategoryDto = Builder(ListCategoryDto)
-      .isLogin(isAuthenticated ? 'Y' : 'N')
-      .build();
+                                            .isLogin(isAuthenticated ? 'Y' : 'N')
+                                            .build();
     return this.categoryService.listCategoryAndCount(listCategoryDto);
   }
 

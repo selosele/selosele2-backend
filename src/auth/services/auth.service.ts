@@ -57,11 +57,10 @@ export class AuthService {
 
         for (const role of roles) {
           const dto: AuthCredentialsRoleDto = Builder(AuthCredentialsRoleDto)
-            .userSn(addUserRes.identifiers[0].userSn)
-            .userId(userId)
-            .roleId(role)
-            .build();
-
+                                              .userSn(addUserRes.identifiers[0].userSn)
+                                              .userId(userId)
+                                              .roleId(role)
+                                              .build();
           addUserRoleRes = await manager.withRepository(this.userRoleRepository).addUserRole(dto);
         }
       }

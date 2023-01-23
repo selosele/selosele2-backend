@@ -301,6 +301,7 @@ export class PostRepository extends Repository<PostEntity> {
           tag: true,
         },
         postLike: true,
+        postReply: true,
       },
       select: {
         id: true,
@@ -314,7 +315,22 @@ export class PostRepository extends Repository<PostEntity> {
         postLike: {
           postId: true,
           ip: false,
-        }
+        },
+        postReply: {
+          id: true,
+          parentId: true,
+          parentReplyId: true,
+          group: true,
+          sort: true,
+          depth: true,
+          author: true,
+          authorPw: false,
+          ip: false,
+          cont: true,
+          regDate: true,
+          modDate: true,
+          delDate: true,
+        },
       },
       where: {
         tmpYn: 'N',

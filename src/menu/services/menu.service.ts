@@ -43,8 +43,8 @@ export class MenuService {
       // 기존의 메뉴 권한을 삭제한다.
       await manager.withRepository(this.menuRoleRepository).removeMenuRole(
         Builder(SaveMenuRoleDto)
-          .menuId(menu.id)
-          .build()
+        .menuId(menu.id)
+        .build()
       );
   
       let roles: SaveMenuRoleDto[] = [];
@@ -52,7 +52,7 @@ export class MenuService {
       if ('0' === saveMenuDto.role) {
         const roleList = await this.roleRepository.listRole();
         
-        for (let role of roleList) {
+        for (const role of roleList) {
           // 선택한 값이 '모든 권한 허용'일 경우에는 모든 권한을 추가하고
           roles.push({
             menuId: menu.id,
@@ -67,13 +67,13 @@ export class MenuService {
         });
       }
   
-      for (let role of roles) {
+      for (const role of roles) {
         // 메뉴 권한을 추가한다.
         await manager.withRepository(this.menuRoleRepository).saveMenuRole(
           Builder(SaveMenuRoleDto)
-            .menuId(role.menuId)
-            .roleId(role.roleId)
-            .build()
+          .menuId(role.menuId)
+          .roleId(role.roleId)
+          .build()
         );
       }
     });
@@ -91,8 +91,8 @@ export class MenuService {
       // 먼저 메뉴 권한을 삭제하고
       await manager.withRepository(this.menuRoleRepository).removeMenuRole(
         Builder(SaveMenuRoleDto)
-          .menuId(saveMenuDto.id)
-          .build()
+        .menuId(saveMenuDto.id)
+        .build()
       );
   
       // 메뉴를 삭제한다.

@@ -36,9 +36,9 @@ export class MenuController {
     @Query(ValidationPipe) listMenuDto: ListMenuDto,
   ): Promise<MenuEntity[]> {
     const dto: ListMenuDto = Builder(ListMenuDto)
-      .useYn(listMenuDto?.useYn)
-      .roleIds(isAuthenticated ? [RoleEnum.ROLE_ADMIN] : [RoleEnum.ROLE_ANONYMOUS])
-      .build();
+                            .useYn(listMenuDto?.useYn)
+                            .roleIds(isAuthenticated ? [RoleEnum.ROLE_ADMIN] : [RoleEnum.ROLE_ANONYMOUS])
+                            .build();
     return this.menuService.listTreeMenu(dto);
   }
 
@@ -115,8 +115,8 @@ export class MenuController {
   removeMenu(@Param('id', ParseIntPipe) id: number): Promise<MenuEntity> {
     return this.menuService.removeMenu(
       Builder(MenuEntity)
-        .id(id)
-        .build()
+      .id(id)
+      .build()
     );
   }
 

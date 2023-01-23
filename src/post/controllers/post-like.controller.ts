@@ -33,9 +33,9 @@ export class PostLikeController {
     @Param('id', ParseIntPipe) id: number
   ): Promise<PostLikeEntity> {
     const getPostLikeDto: GetPostLikeDto = Builder(GetPostLikeDto)
-      .postId(id)
-      .ip(ip)
-      .build();
+                                          .postId(id)
+                                          .ip(ip)
+                                          .build();
     return this.postLikeService.getPostLike(getPostLikeDto);
   }
 
@@ -59,10 +59,10 @@ export class PostLikeController {
     @Param('id', ParseIntPipe) id: number
   ): Promise<number> {
     const savePostLikeDto: SavePostLikeDto = Builder(SavePostLikeDto)
-      .postId(id)
-      .ip(ip)
-      .isLogin(isAuthenticated ? 'Y' : 'N')
-      .build();
+                                            .postId(id)
+                                            .ip(ip)
+                                            .isLogin(isAuthenticated ? 'Y' : 'N')
+                                            .build();
     return this.postLikeService.savePostLike(savePostLikeDto);
   }
 

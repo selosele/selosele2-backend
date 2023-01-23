@@ -27,8 +27,8 @@ export class TagController {
   })
   listTagAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<TagEntity[]> {
     const listTagDto: ListTagDto = Builder(ListTagDto)
-      .isLogin(isAuthenticated ? 'Y' : 'N')
-      .build();
+                                  .isLogin(isAuthenticated ? 'Y' : 'N')
+                                  .build();
     return this.tagService.listTagAndCount(listTagDto);
   }
 
