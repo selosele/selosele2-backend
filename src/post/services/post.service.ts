@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from 'src/category/repositories/post-category.repository';
 import { PaginationDto } from 'src/shared/models';
-import { BizException } from 'src/shared/exceptions/biz/biz.exception';
 import { isEmpty, isNotEmpty } from 'src/shared/utils';
 import { DeleteResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
@@ -102,8 +101,9 @@ export class PostService {
       throw new NotFoundException();
     }
 
+    //관리자 외 비밀글 조회 방지
     if (isNotEmpty(post) && 'N' === getPostDto.isLogin && 'Y' === post.secretYn) {
-      throw new BizException('비밀글은 조회할 수 없습니다.');
+      throw new NotFoundException();
     }
 
     return post;
