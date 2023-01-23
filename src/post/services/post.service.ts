@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from 'src/category/repositories/post-category.repository';
 import { PaginationDto } from 'src/shared/models';
-import { isEmpty, isNotEmpty } from 'src/shared/utils';
+import { getRawText, isEmpty, isNotEmpty } from 'src/shared/utils';
 import { DeleteResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
 import { PostRepository } from '../repositories/post.repository';
@@ -19,19 +19,22 @@ export class PostService {
 
   /** 포스트 목록을 조회한다. */
   async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
-    const [post, postCategory] = await Promise.all([
+    const [postList, postCategory] = await Promise.all([
       // 포스트 조회
       this.postRepository.listPost(listPostDto),
       // 카테고리 조회
       this.postCategoryRepository.listPostCategory(listPostDto),
     ]);
 
-    // 포스트 데이타에 카테고리 데이타를 넣어준다.
-    post[0].map(p => {
+    postList[0].map(p => {
+      // 포스트 데이타에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
+      p.rawText = getRawText(p.cont).substring(0, 180);
+
+      // 포스트 데이타에 카테고리 데이타를 넣어준다.
       p.postCategory = postCategory.filter(d => d.postId === p.id);
     });
 
-    return [post[0], post[1]];
+    return [postList[0], postList[1]];
   }
 
   /** 개수별 포스트 목록을 조회한다. */
@@ -51,8 +54,11 @@ export class PostService {
       this.postCategoryRepository.listPostCategorySearch(searchPostDto, paginationDto),
     ]);
 
-    // 포스트 데이타에 카테고리 데이타를 넣어준다.
     post[0].map(p => {
+      // 포스트 데이타에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
+      p.rawText = getRawText(p.cont);
+
+      // 포스트 데이타에 카테고리 데이타를 넣어준다.
       p.postCategory = postCategory.filter(d => d.postId === p.id);
     });
 

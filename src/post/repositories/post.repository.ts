@@ -44,7 +44,7 @@ export class PostRepository extends Repository<PostEntity> {
       .select("post.id", "id")
         .addSelect("post.title", "title")
         .addSelect("post.reg_date", "regDate")
-        .addSelect("SUBSTR(post.raw_text, 1, 180)", "rawText")
+        .addSelect("SUBSTR(post.cont, 1, 180)", "cont")
         .addSelect("post.og_img_url", "ogImgUrl")
         .addSelect("post.secret_yn", "secretYn")
         .addSelect("post.pin_yn", "pinYn")
@@ -59,7 +59,7 @@ export class PostRepository extends Repository<PostEntity> {
         .leftJoin("postCategory.category", "category", "category.id = postCategory.category_id")
         .where(new Brackets(qb => {
           qb.where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` })
-            .orWhere(caseSensitive + "post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` })
+            .orWhere(caseSensitive + "post.cont LIKE :cont", { cont: `%${searchPostDto.q}%` })
             .orWhere(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
         }));
     }
@@ -76,7 +76,7 @@ export class PostRepository extends Repository<PostEntity> {
     if ('003' === searchPostDto.t) {
       query = query
         .where(new Brackets(qb => {
-          qb.where(caseSensitive + "post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` });
+          qb.where(caseSensitive + "post.cont LIKE :cont", { cont: `%${searchPostDto.q}%` });
         }));
     }
 
@@ -172,7 +172,6 @@ export class PostRepository extends Repository<PostEntity> {
         title: true,
         regDate: true,
         cont: false,
-        rawText: false,
         secretYn: true,
         postCategory: {
           postId: false,
@@ -215,7 +214,6 @@ export class PostRepository extends Repository<PostEntity> {
         title: true,
         regDate: true,
         cont: false,
-        rawText: false,
         secretYn: true,
         postTag: {
           postId: false,

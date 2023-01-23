@@ -46,7 +46,7 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
       query = query
         .where(new Brackets(qb => {
           qb.where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` })
-            .orWhere(caseSensitive + "post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` })
+            .orWhere(caseSensitive + "post.cont LIKE :cont", { cont: `%${searchPostDto.q}%` })
             .orWhere(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
         }));
     }
@@ -63,7 +63,7 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
     if ('003' === searchPostDto.t) {
       query = query
         .where(new Brackets(qb => {
-          qb.where(caseSensitive + "post.raw_text LIKE :raw_text", { raw_text: `%${searchPostDto.q}%` });
+          qb.where(caseSensitive + "post.cont LIKE :cont", { cont: `%${searchPostDto.q}%` });
         }));
     }
 

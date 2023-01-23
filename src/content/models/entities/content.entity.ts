@@ -50,9 +50,6 @@ export class ContentEntity extends BaseEntity {
   })
   cont?: string;
 
-  @Column({
-    comment: '콘텐츠 내용의 순수 텍스트'
-  })
   @ApiProperty({
     description: '콘텐츠 내용의 순수 텍스트'
   })

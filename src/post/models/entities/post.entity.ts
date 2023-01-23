@@ -53,9 +53,6 @@ export class PostEntity extends BaseEntity {
   })
   cont?: string;
   
-  @Column({
-    comment: '포스트 내용의 순수 텍스트'
-  })
   @ApiProperty({
     description: '포스트 내용의 순수 텍스트'
   })

@@ -13,7 +13,7 @@ export const listPostSql = (params: { listPostDto: ListPostDto }): string => {
           , post.title
           , post.reg_date AS regDate
           , post.reply_cnt AS replyCnt
-          , SUBSTR(post.raw_text, 1, 180) AS rawText
+          , post.cont AS cont
           , post.og_img_url AS ogImgUrl
           , post.secret_yn AS secretYn
           , post.pin_yn AS pinYn
@@ -39,7 +39,7 @@ export const listPostSql = (params: { listPostDto: ListPostDto }): string => {
           , post.title
           , post.reg_date AS regDate
           , post.reply_cnt AS replyCnt
-          , SUBSTR(post.raw_text, 1, 180) AS rawText
+          , post.cont AS cont
           , post.og_img_url AS ogImgUrl
           , post.secret_yn AS secretYn
           , post.pin_yn AS pinYn
