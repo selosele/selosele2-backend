@@ -1,4 +1,4 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { PostCategoryEntity } from './post-category.entity';
 
@@ -26,6 +26,14 @@ export class CategoryEntity extends BaseEntity {
     description: '카테고리 등록일시'
   })
   regDate?: Date;
+
+  @UpdateDateColumn({
+    comment: '카테고리 수정일시'
+  })
+  @ApiProperty({
+    description: '카테고리 수정일시'
+  })
+  modDate?: Date;
 
   @OneToMany(() => PostCategoryEntity, postCategory => postCategory.category)
   @JoinColumn({ referencedColumnName: 'category_id' })

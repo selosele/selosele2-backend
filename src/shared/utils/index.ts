@@ -6,6 +6,8 @@ export * from './database/transaction.util';
 
 export * from './htmlParser/html-parser.util';
 
+export * from './markdown/markdown.util';
+
 export * from './swagger/swagger.util';
 
 export * from './validation/validation.util';

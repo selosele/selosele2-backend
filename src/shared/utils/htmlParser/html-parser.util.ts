@@ -1,6 +1,6 @@
-import { Options, parse } from 'node-html-parser';
+import { Options, parse as nodeHTMLParser } from 'node-html-parser';
 
-/** rawText 가져오기 */
+/** rawText로 파싱한 결과물을 반환한다. */
 export function getRawText(str: string): string {
   let opt: Options = {
     blockTextElements: {
@@ -8,5 +8,5 @@ export function getRawText(str: string): string {
     }
   };
 
-  return parse.parse(str, opt).rawText;
+  return nodeHTMLParser.parse(str, opt).rawText;
 };

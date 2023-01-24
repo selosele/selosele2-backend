@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from 'src/category/repositories/post-category.repository';
 import { PaginationDto } from 'src/shared/models';
-import { getRawText, isEmpty, isNotEmpty } from 'src/shared/utils';
+import { getRawText, isEmpty, isNotEmpty, md } from 'src/shared/utils';
 import { DeleteResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
 import { PostRepository } from '../repositories/post.repository';
@@ -101,16 +101,19 @@ export class PostService {
 
   /** 포스트를 조회한다. */
   async getPost(getPostDto: GetPostDto): Promise<PostEntity> {
-    const post = await this.postRepository.getPost(getPostDto);
+    const post: PostEntity = await this.postRepository.getPost(getPostDto);
 
     if (isEmpty(post)) {
       throw new NotFoundException();
     }
 
-    //관리자 외 비밀글 조회 방지
+    // 관리자 외 비밀글 조회를 방지한다.
     if (isNotEmpty(post) && 'N' === getPostDto.isLogin && 'Y' === post.secretYn) {
       throw new NotFoundException();
     }
+
+    // 포스트의 콘텐츠를 Markdown으로 렌더링한다.
+    post.cont = md.render(post.cont);
 
     return post;
   }

@@ -23,6 +23,7 @@ export class SatisfactionService {
 
     // HTML Escape
     addSatisfactiontDto.comment = sanitizeHtml(addSatisfactiontDto.comment);
+    
     return await this.satisfactionRepository.addSatisfaction(addSatisfactiontDto);
   }
 

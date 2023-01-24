@@ -76,10 +76,10 @@ export class PostEntity extends BaseEntity {
   ogImgUrl?: string;
   
   @Column({
-    comment: '포스트 대표 이미지 파일 크기'
+    comment: '포스트 대표 이미지 용량'
   })
   @ApiProperty({
-    description: '포스트 대표 이미지 파일 크기'
+    description: '포스트 대표 이미지 용량'
   })
   ogImgSize?: number;
   

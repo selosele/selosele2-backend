@@ -72,10 +72,10 @@ export class ContentEntity extends BaseEntity {
   ogImgUrl?: string;
   
   @Column({
-    comment: '콘텐츠 대표 이미지 파일 크기'
+    comment: '콘텐츠 대표 이미지 용량'
   })
   @ApiProperty({
-    description: '콘텐츠 대표 이미지 파일 크기'
+    description: '콘텐츠 대표 이미지 용량'
   })
   ogImgSize?: number;
 

@@ -1,4 +1,4 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { PostTagEntity } from './post-tag.entity';
 
@@ -26,6 +26,14 @@ export class TagEntity extends BaseEntity {
     description: '태그 등록일시'
   })
   regDate?: Date;
+
+  @UpdateDateColumn({
+    comment: '태그 수정일시'
+  })
+  @ApiProperty({
+    description: '태그 수정일시'
+  })
+  modDate?: Date;
 
   @OneToMany(() => PostTagEntity, postTag => postTag.tag)
   @JoinColumn({ referencedColumnName: 'tag_id' })
