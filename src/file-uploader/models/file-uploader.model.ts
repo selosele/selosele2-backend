@@ -6,7 +6,7 @@ export interface FileUploaderApi {
   /** 파일 목록을 조회한다. */
   listFile(): Promise<FileUploaderResponse[]>;
 
-  /** 파일를 업로드한다. */
+  /** 이미지 파일을 업로드한다. */
   uploadImage(file: FileUploaderRequest): Promise<FileUploaderResponse>;
   
 }
