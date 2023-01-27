@@ -24,7 +24,7 @@ export class BlogConfigService {
   async updateBlogConfig(updateBlogConfigDto: UpdateBlogConfigDto): Promise<BlogConfigEntity> {
     let fileUploaderResponse = null;
 
-    //업로드 파일 존재 시
+    // 업로드 파일 존재 시
     if (0 < updateBlogConfigDto.files.length) {
       fileUploaderResponse = await this.uploadBlogConfigImg(updateBlogConfigDto);
       
@@ -32,7 +32,7 @@ export class BlogConfigService {
       const ogImgFile: FileUploaderRequest = updateBlogConfigDto.files.find(d => d.fieldname === 'ogImgFile');
 
       if (isNotEmpty(avatarImgFile)) {
-        updateBlogConfigDto.avatarImg = fileUploaderResponse['avatarImgFileResponse'].public_id + '.' + fileUploaderResponse['ogImgFileResponse'].format;
+        updateBlogConfigDto.avatarImg = fileUploaderResponse['avatarImgFileResponse'].public_id + '.' + fileUploaderResponse['avatarImgFileResponse'].format;
         updateBlogConfigDto.avatarImgUrl = fileUploaderResponse['avatarImgFileResponse'].url;
         updateBlogConfigDto.avatarImgSize = avatarImgFile.size;
       }
@@ -44,14 +44,14 @@ export class BlogConfigService {
       }
     }
 
-    //아바타 이미지 파일 삭제여부 값 존재 시
+    // 아바타 이미지 파일 삭제여부 값 존재 시
     if (this.hasDelImg(updateBlogConfigDto.delAvatarImg)) {
       updateBlogConfigDto.avatarImg = '';
       updateBlogConfigDto.avatarImgUrl = null;
       updateBlogConfigDto.avatarImgSize = null;
     }
 
-    //대표 이미지 파일 삭제여부 값 존재 시
+    // 대표 이미지 파일 삭제여부 값 존재 시
     if (this.hasDelImg(updateBlogConfigDto.delOgImg)) {
       updateBlogConfigDto.ogImg = '';
       updateBlogConfigDto.ogImgUrl = null;
@@ -69,12 +69,12 @@ export class BlogConfigService {
     let avatarImgFileResponse: FileUploaderResponse = null;
     let ogImgFileResponse: FileUploaderResponse = null;
 
-    //블로그 아바타 이미지 파일 업로드
+    // 블로그 아바타 이미지 파일 업로드
     if (isNotEmpty(avatarImgFile) && !this.hasDelImg(updateBlogConfigDto.delAvatarImg)) {
       avatarImgFileResponse = await this.fileUploaderService.uploadImage(avatarImgFile);
     }
 
-    //블로그 대표 이미지 파일 업로드
+    // 블로그 대표 이미지 파일 업로드
     if (isNotEmpty(ogImgFile) && !this.hasDelImg(updateBlogConfigDto.delOgImg)) {
       ogImgFileResponse = await this.fileUploaderService.uploadImage(ogImgFile);
     }
