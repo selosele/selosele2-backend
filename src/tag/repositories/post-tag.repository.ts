@@ -4,6 +4,7 @@ import { SearchPostDto } from "src/post/models";
 import { PaginationDto } from "src/shared/models";
 import { Brackets, Repository } from "typeorm";
 import { PostTagEntity } from "../models";
+import { SavePostTagDto } from "../models/dto/save-post-tag.dto";
 
 @CustomRepository(PostTagEntity)
 export class PostTagRepository extends Repository<PostTagEntity> {
@@ -80,6 +81,11 @@ export class PostTagRepository extends Repository<PostTagEntity> {
       .offset(paginationDto.getSkipSize());
 
     return await query.getMany();
+  }
+
+  /** 포스트 태그를 추가한다. */
+  async addPostTag(savePostTagDto: SavePostTagDto): Promise<PostTagEntity> {
+    return await this.save(savePostTagDto);
   }
 
 }

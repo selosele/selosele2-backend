@@ -2,10 +2,24 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from 'src/category/repositories/post-category.repository';
 import { PaginationDto } from 'src/shared/models';
-import { getRawText, isEmpty, isNotEmpty, md } from 'src/shared/utils';
-import { DeleteResult } from 'typeorm';
+import { getRawText, initTransaction, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md } from 'src/shared/utils';
+import { DeleteResult, EntityManager } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
+import { AddPostDto } from '../models/dto/add-post.dto';
 import { PostRepository } from '../repositories/post.repository';
+import * as sanitizeHtml from 'sanitize-html';
+import { BlogConfigRepository } from 'src/blog-config/repositories/blog-config.repository';
+import { BlogConfigEntity } from 'src/blog-config/models';
+import { BizException } from 'src/shared/exceptions';
+import { SavePostCategoryDto } from 'src/category/models/dto/save-post-category.dto';
+import { Builder } from 'builder-pattern';
+import { PostTagRepository } from 'src/tag/repositories/post-tag.repository';
+import { SavePostTagDto } from 'src/tag/models/dto/save-post-tag.dto';
+import { TagRepository } from 'src/tag/repositories/tag.repository';
+import { SaveTagDto, TagEntity } from 'src/tag/models';
+import { FileUploaderService } from 'src/file-uploader/services/file-uploader.service';
+import { classToPlain, plainToClass, plainToInstance } from 'class-transformer';
+import { FileUploaderResponse } from 'src/file-uploader/models/file-uploader.model';
 
 @Injectable()
 export class PostService {
@@ -15,6 +29,13 @@ export class PostService {
     private readonly postRepository: PostRepository,
     @InjectRepository(PostCategoryRepository)
     private readonly postCategoryRepository: PostCategoryRepository,
+    @InjectRepository(PostTagRepository)
+    private readonly postTagRepository: PostTagRepository,
+    @InjectRepository(TagRepository)
+    private readonly tagRepository: TagRepository,
+    @InjectRepository(BlogConfigRepository)
+    private readonly blogConfigRepository: BlogConfigRepository,
+    private readonly fileUploaderService: FileUploaderService,
   ) {}
 
   /** 포스트 목록을 조회한다. */
@@ -118,6 +139,69 @@ export class PostService {
     return post;
   }
 
+  /** 포스트를 추가한다. */
+  async addPost(addPostDto: AddPostDto): Promise<PostEntity> {
+    const isValid: boolean = await this.savePostValidationCheck();
+    if (!isValid) return;
+
+    const { title, cont, ogImgFile, categoryId } = addPostDto;
+
+    // 포스트 내용 요약이 없으면 제목을 넣는다.
+    if (isBlank(addPostDto.ogDesc)) {
+      addPostDto.ogDesc = title;
+    }
+
+    // HTML Escape
+    addPostDto.cont = sanitizeHtml(cont);
+
+    // 대표 이미지 파일을 업로드한다.
+    if (isNotFileEmpty(ogImgFile)) {
+      const uploadFile: FileUploaderResponse = await this.fileUploaderService.uploadImage(ogImgFile);
+
+      addPostDto.ogImg = uploadFile.public_id;
+      addPostDto.ogImgUrl = uploadFile.url;
+      addPostDto.ogImgSize = uploadFile.size;
+    }
+
+    let post: PostEntity = null;
+
+    // 트랜잭션을 시작한다.
+    await initTransaction(async (manager: EntityManager) => {
+
+      // 먼저 포스트를 추가하고
+      post = await manager.withRepository(this.postRepository).addPost(addPostDto);
+
+      // 포스트 카테고리를 추가한다음
+      const savePostCategoryDto: SavePostCategoryDto = Builder(SavePostCategoryDto)
+                                                      .postId(post.id)
+                                                      .categoryId(categoryId)
+                                                      .build();
+      await manager.withRepository(this.postCategoryRepository).addPostCategory(savePostCategoryDto);
+
+      if (isNotBlank(addPostDto.saveTagList)) {
+        const saveTagList: SaveTagDto[] = plainToClass(Array<SaveTagDto>, JSON.parse(addPostDto.saveTagList)); // JSON -> Array 역직렬화
+        
+        for (let saveTag of saveTagList) {
+          
+          // 태그를 추가하고
+          const saveTagDto: SaveTagDto = Builder(SaveTagDto)
+                                         .nm(saveTag.nm)
+                                         .build();
+          const tag: TagEntity = await manager.withRepository(this.tagRepository).saveTag(saveTagDto);
+  
+          // 포스트 태그를 추가한다.
+          const savePostTagDto: SavePostTagDto = Builder(SavePostTagDto)
+                                                 .postId(post.id)
+                                                 .tagId(tag.id)
+                                                 .build();
+          await manager.withRepository(this.postTagRepository).addPostTag(savePostTagDto);
+        }
+      }
+    });
+
+    return post;
+  }
+
   /** 포스트 다건을 삭제한다. */
   async removePosts(removePostDto: RemovePostDto[]): Promise<DeleteResult> {
     let idList: number[] = [];
@@ -132,6 +216,18 @@ export class PostService {
   /** 포스트를 삭제한다. */
   async removePost(id: number): Promise<DeleteResult> {
     return await this.postRepository.removePost(id);
+  }
+
+  /** 포스트 추가/수정 유효성 검사 */
+  async savePostValidationCheck(): Promise<boolean> {
+    const pinPostCount: number = await this.postRepository.count({ where: { pinYn: 'Y' } });
+    const blogConfig: BlogConfigEntity = await this.blogConfigRepository.getBlogConfig();
+
+    if (pinPostCount >= blogConfig.pageSize) {
+      throw new BizException('허용 가능한 고정 글 개수에 도달했습니다.');
+    }
+
+    return true;
   }
 
 }

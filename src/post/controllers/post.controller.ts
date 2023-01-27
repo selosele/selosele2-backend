@@ -1,11 +1,15 @@
-import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Delete, Body } from '@nestjs/common';
+import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Delete, Body, UseInterceptors, ParseFilePipe, UploadedFile } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/models';
+import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
 import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { PaginationDto } from 'src/shared/models';
+import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator } from 'src/shared/utils';
 import { DeleteResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
+import { AddPostDto } from '../models/dto/add-post.dto';
 import { PostService } from '../services/post.service';
 
 @Controller('post')
@@ -255,6 +259,38 @@ export class PostController {
                                   .isLogin(isAuthenticated ? 'Y' : 'N')
                                   .build();
     return this.postService.getPost(getPostDto);
+  }
+
+  @Post()
+  @Auth(RoleEnum.ROLE_ADMIN)
+  @UseInterceptors(FileInterceptor('ogImgFile'))
+  @ApiOperation({
+    summary: '포스트 추가 API',
+    description: '포스트를 추가한다.'
+  })
+  @ApiCreatedResponse({
+    type: AddPostDto,
+    description: '포스트를 추가한다.',
+  })
+  @ApiBody({
+    type: AddPostDto,
+    description: '포스트 추가 DTO',
+  })
+  addPost(
+    @Body(ValidationPipe) addPostDto: AddPostDto,
+    @UploadedFile(new ParseFilePipe({
+      validators: [
+        new MaxFileSizeValidator({ maxSize: 1000000 }),
+        new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
+      ],
+      fileIsRequired: false,
+    })) ogImgFile: FileUploaderRequest,
+  ) {
+    if (isNotFileEmpty(ogImgFile)) {
+      addPostDto.ogImgFile = ogImgFile;
+    }
+
+    return this.postService.addPost(addPostDto);
   }
 
   @Delete()

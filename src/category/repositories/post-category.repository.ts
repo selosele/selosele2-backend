@@ -3,6 +3,7 @@ import { ListPostDto, SearchPostDto } from "src/post/models";
 import { PaginationDto } from "src/shared/models";
 import { Brackets, Repository } from "typeorm";
 import { PostCategoryEntity } from "../models";
+import { SavePostCategoryDto } from "../models/dto/save-post-category.dto";
 
 @CustomRepository(PostCategoryEntity)
 export class PostCategoryRepository extends Repository<PostCategoryEntity> {
@@ -92,6 +93,11 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
       .offset(paginationDto.getSkipSize());
 
     return await query.getMany();
+  }
+
+  /** 포스트 카테고리를 추가한다. */
+  async addPostCategory(savePostCategoryDto: SavePostCategoryDto): Promise<PostCategoryEntity> {
+    return await this.save(savePostCategoryDto);
   }
 
 }

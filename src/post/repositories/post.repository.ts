@@ -3,6 +3,7 @@ import { PaginationDto } from 'src/shared/models';
 import { sqlManager } from 'src/shared/utils/database/sql-manager.util';
 import { Brackets, DeleteResult, Repository } from 'typeorm';
 import { GetPostDto, ListPostDto, SearchPostDto, PostEntity } from '../models';
+import { AddPostDto } from '../models/dto/add-post.dto';
 import { listPostSql } from './sql/post.sql';
 
 @CustomRepository(PostEntity)
@@ -338,6 +339,11 @@ export class PostRepository extends Repository<PostEntity> {
         id: getPostDto?.id
       },
     });
+  }
+
+  /** 포스트를 추가한다. */
+  async addPost(addPostDto: AddPostDto): Promise<PostEntity> {
+    return await this.save(addPostDto);
   }
 
   /** 포스트 다건을 삭제한다. */

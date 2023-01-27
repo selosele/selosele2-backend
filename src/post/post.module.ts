@@ -13,20 +13,32 @@ import { PostLikeController } from './controllers/post-like.controller';
 import { PostReplyRepository } from './repositories/post-reply.repository';
 import { PostReplyService } from './services/post-reply.service';
 import { PostReplyController } from './controllers/post-reply.controller';
+import { BlogConfigEntity } from 'src/blog-config/models';
+import { BlogConfigRepository } from 'src/blog-config/repositories/blog-config.repository';
+import { PostTagEntity, TagEntity } from 'src/tag/models';
+import { PostTagRepository } from 'src/tag/repositories/post-tag.repository';
+import { TagRepository } from 'src/tag/repositories/tag.repository';
+import { FileUploaderService } from 'src/file-uploader/services/file-uploader.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       PostEntity,
       PostCategoryEntity,
+      PostTagEntity,
       PostLikeEntity,
-      PostReplyEntity
+      PostReplyEntity,
+      TagEntity,
+      BlogConfigEntity,
     ]),
     CustomTypeOrmModule.forCustomRepository([
       PostRepository,
       PostCategoryRepository,
+      PostTagRepository,
       PostLikeRepository,
-      PostReplyRepository
+      PostReplyRepository,
+      TagRepository,
+      BlogConfigRepository,
     ]),
   ],
   controllers: [
@@ -37,7 +49,8 @@ import { PostReplyController } from './controllers/post-reply.controller';
   providers: [
     PostService,
     PostLikeService,
-    PostReplyService
+    PostReplyService,
+    FileUploaderService
   ]
 })
 export class PostModule {}
