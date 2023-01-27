@@ -53,7 +53,6 @@ export class TagRepository extends Repository<TagEntity> {
     return await this.createQueryBuilder('tag')
       .leftJoinAndSelect("tag.postTag", "postTag")
       .leftJoinAndSelect("postTag.post", "post")
-      .where("post.tmp_yn = 'N'")
       .orderBy("COUNT(postTag.tag_id) OVER (PARTITION BY postTag.tag_id)", "DESC")
         .addOrderBy("post.reg_date", "DESC")
       .getMany();

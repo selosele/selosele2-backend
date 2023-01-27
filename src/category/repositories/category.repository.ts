@@ -53,7 +53,6 @@ export class CategoryRepository extends Repository<CategoryEntity> {
     return await this.createQueryBuilder('category')
       .leftJoinAndSelect("category.postCategory", "postCategory")
       .leftJoinAndSelect("postCategory.post", "post")
-      .where("post.tmp_yn = 'N'")
       .orderBy("COUNT(postCategory.category_id) OVER (PARTITION BY postCategory.category_id)", "DESC")
         .addOrderBy("post.reg_date", "DESC")
       .getMany();
