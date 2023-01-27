@@ -1,3 +1,5 @@
+import { FileUploaderRequest } from "src/file-uploader/models/file-uploader.model";
+
 /** 값이 비었는지 확인 */
 export const isEmpty = (value: any): boolean => {
   return null === value || undefined === value || '' === value;
@@ -33,4 +35,14 @@ export const arrayHasDuplicateValue = (value: any[]): boolean => {
   const setCollection: Set<any> = new Set(value.map(d => d.trim()));
   
   return setCollection.size < value.map(d => d.trim()).length;
+};
+
+/** 업로드 파일이 없는지 확인 */
+export const isFileEmpty = (value: FileUploaderRequest): boolean => {
+  return isEmpty(value) || 0 === Object.values(value).length;
+};
+
+/** 업로드 파일이 있는지 확인 */
+export const isNotFileEmpty = (value: FileUploaderRequest): boolean => {
+  return !isFileEmpty(value);
 };
