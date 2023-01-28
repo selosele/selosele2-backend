@@ -6,14 +6,23 @@ import { ListTagDto, SaveTagDto, PostTagEntity, TagEntity } from '../models';
 @CustomRepository(TagEntity)
 export class TagRepository extends Repository<TagEntity> {
 
+  /** 태그 목록을 조회한다. */
+  async listTag(listTagDto?: ListTagDto): Promise<TagEntity[]> {
+    return await this.find({
+      order: {
+        nm: 'ASC',
+      },
+    });
+  }
+
   /** 태그 목록 및 개수를 조회한다. */
   async listTagAndCount(listTagDto: ListTagDto): Promise<TagEntity[]> {
     let query = this.createQueryBuilder('tag')
       .select("COUNT(*)", "count")
         .addSelect("tag.id", "id")
         .addSelect("tag.nm", "nm")
-      .innerJoin(PostTagEntity, "postTag", "tag.id = postTag.tag_id")
-      .innerJoin(PostEntity, "post", "postTag.post_id = post.id");
+      .leftJoin(PostTagEntity, "postTag", "tag.id = postTag.tag_id")
+      .leftJoin(PostEntity, "post", "postTag.post_id = post.id");
 
     query = query
       .where("post.tmp_yn = 'N'");

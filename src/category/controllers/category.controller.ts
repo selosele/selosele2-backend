@@ -19,6 +19,19 @@ export class CategoryController {
 
   @Get()
   @ApiOperation({
+    summary: '카테고리 목록 조회 API',
+    description: '카테고리 목록을 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: CategoryEntity,
+    description: '카테고리 목록을 조회한다.',
+  })
+  listCategory(): Promise<CategoryEntity[]> {
+    return this.categoryService.listCategory();
+  }
+
+  @Get('list/count')
+  @ApiOperation({
     summary: '카테고리 목록 및 개수 조회 API',
     description: '카테고리 목록 및 개수를 조회한다.'
   })

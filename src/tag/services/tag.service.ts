@@ -12,6 +12,11 @@ export class TagService {
     private readonly tagRepository: TagRepository,
   ) {}
 
+  /** 태그 목록을 조회한다. */
+  async listTag(listTagDto?: ListTagDto): Promise<TagEntity[]> {
+    return await this.tagRepository.listTag(listTagDto);
+  }
+
   /** 태그 목록 및 개수를 조회한다. */
   async listTagAndCount(listTagDto: ListTagDto): Promise<TagEntity[]> {
     return await this.tagRepository.listTagAndCount(listTagDto);

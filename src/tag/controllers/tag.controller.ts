@@ -18,6 +18,19 @@ export class TagController {
 
   @Get()
   @ApiOperation({
+    summary: '태그 목록 조회 API',
+    description: '태그 목록을 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: TagEntity,
+    description: '태그 목록을 조회한다.',
+  })
+  listTag(): Promise<TagEntity[]> {
+    return this.tagService.listTag();
+  }
+
+  @Get('list/count')
+  @ApiOperation({
     summary: '태그 목록 및 개수 조회 API',
     description: '태그 목록 및 개수를 조회한다.'
   })
