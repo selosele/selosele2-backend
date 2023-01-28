@@ -9,7 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { BizException } from 'src/shared/exceptions/biz/biz.exception';
 import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, RoleEnum } from '../models';
 import { RoleRepository } from '../repositories/role.repository';
-import { initTransaction } from 'src/shared/utils';
+import { startTransaction } from 'src/shared/utils';
 
 @Injectable()
 export class AuthService {
@@ -46,7 +46,7 @@ export class AuthService {
     let addUserRoleRes: InsertResult = null;
 
     // 트랜잭션을 시작한다.
-    await initTransaction(async (manager: EntityManager) => {
+    await startTransaction(async (manager: EntityManager) => {
 
       // 먼저 사용자를 생성하고
       const addUserRes: InsertResult = await manager.withRepository(this.userRepository).addUser(authCredentialsDto);

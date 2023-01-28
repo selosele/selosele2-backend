@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Delete, Body, UseInterceptors, ParseFilePipe, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Delete, Body, UseInterceptors, ParseFilePipe, UploadedFile, Put } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
@@ -9,7 +9,7 @@ import { PaginationDto } from 'src/shared/models';
 import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator } from 'src/shared/utils';
 import { DeleteResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
-import { AddPostDto } from '../models/dto/add-post.dto';
+import { SavePostDto } from '../models/dto/save-post.dto';
 import { PostService } from '../services/post.service';
 
 @Controller('post')
@@ -269,15 +269,15 @@ export class PostController {
     description: '포스트를 추가한다.'
   })
   @ApiCreatedResponse({
-    type: AddPostDto,
+    type: SavePostDto,
     description: '포스트를 추가한다.',
   })
   @ApiBody({
-    type: AddPostDto,
-    description: '포스트 추가 DTO',
+    type: SavePostDto,
+    description: '포스트 추가/수정 DTO',
   })
   addPost(
-    @Body(ValidationPipe) addPostDto: AddPostDto,
+    @Body(ValidationPipe) savePostDto: SavePostDto,
     @UploadedFile(new ParseFilePipe({
       validators: [
         new MaxFileSizeValidator({ maxSize: 1000000 }),
@@ -287,10 +287,42 @@ export class PostController {
     })) ogImgFile: FileUploaderRequest,
   ) {
     if (isNotFileEmpty(ogImgFile)) {
-      addPostDto.ogImgFile = ogImgFile;
+      savePostDto.ogImgFile = ogImgFile;
     }
 
-    return this.postService.addPost(addPostDto);
+    return this.postService.savePost(savePostDto);
+  }
+
+  @Put()
+  @Auth(RoleEnum.ROLE_ADMIN)
+  @UseInterceptors(FileInterceptor('ogImgFile'))
+  @ApiOperation({
+    summary: '포스트 수정 API',
+    description: '포스트를 수정한다.'
+  })
+  @ApiCreatedResponse({
+    type: SavePostDto,
+    description: '포스트를 수정한다.',
+  })
+  @ApiBody({
+    type: SavePostDto,
+    description: '포스트 추가/수정 DTO',
+  })
+  updatePost(
+    @Body(ValidationPipe) savePostDto: SavePostDto,
+    @UploadedFile(new ParseFilePipe({
+      validators: [
+        new MaxFileSizeValidator({ maxSize: 1000000 }),
+        new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
+      ],
+      fileIsRequired: false,
+    })) ogImgFile: FileUploaderRequest,
+  ) {
+    if (isNotFileEmpty(ogImgFile)) {
+      savePostDto.ogImgFile = ogImgFile;
+    }
+
+    return this.postService.savePost(savePostDto);
   }
 
   @Delete()

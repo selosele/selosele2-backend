@@ -3,8 +3,14 @@ import { IsInt, IsNotEmpty, IsOptional } from "class-validator";
 import { FileUploaderRequest } from "src/file-uploader/models/file-uploader.model";
 import { SaveTagDto } from "src/tag/models";
 
-/** 포스트 추가 DTO */
-export class AddPostDto {
+/** 포스트 추가/수정 DTO */
+export class SavePostDto {
+
+  /** 포스트 ID */
+  @Type(() => Number)
+  @IsInt()
+  @IsOptional()
+  id?: number;
 
   /** 포스트 제목 */
   @IsNotEmpty()

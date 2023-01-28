@@ -2,7 +2,7 @@ import { dataSorce } from 'src/configs/database/typeorm.config';
 import { EntityManager } from 'typeorm';
 
 /** 트랜잭션 유틸 */
-export async function initTransaction(callback: (entityManager: EntityManager) => void): Promise<void> {
+export async function startTransaction(callback: (entityManager: EntityManager) => void): Promise<void> {
   await dataSorce.initialize();
 
   await dataSorce.transaction(async (entityManager: EntityManager) => {
