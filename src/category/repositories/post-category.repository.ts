@@ -1,7 +1,7 @@
 import { CustomRepository } from "src/configs/database/CustomRepository";
 import { ListPostDto, SearchPostDto } from "src/post/models";
 import { PaginationDto } from "src/shared/models";
-import { Brackets, Repository } from "typeorm";
+import { Brackets, DeleteResult, Repository } from "typeorm";
 import { PostCategoryEntity } from "../models";
 import { SavePostCategoryDto } from "../models/dto/save-post-category.dto";
 
@@ -95,9 +95,17 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
     return await query.getMany();
   }
 
-  /** 포스트 카테고리를 추가한다. */
-  async addPostCategory(savePostCategoryDto: SavePostCategoryDto): Promise<PostCategoryEntity> {
+  /** 포스트 카테고리를 추가/수정한다. */
+  async savePostCategory(savePostCategoryDto: SavePostCategoryDto): Promise<PostCategoryEntity> {
     return await this.save(savePostCategoryDto);
+  }
+
+  /** 포스트 카테고리를 삭제한다. */
+  async removePostCategory(savePostCategoryDto: SavePostCategoryDto): Promise<DeleteResult> {
+    return await this.createQueryBuilder('postCategory')
+      .delete()
+      .where("post_id = :post_id", { post_id: savePostCategoryDto.postId })
+      .execute();
   }
 
 }

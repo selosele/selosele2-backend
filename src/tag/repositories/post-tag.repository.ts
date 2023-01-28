@@ -2,7 +2,7 @@ import { PostCategoryEntity } from "src/category/models";
 import { CustomRepository } from "src/configs/database/CustomRepository";
 import { SearchPostDto } from "src/post/models";
 import { PaginationDto } from "src/shared/models";
-import { Brackets, Repository } from "typeorm";
+import { Brackets, DeleteResult, Repository } from "typeorm";
 import { PostTagEntity } from "../models";
 import { SavePostTagDto } from "../models/dto/save-post-tag.dto";
 
@@ -83,9 +83,17 @@ export class PostTagRepository extends Repository<PostTagEntity> {
     return await query.getMany();
   }
 
-  /** 포스트 태그를 추가한다. */
-  async addPostTag(savePostTagDto: SavePostTagDto): Promise<PostTagEntity> {
+  /** 포스트 태그를 추가/수정한다. */
+  async savePostTag(savePostTagDto: SavePostTagDto): Promise<PostTagEntity> {
     return await this.save(savePostTagDto);
+  }
+
+  /** 포스트 태그를 삭제한다. */
+  async removePostTag(savePostTagDto: SavePostTagDto): Promise<DeleteResult> {
+    return await this.createQueryBuilder('postTag')
+      .delete()
+      .where("post_id = :post_id", { post_id: savePostTagDto.postId })
+      .execute();
   }
 
 }

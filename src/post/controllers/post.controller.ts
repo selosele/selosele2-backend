@@ -256,6 +256,7 @@ export class PostController {
   ): Promise<PostEntity> {
     const getPostDto: GetPostDto = Builder(GetPostDto)
                                   .id(id)
+                                  .tmpYn('N')
                                   .isLogin(isAuthenticated ? 'Y' : 'N')
                                   .build();
     return this.postService.getPost(getPostDto);
@@ -360,6 +361,24 @@ export class PostController {
   })
   removePost(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
     return this.postService.removePost(id);
+  }
+
+  @Post('preview')
+  @Auth(RoleEnum.ROLE_ADMIN)
+  @ApiOperation({
+    summary: '포스트 미리보기 API',
+    description: '미리보기 포스트로 응답한다.'
+  })
+  @ApiCreatedResponse({
+    type: PostEntity,
+    description: '미리보기 포스트로 응답한다.',
+  })
+  @ApiBody({
+    type: SavePostDto,
+    description: '포스트 추가/수정 DTO',
+  })
+  getPreviewPost(@Body(ValidationPipe) savePostDto: SavePostDto): Promise<PostEntity> {
+    return this.postService.getPreviewPost(savePostDto);
   }
 
 }

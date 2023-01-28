@@ -24,17 +24,21 @@ export class SavePostDto {
   @IsOptional()
   ogImgFile?: FileUploaderRequest;
 
-  /** 포스트 이미지 */
+  /** 포스트 대표 이미지 */
   @IsOptional()
   ogImg?: string;
   
-  /** 포스트 이미지 URL */
+  /** 포스트 대표 이미지 URL */
   @IsOptional()
   ogImgUrl?: string;
 
-  /** 포스트 이미지 용량 */
+  /** 포스트 대표 이미지 용량 */
   @IsOptional()
   ogImgSize?: number;
+  
+  /** 포스트 대표 이미지 삭제여부 */
+  @IsOptional()
+  delOgImg?: string;
 
   /** 포스트 내용 요약 */
   @IsOptional()
@@ -48,14 +52,14 @@ export class SavePostDto {
   @IsNotEmpty()
   pinYn?: string;
 
-  /** 포스트 상단고정 여부 */
+  /** 포스트 카테고리 ID */
   @Type(() => Number)
   @IsInt()
   @IsNotEmpty()
   categoryId?: number;
   
   /** 포스트 태그 목록 (JSON) */
-  @Type(() => SaveTagDto)
+  @Type(() => Array<SaveTagDto>)
   @IsOptional()
   saveTagList?: string;
 

@@ -1,8 +1,10 @@
 import { CustomRepository } from 'src/configs/database/CustomRepository';
 import { PaginationDto } from 'src/shared/models';
+import { isNotEmpty } from 'src/shared/utils';
 import { sqlManager } from 'src/shared/utils/database/sql-manager.util';
 import { Brackets, DeleteResult, Repository } from 'typeorm';
 import { GetPostDto, ListPostDto, SearchPostDto, PostEntity } from '../models';
+import { CountPostDto } from '../models/dto/count-post.dto';
 import { SavePostDto } from '../models/dto/save-post.dto';
 import { listPostSql } from './sql/post.sql';
 
@@ -310,8 +312,12 @@ export class PostRepository extends Repository<PostEntity> {
         regDate: true,
         modDate: true,
         cont: true,
+        ogDesc: true,
+        ogImg: true,
         ogImgUrl: true,
+        ogImgSize: true,
         secretYn: true,
+        pinYn: true,
         replyCnt: true,
         postLike: {
           postId: true,
@@ -334,9 +340,18 @@ export class PostRepository extends Repository<PostEntity> {
         },
       },
       where: {
-        tmpYn: 'N',
+        tmpYn: getPostDto.tmpYn,
         ...('N' === getPostDto?.isLogin && { secretYn: 'N' }),
         id: getPostDto?.id
+      },
+    });
+  }
+
+  /** 포스트의 개수를 조회한다. */
+  async countPost(countPostDto?: CountPostDto): Promise<number> {
+    return await this.count({
+      where: {
+        ...(isNotEmpty(countPostDto.pinYn) && { pinYn: countPostDto.pinYn }),
       },
     });
   }

@@ -19,6 +19,7 @@ import { TagRepository } from 'src/tag/repositories/tag.repository';
 import { SaveTagDto, TagEntity } from 'src/tag/models';
 import { FileUploaderService } from 'src/file-uploader/services/file-uploader.service';
 import { FileUploaderResponse } from 'src/file-uploader/models/file-uploader.model';
+import { CountPostDto } from '../models/dto/count-post.dto';
 
 @Injectable()
 export class PostService {
@@ -132,15 +133,22 @@ export class PostService {
       throw new NotFoundException();
     }
 
+    post.rawText = post.cont;
+
     // 포스트의 콘텐츠를 Markdown으로 렌더링한다.
     post.cont = md.render(post.cont);
 
     return post;
   }
 
+  /** 포스트의 개수를 조회한다. */
+  async countPost(countPostDto?: CountPostDto): Promise<number> {
+    return await this.postRepository.countPost(countPostDto);
+  }
+
   /** 포스트를 추가/수정한다. */
   async savePost(savePostDto: SavePostDto): Promise<PostEntity> {
-    const { title, cont, ogImgFile, categoryId } = savePostDto;
+    const { title, cont, ogImgFile, categoryId, delOgImg } = savePostDto;
 
     const isValid: boolean = await this.savePostValidationCheck(savePostDto);
     if (!isValid) return;
@@ -154,12 +162,19 @@ export class PostService {
     savePostDto.cont = sanitizeHtml(cont);
 
     // 대표 이미지 파일을 업로드한다.
-    if (isNotFileEmpty(ogImgFile)) {
+    if (isNotFileEmpty(ogImgFile) && !this.hasDelOgImg(delOgImg)) {
       const uploadFile: FileUploaderResponse = await this.fileUploaderService.uploadImage(ogImgFile);
 
-      savePostDto.ogImg = uploadFile.public_id;
+      savePostDto.ogImg = uploadFile.public_id + '.' + uploadFile.format;
       savePostDto.ogImgUrl = uploadFile.url;
-      savePostDto.ogImgSize = uploadFile.size;
+      savePostDto.ogImgSize = ogImgFile.size;
+    }
+
+    // 대표 이미지 정보를 삭제한다.
+    if (this.hasDelOgImg(delOgImg)) {
+      savePostDto.ogImg = '';
+      savePostDto.ogImgUrl = null;
+      savePostDto.ogImgSize = null;
     }
 
     let post: PostEntity = null;
@@ -175,25 +190,33 @@ export class PostService {
                                                        .postId(post.id)
                                                        .categoryId(categoryId)
                                                        .build();
-      await manager.withRepository(this.postCategoryRepository).addPostCategory(savePostCategoryDto);
+      await manager.withRepository(this.postCategoryRepository).removePostCategory(savePostCategoryDto);
+      await manager.withRepository(this.postCategoryRepository).savePostCategory(savePostCategoryDto);
 
       if (isNotBlank(savePostDto.saveTagList)) {
         const saveTagList: SaveTagDto[] = deserialize(Array<SaveTagDto>, savePostDto.saveTagList); // JSON -> Array 역직렬화
 
+        // 포스트 태그를 삭제하고
+        const removePostTagDto: SavePostTagDto = Builder(SavePostTagDto)
+                                                 .postId(post.id)
+                                                 .build();
+        await manager.withRepository(this.postTagRepository).removePostTag(removePostTagDto);
+
         for (let saveTag of saveTagList) {
-          
-          // 태그를 저장하고
+
+          // 태그를 저장한다음
           const saveTagDto: SaveTagDto = Builder(SaveTagDto)
+                                         .id(saveTag.id)
                                          .nm(saveTag.nm)
                                          .build();
           const tag: TagEntity = await manager.withRepository(this.tagRepository).saveTag(saveTagDto);
-  
+
           // 포스트 태그를 저장한다.
           const savePostTagDto: SavePostTagDto = Builder(SavePostTagDto)
                                                  .postId(post.id)
                                                  .tagId(tag.id)
                                                  .build();
-          await manager.withRepository(this.postTagRepository).addPostTag(savePostTagDto);
+          await manager.withRepository(this.postTagRepository).savePostTag(savePostTagDto);
         }
       }
     });
@@ -217,9 +240,9 @@ export class PostService {
     return await this.postRepository.removePost(id);
   }
 
-  /** 포스트 추가/수정 유효성 검사 */
+  /** 포스트 추가/수정 유효성을 검사한다. */
   async savePostValidationCheck(savePostDto: SavePostDto): Promise<boolean> {
-    const pinPostCount: number = await this.postRepository.count({ where: { pinYn: 'Y' } });
+    const pinPostCount: number = await this.countPost({ pinYn: 'Y' });
     const blogConfig: BlogConfigEntity = await this.blogConfigRepository.getBlogConfig();
 
     if ('Y' === savePostDto.pinYn) {
@@ -229,6 +252,20 @@ export class PostService {
     }
 
     return true;
+  }
+
+  /** 미리보기 포스트 데이타를 가공한다.  */
+  async getPreviewPost(savePostDto: SavePostDto): Promise<PostEntity> {
+
+    // 포스트의 콘텐츠를 Markdown으로 렌더링한다.
+    savePostDto.cont = md.render(savePostDto.cont);
+
+    return <PostEntity>savePostDto;
+  }
+
+  /** 포스트 대표 이미지 파일 삭제여부 값 존재를 확인한다. */
+  private hasDelOgImg(delOgImg: string): boolean {
+    return isNotBlank(delOgImg) && 'Y' === delOgImg;
   }
 
 }

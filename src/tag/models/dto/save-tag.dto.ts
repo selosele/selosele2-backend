@@ -16,9 +16,4 @@ export class SaveTagDto {
   @IsNotEmpty()
   nm?: string;
 
-  /** 태그 추가 여부 */
-  @Expose()
-  @IsOptional()
-  addTagYn: string;
-
 }
