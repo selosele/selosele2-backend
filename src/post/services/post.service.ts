@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from 'src/category/repositories/post-category.repository';
 import { PaginationDto } from 'src/shared/models';
-import { deserialize, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, startTransaction } from 'src/shared/utils';
+import { deserialize, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, santinizeHtmlOption, startTransaction } from 'src/shared/utils';
 import { DeleteResult, EntityManager } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
 import { SavePostDto } from '../models/dto/save-post.dto';
@@ -178,11 +178,7 @@ export class PostService {
     }
 
     // HTML Escape
-    savePostDto.cont = sanitizeHtml(cont, {
-
-      // 디폴트 allowTags에 추가로 태그 허용
-      // allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'form', 'input', 'textarea', 'select' ]),
-    });
+    savePostDto.cont = sanitizeHtml(cont, santinizeHtmlOption);
 
     // 대표 이미지 파일을 업로드한다.
     if (isNotFileEmpty(ogImgFile) && !this.hasDelOgImg(delOgImg)) {

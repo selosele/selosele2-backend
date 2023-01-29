@@ -47,14 +47,11 @@ export class GuestbookReplyService {
 
   /** 방명록 댓글을 수정한다. */
   async updateGuestbookReply(updateGuestbookReplyDto: UpdateGuestbookReplyDto): Promise<GuestbookReplyEntity> {
-    const { id, authorPw, cont } = updateGuestbookReplyDto;
+    const { authorPw, cont } = updateGuestbookReplyDto;
 
-    const foundGuestbookReply: GuestbookReplyEntity = await this.getGuestbookReply(id);
-    const matchPw = await bcrypt.compare(authorPw, foundGuestbookReply.authorPw);
-
-    if (!matchPw) {
-      throw new BizException('비밀번호를 확인하세요.');
-    }
+    // 비밀번호 비교
+    const isValid: boolean = await this.compareAuthorPassword(updateGuestbookReplyDto);
+    if (!isValid) throw new BizException('비밀번호를 확인하세요.');
 
     // 비밀번호 암호화
     const salt = await bcrypt.genSalt();
@@ -69,18 +66,26 @@ export class GuestbookReplyService {
 
   /** 방명록 댓글을 삭제한다. */
   async removeGuestbookReply(removeGuestbookReplyDto: RemoveGuestbookReplyDto): Promise<GuestbookReplyEntity> {
-    const { id, authorPw } = removeGuestbookReplyDto;
 
+    // 관리자가 아닌 경우는 비밀번호를 비교한다.
     if ('N' === removeGuestbookReplyDto.isLogin) {
-      const foundGuestbook: GuestbookReplyEntity = await this.getGuestbookReply(id);
-      const matchPw = await bcrypt.compare(authorPw, foundGuestbook.authorPw);
-  
-      if (!matchPw) {
-        throw new BizException('비밀번호를 확인하세요.');
-      }
+      const isValid: boolean = await this.compareAuthorPassword(removeGuestbookReplyDto);
+      if (!isValid) throw new BizException('비밀번호를 확인하세요.');
     }
     
     return this.guestbookReplyRepository.removeGuestbookReply(<GuestbookReplyEntity>removeGuestbookReplyDto);
+  }
+
+  /** 방명록 댓글 작성자의 비밀번호를 비교한다. */
+  async compareAuthorPassword(dto: UpdateGuestbookReplyDto | RemoveGuestbookReplyDto): Promise<boolean> {
+    const { id, authorPw } = dto;
+
+    const foundGuestbookReply: GuestbookReplyEntity = await this.getGuestbookReply(id);
+    const matchPw = await bcrypt.compare(authorPw, foundGuestbookReply.authorPw);
+
+    if (!matchPw) return false;
+
+    return true;
   }
 
 }

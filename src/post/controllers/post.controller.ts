@@ -100,6 +100,7 @@ export class PostController {
   ): Promise<[PostEntity[], number]> {
     // 비밀글 조회를 위한 세팅
     searchPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
+    
     return this.postService.listPostSearch(searchPostDto, paginationDto);
   }
 

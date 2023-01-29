@@ -45,14 +45,11 @@ export class GuestbookService {
 
   /** 방명록을 수정한다. */
   async updateGuestbook(updateGuestbookDto: UpdateGuestbookDto): Promise<GuestbookEntity> {
-    const { id, authorPw, cont } = updateGuestbookDto;
+    const { authorPw, cont } = updateGuestbookDto;
 
-    const foundGuestbook: GuestbookEntity = await this.getGuestbook(id);
-    const matchPw = await bcrypt.compare(authorPw, foundGuestbook.authorPw);
-
-    if (!matchPw) {
-      throw new BizException('비밀번호를 확인하세요.');
-    }
+    // 비밀번호 비교
+    const isValid: boolean = await this.compareAuthorPassword(updateGuestbookDto);
+    if (!isValid) throw new BizException('비밀번호를 확인하세요.');
 
     // 비밀번호 암호화
     const salt = await bcrypt.genSalt();
@@ -70,18 +67,26 @@ export class GuestbookService {
 
   /** 방명록을 삭제한다. */
   async removeGuestbook(removeGuestbookDto: RemoveGuestbookDto): Promise<GuestbookEntity> {
-    const { id, authorPw } = removeGuestbookDto;
 
+    // 관리자가 아닌 경우는 비밀번호를 비교한다.
     if ('N' === removeGuestbookDto.isLogin) {
-      const foundGuestbook: GuestbookEntity = await this.getGuestbook(id);
-      const matchPw = await bcrypt.compare(authorPw, foundGuestbook.authorPw);
-  
-      if (!matchPw) {
-        throw new BizException('비밀번호를 확인하세요.');
-      }
+      const isValid: boolean = await this.compareAuthorPassword(removeGuestbookDto);
+      if (!isValid) throw new BizException('비밀번호를 확인하세요.');
     }
     
     return this.guestbookRepository.removeGuestbook(<GuestbookEntity>removeGuestbookDto);
+  }
+
+  /** 방명록 작성자의 비밀번호를 비교한다. */
+  async compareAuthorPassword(removeGuestbookDto: RemoveGuestbookDto): Promise<boolean> {
+    const { id, authorPw } = removeGuestbookDto;
+
+    const foundGuestbook: GuestbookEntity = await this.getGuestbook(id);
+    const matchPw = await bcrypt.compare(authorPw, foundGuestbook.authorPw);
+
+    if (!matchPw) return false;
+
+    return true;
   }
 
 }

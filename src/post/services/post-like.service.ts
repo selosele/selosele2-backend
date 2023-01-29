@@ -36,6 +36,7 @@ export class PostLikeService {
       }
       return 0;
     }
+    
     // 추천 이력이 있으면 추천을 해제한다.
     const removePostLike: DeleteResult = await this.postLikeRepository.removePostLike(foundLike);
     if (0 < removePostLike.affected) {
