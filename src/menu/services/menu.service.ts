@@ -35,13 +35,13 @@ export class MenuService {
     let menu: MenuEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (manager: EntityManager) => {
+    await startTransaction(async (entityManager: EntityManager) => {
 
       // 먼저 메뉴를 저장하고
-      menu = await manager.withRepository(this.menuRepository).saveMenu(saveMenuDto);
+      menu = await entityManager.withRepository(this.menuRepository).saveMenu(saveMenuDto);
   
       // 기존의 메뉴 권한을 삭제한다.
-      await manager.withRepository(this.menuRoleRepository).removeMenuRole(
+      await entityManager.withRepository(this.menuRoleRepository).removeMenuRole(
         Builder(SaveMenuRoleDto)
         .menuId(menu.id)
         .build()
@@ -69,7 +69,7 @@ export class MenuService {
   
       for (const role of roles) {
         // 메뉴 권한을 추가한다.
-        await manager.withRepository(this.menuRoleRepository).saveMenuRole(
+        await entityManager.withRepository(this.menuRoleRepository).saveMenuRole(
           Builder(SaveMenuRoleDto)
           .menuId(role.menuId)
           .roleId(role.roleId)
@@ -86,17 +86,17 @@ export class MenuService {
     let removeMenu: MenuEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (manager: EntityManager) => {
+    await startTransaction(async (entityManager: EntityManager) => {
 
       // 먼저 메뉴 권한을 삭제하고
-      await manager.withRepository(this.menuRoleRepository).removeMenuRole(
+      await entityManager.withRepository(this.menuRoleRepository).removeMenuRole(
         Builder(SaveMenuRoleDto)
         .menuId(saveMenuDto.id)
         .build()
       );
   
       // 메뉴를 삭제한다.
-      removeMenu = await manager.withRepository(this.menuRepository).removeMenu(saveMenuDto);
+      removeMenu = await entityManager.withRepository(this.menuRepository).removeMenu(saveMenuDto);
     });
 
     return removeMenu;

@@ -46,10 +46,10 @@ export class AuthService {
     let addUserRoleRes: InsertResult = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (manager: EntityManager) => {
+    await startTransaction(async (entityManager: EntityManager) => {
 
       // 먼저 사용자를 생성하고
-      const addUserRes: InsertResult = await manager.withRepository(this.userRepository).addUser(authCredentialsDto);
+      const addUserRes: InsertResult = await entityManager.withRepository(this.userRepository).addUser(authCredentialsDto);
 
       // 사용자 권한을 생성한다.
       if (addUserRes.identifiers[0].userId) {
@@ -61,7 +61,7 @@ export class AuthService {
                                               .userId(userId)
                                               .roleId(role)
                                               .build();
-          addUserRoleRes = await manager.withRepository(this.userRoleRepository).addUserRole(dto);
+          addUserRoleRes = await entityManager.withRepository(this.userRoleRepository).addUserRole(dto);
         }
       }
     });
