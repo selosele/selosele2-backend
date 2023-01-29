@@ -38,16 +38,18 @@ export class PostService {
     private readonly fileUploaderService: FileUploaderService,
   ) {}
 
-  /** 포스트 목록을 조회한다. */
-  async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
+  /** 메인 포스트 목록을 조회한다. */
+  async listPostMain(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
     const [postList, postCategory] = await Promise.all([
-      // 포스트 조회
-      this.postRepository.listPost(listPostDto),
+
+      // 포스트 목록 조회
+      this.postRepository.listPostMain(listPostDto),
       // 카테고리 조회
       this.postCategoryRepository.listPostCategory(listPostDto),
     ]);
 
     postList[0].map(p => {
+
       // 포스트 데이타에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       p.rawText = getRawText(p.cont).substring(0, 180);
 
@@ -56,6 +58,22 @@ export class PostService {
     });
 
     return [postList[0], postList[1]];
+  }
+
+  /** 포스트 목록을 조회한다. */
+  async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
+    const postList: [PostEntity[], number] = await this.postRepository.listPost(listPostDto);
+
+    postList[0].map(p => {
+
+      // 포스트 데이타에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
+      p.rawText = getRawText(p.cont);
+
+      // 포스트의 콘텐츠를 Markdown으로 렌더링한다.
+      p.cont = md.render(p.cont);
+    });
+
+    return postList;
   }
 
   /** 개수별 포스트 목록을 조회한다. */
@@ -69,7 +87,8 @@ export class PostService {
     paginationDto: PaginationDto
   ): Promise<[PostEntity[], number]> {
     const [post, postCategory] = await Promise.all([
-      // 포스트 조회
+      
+      // 포스트 목록 조회
       this.postRepository.listPostSearch(searchPostDto, paginationDto),
       // 카테고리 조회
       this.postCategoryRepository.listPostCategorySearch(searchPostDto, paginationDto),
@@ -159,7 +178,11 @@ export class PostService {
     }
 
     // HTML Escape
-    savePostDto.cont = sanitizeHtml(cont);
+    savePostDto.cont = sanitizeHtml(cont, {
+
+      // 디폴트 allowTags에 추가로 태그 허용
+      // allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'form', 'input', 'textarea', 'select' ]),
+    });
 
     // 대표 이미지 파일을 업로드한다.
     if (isNotFileEmpty(ogImgFile) && !this.hasDelOgImg(delOgImg)) {
@@ -180,18 +203,18 @@ export class PostService {
     let post: PostEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (manager: EntityManager) => {
+    await startTransaction(async (entityManager: EntityManager) => {
 
       // 먼저 포스트를 저장하고
-      post = await manager.withRepository(this.postRepository).savePost(savePostDto);
+      post = await entityManager.withRepository(this.postRepository).savePost(savePostDto);
 
       // 포스트 카테고리를 저장한다음
       const savePostCategoryDto: SavePostCategoryDto = Builder(SavePostCategoryDto)
                                                        .postId(post.id)
                                                        .categoryId(categoryId)
                                                        .build();
-      await manager.withRepository(this.postCategoryRepository).removePostCategory(savePostCategoryDto);
-      await manager.withRepository(this.postCategoryRepository).savePostCategory(savePostCategoryDto);
+      await entityManager.withRepository(this.postCategoryRepository).removePostCategory(savePostCategoryDto);
+      await entityManager.withRepository(this.postCategoryRepository).savePostCategory(savePostCategoryDto);
 
       if (isNotBlank(savePostDto.saveTagList)) {
         const saveTagList: SaveTagDto[] = deserialize(Array<SaveTagDto>, savePostDto.saveTagList); // JSON -> Array 역직렬화
@@ -200,7 +223,7 @@ export class PostService {
         const removePostTagDto: SavePostTagDto = Builder(SavePostTagDto)
                                                  .postId(post.id)
                                                  .build();
-        await manager.withRepository(this.postTagRepository).removePostTag(removePostTagDto);
+        await entityManager.withRepository(this.postTagRepository).removePostTag(removePostTagDto);
 
         for (let saveTag of saveTagList) {
 
@@ -209,14 +232,14 @@ export class PostService {
                                          .id(saveTag.id)
                                          .nm(saveTag.nm)
                                          .build();
-          const tag: TagEntity = await manager.withRepository(this.tagRepository).saveTag(saveTagDto);
+          const tag: TagEntity = await entityManager.withRepository(this.tagRepository).saveTag(saveTagDto);
 
           // 포스트 태그를 저장한다.
           const savePostTagDto: SavePostTagDto = Builder(SavePostTagDto)
                                                  .postId(post.id)
                                                  .tagId(tag.id)
                                                  .build();
-          await manager.withRepository(this.postTagRepository).savePostTag(savePostTagDto);
+          await entityManager.withRepository(this.postTagRepository).savePostTag(savePostTagDto);
         }
       }
     });

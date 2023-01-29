@@ -6,14 +6,14 @@ import { Brackets, DeleteResult, Repository } from 'typeorm';
 import { GetPostDto, ListPostDto, SearchPostDto, PostEntity } from '../models';
 import { CountPostDto } from '../models/dto/count-post.dto';
 import { SavePostDto } from '../models/dto/save-post.dto';
-import { listPostSql } from './sql/post.sql';
+import { listPostMainSql } from './sql/post.sql';
 
 @CustomRepository(PostEntity)
 export class PostRepository extends Repository<PostEntity> {
 
-  /** 포스트 목록을 조회한다. */
-  async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
-    const sql: string = listPostSql({ listPostDto });
+  /** 메인 포스트 목록을 조회한다. */
+  async listPostMain(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
+    const sql: string = listPostMainSql({ listPostDto });
     
     const params: any[] = [
       listPostDto?.categoryId,
@@ -21,6 +21,29 @@ export class PostRepository extends Repository<PostEntity> {
     ];
 
     return await sqlManager(this.manager).queryAndCount<PostEntity>(sql, params);
+  }
+
+  /** 포스트 목록을 조회한다. */
+  async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
+    return await this.findAndCount({
+      relations: {
+        postCategory: {
+          category: true,
+        },
+        postTag: {
+          tag: true,
+        },
+        postLike: true,
+        postReply: true,
+      },
+      where: {
+        tmpYn: listPostDto.tmpYn,
+        ...('N' === listPostDto?.isLogin && { secretYn: 'N' }),
+      },
+      order: {
+        id: 'DESC',
+      },
+    });
   }
 
   /** 개수별 포스트 목록을 조회한다. */
@@ -318,6 +341,7 @@ export class PostRepository extends Repository<PostEntity> {
         ogImgSize: true,
         secretYn: true,
         pinYn: true,
+        tmpYn: true,
         replyCnt: true,
         postLike: {
           postId: true,
@@ -340,8 +364,10 @@ export class PostRepository extends Repository<PostEntity> {
         },
       },
       where: {
-        tmpYn: getPostDto.tmpYn,
-        ...('N' === getPostDto?.isLogin && { secretYn: 'N' }),
+        ...('N' === getPostDto?.isLogin && {
+          secretYn: 'N',
+          tmpYn: 'N',
+        }),
         id: getPostDto?.id
       },
     });

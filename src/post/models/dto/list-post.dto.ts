@@ -7,6 +7,10 @@ export class ListPostDto {
   @IsOptional()
   id?: number;
 
+  /** 임시저장 여부 */
+  @IsOptional()
+  tmpYn?: string;
+
   /** 카테고리 ID */
   @IsOptional()
   categoryId?: number;
@@ -22,6 +26,10 @@ export class ListPostDto {
   /** 연도 */
   @IsOptional()
   year?: string;
+
+  /** 조회 유형 */
+  @IsOptional()
+  type?: string;
 
   /** 로그인 여부 */
   @IsEmpty()

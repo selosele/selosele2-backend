@@ -1,8 +1,8 @@
 import { isNotEmpty } from "src/shared/utils/common/common.util";
 import { ListPostDto } from "../../models";
 
-/** 포스트 목록을 조회한다. */
-export const listPostSql = (params: { listPostDto: ListPostDto }): string => {
+/** 메인 포스트 목록을 조회한다. */
+export const listPostMainSql = (params: { listPostDto: ListPostDto }): string => {
   return `
     SELECT *
     FROM (
@@ -17,13 +17,16 @@ export const listPostSql = (params: { listPostDto: ListPostDto }): string => {
           , post.og_img_url AS ogImgUrl
           , post.secret_yn AS secretYn
           , post.pin_yn AS pinYn
+          , post.tmp_yn AS tmpYn
           , postCategory.category_id AS categoryId
         FROM post
           LEFT JOIN post_category AS postCategory ON postCategory.post_id = post.id
           LEFT JOIN post_like AS postLike ON postLike.post_id = post.id
         WHERE 1=1
-          AND post.tmp_yn = 'N'
           AND post.pin_yn = 'Y'
+          ${'N' === params.listPostDto?.isLogin ?
+          "AND post.tmp_yn = 'N'" : ""
+          }
           ${'N' === params.listPostDto?.isLogin ?
           "AND post.secret_yn = 'N'" : ""
           }
@@ -43,13 +46,16 @@ export const listPostSql = (params: { listPostDto: ListPostDto }): string => {
           , post.og_img_url AS ogImgUrl
           , post.secret_yn AS secretYn
           , post.pin_yn AS pinYn
+          , post.tmp_yn AS tmpYn
           , postCategory.category_id AS categoryId
         FROM post
           LEFT JOIN post_category AS postCategory ON postCategory.post_id = post.id
           LEFT JOIN post_like AS postLike ON postLike.post_id = post.id
         WHERE 1=1
-          AND post.tmp_yn = 'N'
           AND post.pin_yn = 'N'
+          ${'N' === params.listPostDto?.isLogin ?
+          "AND post.tmp_yn = 'N'" : ""
+          }
           ${'N' === params.listPostDto?.isLogin ?
           "AND post.secret_yn = 'N'" : ""
           }

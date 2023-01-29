@@ -52,6 +52,10 @@ export class SavePostDto {
   @IsNotEmpty()
   pinYn?: string;
 
+  /** 포스트 임시저장 여부 */
+  @IsNotEmpty()
+  tmpYn?: string;
+
   /** 포스트 카테고리 ID */
   @Type(() => Number)
   @IsInt()

@@ -38,12 +38,14 @@ export class PostController {
     @IsAuthenticated() isAuthenticated: boolean,
     @Query(ValidationPipe) listPostDto: ListPostDto,
   ): Promise<[PostEntity[], number]> {
-    if (isAuthenticated) {
-      // 비밀글 조회를 위한 세팅
-      listPostDto.isLogin = 'Y';
-    } else {
-      listPostDto.isLogin = 'N';
+    // 비밀글 조회를 위한 세팅
+    listPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
+
+    // 메인 포스트 목록 조회
+    if ('D01001' === listPostDto.type) {
+      return this.postService.listPostMain(listPostDto);
     }
+
     return this.postService.listPost(listPostDto);
   }
 
@@ -96,12 +98,8 @@ export class PostController {
     @Query(ValidationPipe) searchPostDto: SearchPostDto,
     @Query(ValidationPipe) paginationDto: PaginationDto,
   ): Promise<[PostEntity[], number]> {
-    if (isAuthenticated) {
-      // 비밀글 조회를 위한 세팅
-      searchPostDto.isLogin = 'Y';
-    } else {
-      searchPostDto.isLogin = 'N';
-    }
+    // 비밀글 조회를 위한 세팅
+    searchPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
     return this.postService.listPostSearch(searchPostDto, paginationDto);
   }
 
@@ -256,7 +254,6 @@ export class PostController {
   ): Promise<PostEntity> {
     const getPostDto: GetPostDto = Builder(GetPostDto)
                                   .id(id)
-                                  .tmpYn('N')
                                   .isLogin(isAuthenticated ? 'Y' : 'N')
                                   .build();
     return this.postService.getPost(getPostDto);
