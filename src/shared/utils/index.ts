@@ -4,6 +4,8 @@ export * from './cors/cors.util';
 
 export * from './database/transaction.util';
 
+export * from './escape-html/escape-html.util';
+
 export * from './htmlParser/html-parser.util';
 
 export * from './markdown/markdown.util';
