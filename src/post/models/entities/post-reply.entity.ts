@@ -68,7 +68,8 @@ export class PostReplyEntity extends BaseEntity {
   authorPw?: string;
 
   @Column({
-    comment: '포스트 댓글 작성자 IP'
+    comment: '포스트 댓글 작성자 IP',
+    select: false,
   })
   @ApiProperty({
     description: '포스트 댓글 작성자 IP'
@@ -99,17 +100,26 @@ export class PostReplyEntity extends BaseEntity {
   })
   modDate?: Date;
 
-  @UpdateDateColumn({
-    comment: '포스트 댓글 삭제일시'
+  @Column({
+    comment: '포스트 댓글 삭제여부'
   })
   @ApiProperty({
-    description: '포스트 댓글 삭제일시'
+    description: '포스트 댓글 삭제여부'
   })
-  delDate?: Date;
+  delYn?: string;
+
+  @Column({
+    comment: '관리자 계정 여부'
+  })
+  @ApiProperty({
+    description: '관리자 계정 여부'
+  })
+  adminYn?: string;
 
   @ManyToOne(() => PostEntity, post => post.postReply)
   @JoinColumn({ name: 'parent_id' })
   @ApiProperty({
+    type: () => PostEntity,
     description: '포스트',
   })
   post?: PostEntity;

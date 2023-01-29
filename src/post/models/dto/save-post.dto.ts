@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsInt, IsNotEmpty, IsOptional } from "class-validator";
+import { IsEmpty, IsInt, IsNotEmpty, IsOptional } from "class-validator";
 import { FileUploaderRequest } from "src/file-uploader/models/file-uploader.model";
 import { SaveTagDto } from "src/tag/models";
 
@@ -15,6 +15,14 @@ export class SavePostDto {
   /** 포스트 제목 */
   @IsNotEmpty()
   title?: string;
+
+  /** 포스트 수정일시 */
+  @IsEmpty()
+  modDate?: Date;
+
+  /** 포스트 제목 */
+  @IsEmpty()
+  replyCnt?: number;
 
   /** 포스트 내용 */
   @IsNotEmpty()

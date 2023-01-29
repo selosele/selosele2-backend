@@ -327,7 +327,6 @@ export class PostRepository extends Repository<PostEntity> {
           tag: true,
         },
         postLike: true,
-        postReply: true,
       },
       select: {
         id: true,
@@ -360,7 +359,7 @@ export class PostRepository extends Repository<PostEntity> {
           cont: true,
           regDate: true,
           modDate: true,
-          delDate: true,
+          delYn: true,
         },
       },
       where: {
