@@ -2,7 +2,7 @@ import { isNotEmpty } from "src/shared/utils/common/common.util";
 import { ListPostDto } from "../../models";
 
 /** 메인 포스트 목록을 조회한다. */
-export const listPostMainSql = (params: { listPostDto: ListPostDto }): string => {
+export const listPostMainSql = (listPostDto: ListPostDto): string => {
   return `
     SELECT *
     FROM (
@@ -24,13 +24,13 @@ export const listPostMainSql = (params: { listPostDto: ListPostDto }): string =>
           LEFT JOIN post_like AS postLike ON postLike.post_id = post.id
         WHERE 1=1
           AND post.pin_yn = 'Y'
-          ${'N' === params.listPostDto?.isLogin ?
+          ${'N' === listPostDto?.isLogin ?
           "AND post.tmp_yn = 'N'" : ""
           }
-          ${'N' === params.listPostDto?.isLogin ?
+          ${'N' === listPostDto?.isLogin ?
           "AND post.secret_yn = 'N'" : ""
           }
-          ${isNotEmpty(params.listPostDto?.categoryId) && 0 < params.listPostDto?.categoryId ?
+          ${isNotEmpty(listPostDto?.categoryId) && 0 < listPostDto?.categoryId ?
           "AND postCategory.category_id = ?" : ""
           }
       )
@@ -53,13 +53,13 @@ export const listPostMainSql = (params: { listPostDto: ListPostDto }): string =>
           LEFT JOIN post_like AS postLike ON postLike.post_id = post.id
         WHERE 1=1
           AND post.pin_yn = 'N'
-          ${'N' === params.listPostDto?.isLogin ?
+          ${'N' === listPostDto?.isLogin ?
           "AND post.tmp_yn = 'N'" : ""
           }
-          ${'N' === params.listPostDto?.isLogin ?
+          ${'N' === listPostDto?.isLogin ?
           "AND post.secret_yn = 'N'" : ""
           }
-          ${isNotEmpty(params.listPostDto?.categoryId) && 0 < params.listPostDto?.categoryId ?
+          ${isNotEmpty(listPostDto?.categoryId) && 0 < listPostDto?.categoryId ?
           "AND postCategory.category_id = ?" : ""
           }
         GROUP BY post.id, postCategory.category_id

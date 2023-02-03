@@ -13,7 +13,7 @@ export class PostRepository extends Repository<PostEntity> {
 
   /** 메인 포스트 목록을 조회한다. */
   async listPostMain(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
-    const sql: string = listPostMainSql({ listPostDto });
+    const sql: string = listPostMainSql(listPostDto);
     
     const params: any[] = [
       listPostDto?.categoryId,
