@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
 /** 카테고리 추가/수정 DTO */
 export class SaveCategoryDto {
@@ -12,6 +12,7 @@ export class SaveCategoryDto {
 
   /** 카테고리 명 */
   @IsNotEmpty()
+  @MaxLength(50)
   nm?: string;
 
 }

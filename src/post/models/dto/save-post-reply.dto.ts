@@ -1,4 +1,4 @@
-import { IsEmpty, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
 
 /** 포스트 댓글 추가/수정/삭제 DTO */
 export class SavePostReplyDto {
@@ -11,8 +11,15 @@ export class SavePostReplyDto {
   @IsNotEmpty()
   parentId?: number;
 
+  /** 포스트 댓글 작성자 */
+  @IsNotEmpty()
+  @MaxLength(20)
+  author?: string;
+
   /** 포스트 댓글 작성자 비밀번호 */
   @IsNotEmpty()
+  @MinLength(8)
+  @MaxLength(15)
   authorPw?: string;
 
   /** 포스트 댓글 작성자 IP */

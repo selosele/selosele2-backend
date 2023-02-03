@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber, IsOptional, Max, MaxLength, Min } from 'class-validator';
 import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
 
 /** 블로그 환경설정 수정 DTO */
@@ -13,14 +13,17 @@ export class UpdateBlogConfigDto {
 
   /** 블로그 제목 */
   @IsNotEmpty()
+  @MaxLength(100)
   title?: string;
 
   /** 블로거 닉네임 */
   @IsNotEmpty()
+  @MaxLength(30)
   author?: string;
 
   /** 블로그 소개 */
   @IsOptional()
+  @MaxLength(100)
   desc?: string;
 
   /** 블로그 아바타 이미지, 대표 이미지 File */
@@ -60,23 +63,43 @@ export class UpdateBlogConfigDto {
   delOgImg: string;
 
   /** 블로그 대표 이미지 밝기 */
+  @Type(() => Number)
+  @IsNumber()
   @IsOptional()
+  @Min(0)
+  @Max(1)
   ogImgContrast?: number;
 
   /** 블로그 대표 이미지 흐림 */
+  @Type(() => Number)
+  @IsNumber()
   @IsOptional()
+  @Min(0)
+  @Max(9.9)
   ogImgBlur?: number;
 
   /** 블로그 대표 이미지 가로 위치값 */
+  @Type(() => Number)
+  @IsNumber()
   @IsOptional()
+  @Min(0)
+  @Max(100)
   ogImgPosX?: number;
 
   /** 블로그 대표 이미지 세로 위치값 */
+  @Type(() => Number)
+  @IsNumber()
   @IsOptional()
+  @Min(0)
+  @Max(100)
   ogImgPosY?: number;
 
   /** 메인 포스트 목록 출력 개수 */
+  @Type(() => Number)
+  @IsInt()
   @IsNotEmpty()
+  @Min(2)
+  @Max(10)
   pageSize?: number;
 
   /** 만족도조사 표출 여부 */
