@@ -1,16 +1,17 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Builder } from "builder-pattern";
 import { BizException } from "src/shared/exceptions";
 import { startTransaction } from "src/shared/utils";
 import { EntityManager } from "typeorm";
-import { PostReplyEntity } from "../models";
+import { PostEntity, PostReplyEntity, GetPostDto } from "../models";
 import { SavePostReplyDto } from "../models/dto/save-post-reply.dto";
 import { SavePostDto } from "../models/dto/save-post.dto";
 import { PostReplyRepository } from "../repositories/post-reply.repository";
 import { PostRepository } from "../repositories/post.repository";
 import * as bcrypt from 'bcrypt';
 import * as sanitizeHtml from 'sanitize-html';
+import { PostService } from "./post.service";
 
 @Injectable()
 export class PostReplyService {
@@ -20,6 +21,7 @@ export class PostReplyService {
     private readonly postReplyRepository: PostReplyRepository,
     @InjectRepository(PostRepository)
     private readonly postRepository: PostRepository,
+    private readonly postService: PostService,
   ) {}
 
   /** 포스트 댓글 목록을 조회한다. */
@@ -44,6 +46,18 @@ export class PostReplyService {
 
   /** 포스트 댓글을 추가/수정/삭제한다. */
   async savePostReply(savePostReplyDto: SavePostReplyDto): Promise<PostReplyEntity> {
+    
+    // 상위 포스트를 조회한다.
+    const getPostDto: GetPostDto = Builder(GetPostDto)
+                                   .id(savePostReplyDto.parentId)
+                                   .build();
+    const parentPost: PostEntity = await this.postService.getPost(getPostDto);
+
+    // 임시저장 글, 비밀 글에 인증되지 않은 사용자의 댓글 저장을 방지한다.
+    if (this.isNotAllowedPost(savePostReplyDto, parentPost)) {
+      throw new NotFoundException();
+    }
+
     let res: PostReplyEntity = null;
 
     // 추가
@@ -134,6 +148,11 @@ export class PostReplyService {
     if (!matchPw) return false;
 
     return true;
+  }
+
+  /** 임시저장 글, 비밀 글에 인증되지 않은 사용자의 댓글 저장을 방지한다. */
+  async isNotAllowedPost(savePostReplyDto: SavePostReplyDto, parentPost: PostEntity): Promise<boolean> {
+    return 'N' === savePostReplyDto.isAdmin && ('Y' === parentPost.secretYn || 'Y' === parentPost.tmpYn);
   }
 
 }
