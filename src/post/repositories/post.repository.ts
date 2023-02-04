@@ -2,7 +2,7 @@ import { CustomRepository } from 'src/configs/database/CustomRepository';
 import { PaginationDto } from 'src/shared/models';
 import { isNotEmpty } from 'src/shared/utils';
 import { sqlManager } from 'src/shared/utils/database/sql-manager.util';
-import { Brackets, DeleteResult, Repository } from 'typeorm';
+import { Brackets, DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { GetPostDto, ListPostDto, SearchPostDto, PostEntity } from '../models';
 import { CountPostDto } from '../models/dto/count-post.dto';
 import { SavePostDto } from '../models/dto/save-post.dto';
@@ -394,6 +394,20 @@ export class PostRepository extends Repository<PostEntity> {
   /** 포스트를 삭제한다. */
   async removePost(id: number): Promise<DeleteResult> {
     return await this.delete(id);
+  }
+
+  /** 포스트의 댓글 개수를 수정한다. */
+  async updatePostReplyCnt(savePostDto: SavePostDto): Promise<UpdateResult> {
+    return await this.createQueryBuilder('post')
+      .update()
+      .set({
+        replyCnt: savePostDto.replyCnt,
+        modDate: savePostDto.modDate,
+      })
+      .where({
+        id: savePostDto.id,
+      })
+      .execute();
   }
 
 }

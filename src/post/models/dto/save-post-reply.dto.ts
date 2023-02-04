@@ -11,6 +11,18 @@ export class SavePostReplyDto {
   @IsNotEmpty()
   parentId?: number;
 
+  /** 상위 포스트 댓글 ID */
+  @IsOptional()
+  parentReplyId?: number;
+
+  /** 포스트 댓글 그룹 */
+  @IsOptional()
+  group?: number;
+
+  /** 포스트 댓글 계층 */
+  @IsOptional()
+  depth?: number;
+
   /** 포스트 댓글 작성자 */
   @IsNotEmpty()
   @MaxLength(20)
@@ -27,7 +39,7 @@ export class SavePostReplyDto {
   ip?: string;
   
   /** 포스트 댓글 내용 */
-  @IsNotEmpty()
+  @IsOptional()
   cont?: string;
 
   /** 포스트 댓글 삭제여부 */

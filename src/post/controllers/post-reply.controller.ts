@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, ValidationPipe } from "@nestjs/common";
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import { RealIP } from "nestjs-real-ip";
 import { IsAuthenticated } from "src/shared/decorators";
 import { PostReplyEntity } from "../models";
 import { SavePostReplyDto } from "../models/dto/save-post-reply.dto";
@@ -46,21 +47,24 @@ export class PostReplyController {
   })
   addPostReply(
     @IsAuthenticated() isAuthenticated: boolean,
+    @RealIP() ip: string,
     @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto
   ) {
+    savePostReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.isAdmin = isAuthenticated ? 'Y' : 'N';
+    savePostReplyDto.ip = ip;
 
     return this.postReplyService.savePostReply(savePostReplyDto);
   }
 
   @Put()
   @ApiOperation({
-    summary: '포스트 댓글 수정/삭제 API',
-    description: '포스트 댓글을 수정/삭제한다.'
+    summary: '포스트 댓글 수정 API',
+    description: '포스트 댓글을 수정한다.'
   })
   @ApiCreatedResponse({
     type: PostReplyEntity,
-    description: '포스트 댓글을 수정/삭제한다.',
+    description: '포스트 댓글을 수정한다.',
   })
   @ApiBody({
     type: SavePostReplyDto,
@@ -68,9 +72,37 @@ export class PostReplyController {
   })
   updatePostReply(
     @IsAuthenticated() isAuthenticated: boolean,
+    @RealIP() ip: string,
     @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto
   ) {
+    savePostReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.isAdmin = isAuthenticated ? 'Y' : 'N';
+    savePostReplyDto.ip = ip;
+
+    return this.postReplyService.savePostReply(savePostReplyDto);
+  }
+
+  @Post('remove')
+  @ApiOperation({
+    summary: '포스트 댓글 삭제 API',
+    description: '포스트 댓글을 삭제한다.'
+  })
+  @ApiCreatedResponse({
+    type: PostReplyEntity,
+    description: '포스트 댓글을 삭제한다.',
+  })
+  @ApiBody({
+    type: SavePostReplyDto,
+    description: '포스트 댓글 추가/수정/삭제 DTO',
+  })
+  removePostReply(
+    @IsAuthenticated() isAuthenticated: boolean,
+    @RealIP() ip: string,
+    @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto
+  ) {
+    savePostReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
+    savePostReplyDto.isAdmin = isAuthenticated ? 'Y' : 'N';
+    savePostReplyDto.ip = ip;
 
     return this.postReplyService.savePostReply(savePostReplyDto);
   }
