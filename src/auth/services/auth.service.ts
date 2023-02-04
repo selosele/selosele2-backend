@@ -43,30 +43,31 @@ export class AuthService {
     const salt = await bcrypt.genSalt();
     authCredentialsDto.userPw = await bcrypt.hash(userPw, salt);
 
-    let addUserRoleRes: InsertResult = null;
+    let res: InsertResult = null;
 
     // 트랜잭션을 시작한다.
     await startTransaction(async (entityManager: EntityManager) => {
 
-      // 먼저 사용자를 생성하고
+      // 1. 사용자를 생성한다.
       const addUserRes: InsertResult = await entityManager.withRepository(this.userRepository).addUser(authCredentialsDto);
 
-      // 사용자 권한을 생성한다.
       if (addUserRes.identifiers[0].userId) {
         const roles: string[] = [RoleEnum.ROLE_ANONYMOUS, RoleEnum.ROLE_ADMIN];
-
+        
         for (const role of roles) {
-          const dto: AuthCredentialsRoleDto = Builder(AuthCredentialsRoleDto)
-                                              .userSn(addUserRes.identifiers[0].userSn)
-                                              .userId(userId)
-                                              .roleId(role)
-                                              .build();
-          addUserRoleRes = await entityManager.withRepository(this.userRoleRepository).addUserRole(dto);
+
+          // 2. 사용자 권한을 생성한다.
+          const addUserRoleDto: AuthCredentialsRoleDto = Builder(AuthCredentialsRoleDto)
+                                                         .userSn(addUserRes.identifiers[0].userSn)
+                                                         .userId(userId)
+                                                         .roleId(role)
+                                                         .build();
+          res = await entityManager.withRepository(this.userRoleRepository).addUserRole(addUserRoleDto);
         }
       }
     });
 
-    return addUserRoleRes;
+    return res;
   }
 
   /** 사용자 권한을 생성한다. */

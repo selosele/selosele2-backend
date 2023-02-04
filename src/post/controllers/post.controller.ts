@@ -42,7 +42,7 @@ export class PostController {
     listPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
     // 메인 포스트 목록 조회
-    if ('D01001' === listPostDto.type) {
+    if ('D01001' === listPostDto.pageType) {
       return this.postService.listPostMain(listPostDto);
     }
 

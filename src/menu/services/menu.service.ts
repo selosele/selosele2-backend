@@ -37,15 +37,14 @@ export class MenuService {
     // 트랜잭션을 시작한다.
     await startTransaction(async (entityManager: EntityManager) => {
 
-      // 먼저 메뉴를 저장하고
+      // 1. 메뉴를 저장한다.
       menu = await entityManager.withRepository(this.menuRepository).saveMenu(saveMenuDto);
   
-      // 기존의 메뉴 권한을 삭제한다.
-      await entityManager.withRepository(this.menuRoleRepository).removeMenuRole(
-        Builder(SaveMenuRoleDto)
-        .menuId(menu.id)
-        .build()
-      );
+      // 2. 기존의 메뉴 권한을 삭제한다.
+      const removeMenuRoleDto: SaveMenuRoleDto = Builder(SaveMenuRoleDto)
+                                                 .menuId(menu.id)
+                                                 .build();
+      await entityManager.withRepository(this.menuRoleRepository).removeMenuRole(removeMenuRoleDto);
   
       let roles: SaveMenuRoleDto[] = [];
     
@@ -68,13 +67,13 @@ export class MenuService {
       }
   
       for (const role of roles) {
-        // 메뉴 권한을 추가한다.
-        await entityManager.withRepository(this.menuRoleRepository).saveMenuRole(
-          Builder(SaveMenuRoleDto)
-          .menuId(role.menuId)
-          .roleId(role.roleId)
-          .build()
-        );
+
+        // 3. 메뉴 권한을 추가한다.
+        const addMenuRoleDto: SaveMenuRoleDto = Builder(SaveMenuRoleDto)
+                                                .menuId(role.menuId)
+                                                .roleId(role.roleId)
+                                                .build();
+        await entityManager.withRepository(this.menuRoleRepository).saveMenuRole(addMenuRoleDto);
       }
     });
 
@@ -88,14 +87,13 @@ export class MenuService {
     // 트랜잭션을 시작한다.
     await startTransaction(async (entityManager: EntityManager) => {
 
-      // 먼저 메뉴 권한을 삭제하고
-      await entityManager.withRepository(this.menuRoleRepository).removeMenuRole(
-        Builder(SaveMenuRoleDto)
-        .menuId(saveMenuDto.id)
-        .build()
-      );
+      // 1. 메뉴 권한을 삭제한다.
+      const removeMenuRoleDto: SaveMenuRoleDto = Builder(SaveMenuRoleDto)
+                                                 .menuId(saveMenuDto.id)
+                                                 .build();
+      await entityManager.withRepository(this.menuRoleRepository).removeMenuRole(removeMenuRoleDto);
   
-      // 메뉴를 삭제한다.
+      // 2. 메뉴를 삭제한다.
       removeMenu = await entityManager.withRepository(this.menuRepository).removeMenu(saveMenuDto);
     });
 

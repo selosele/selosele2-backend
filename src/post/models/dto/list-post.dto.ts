@@ -27,9 +27,9 @@ export class ListPostDto {
   @IsOptional()
   year?: string;
 
-  /** 조회 유형 */
+  /** 페이지 유형 */
   @IsOptional()
-  type?: string;
+  pageType?: string;
 
   /** 로그인 여부 */
   @IsEmpty()

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from 'src/category/repositories/post-category.repository';
 import { PaginationDto } from 'src/shared/models';
 import { deserialize, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, santinizeHtmlOption, startTransaction } from 'src/shared/utils';
-import { DeleteResult, EntityManager } from 'typeorm';
+import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
 import { SavePostDto } from '../models/dto/save-post.dto';
 import { PostRepository } from '../repositories/post.repository';
@@ -201,10 +201,10 @@ export class PostService {
     // 트랜잭션을 시작한다.
     await startTransaction(async (entityManager: EntityManager) => {
 
-      // 먼저 포스트를 저장하고
+      // 1. 포스트를 저장한다.
       post = await entityManager.withRepository(this.postRepository).savePost(savePostDto);
 
-      // 포스트 카테고리를 저장한다음
+      // 2. 포스트 카테고리를 저장한다.
       const savePostCategoryDto: SavePostCategoryDto = Builder(SavePostCategoryDto)
                                                        .postId(post.id)
                                                        .categoryId(categoryId)
@@ -215,22 +215,22 @@ export class PostService {
       if (isNotBlank(savePostDto.saveTagList)) {
         const saveTagList: SaveTagDto[] = deserialize(Array<SaveTagDto>, savePostDto.saveTagList); // JSON -> Array 역직렬화
 
-        // 포스트 태그를 삭제하고
+        // 3. 포스트 태그를 삭제한다.
         const removePostTagDto: SavePostTagDto = Builder(SavePostTagDto)
                                                  .postId(post.id)
                                                  .build();
         await entityManager.withRepository(this.postTagRepository).removePostTag(removePostTagDto);
 
-        for (let saveTag of saveTagList) {
+        for (const saveTag of saveTagList) {
 
-          // 태그를 저장한다음
+          // 4. 태그를 저장한다.
           const saveTagDto: SaveTagDto = Builder(SaveTagDto)
                                          .id(saveTag.id)
                                          .nm(saveTag.nm)
                                          .build();
           const tag: TagEntity = await entityManager.withRepository(this.tagRepository).saveTag(saveTagDto);
 
-          // 포스트 태그를 저장한다.
+          // 5. 포스트 태그를 저장한다.
           const savePostTagDto: SavePostTagDto = Builder(SavePostTagDto)
                                                  .postId(post.id)
                                                  .tagId(tag.id)
@@ -259,9 +259,17 @@ export class PostService {
     return await this.postRepository.removePost(id);
   }
 
+  /** 포스트의 댓글 개수를 수정한다. */
+  async updatePostReplyCnt(savePostDto: SavePostDto): Promise<UpdateResult> {
+    return await this.postRepository.updatePostReplyCnt(savePostDto);
+  }
+
   /** 포스트 추가/수정 유효성을 검사한다. */
   async savePostValidationCheck(savePostDto: SavePostDto): Promise<boolean> {
-    const pinPostCount: number = await this.countPost({ pinYn: 'Y' });
+    const countPostDto: CountPostDto = Builder(CountPostDto)
+                                       .pinYn('Y')
+                                       .build();
+    const pinPostCount: number = await this.countPost(countPostDto);
     const blogConfig: BlogConfigEntity = await this.blogConfigRepository.getBlogConfig();
 
     if ('Y' === savePostDto.pinYn) {
