@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
 /** 메뉴 추가/수정/삭제 DTO */
 export class SaveMenuDto {
@@ -18,10 +18,12 @@ export class SaveMenuDto {
 
   /** 메뉴 명 */
   @IsNotEmpty()
+  @MaxLength(50)
   name?: string;
 
   /** 메뉴 링크 */
   @IsNotEmpty()
+  @MaxLength(255)
   link?: string;
 
   /** 메뉴 정렬 순서 */

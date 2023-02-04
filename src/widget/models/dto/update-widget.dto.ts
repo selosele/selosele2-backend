@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, MaxLength } from 'class-validator';
 
 /** 위젯 수정 DTO */
 export class UpdateWidgetDto {
@@ -9,6 +9,7 @@ export class UpdateWidgetDto {
 
   /** 위젯 명 */
   @IsNotEmpty()
+  @MaxLength(30)
   title?: string;
 
   /** 위젯 아이콘 */

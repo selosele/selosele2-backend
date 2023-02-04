@@ -1,4 +1,4 @@
-import { IsEmpty, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
 /** 만족도조사 참여 DTO */
 export class AddSatisfactiontDto {
@@ -13,6 +13,7 @@ export class AddSatisfactiontDto {
 
   /** 만족도 의견 */
   @IsOptional()
+  @MaxLength(1000)
   comment?: string;
   
   /** 참여자 IP */
