@@ -21,7 +21,7 @@ export class WidgetService {
     return await this.widgetRepository.updateWidget(updateWidgetDto);
   }
 
-  /** 위젯 사용여부를 수정한다. */
+  /** 위젯 사용 여부를 수정한다. */
   async updateWidgetUseYn(updateWidgetUseYnDto: UpdateWidgetUseYnDto): Promise<number> {
     let cnt: number = 0;
 

@@ -51,16 +51,16 @@ export class WidgetController {
   @Put('use')
   @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
-    summary: '위젯 사용여부 수정 API',
-    description: '위젯 사용여부를 수정한다.',
+    summary: '위젯 사용 여부 수정 API',
+    description: '위젯 사용 여부를 수정한다.',
   })
   @ApiCreatedResponse({
     type: Number,
-    description: '위젯 사용여부를 수정한다.',
+    description: '위젯 사용 여부를 수정한다.',
   })
   @ApiBody({
     type: UpdateWidgetUseYnDto,
-    description: '위젯 사용여부 수정 DTO',
+    description: '위젯 사용 여부 수정 DTO',
   })
   updateWidgetUseYn(@Body(ValidationPipe) updateWidgetUseYnDto: UpdateWidgetUseYnDto): Promise<number> {
     return this.widgetService.updateWidgetUseYn(updateWidgetUseYnDto);

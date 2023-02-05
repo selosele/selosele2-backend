@@ -2,12 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from 'src/category/repositories/post-category.repository';
 import { PaginationDto } from 'src/shared/models';
-import { deserialize, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, santinizeHtmlOption, startTransaction } from 'src/shared/utils';
+import { deserialize, escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, santinizeHtmlOption, startTransaction } from 'src/shared/utils';
 import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
 import { SavePostDto } from '../models/dto/save-post.dto';
 import { PostRepository } from '../repositories/post.repository';
-import * as sanitizeHtml from 'sanitize-html';
 import { BlogConfigRepository } from 'src/blog-config/repositories/blog-config.repository';
 import { BlogConfigEntity } from 'src/blog-config/models';
 import { BizException } from 'src/shared/exceptions';
@@ -178,7 +177,7 @@ export class PostService {
     }
 
     // HTML Escape
-    savePostDto.cont = sanitizeHtml(cont, santinizeHtmlOption);
+    savePostDto.cont = escapeHtml(cont, santinizeHtmlOption);
 
     // 대표 이미지 파일을 업로드한다.
     if (isNotFileEmpty(ogImgFile) && !this.hasDelOgImg(delOgImg)) {
@@ -290,7 +289,7 @@ export class PostService {
     return <PostEntity>savePostDto;
   }
 
-  /** 포스트 대표 이미지 파일 삭제여부 값 존재를 확인한다. */
+  /** 포스트 대표 이미지 파일 삭제 여부 값 존재를 확인한다. */
   private hasDelOgImg(delOgImg: string): boolean {
     return isNotBlank(delOgImg) && 'Y' === delOgImg;
   }

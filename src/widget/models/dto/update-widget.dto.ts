@@ -20,7 +20,7 @@ export class UpdateWidgetDto {
   @IsNotEmpty()
   sort?: number;
 
-  /** 위젯 사용여부 */
+  /** 위젯 사용 여부 */
   @IsNotEmpty()
   useYn?: string;
 

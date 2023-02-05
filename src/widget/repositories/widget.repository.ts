@@ -22,7 +22,7 @@ export class WidgetRepository extends Repository<WidgetEntity> {
     return await this.save(updateWidgetDto);
   }
 
-  /** 위젯 사용여부를 수정한다. */
+  /** 위젯 사용 여부를 수정한다. */
   async updateWidgetUseYn(id: number): Promise<UpdateResult> {
     return await this.update(id, {
       useYn: 'Y',

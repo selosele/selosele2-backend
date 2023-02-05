@@ -33,7 +33,7 @@ export class SaveCodeDto {
   @MaxLength(30)
   desc?: string;
 
-  /** 코드 사용여부 */
+  /** 코드 사용 여부 */
   @IsNotEmpty()
   useYn?: string;
 

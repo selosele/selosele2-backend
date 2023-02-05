@@ -42,7 +42,7 @@ export class SavePostReplyDto {
   @IsOptional()
   cont?: string;
 
-  /** 포스트 댓글 삭제여부 */
+  /** 포스트 댓글 삭제 여부 */
   @IsEmpty()
   delYn?: string;
 

@@ -59,10 +59,10 @@ export class CodeEntity extends BaseEntity {
   modDate?: Date;
 
   @Column({
-    comment: '코드 사용여부'
+    comment: '코드 사용 여부'
   })
   @ApiProperty({
-    description: '코드 사용여부'
+    description: '코드 사용 여부'
   })
   useYn?: string;
   

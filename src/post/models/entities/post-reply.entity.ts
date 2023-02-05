@@ -101,10 +101,10 @@ export class PostReplyEntity extends BaseEntity {
   modDate?: Date;
 
   @Column({
-    comment: '포스트 댓글 삭제여부'
+    comment: '포스트 댓글 삭제 여부'
   })
   @ApiProperty({
-    description: '포스트 댓글 삭제여부'
+    description: '포스트 댓글 삭제 여부'
   })
   delYn?: string;
 

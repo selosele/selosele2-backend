@@ -44,14 +44,14 @@ export class BlogConfigService {
       }
     }
 
-    // 아바타 이미지 파일 삭제여부 값 존재 시
+    // 아바타 이미지 파일 삭제 여부 값 존재 시
     if (this.hasDelImg(updateBlogConfigDto.delAvatarImg)) {
       updateBlogConfigDto.avatarImg = '';
       updateBlogConfigDto.avatarImgUrl = null;
       updateBlogConfigDto.avatarImgSize = null;
     }
 
-    // 대표 이미지 파일 삭제여부 값 존재 시
+    // 대표 이미지 파일 삭제 여부 값 존재 시
     if (this.hasDelImg(updateBlogConfigDto.delOgImg)) {
       updateBlogConfigDto.ogImg = '';
       updateBlogConfigDto.ogImgUrl = null;
@@ -85,7 +85,7 @@ export class BlogConfigService {
     }
   }
 
-  /** 블로그 환경설정 이미지 파일 삭제여부 값 존재를 확인한다. */
+  /** 블로그 환경설정 이미지 파일 삭제 여부 값 존재를 확인한다. */
   private hasDelImg(delImg: string): boolean {
     return isNotBlank(delImg) && 'Y' === delImg;
   }

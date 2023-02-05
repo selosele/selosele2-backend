@@ -35,10 +35,10 @@ export class WidgetEntity extends BaseEntity {
   sort?: number;
 
   @Column({
-    comment: '위젯 사용여부'
+    comment: '위젯 사용 여부'
   })
   @ApiProperty({
-    description: '위젯 사용여부'
+    description: '위젯 사용 여부'
   })
   useYn?: string;
 

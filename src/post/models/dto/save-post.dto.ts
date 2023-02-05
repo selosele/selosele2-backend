@@ -44,7 +44,7 @@ export class SavePostDto {
   @IsOptional()
   ogImgSize?: number;
   
-  /** 포스트 대표 이미지 삭제여부 */
+  /** 포스트 대표 이미지 삭제 여부 */
   @IsOptional()
   delOgImg?: string;
 
