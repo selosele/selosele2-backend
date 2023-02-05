@@ -167,7 +167,7 @@ export class PostRepository extends Repository<PostEntity> {
       .where("YEAR(reg_date) = :year", { year: listPostDto?.year });
 
     query = query
-      .where("tmp_yn = 'N'");
+      .andWhere("tmp_yn = 'N'");
 
     if ('N' === listPostDto?.isLogin) {
       query = query
