@@ -5,11 +5,10 @@ import { EntityManager, InsertResult } from 'typeorm';
 import { UserRoleRepository } from '../repositories/user-role.repository';
 import { Builder } from 'builder-pattern';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 import { BizException } from 'src/shared/exceptions/biz/biz.exception';
 import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, RoleEnum } from '../models';
 import { RoleRepository } from '../repositories/role.repository';
-import { startTransaction } from 'src/shared/utils';
+import { compareEncrypt, encrypt, startTransaction } from 'src/shared/utils';
 
 @Injectable()
 export class AuthService {
@@ -40,8 +39,7 @@ export class AuthService {
     }
 
     // 비밀번호 암호화
-    const salt = await bcrypt.genSalt();
-    authCredentialsDto.userPw = await bcrypt.hash(userPw, salt);
+    authCredentialsDto.userPw = await encrypt(userPw);
 
     let res: InsertResult = null;
 
@@ -89,7 +87,7 @@ export class AuthService {
       throw new BizException('비활성화된 계정입니다.');
     }
 
-    const matchPw = await bcrypt.compare(userPw, user.userPw);
+    const matchPw = await compareEncrypt(userPw, user.userPw);
 
     if (user && matchPw) {
       // 사용자 토큰 생성

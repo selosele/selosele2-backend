@@ -3,9 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/shared/models';
 import { AddGuestbookDto, RemoveGuestbookDto, UpdateGuestbookDto, GuestbookEntity } from '../models';
 import { GuestbookRepository } from '../repositories/guestbook.repository';
-import * as bcrypt from 'bcrypt';
-import * as sanitizeHtml from 'sanitize-html';
 import { BizException } from 'src/shared/exceptions/biz/biz.exception';
+import { compareEncrypt, encrypt, escapeHtml } from 'src/shared/utils';
 
 @Injectable()
 export class GuestbookService {
@@ -30,11 +29,10 @@ export class GuestbookService {
     const { authorPw, cont } = addGuestbookDto;
 
     // 비밀번호 암호화
-    const salt = await bcrypt.genSalt();
-    addGuestbookDto.authorPw = await bcrypt.hash(authorPw, salt);
+    addGuestbookDto.authorPw = await encrypt(authorPw);
 
     // HTML Escape
-    addGuestbookDto.cont = sanitizeHtml(cont);
+    addGuestbookDto.cont = escapeHtml(cont);
 
     // 방명록 추가
     const guestbook: GuestbookEntity = await this.guestbookRepository.addGuestbook(addGuestbookDto);
@@ -52,11 +50,10 @@ export class GuestbookService {
     if (!isValid) throw new BizException('비밀번호를 확인하세요.');
 
     // 비밀번호 암호화
-    const salt = await bcrypt.genSalt();
-    updateGuestbookDto.authorPw = await bcrypt.hash(authorPw, salt);
+    updateGuestbookDto.authorPw = await encrypt(authorPw);
 
     // HTML Escape
-    updateGuestbookDto.cont = sanitizeHtml(cont);
+    updateGuestbookDto.cont = escapeHtml(cont);
 
     // 방명록 수정
     const guestbook: GuestbookEntity = await this.guestbookRepository.updateGuestbook(updateGuestbookDto);
@@ -82,7 +79,7 @@ export class GuestbookService {
     const { id, authorPw } = removeGuestbookDto;
 
     const foundGuestbook: GuestbookEntity = await this.getGuestbook(id);
-    const matchPw = await bcrypt.compare(authorPw, foundGuestbook.authorPw);
+    const matchPw = await compareEncrypt(authorPw, foundGuestbook.authorPw);
 
     if (!matchPw) return false;
 

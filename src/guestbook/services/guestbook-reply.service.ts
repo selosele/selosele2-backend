@@ -2,13 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { AddGuestbookReplyDto, GuestbookReplyEntity } from '../models';
 import { GuestbookReplyRepository } from '../repositories/guestbook-reply.repository';
-import * as bcrypt from 'bcrypt';
-import * as sanitizeHtml from 'sanitize-html';
 import { ListGuestbookReplyDto } from '../models/dto/list-guestbook-reply.dto';
 import { PaginationDto } from 'src/shared/models';
 import { UpdateGuestbookReplyDto } from '../models/dto/update-guestbook-reply.dto';
 import { BizException } from 'src/shared/exceptions';
 import { RemoveGuestbookReplyDto } from '../models/dto/remove-guestbook-reply.dto';
+import { compareEncrypt, encrypt, escapeHtml } from 'src/shared/utils';
 
 @Injectable()
 export class GuestbookReplyService {
@@ -36,11 +35,10 @@ export class GuestbookReplyService {
     const { authorPw, cont } = addGuestbookReplyDto;
 
     // 비밀번호 암호화
-    const salt = await bcrypt.genSalt();
-    addGuestbookReplyDto.authorPw = await bcrypt.hash(authorPw, salt);
+    addGuestbookReplyDto.authorPw = await encrypt(authorPw);
 
     // HTML Escape
-    addGuestbookReplyDto.cont = sanitizeHtml(cont);
+    addGuestbookReplyDto.cont = escapeHtml(cont);
 
     return await this.guestbookReplyRepository.addGuestbookReply(addGuestbookReplyDto);
   }
@@ -54,11 +52,10 @@ export class GuestbookReplyService {
     if (!isValid) throw new BizException('비밀번호를 확인하세요.');
 
     // 비밀번호 암호화
-    const salt = await bcrypt.genSalt();
-    updateGuestbookReplyDto.authorPw = await bcrypt.hash(authorPw, salt);
+    updateGuestbookReplyDto.authorPw = await encrypt(authorPw);
 
     // HTML Escape
-    updateGuestbookReplyDto.cont = sanitizeHtml(cont);
+    updateGuestbookReplyDto.cont = escapeHtml(cont);
 
     // 방명록 댓글 수정
     return await this.guestbookReplyRepository.updateGuestbookReply(updateGuestbookReplyDto);
@@ -81,7 +78,7 @@ export class GuestbookReplyService {
     const { id, authorPw } = dto;
 
     const foundGuestbookReply: GuestbookReplyEntity = await this.getGuestbookReply(id);
-    const matchPw = await bcrypt.compare(authorPw, foundGuestbookReply.authorPw);
+    const matchPw = await compareEncrypt(authorPw, foundGuestbookReply.authorPw);
 
     if (!matchPw) return false;
 
