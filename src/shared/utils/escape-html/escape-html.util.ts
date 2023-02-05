@@ -1,5 +1,10 @@
 import * as sanitizeHtml from 'sanitize-html';
 
+/** escape html 유틸 */
+export function escapeHtml(plain: string, option?: sanitizeHtml.IOptions): string {
+  return sanitizeHtml(plain, option);
+}
+
 /** santinize-html 공통 옵션 */
 export const santinizeHtmlOption: sanitizeHtml.IOptions = {
 
