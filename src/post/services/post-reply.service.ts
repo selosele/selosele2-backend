@@ -2,18 +2,17 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Builder } from "builder-pattern";
 import { BizException } from "src/shared/exceptions";
-import { isEmpty, isNotEmpty, startTransaction } from "src/shared/utils";
+import { compareEncrypt, encrypt, escapeHtml, isEmpty, isNotEmpty, startTransaction } from "src/shared/utils";
 import { EntityManager, UpdateResult } from "typeorm";
 import { PostEntity, PostReplyEntity, GetPostDto } from "../models";
 import { SavePostReplyDto } from "../models/dto/save-post-reply.dto";
 import { SavePostDto } from "../models/dto/save-post.dto";
 import { PostReplyRepository } from "../repositories/post-reply.repository";
 import { PostRepository } from "../repositories/post.repository";
-import * as bcrypt from 'bcrypt';
-import * as sanitizeHtml from 'sanitize-html';
 import { PostService } from "./post.service";
 import { UpdatePostReplySortDto } from "../models/dto/update-post-reply-sort.dto";
 import { GetPostReplyDto } from "../models/dto/get-post-reply.dto";
+import { ListPostReplyDto } from "../models/dto/list-post-reply.dto";
 
 @Injectable()
 export class PostReplyService {
@@ -25,6 +24,11 @@ export class PostReplyService {
     private readonly postRepository: PostRepository,
     private readonly postService: PostService,
   ) {}
+
+  /** 모든 포스트 댓글 목록을 조회한다. */
+  async listPostReplyAll(listPostReplyDto?: ListPostReplyDto): Promise<PostReplyEntity[]> {
+    return await this.postReplyRepository.listPostReplyAll(listPostReplyDto);
+  }
 
   /** 포스트 댓글 목록을 조회한다. */
   async listPostReply(postId: number): Promise<[PostReplyEntity[], number]> {
@@ -72,11 +76,10 @@ export class PostReplyService {
     if ('E01001' === savePostReplyDto.crudType) {
 
       // 비밀번호 암호화
-      const salt = await bcrypt.genSalt();
-      savePostReplyDto.authorPw = await bcrypt.hash(authorPw, salt);
+      savePostReplyDto.authorPw = await encrypt(authorPw);
 
       // HTML Escape
-      savePostReplyDto.cont = sanitizeHtml(cont);
+      savePostReplyDto.cont = escapeHtml(cont);
 
       // 트랜잭션을 시작한다.
       await startTransaction(async (entityManager: EntityManager) => {
@@ -130,11 +133,11 @@ export class PostReplyService {
       }
 
       // 비밀번호 암호화
-      const salt = await bcrypt.genSalt();
-      savePostReplyDto.authorPw = await bcrypt.hash(authorPw, salt);
+      savePostReplyDto.authorPw = await encrypt(authorPw);
 
       // HTML Escape
-      savePostReplyDto.cont = sanitizeHtml(savePostReplyDto.cont);
+      savePostReplyDto.cont = escapeHtml(savePostReplyDto.cont);
+
       save = await this.postReplyRepository.savePostReply(savePostReplyDto);
     }
     // 삭제
@@ -158,8 +161,7 @@ export class PostReplyService {
     }
 
     // 비밀번호 암호화
-    const salt = await bcrypt.genSalt();
-    savePostReplyDto.authorPw = await bcrypt.hash(authorPw, salt);
+    savePostReplyDto.authorPw = await encrypt(authorPw);
 
     // 상위 포스트를 조회한다.
     const getPostDto: GetPostDto = Builder(GetPostDto)
@@ -201,6 +203,36 @@ export class PostReplyService {
     return await this.postReplyRepository.updatePostReplySort(updatePostReplySortDto);
   }
 
+  /** 삭제된 포스트 댓글을 복구한다. */
+  async updatePostReplyDelYn(savePostReplyDto: SavePostReplyDto): Promise<UpdateResult> {
+    let res: UpdateResult = null;
+
+    await startTransaction(async (entityManager: EntityManager) => {
+
+      // 1. 포스트 댓글의 삭제 여부 값을 N으로 변경한다.
+      res = await entityManager.withRepository(this.postReplyRepository).updatePostReplyDelYn(savePostReplyDto);
+
+      // 2. 상위 포스트를 조회한다.
+      const getPostDto: GetPostDto = Builder(GetPostDto)
+                                     .id(savePostReplyDto.parentId)
+                                     .build();
+      const parentPost: PostEntity = await this.postService.getPost(getPostDto);
+
+      // 3. 댓글 개수를 조회한다.
+      const postReplyCount: number = await entityManager.withRepository(this.postReplyRepository).countPostReply(savePostReplyDto.parentId);
+
+      // 4. 상위 포스트의 댓글 개수 컬럼을 수정한다.
+      const savePostDto: SavePostDto = Builder(SavePostDto)
+                                       .id(savePostReplyDto.parentId)
+                                       .replyCnt(postReplyCount)
+                                       .modDate(parentPost.modDate)
+                                       .build();
+      await entityManager.withRepository(this.postRepository).updatePostReplyCnt(savePostDto);
+    });
+
+    return res;
+  }
+
   /** 마지막 포스트 댓글을 조회한다. */
   async getLastPostReply(getPostReplyDto: GetPostReplyDto): Promise<PostReplyEntity> {
     return await this.postReplyRepository.getLastPostReply(getPostReplyDto);
@@ -211,7 +243,7 @@ export class PostReplyService {
     const { id, authorPw } = savePostReplyDto;
 
     const foundPostReply: PostReplyEntity = await this.getPostReply(id);
-    const matchPw = await bcrypt.compare(authorPw, foundPostReply.authorPw);
+    const matchPw = await compareEncrypt(authorPw, foundPostReply.authorPw);
 
     if (!matchPw) return false;
 
