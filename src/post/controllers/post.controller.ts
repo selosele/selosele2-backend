@@ -324,7 +324,7 @@ export class PostController {
     return this.postService.savePost(savePostDto);
   }
 
-  @Delete()
+  @Post('remove')
   @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '포스트 다건 삭제 API',

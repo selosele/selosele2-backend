@@ -6,6 +6,7 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags 
 import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/models';
 import { Auth, IsAuthenticated } from 'src/shared/decorators';
+import { DeleteResult } from 'typeorm';
 import { ListMenuDto, SaveMenuDto, MenuEntity } from '../models';
 import { MenuService } from '../services/menu.service';
 
@@ -36,9 +37,9 @@ export class MenuController {
     @Query(ValidationPipe) listMenuDto: ListMenuDto,
   ): Promise<MenuEntity[]> {
     const dto: ListMenuDto = Builder(ListMenuDto)
-                            .useYn(listMenuDto?.useYn)
-                            .roleIds(isAuthenticated ? [RoleEnum.ROLE_ADMIN] : [RoleEnum.ROLE_ANONYMOUS])
-                            .build();
+                             .useYn(listMenuDto?.useYn)
+                             .roleIds(isAuthenticated ? [RoleEnum.ROLE_ADMIN] : [RoleEnum.ROLE_ANONYMOUS])
+                             .build();
     return this.menuService.listTreeMenu(dto);
   }
 
@@ -112,12 +113,8 @@ export class MenuController {
     name: 'id',
     description: '메뉴 ID',
   })
-  removeMenu(@Param('id', ParseIntPipe) id: number): Promise<MenuEntity> {
-    return this.menuService.removeMenu(
-      Builder(MenuEntity)
-      .id(id)
-      .build()
-    );
+  removeMenu(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
+    return this.menuService.removeMenu(id);
   }
 
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Delete, Body, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Delete, Body, ValidationPipe, Post } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from 'src/auth/models';
 import { Auth } from 'src/shared/decorators';
@@ -27,7 +27,7 @@ export class ContentController {
     return this.contentService.listContent();
   }
 
-  @Delete()
+  @Post('remove')
   @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '콘텐츠 다건 삭제 API',

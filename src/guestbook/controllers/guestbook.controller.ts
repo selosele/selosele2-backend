@@ -81,7 +81,7 @@ export class GuestbookController {
     return this.guestbookService.updateGuestbook(updateGuestbookDto);
   }
 
-  @Delete(':id')
+  @Post('remove')
   @ApiOperation({
     summary: '방명록 삭제 API',
     description: '방명록을 삭제한다.',

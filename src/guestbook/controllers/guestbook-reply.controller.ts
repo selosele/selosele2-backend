@@ -92,7 +92,7 @@ export class GuestbookReplyController {
     return this.guestbookReplyService.updateGuestbookReply(updateGuestbookReplyDto);
   }
 
-  @Delete(':id')
+  @Post('remove')
   @ApiOperation({
     summary: '방명록 댓글 삭제 API',
     description: '방명록 댓글을 삭제한다.',

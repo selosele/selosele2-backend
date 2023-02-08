@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Builder } from 'builder-pattern';
 import { RoleRepository } from 'src/auth/repositories/role.repository';
 import { startTransaction } from 'src/shared/utils';
-import { EntityManager } from 'typeorm';
+import { DeleteResult, EntityManager } from 'typeorm';
 import { ListMenuDto, SaveMenuRoleDto, SaveMenuDto, MenuEntity } from '../models';
 import { MenuRoleRepository } from '../repositories/menu-role.repository';
 import { MenuRepository } from '../repositories/menu.repository';
@@ -81,20 +81,20 @@ export class MenuService {
   }
 
   /** 메뉴를 삭제한다. */
-  async removeMenu(saveMenuDto: MenuEntity): Promise<MenuEntity> {
-    let removeMenu: MenuEntity = null;
+  async removeMenu(id: number): Promise<DeleteResult> {
+    let removeMenu: DeleteResult = null;
 
     // 트랜잭션을 시작한다.
     await startTransaction(async (entityManager: EntityManager) => {
 
       // 1. 메뉴 권한을 삭제한다.
       const removeMenuRoleDto: SaveMenuRoleDto = Builder(SaveMenuRoleDto)
-                                                 .menuId(saveMenuDto.id)
+                                                 .menuId(id)
                                                  .build();
       await entityManager.withRepository(this.menuRoleRepository).removeMenuRole(removeMenuRoleDto);
   
       // 2. 메뉴를 삭제한다.
-      removeMenu = await entityManager.withRepository(this.menuRepository).removeMenu(saveMenuDto);
+      removeMenu = await entityManager.withRepository(this.menuRepository).removeMenu(id);
     });
 
     return removeMenu;

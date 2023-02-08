@@ -1,6 +1,7 @@
-import { Type } from "class-transformer";
+import { Transform, TransformFnParams, Type } from "class-transformer";
 import { IsEmpty, IsInt, IsNotEmpty, IsOptional } from "class-validator";
 import { FileUploaderRequest } from "src/file-uploader/models/file-uploader.model";
+import { isNotBlank } from "src/shared/utils";
 import { SaveTagDto } from "src/tag/models";
 
 /** 포스트 추가/수정 DTO */
@@ -34,14 +35,17 @@ export class SavePostDto {
 
   /** 포스트 대표 이미지 */
   @IsOptional()
+  @Transform(({ value }: TransformFnParams) => isNotBlank(value) ? value : null)
   ogImg?: string;
   
   /** 포스트 대표 이미지 URL */
   @IsOptional()
+  @Transform(({ value }: TransformFnParams) => isNotBlank(value) ? value : null)
   ogImgUrl?: string;
 
   /** 포스트 대표 이미지 용량 */
   @IsOptional()
+  @Transform(({ value }: TransformFnParams) => isNotBlank(value) ? value : null)
   ogImgSize?: number;
   
   /** 포스트 대표 이미지 삭제 여부 */

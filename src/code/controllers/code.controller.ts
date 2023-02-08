@@ -99,7 +99,7 @@ export class CodeController {
     return this.codeService.saveCode(SaveCodeDto);
   }
 
-  @Delete()
+  @Post('remove')
   @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '공통코드 다건 삭제 API',
