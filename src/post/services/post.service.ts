@@ -190,7 +190,7 @@ export class PostService {
 
     // 대표 이미지 정보를 삭제한다.
     if (this.hasDelOgImg(delOgImg)) {
-      savePostDto.ogImg = '';
+      savePostDto.ogImg = null;
       savePostDto.ogImgUrl = null;
       savePostDto.ogImgSize = null;
     }
@@ -273,7 +273,7 @@ export class PostService {
 
     if ('Y' === savePostDto.pinYn) {
       if ((pinPostCount + 1) >= blogConfig.pageSize) {
-        throw new BizException('허용 가능한 고정 글 개수에 도달했습니다.');
+        throw new BizException('고정 글의 개수를 확인하세요.');
       }
     }
 
