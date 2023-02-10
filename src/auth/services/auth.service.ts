@@ -83,7 +83,7 @@ export class AuthService {
       throw new BizException('로그인에 실패했습니다.');
     }
 
-    if ('N' === user.enabled) {
+    if ('N' === user.enableYn) {
       throw new BizException('비활성화된 계정입니다.');
     }
 

@@ -33,7 +33,7 @@ export class UserEntity extends BaseEntity {
   @ApiProperty({
     description: '사용자 계정 활성화 여부'
   })
-  enabled?: string;
+  enableYn?: string;
 
   @OneToMany(() => UserRoleEntity, userRole => userRole.user)
   @JoinColumn({ referencedColumnName: 'user_id' })
