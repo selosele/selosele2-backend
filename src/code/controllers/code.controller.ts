@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Body, Param, ValidationPipe, Put, Post } from '@nestjs/common';
+import { Controller, Get, Body, Param, ValidationPipe, Put, Post } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from 'src/auth/models';
 import { Auth } from 'src/shared/decorators';

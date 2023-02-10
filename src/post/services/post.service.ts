@@ -153,7 +153,7 @@ export class PostService {
 
     post.rawText = post.cont;
 
-    // 포스트의 콘텐츠를 Markdown으로 렌더링한다.
+    // 포스트의 내용을 Markdown으로 렌더링한다.
     post.cont = md.render(post.cont);
 
     return post;
