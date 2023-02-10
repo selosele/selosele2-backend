@@ -38,6 +38,7 @@ export class MenuController {
   ): Promise<MenuEntity[]> {
     const dto: ListMenuDto = Builder(ListMenuDto)
                              .useYn(listMenuDto?.useYn)
+                             .isLogin(isAuthenticated ? 'Y' : 'N')
                              .roleIds(isAuthenticated ? [RoleEnum.ROLE_ADMIN] : [RoleEnum.ROLE_ANONYMOUS])
                              .build();
     return this.menuService.listTreeMenu(dto);

@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional } from 'class-validator';
+import { IsEmpty, IsInt, IsOptional } from 'class-validator';
 
 /** 메뉴 목록 조회 DTO */
 export class ListMenuDto {
@@ -17,5 +17,9 @@ export class ListMenuDto {
   /** 메뉴 사용 여부 */
   @IsOptional()
   useYn?: string;
+
+  /** 로그인 여부 */
+  @IsEmpty()
+  isLogin?: string;
 
 }

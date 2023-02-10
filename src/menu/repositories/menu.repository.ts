@@ -29,8 +29,14 @@ export class MenuRepository extends Repository<MenuEntity> {
       }
 
       query = query
-        .andWhere("menu.parent_id IS NULL")
-        .andWhere("menuRole.role_id IN (:role_id)", { role_id: listMenuDto?.roleIds })
+        .andWhere("menu.parent_id IS NULL");
+
+      if ('N' === listMenuDto.isLogin) {
+        query = query
+          .andWhere("menuRole.role_id IN (:role_id)", { role_id: listMenuDto?.roleIds });
+      }
+      
+      query = query
         .orderBy("menu.sort")
         .addOrderBy("parent.sort");
 
