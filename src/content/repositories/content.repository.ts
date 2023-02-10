@@ -1,6 +1,7 @@
 import { CustomRepository } from "src/configs/database/CustomRepository";
 import { DeleteResult, Repository } from "typeorm";
 import { ContentEntity } from "../models";
+import { GetContentDto } from "../models/dto/get-content.dto";
 
 @CustomRepository(ContentEntity)
 export class ContentRepository extends Repository<ContentEntity> {
@@ -8,13 +9,34 @@ export class ContentRepository extends Repository<ContentEntity> {
   /** 콘텐츠 목록을 조회한다. */
   async listContent(): Promise<ContentEntity[]> {
     return this.find({
-      select: ['id', 'link', 'title', 'regDate', 'modDate'],
+      select: [
+        'id', 'link', 'title',
+        'regDate', 'modDate'
+      ],
       where: {
         tmpYn: 'N',
       },
       order: {
         regDate: 'DESC',
       }
+    });
+  }
+
+  /** 콘텐츠를 조회한다. */
+  async getContent(getContentDto: GetContentDto): Promise<ContentEntity> {
+    return await this.findOne({
+      select: [
+        'id', 'link', 'title',
+        'regDate', 'modDate', 'cont',
+        'ogImg', 'ogImgUrl', 'ogImgSize',
+        'ogDesc', 'tmpYn'
+      ],
+      where: {
+        ...('N' === getContentDto?.isLogin && {
+          tmpYn: 'N',
+        }),
+        link: '/' + getContentDto?.link
+      },
     });
   }
 

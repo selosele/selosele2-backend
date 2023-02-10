@@ -1,9 +1,11 @@
-import { Controller, Get, Delete, Body, ValidationPipe, Post } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Body, ValidationPipe, Post, Param } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/models';
-import { Auth } from 'src/shared/decorators';
+import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { DeleteResult } from 'typeorm';
 import { RemoveContentDto, ContentEntity } from '../models';
+import { GetContentDto } from '../models/dto/get-content.dto';
 import { ContentService } from '../services/content.service';
 
 @Controller('content')
@@ -25,6 +27,31 @@ export class ContentController {
   })
   listContent(): Promise<ContentEntity[]> {
     return this.contentService.listContent();
+  }
+
+  @Get(':link')
+  @ApiOperation({
+    summary: '콘텐츠 상세 조회 API',
+    description: '콘텐츠를 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: ContentEntity,
+    description: '콘텐츠를 조회한다.',
+  })
+  @ApiParam({
+    type: String,
+    name: 'link',
+    description: '콘텐츠 링크',
+  })
+  getContent(
+    @IsAuthenticated() isAuthenticated: boolean,
+    @Param('link') link: string
+  ): Promise<ContentEntity> {
+    const getContentDto: GetContentDto = Builder(GetContentDto)
+                                         .link(link)
+                                         .isLogin(isAuthenticated ? 'Y' : 'N')
+                                         .build();
+    return this.contentService.getContent(getContentDto);
   }
 
   @Post('remove')
