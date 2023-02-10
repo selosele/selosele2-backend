@@ -1,14 +1,17 @@
-import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Logger } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { AuthCredentialsDto, UserEntity, RoleEntity, RoleEnum } from '../models';
 import { AuthService } from '../services/auth.service';
 import { InsertResult } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Auth } from 'src/shared/decorators';
+import { RealIP } from 'nestjs-real-ip';
 
 @Controller('auth')
 @ApiTags('인증·인가 API')
 export class AuthController {
+
+  private readonly logger = new Logger(AuthController.name);
   
   constructor(
     private readonly config: ConfigService,
@@ -66,7 +69,14 @@ export class AuthController {
     type: AuthCredentialsDto,
     description: '로그인 DTO',
   })
-  signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
+  signIn(
+    @RealIP() ip: string,
+    @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto
+  ): Promise<{ accessToken: string }> {
+    const { userId, userPw } = authCredentialsDto;
+
+    this.logger.log(`userId : ${userId}, userPw : ${userPw}, ip : ${ip}`);
+    
     return this.authService.signIn(authCredentialsDto);
   }
 

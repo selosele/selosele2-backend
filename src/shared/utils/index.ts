@@ -4,6 +4,7 @@ export * from './database/transaction.util';
 export * from './encrypt/encrypt.util';
 export * from './escape-html/escape-html.util';
 export * from './html-parser/html-parser.util';
+export * from './logger/logger.util';
 export * from './markdown/markdown.util';
 export * from './swagger/swagger.util';
 export * from './validation/validation.util';
