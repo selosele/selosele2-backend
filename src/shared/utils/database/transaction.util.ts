@@ -10,4 +10,4 @@ export async function startTransaction(callback: (entityManager: EntityManager) 
   });
 
   return await dataSorce.destroy();
-};
+}

@@ -12,4 +12,4 @@ export function setupValidation(app: INestApplication): void {
       transform: true,
     })
   );
-};
+}

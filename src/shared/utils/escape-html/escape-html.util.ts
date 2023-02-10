@@ -20,4 +20,5 @@ export const santinizeHtmlOption: sanitizeHtml.IOptions = {
                .replace(/&lt;/g, '<')
                .replace(/&gt;/g, '>');
   },
-};
+  
+}

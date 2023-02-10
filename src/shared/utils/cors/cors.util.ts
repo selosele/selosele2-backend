@@ -16,4 +16,4 @@ export function setupCors(app: INestApplication): void {
     methods: 'GET,POST,PUT,DELETE', // 허용할 Request Method
     credentials: true, // 요청에 인증 정보를 담아서 보낼지 여부
   });
-};
+}
