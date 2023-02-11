@@ -1,0 +1,10 @@
+{
+  "apps": [
+    {
+      "name": "blog2",
+      "script": "dist/main.js",
+      "watch": true,
+      "ignore_watch": ["./node_modules", "./.git", "./.gitignore", "./README.md"]
+    }
+  ]
+}

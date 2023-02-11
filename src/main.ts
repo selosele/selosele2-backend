@@ -33,6 +33,12 @@ async function bootstrap() {
   // 유효성 검증 설정
   setupValidation(app);
 
-  await app.listen(process.env.PORT || 3000);
+  const port = process.env.PORT || 3000;
+
+  await app.listen(port);
+
+  if ('development' === process.env.NODE_ENV) {
+    console.log(`Server running at http://localhost:${port}..`);
+  }
 }
 bootstrap();
