@@ -1,9 +1,7 @@
 import { CustomRepository } from "src/configs/database/CustomRepository";
 import { PaginationDto } from "src/shared/models";
 import { Repository } from "typeorm";
-import { AddGuestbookReplyDto, GuestbookReplyEntity } from "../models";
-import { ListGuestbookReplyDto } from "../models/dto/list-guestbook-reply.dto";
-import { UpdateGuestbookReplyDto } from "../models/dto/update-guestbook-reply.dto";
+import { AddGuestbookReplyDto, UpdateGuestbookReplyDto, ListGuestbookReplyDto, GuestbookReplyEntity } from "../models";
 
 @CustomRepository(GuestbookReplyEntity)
 export class GuestbookReplyRepository extends Repository<GuestbookReplyEntity> {

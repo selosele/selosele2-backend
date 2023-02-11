@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put, Query, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { RealIP } from 'nestjs-real-ip';
 import { IsAuthenticated } from 'src/shared/decorators';

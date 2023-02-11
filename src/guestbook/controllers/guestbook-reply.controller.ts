@@ -3,10 +3,7 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@n
 import { RealIP } from 'nestjs-real-ip';
 import { IsAuthenticated } from 'src/shared/decorators';
 import { PaginationDto } from 'src/shared/models';
-import { AddGuestbookReplyDto, GuestbookReplyEntity } from '../models';
-import { ListGuestbookReplyDto } from '../models/dto/list-guestbook-reply.dto';
-import { RemoveGuestbookReplyDto } from '../models/dto/remove-guestbook-reply.dto';
-import { UpdateGuestbookReplyDto } from '../models/dto/update-guestbook-reply.dto';
+import { ListGuestbookReplyDto, AddGuestbookReplyDto, RemoveGuestbookReplyDto, UpdateGuestbookReplyDto, GuestbookReplyEntity } from '../models';
 import { GuestbookReplyService } from "../services/guestbook-reply.service";
 
 @Controller('guestbookreply')

@@ -2,8 +2,7 @@ import { CustomRepository } from "src/configs/database/CustomRepository";
 import { ListPostDto, SearchPostDto } from "src/post/models";
 import { PaginationDto } from "src/shared/models";
 import { Brackets, DeleteResult, Repository } from "typeorm";
-import { PostCategoryEntity } from "../models";
-import { SavePostCategoryDto } from "../models/dto/save-post-category.dto";
+import { SavePostCategoryDto, PostCategoryEntity } from "../models";
 
 @CustomRepository(PostCategoryEntity)
 export class PostCategoryRepository extends Repository<PostCategoryEntity> {

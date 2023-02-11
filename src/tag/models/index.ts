@@ -1,5 +1,6 @@
 //DTO
 export * from './dto/list-tag.dto';
+export * from './dto/save-post-tag.dto';
 export * from './dto/save-tag.dto';
 
 //Entities

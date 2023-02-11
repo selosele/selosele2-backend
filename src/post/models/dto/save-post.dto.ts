@@ -21,7 +21,7 @@ export class SavePostDto {
   @IsEmpty()
   modDate?: Date;
 
-  /** 포스트 제목 */
+  /** 포스트 댓글 개수 */
   @IsEmpty()
   replyCnt?: number;
 

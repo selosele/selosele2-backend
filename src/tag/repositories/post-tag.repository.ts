@@ -3,8 +3,7 @@ import { CustomRepository } from "src/configs/database/CustomRepository";
 import { SearchPostDto } from "src/post/models";
 import { PaginationDto } from "src/shared/models";
 import { Brackets, DeleteResult, Repository } from "typeorm";
-import { PostTagEntity } from "../models";
-import { SavePostTagDto } from "../models/dto/save-post-tag.dto";
+import { SavePostTagDto, PostTagEntity } from "../models";
 
 @CustomRepository(PostTagEntity)
 export class PostTagRepository extends Repository<PostTagEntity> {

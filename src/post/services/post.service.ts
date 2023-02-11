@@ -283,7 +283,7 @@ export class PostService {
   /** 미리보기 포스트 데이타를 가공한다.  */
   async getPreviewPost(savePostDto: SavePostDto): Promise<PostEntity> {
 
-    // 포스트의 콘텐츠를 Markdown으로 렌더링한다.
+    // 포스트의 내용을 Markdown으로 렌더링한다.
     savePostDto.cont = md.render(savePostDto.cont);
 
     return <PostEntity>savePostDto;
