@@ -22,7 +22,7 @@ import { CountPostDto } from '../models/dto/count-post.dto';
 
 @Injectable()
 export class PostService {
-  
+
   constructor(
     @InjectRepository(PostRepository)
     private readonly postRepository: PostRepository,
@@ -85,6 +85,10 @@ export class PostService {
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto
   ): Promise<[PostEntity[], number]> {
+
+    // HTML Escape
+    searchPostDto.q = escapeHtml(searchPostDto.q);
+
     const [post, postCategory] = await Promise.all([
       
       // 포스트 목록 조회

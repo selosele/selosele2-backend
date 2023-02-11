@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Delete, Body, UseInterceptors, ParseFilePipe, UploadedFile, Put } from '@nestjs/common';
+import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Delete, Body, UseInterceptors, ParseFilePipe, UploadedFile, Put, Logger } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
+import { RealIP } from 'nestjs-real-ip';
 import { RoleEnum } from 'src/auth/models';
 import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
 import { Auth, IsAuthenticated } from 'src/shared/decorators';
@@ -15,6 +16,8 @@ import { PostService } from '../services/post.service';
 @Controller('post')
 @ApiTags('포스트 API')
 export class PostController {
+
+  private readonly logger = new Logger(PostService.name);
   
   constructor(
     private readonly postService: PostService,
@@ -94,10 +97,14 @@ export class PostController {
     description: '페이지네이션 DTO',
   })
   listPostSearch(
+    @RealIP() ip: string,
     @IsAuthenticated() isAuthenticated: boolean,
     @Query(ValidationPipe) searchPostDto: SearchPostDto,
     @Query(ValidationPipe) paginationDto: PaginationDto,
   ): Promise<[PostEntity[], number]> {
+
+    this.logger.warn(`q : ${searchPostDto.q}, ip: ${ip}`);
+
     // 비밀글 조회를 위한 세팅
     searchPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
     
