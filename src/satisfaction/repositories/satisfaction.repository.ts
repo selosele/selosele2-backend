@@ -1,13 +1,13 @@
 import { CustomRepository } from "src/configs/database/CustomRepository";
-import { InsertResult, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from "../models";
 
 @CustomRepository(SatisfactionEntity)
 export class SatisfactionRepository extends Repository<SatisfactionEntity> {
 
   /** 만족도조사에 참여한다. */
-  async addSatisfaction(addSatisfactiontDto: AddSatisfactiontDto): Promise<InsertResult> {
-    return await this.insert(addSatisfactiontDto);
+  async addSatisfaction(addSatisfactiontDto: AddSatisfactiontDto): Promise<SatisfactionEntity> {
+    return await this.save(addSatisfactiontDto);
   }
 
   /** 만족도조사 참여 여부를 조회한다. */

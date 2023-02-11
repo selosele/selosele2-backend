@@ -5,21 +5,27 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SatisfactionEntity } from './models';
 import { CustomTypeOrmModule } from 'src/configs/database/CustomTypeOrmModule';
 import { SatisfactionRepository } from './repositories/satisfaction.repository';
+import { NotificationService } from 'src/notification/services/notification.service';
+import { NotificationEntity } from 'src/notification/models';
+import { NotificationRepository } from 'src/notification/repositories/notification.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      SatisfactionEntity
+      SatisfactionEntity,
+      NotificationEntity
     ]),
     CustomTypeOrmModule.forCustomRepository([
-      SatisfactionRepository
+      SatisfactionRepository,
+      NotificationRepository
     ]),
   ],
   controllers: [
     SatisfactionController
   ],
   providers: [
-    SatisfactionService
+    SatisfactionService,
+    NotificationService
   ]
 })
 export class SatisfactionModule {}

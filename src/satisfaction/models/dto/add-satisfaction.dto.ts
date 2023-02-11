@@ -7,6 +7,10 @@ export class AddSatisfactiontDto {
   @IsNotEmpty()
   pagePath?: string;
 
+  /** 페이지 타이틀 */
+  @IsOptional()
+  pageTitle?: string;
+
   /** 만족도 점수 */
   @IsNotEmpty()
   score?: string;

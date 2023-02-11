@@ -41,7 +41,7 @@ export class SatisfactionController {
     description: '만족도조사에 참여한다.',
   })
   @ApiCreatedResponse({
-    type: InsertResult,
+    type: SatisfactionEntity,
     description: '만족도조사에 참여한다.',
   })
   @ApiBody({
@@ -52,7 +52,7 @@ export class SatisfactionController {
     @Body(ValidationPipe) addSatisfactiontDto: AddSatisfactiontDto,
     @RealIP() ip: string,
     @IsAuthenticated() isAuthenticated: boolean
-  ): Promise<InsertResult> {
+  ): Promise<SatisfactionEntity> {
     if (isAuthenticated) {
       throw new BizException('관리자는 참여할 수 없습니다.');
     }

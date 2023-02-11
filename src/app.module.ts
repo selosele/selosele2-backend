@@ -18,6 +18,7 @@ import { ContentModule } from './content/content.module';
 import { APP_FILTER } from '@nestjs/core';
 import { BizExceptionFilter } from './shared/exceptions/biz/biz-exception.filter';
 import { FileUploaderModule } from './file-uploader/file-uploader.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { FileUploaderModule } from './file-uploader/file-uploader.module';
     SatisfactionModule,
     GuestbookModule,
     ContentModule,
+    NotificationModule,
   ],
   providers: [
     {
