@@ -1,7 +1,7 @@
 import { CustomRepository } from 'src/configs/database/CustomRepository';
 import { isNotEmpty } from 'src/shared/utils';
-import { DeleteResult, Repository } from 'typeorm';
-import { ListMenuDto, SaveMenuDto, MenuEntity } from '../models';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { ListMenuDto, SaveMenuDto, UpdateContentMenuDto, MenuEntity } from '../models';
 
 @CustomRepository(MenuEntity)
 export class MenuRepository extends Repository<MenuEntity> {
@@ -59,6 +59,19 @@ export class MenuRepository extends Repository<MenuEntity> {
   /** 메뉴를 삭제한다. */
   async removeMenu(id: number): Promise<DeleteResult> {
     return await this.delete(id);
+  }
+
+  /** 콘텐츠 연결메뉴를 수정한다. */
+  async updateContentMenu(updateContentMenuDto: UpdateContentMenuDto): Promise<UpdateResult> {
+    return await this.createQueryBuilder('menu')
+      .update()
+      .set({
+        name: updateContentMenuDto.name,
+      })
+      .where({
+        link: updateContentMenuDto.link,
+      })
+      .execute();
   }
 
 }

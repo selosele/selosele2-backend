@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Builder } from 'builder-pattern';
 import { RoleRepository } from 'src/auth/repositories/role.repository';
 import { startTransaction } from 'src/shared/utils';
-import { DeleteResult, EntityManager } from 'typeorm';
-import { ListMenuDto, SaveMenuRoleDto, SaveMenuDto, MenuEntity } from '../models';
+import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
+import { ListMenuDto, SaveMenuRoleDto, SaveMenuDto, MenuEntity, UpdateContentMenuDto } from '../models';
 import { MenuRoleRepository } from '../repositories/menu-role.repository';
 import { MenuRepository } from '../repositories/menu.repository';
 
@@ -98,6 +98,11 @@ export class MenuService {
     });
 
     return removeMenu;
+  }
+
+  /** 콘텐츠 연결메뉴를 수정한다. */
+  async updateContentMenu(updateContentMenuDto: UpdateContentMenuDto): Promise<UpdateResult> {
+    return await this.updateContentMenu(updateContentMenuDto);
   }
 
 }
