@@ -1,22 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, InsertResult } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
 import { SatisfactionRepository } from '../repositories/satisfaction.repository';
 import { BizException } from 'src/shared/exceptions/biz/biz.exception';
-import { escapeHtml, startTransaction } from 'src/shared/utils';
+import { escapeHtml, kakaoUtil, startTransaction } from 'src/shared/utils';
 import { NotificationRepository } from 'src/notification/repositories/notification.repository';
 import { Builder } from 'builder-pattern';
 import { AddNotificationDto } from 'src/notification/models';
+import { HttpService } from '@nestjs/axios/dist/http.service';
+import { BlogConfigRepository } from 'src/blog-config/repositories/blog-config.repository';
+import { BlogConfigEntity } from 'src/blog-config/models';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SatisfactionService {
+
+  private logger = new Logger(SatisfactionService.name);
 
   constructor(
     @InjectRepository(SatisfactionRepository)
     private readonly satisfactionRepository: SatisfactionRepository,
     @InjectRepository(NotificationRepository)
     private readonly notificationRepository: NotificationRepository,
+    @InjectRepository(BlogConfigRepository)
+    private readonly blogConfigRepository: BlogConfigRepository,
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
   ) {}
 
   /** 만족도조사에 참여한다. */
@@ -46,6 +56,31 @@ export class SatisfactionService {
                                                      .title(addSatisfactiontDto.pageTitle)
                                                      .build();
       await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
+
+      // 3. 블로그 환경설정의 카카오톡 메시지 수신 여부를 조회한다.
+      // const blogConfig: BlogConfigEntity = await em.withRepository(this.blogConfigRepository).getKakaoMsgYn();
+
+      // if ('Y' === blogConfig.kakaoMsgYn) {
+
+      //   // 4. 카카오톡 액세스 토큰을 갱신한다.
+      //   this.httpService.post('https://kauth.kakao.com/oauth/token');
+
+      //   // 5. 카카오톡 메시지를 전송한다.
+      //   const text = `${addSatisfactiontDto.pageTitle} 페이지에 만족도 평가가 등록되었습니다.`;
+      //   const url = `${this.configService.get<string>('PAGE_ORIGIN')}${addSatisfactiontDto.pagePath}`;
+      //   const headers = kakaoUtil.getSendMessageHeaders('o_YqacZBcIKqLBjVwOStQURs6qdKJNUQa1zID7VkCiolTgAAAYZF3W7_');
+      //   const body = kakaoUtil.getSendMessageBody(text, url);
+
+      //   this.httpService.post('https://kapi.kakao.com/v2/api/talk/memo/default/send', body, { headers })
+      //   .subscribe({
+      //     next: (res) => {
+      //       this.logger.log(`카카오톡 메시지 전송 성공 : ${JSON.stringify(res.data)}`);
+      //     },
+      //     error: (err) => {
+      //       this.logger.debug(`카카오톡 메시지 전송 실패 : ${JSON.stringify(err.response.data)}`);
+      //     }
+      //   });
+      // }
     });
     
     return res;
