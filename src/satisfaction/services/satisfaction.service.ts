@@ -32,10 +32,10 @@ export class SatisfactionService {
     let res: SatisfactionEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (entityManager: EntityManager) => {
+    await startTransaction(async (em: EntityManager) => {
 
       // 1. 만족도조사를 추가한다.
-      res = await entityManager.withRepository(this.satisfactionRepository).addSatisfaction(addSatisfactiontDto);
+      res = await em.withRepository(this.satisfactionRepository).addSatisfaction(addSatisfactiontDto);
 
       // 2. 알림을 추가한다.
       const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
@@ -45,7 +45,7 @@ export class SatisfactionService {
                                                      .senderIp(addSatisfactiontDto.ip)
                                                      .title(addSatisfactiontDto.pageTitle)
                                                      .build();
-      await entityManager.withRepository(this.notificationRepository).addNotification(addNotificationDto);
+      await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
     });
     
     return res;

@@ -86,10 +86,10 @@ export class ContentService {
     let content: ContentEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (entityManager: EntityManager) => {
+    await startTransaction(async (em: EntityManager) => {
 
       // 1. 콘텐츠를 저장한다.
-      content = await entityManager.withRepository(this.contentRepository).saveContent(saveContentDto);
+      content = await em.withRepository(this.contentRepository).saveContent(saveContentDto);
 
       // 2. 연결메뉴명을 수정한다.
       if ('Y' === updateMenuNameYn) {
@@ -97,7 +97,7 @@ export class ContentService {
                                                            .link('/content' + saveContentDto.link)
                                                            .name(saveContentDto.title)
                                                            .build();
-        await entityManager.withRepository(this.menuRepository).updateContentMenu(updateContentMenuDto);
+        await em.withRepository(this.menuRepository).updateContentMenu(updateContentMenuDto);
       }
     });
 

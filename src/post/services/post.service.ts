@@ -202,18 +202,18 @@ export class PostService {
     let post: PostEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (entityManager: EntityManager) => {
+    await startTransaction(async (em: EntityManager) => {
 
       // 1. 포스트를 저장한다.
-      post = await entityManager.withRepository(this.postRepository).savePost(savePostDto);
+      post = await em.withRepository(this.postRepository).savePost(savePostDto);
 
       // 2. 포스트 카테고리를 저장한다.
       const savePostCategoryDto: SavePostCategoryDto = Builder(SavePostCategoryDto)
                                                        .postId(post.id)
                                                        .categoryId(categoryId)
                                                        .build();
-      await entityManager.withRepository(this.postCategoryRepository).removePostCategory(savePostCategoryDto);
-      await entityManager.withRepository(this.postCategoryRepository).savePostCategory(savePostCategoryDto);
+      await em.withRepository(this.postCategoryRepository).removePostCategory(savePostCategoryDto);
+      await em.withRepository(this.postCategoryRepository).savePostCategory(savePostCategoryDto);
 
       if (isNotBlank(savePostDto.saveTagList)) {
         const saveTagList: SaveTagDto[] = deserialize(Array<SaveTagDto>, savePostDto.saveTagList); // JSON -> Array 역직렬화
@@ -222,7 +222,7 @@ export class PostService {
         const removePostTagDto: SavePostTagDto = Builder(SavePostTagDto)
                                                  .postId(post.id)
                                                  .build();
-        await entityManager.withRepository(this.postTagRepository).removePostTag(removePostTagDto);
+        await em.withRepository(this.postTagRepository).removePostTag(removePostTagDto);
 
         for (const saveTag of saveTagList) {
 
@@ -231,14 +231,14 @@ export class PostService {
                                          .id(saveTag.id)
                                          .nm(saveTag.nm)
                                          .build();
-          const tag: TagEntity = await entityManager.withRepository(this.tagRepository).saveTag(saveTagDto);
+          const tag: TagEntity = await em.withRepository(this.tagRepository).saveTag(saveTagDto);
 
           // 5. 포스트 태그를 저장한다.
           const savePostTagDto: SavePostTagDto = Builder(SavePostTagDto)
                                                  .postId(post.id)
                                                  .tagId(tag.id)
                                                  .build();
-          await entityManager.withRepository(this.postTagRepository).savePostTag(savePostTagDto);
+          await em.withRepository(this.postTagRepository).savePostTag(savePostTagDto);
         }
       }
     });

@@ -35,16 +35,16 @@ export class MenuService {
     let menu: MenuEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (entityManager: EntityManager) => {
+    await startTransaction(async (em: EntityManager) => {
 
       // 1. 메뉴를 저장한다.
-      menu = await entityManager.withRepository(this.menuRepository).saveMenu(saveMenuDto);
+      menu = await em.withRepository(this.menuRepository).saveMenu(saveMenuDto);
   
       // 2. 기존의 메뉴 권한을 삭제한다.
       const removeMenuRoleDto: SaveMenuRoleDto = Builder(SaveMenuRoleDto)
                                                  .menuId(menu.id)
                                                  .build();
-      await entityManager.withRepository(this.menuRoleRepository).removeMenuRole(removeMenuRoleDto);
+      await em.withRepository(this.menuRoleRepository).removeMenuRole(removeMenuRoleDto);
   
       let roles: SaveMenuRoleDto[] = [];
     
@@ -73,7 +73,7 @@ export class MenuService {
                                                 .menuId(role.menuId)
                                                 .roleId(role.roleId)
                                                 .build();
-        await entityManager.withRepository(this.menuRoleRepository).saveMenuRole(addMenuRoleDto);
+        await em.withRepository(this.menuRoleRepository).saveMenuRole(addMenuRoleDto);
       }
     });
 
@@ -85,16 +85,16 @@ export class MenuService {
     let removeMenu: DeleteResult = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (entityManager: EntityManager) => {
+    await startTransaction(async (em: EntityManager) => {
 
       // 1. 메뉴 권한을 삭제한다.
       const removeMenuRoleDto: SaveMenuRoleDto = Builder(SaveMenuRoleDto)
                                                  .menuId(id)
                                                  .build();
-      await entityManager.withRepository(this.menuRoleRepository).removeMenuRole(removeMenuRoleDto);
+      await em.withRepository(this.menuRoleRepository).removeMenuRole(removeMenuRoleDto);
   
       // 2. 메뉴를 삭제한다.
-      removeMenu = await entityManager.withRepository(this.menuRepository).removeMenu(id);
+      removeMenu = await em.withRepository(this.menuRepository).removeMenu(id);
     });
 
     return removeMenu;
