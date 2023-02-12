@@ -1,8 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Builder } from "builder-pattern";
+import { AddNotificationDto } from "src/notification/models";
+import { NotificationRepository } from "src/notification/repositories/notification.repository";
 import { BizException } from "src/shared/exceptions/biz/biz.exception";
+import { startTransaction } from "src/shared/utils";
 import { isEmpty } from "src/shared/utils/common/common.util";
-import { DeleteResult, InsertResult } from "typeorm";
+import { DeleteResult, EntityManager } from "typeorm";
 import { GetPostLikeDto, SavePostLikeDto, PostLikeEntity } from "../models";
 import { PostLikeRepository } from "../repositories/post-like.repository";
 
@@ -12,6 +16,8 @@ export class PostLikeService {
   constructor(
     @InjectRepository(PostLikeRepository)
     private readonly postLikeRepository: PostLikeRepository,
+    @InjectRepository(NotificationRepository)
+    private readonly notificationRepository: NotificationRepository,
   ) {}
 
   /** 포스트 추천 정보를 조회한다. */
@@ -30,11 +36,26 @@ export class PostLikeService {
 
     // 추천 이력이 없으면 추천을 하고
     if (isEmpty(foundLike)) {
-      const addPostLike: InsertResult = await this.postLikeRepository.addPostLike(savePostLikeDto);
-      if (0 < addPostLike.raw.length) {
-        return 1;
-      }
-      return 0;
+      let res: PostLikeEntity = null;
+
+      // 트랜잭션을 시작한다.
+      await startTransaction(async (em: EntityManager) => {
+
+        // 1. 추천을 추가한다.
+        res = await em.withRepository(this.postLikeRepository).addPostLike(savePostLikeDto);
+  
+        // 2. 알림을 추가한다.
+        const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
+                                                       .cnncId(res.id)
+                                                       .typeCd('D02001')
+                                                       .link(`/post/${savePostLikeDto.postId}`)
+                                                       .senderIp(savePostLikeDto.ip)
+                                                       .title(savePostLikeDto.title)
+                                                       .build();
+        await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
+      });
+
+      return 1;
     }
     
     // 추천 이력이 있으면 추천을 해제한다.

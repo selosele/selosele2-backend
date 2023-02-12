@@ -15,6 +15,10 @@ export class SavePostReplyDto {
   @IsOptional()
   parentReplyId?: number;
 
+  /** 상위 포스트 제목 */
+  @IsOptional()
+  title?: string;
+
   /** 포스트 댓글 그룹 */
   @IsOptional()
   group?: number;

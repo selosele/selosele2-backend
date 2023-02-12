@@ -8,16 +8,21 @@ import { GuestbookRepository } from './repositories/guestbook.repository';
 import { GuestbookReplyRepository } from './repositories/guestbook-reply.repository';
 import { GuestbookReplyService } from './services/guestbook-reply.service';
 import { GuestbookReplyController } from './controllers/guestbook-reply.controller';
+import { NotificationService } from 'src/notification/services/notification.service';
+import { NotificationRepository } from 'src/notification/repositories/notification.repository';
+import { NotificationEntity } from 'src/notification/models';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       GuestbookEntity,
-      GuestbookReplyEntity
+      GuestbookReplyEntity,
+      NotificationEntity
     ]),
     CustomTypeOrmModule.forCustomRepository([
       GuestbookRepository,
-      GuestbookReplyRepository
+      GuestbookReplyRepository,
+      NotificationRepository
     ]),
   ],
   controllers: [
@@ -26,7 +31,8 @@ import { GuestbookReplyController } from './controllers/guestbook-reply.controll
   ],
   providers: [
     GuestbookService,
-    GuestbookReplyService
+    GuestbookReplyService,
+    NotificationService
   ]
 })
 export class GuestbookModule {}

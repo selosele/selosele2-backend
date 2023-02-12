@@ -11,6 +11,10 @@ export class SavePostLikeDto {
   @IsNotEmpty()
   postId?: number;
 
+  /** 포스트 제목 */
+  @IsNotEmpty()
+  title?: string;
+
   /** 포스트 추천자 IP */
   @IsEmpty()
   ip?: string;

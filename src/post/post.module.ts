@@ -19,6 +19,9 @@ import { PostTagEntity, TagEntity } from 'src/tag/models';
 import { PostTagRepository } from 'src/tag/repositories/post-tag.repository';
 import { TagRepository } from 'src/tag/repositories/tag.repository';
 import { FileUploaderService } from 'src/file-uploader/services/file-uploader.service';
+import { NotificationService } from 'src/notification/services/notification.service';
+import { NotificationRepository } from 'src/notification/repositories/notification.repository';
+import { NotificationEntity } from 'src/notification/models';
 
 @Module({
   imports: [
@@ -30,6 +33,7 @@ import { FileUploaderService } from 'src/file-uploader/services/file-uploader.se
       PostReplyEntity,
       TagEntity,
       BlogConfigEntity,
+      NotificationEntity
     ]),
     CustomTypeOrmModule.forCustomRepository([
       PostRepository,
@@ -39,6 +43,7 @@ import { FileUploaderService } from 'src/file-uploader/services/file-uploader.se
       PostReplyRepository,
       TagRepository,
       BlogConfigRepository,
+      NotificationRepository
     ]),
   ],
   controllers: [
@@ -50,7 +55,8 @@ import { FileUploaderService } from 'src/file-uploader/services/file-uploader.se
     PostService,
     PostLikeService,
     PostReplyService,
-    FileUploaderService
+    FileUploaderService,
+    NotificationService
   ]
 })
 export class PostModule {}

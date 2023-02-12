@@ -1,5 +1,5 @@
 import { CustomRepository } from "src/configs/database/CustomRepository";
-import { DeleteResult, InsertResult, Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 import { SavePostLikeDto, PostLikeEntity } from "../models";
 
 @CustomRepository(PostLikeEntity)
@@ -16,8 +16,8 @@ export class PostLikeRepository extends Repository<PostLikeEntity> {
   }
 
   /** 포스트를 추천한다. */
-  async addPostLike(savePostLikeDto: SavePostLikeDto): Promise<InsertResult> {
-    return await this.insert(savePostLikeDto);
+  async addPostLike(savePostLikeDto: SavePostLikeDto): Promise<PostLikeEntity> {
+    return await this.save(savePostLikeDto);
   }
 
   /** 포스트를 추천 해제한다. */

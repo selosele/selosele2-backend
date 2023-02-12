@@ -4,7 +4,11 @@ import { PaginationDto } from 'src/shared/models';
 import { AddGuestbookDto, RemoveGuestbookDto, UpdateGuestbookDto, GuestbookEntity } from '../models';
 import { GuestbookRepository } from '../repositories/guestbook.repository';
 import { BizException } from 'src/shared/exceptions/biz/biz.exception';
-import { compareEncrypt, encrypt, escapeHtml } from 'src/shared/utils';
+import { compareEncrypt, encrypt, escapeHtml, startTransaction } from 'src/shared/utils';
+import { EntityManager } from 'typeorm';
+import { AddNotificationDto } from 'src/notification/models';
+import { Builder } from 'builder-pattern';
+import { NotificationRepository } from 'src/notification/repositories/notification.repository';
 
 @Injectable()
 export class GuestbookService {
@@ -12,6 +16,8 @@ export class GuestbookService {
   constructor(
     @InjectRepository(GuestbookRepository)
     private readonly guestbookRepository: GuestbookRepository,
+    @InjectRepository(NotificationRepository)
+    private readonly notificationRepository: NotificationRepository,
   ) {}
 
   /** 방명록 목록을 조회한다. */
@@ -34,10 +40,28 @@ export class GuestbookService {
     // HTML Escape
     addGuestbookDto.cont = escapeHtml(cont);
 
-    // 방명록 추가
-    const guestbook: GuestbookEntity = await this.guestbookRepository.addGuestbook(addGuestbookDto);
-    guestbook.guestbookReply = [];
-    
+    let guestbook: GuestbookEntity = null;
+
+    // 트랜잭션을 시작한다.
+    await startTransaction(async (em: EntityManager) => {
+
+      // 1. 방명록을 추가한다.
+      guestbook = await em.withRepository(this.guestbookRepository).addGuestbook(addGuestbookDto);
+      guestbook.guestbookReply = [];
+
+      // 2. 알림을 추가한다.
+      if ('N' === addGuestbookDto.adminYn) {
+        const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
+                                                        .cnncId(guestbook.id)
+                                                        .typeCd('D02003')
+                                                        .link('/guestbook')
+                                                        .senderIp(addGuestbookDto.ip)
+                                                        .senderNm(addGuestbookDto.author)
+                                                        .build();
+        await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
+      }
+    });
+
     return guestbook;
   }
 

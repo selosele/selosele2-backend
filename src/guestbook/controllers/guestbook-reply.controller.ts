@@ -58,11 +58,8 @@ export class GuestbookReplyController {
     @RealIP() ip: string,
     @Body(ValidationPipe) addGuestbookReplyDto: AddGuestbookReplyDto
   ): Promise<GuestbookReplyEntity> {
-    if (isAuthenticated) {
-      addGuestbookReplyDto.adminYn = 'Y';
-    }
-
     addGuestbookReplyDto.ip = ip;
+    addGuestbookReplyDto.adminYn = isAuthenticated ? 'Y' : 'N';
 
     return this.guestbookReplyService.addGuestbookReply(addGuestbookReplyDto);
   }

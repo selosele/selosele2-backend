@@ -1,5 +1,5 @@
-import { Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
-import { ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, ValidationPipe } from "@nestjs/common";
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { Builder } from "builder-pattern";
 import { RealIP } from "nestjs-real-ip";
 import { IsAuthenticated } from "src/shared/decorators";
@@ -39,7 +39,7 @@ export class PostLikeController {
     return this.postLikeService.getPostLike(getPostLikeDto);
   }
 
-  @Post(':id')
+  @Post()
   @ApiOperation({
     summary: '포스트 추천/추천 해제 API',
     description: '포스트를 추천/추천 해제한다.',
@@ -48,21 +48,18 @@ export class PostLikeController {
     type: Number,
     description: '포스트를 추천/추천 해제한다.',
   })
-  @ApiParam({
-    type: Number,
-    name: 'id',
-    description: '포스트 ID',
+  @ApiBody({
+    type: SavePostLikeDto,
+    description: '포스트 추천 DTO',
   })
   savePostLike(
     @IsAuthenticated() isAuthenticated: boolean,
     @RealIP() ip: string,
-    @Param('id', ParseIntPipe) id: number
+    @Body(ValidationPipe) savePostLikeDto: SavePostLikeDto
   ): Promise<number> {
-    const savePostLikeDto: SavePostLikeDto = Builder(SavePostLikeDto)
-                                            .postId(id)
-                                            .ip(ip)
-                                            .isLogin(isAuthenticated ? 'Y' : 'N')
-                                            .build();
+    savePostLikeDto.ip = ip;
+    savePostLikeDto.isLogin = isAuthenticated ? 'Y' : 'N';
+    
     return this.postLikeService.savePostLike(savePostLikeDto);
   }
 

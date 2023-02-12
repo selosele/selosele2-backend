@@ -4,7 +4,11 @@ import { AddGuestbookReplyDto, UpdateGuestbookReplyDto, RemoveGuestbookReplyDto,
 import { GuestbookReplyRepository } from '../repositories/guestbook-reply.repository';
 import { PaginationDto } from 'src/shared/models';
 import { BizException } from 'src/shared/exceptions';
-import { compareEncrypt, encrypt, escapeHtml } from 'src/shared/utils';
+import { compareEncrypt, encrypt, escapeHtml, startTransaction } from 'src/shared/utils';
+import { EntityManager } from 'typeorm';
+import { AddNotificationDto } from 'src/notification/models';
+import { Builder } from 'builder-pattern';
+import { NotificationRepository } from 'src/notification/repositories/notification.repository';
 
 @Injectable()
 export class GuestbookReplyService {
@@ -12,6 +16,8 @@ export class GuestbookReplyService {
   constructor(
     @InjectRepository(GuestbookReplyRepository)
     private readonly guestbookReplyRepository: GuestbookReplyRepository,
+    @InjectRepository(NotificationRepository)
+    private readonly notificationRepository: NotificationRepository,
   ) {}
 
   /** 방명록 댓글 목록을 조회한다. */
@@ -37,7 +43,28 @@ export class GuestbookReplyService {
     // HTML Escape
     addGuestbookReplyDto.cont = escapeHtml(cont);
 
-    return await this.guestbookReplyRepository.addGuestbookReply(addGuestbookReplyDto);
+    let guestbookReply: GuestbookReplyEntity = null;
+
+    // 트랜잭션을 시작한다.
+    await startTransaction(async (em: EntityManager) => {
+
+      // 1. 방명록 댓글을 추가한다.
+      guestbookReply = await em.withRepository(this.guestbookReplyRepository).addGuestbookReply(addGuestbookReplyDto);
+
+      // 2. 알림을 추가한다.
+      if ('N' === addGuestbookReplyDto.adminYn) {
+        const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
+                                                        .cnncId(guestbookReply.id)
+                                                        .typeCd('D02004')
+                                                        .link('/guestbook')
+                                                        .senderIp(addGuestbookReplyDto.ip)
+                                                        .senderNm(addGuestbookReplyDto.author)
+                                                        .build();
+        await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
+      }
+    });
+
+    return guestbookReply;
   }
 
   /** 방명록 댓글을 수정한다. */

@@ -50,11 +50,8 @@ export class GuestbookController {
     @RealIP() ip: string,
     @Body(ValidationPipe) addGuestbookDto: AddGuestbookDto
   ): Promise<GuestbookEntity> {
-    if (isAuthenticated) {
-      addGuestbookDto.adminYn = 'Y';
-    }
-
     addGuestbookDto.ip = ip;
+    addGuestbookDto.adminYn = isAuthenticated ? 'Y' : 'N';
 
     return this.guestbookService.addGuestbook(addGuestbookDto);
   }

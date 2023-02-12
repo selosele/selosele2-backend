@@ -13,6 +13,8 @@ import { PostService } from "./post.service";
 import { UpdatePostReplySortDto } from "../models/dto/update-post-reply-sort.dto";
 import { GetPostReplyDto } from "../models/dto/get-post-reply.dto";
 import { ListPostReplyDto } from "../models/dto/list-post-reply.dto";
+import { NotificationRepository } from "src/notification/repositories/notification.repository";
+import { AddNotificationDto } from "src/notification/models";
 
 @Injectable()
 export class PostReplyService {
@@ -22,6 +24,8 @@ export class PostReplyService {
     private readonly postReplyRepository: PostReplyRepository,
     @InjectRepository(PostRepository)
     private readonly postRepository: PostRepository,
+    @InjectRepository(NotificationRepository)
+    private readonly notificationRepository: NotificationRepository,
     private readonly postService: PostService,
   ) {}
 
@@ -70,7 +74,7 @@ export class PostReplyService {
       throw new NotFoundException();
     }
 
-    let save: PostReplyEntity = null;
+    let res: PostReplyEntity = null;
 
     // 추가
     if ('E01001' === savePostReplyDto.crudType) {
@@ -85,42 +89,55 @@ export class PostReplyService {
       await startTransaction(async (em: EntityManager) => {
 
         // 1. 댓글을 추가한다
-        save = await em.withRepository(this.postReplyRepository).savePostReply(savePostReplyDto);
+        res = await em.withRepository(this.postReplyRepository).savePostReply(savePostReplyDto);
 
         // 2. 포스트 댓글의 그룹을 수정한다.
         if (isEmpty(group)) {
 
           // 1 depth 댓글은 추가한 댓글의 ID 값을 group 값에 넣어주고, 2 depth 댓글은 상위 댓글의 ID 값을 group 값에 넣어준다.
-          await em.withRepository(this.postReplyRepository).updatePostReplyGroup(save.id);
+          await em.withRepository(this.postReplyRepository).updatePostReplyGroup(res.id);
         }
 
         if (isNotEmpty(parentReplyId)) {
 
           // 3. 마지막 포스트 댓글을 조회한다.
           const getPostReplyDto: GetPostReplyDto = Builder(GetPostReplyDto)
-                                                   .id(save.id)
+                                                   .id(res.id)
                                                    .group(parentReplyId)
                                                    .build();
           const lastPostReply: PostReplyEntity = await em.withRepository(this.postReplyRepository).getLastPostReply(getPostReplyDto);
 
           // 4. 포스트 댓글의 순서를 수정한다.
           const updatePostReplySortDto: UpdatePostReplySortDto = Builder(UpdatePostReplySortDto)
-                                                                 .id(save.id)
+                                                                 .id(res.id)
                                                                  .sort(lastPostReply.sort + 1)
                                                                  .build();
           await em.withRepository(this.postReplyRepository).updatePostReplySort(updatePostReplySortDto);
         }
   
         // 5. 댓글 개수를 조회한다.
-        const postReplyCount: number = await em.withRepository(this.postReplyRepository).countPostReply(save.parentId);
+        const postReplyCount: number = await em.withRepository(this.postReplyRepository).countPostReply(res.parentId);
         
         // 6. 상위 포스트의 댓글 개수 컬럼을 수정한다.
         const savePostDto: SavePostDto = Builder(SavePostDto)
-                                         .id(save.parentId)
+                                         .id(res.parentId)
                                          .replyCnt(postReplyCount)
                                          .modDate(parentPost.modDate)
                                          .build();
         await em.withRepository(this.postRepository).updatePostReplyCnt(savePostDto);
+
+        // 7. 알림을 추가한다.
+        if ('N' === savePostReplyDto.isLogin) {
+          const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
+                                                         .cnncId(res.id)
+                                                         .typeCd('D02002')
+                                                         .link(`/post/${savePostReplyDto.parentId}#postReply${res.id}`)
+                                                         .senderIp(savePostReplyDto.ip)
+                                                         .senderNm(savePostReplyDto.author)
+                                                         .title(savePostReplyDto.title)
+                                                         .build();
+          await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
+        }
       });
     }
     // 수정
@@ -128,6 +145,7 @@ export class PostReplyService {
 
       // 비밀번호 비교
       const isValid: boolean = await this.compareAuthorPassword(savePostReplyDto);
+
       if (!isValid) {
         throw new BizException('비밀번호를 확인하세요.');
       }
@@ -138,14 +156,14 @@ export class PostReplyService {
       // HTML Escape
       savePostReplyDto.cont = escapeHtml(savePostReplyDto.cont);
 
-      save = await this.postReplyRepository.savePostReply(savePostReplyDto);
+      res = await this.postReplyRepository.savePostReply(savePostReplyDto);
     }
     // 삭제
     else if ('E01004' === savePostReplyDto.crudType) {
-      save = await this.removePostReply(savePostReplyDto);
+      res = await this.removePostReply(savePostReplyDto);
     }
 
-    return save;
+    return res;
   }
 
   /** 포스트 댓글을 삭제한다. */
@@ -155,6 +173,7 @@ export class PostReplyService {
     // 관리자가 아닌 경우는 비밀번호를 비교한다.
     if ('N' === savePostReplyDto.isLogin) {
       const isValid: boolean = await this.compareAuthorPassword(savePostReplyDto);
+
       if (!isValid) {
         throw new BizException('비밀번호를 확인하세요.');
       }
@@ -169,28 +188,28 @@ export class PostReplyService {
                                    .build();
     const parentPost: PostEntity = await this.postService.getPost(getPostDto);
 
-    let remove: PostReplyEntity = null;
+    let res: PostReplyEntity = null;
 
     // 트랜잭션을 시작한다.
     await startTransaction(async (em: EntityManager) => {
 
       // 1. 댓글을 삭제한다.
       savePostReplyDto.delYn = 'Y';
-      remove = await em.withRepository(this.postReplyRepository).savePostReply(savePostReplyDto);
+      res = await em.withRepository(this.postReplyRepository).savePostReply(savePostReplyDto);
 
       // 2. 댓글 개수를 조회한다.
-      const postReplyCount: number = await em.withRepository(this.postReplyRepository).countPostReply(remove.parentId);
+      const postReplyCount: number = await em.withRepository(this.postReplyRepository).countPostReply(res.parentId);
       
       // 3. 상위 포스트의 댓글 개수 컬럼을 수정한다.
       const savePostDto: SavePostDto = Builder(SavePostDto)
-                                       .id(remove.parentId)
+                                       .id(res.parentId)
                                        .replyCnt(postReplyCount)
                                        .modDate(parentPost.modDate)
                                        .build();
       await em.withRepository(this.postRepository).updatePostReplyCnt(savePostDto);
     });
 
-    return remove;
+    return res;
   }
 
   /** 포스트 댓글의 그룹을 수정한다. */
