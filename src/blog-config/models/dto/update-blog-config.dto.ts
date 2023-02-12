@@ -106,4 +106,8 @@ export class UpdateBlogConfigDto {
   @IsNotEmpty()
   showSatisYn?: string;
 
+  /** 카카오톡 메시지 수신 여부 */
+  @IsNotEmpty()
+  kakaoMsgYn?: string;
+
 }

@@ -129,5 +129,13 @@ export class BlogConfigEntity extends BaseEntity {
     description: '만족도조사 표출 여부'
   })
   showSatisYn?: string;
+
+  @Column({
+    comment: '카카오톡 메시지 수신 여부'
+  })
+  @ApiProperty({
+    description: '카카오톡 메시지 수신 여부'
+  })
+  kakaoMsgYn?: string;
   
 }
