@@ -126,6 +126,7 @@ export class AuthController {
   }
 
   @Post('signout')
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '로그아웃 API',
     description: '로그아웃을 한다.',
