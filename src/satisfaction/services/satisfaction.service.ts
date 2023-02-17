@@ -68,7 +68,7 @@ export class SatisfactionService {
       //   // 5. 카카오톡 메시지를 전송한다.
       //   const text = `${addSatisfactiontDto.pageTitle} 페이지에 만족도 평가가 등록되었습니다.`;
       //   const url = `${this.configService.get<string>('PAGE_ORIGIN')}${addSatisfactiontDto.pagePath}`;
-      //   const headers = kakaoUtil.getSendMessageHeaders('o_YqacZBcIKqLBjVwOStQURs6qdKJNUQa1zID7VkCiolTgAAAYZF3W7_');
+      //   const headers = kakaoUtil.getSendMessageHeaders('token');
       //   const body = kakaoUtil.getSendMessageBody(text, url);
 
       //   this.httpService.post('https://kapi.kakao.com/v2/api/talk/memo/default/send', body, { headers })
