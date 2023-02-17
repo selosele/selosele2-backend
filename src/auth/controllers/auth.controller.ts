@@ -1,11 +1,13 @@
-import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Logger } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Logger, Res, UnauthorizedException, Req } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { AuthCredentialsDto, UserEntity, RoleEntity, RoleEnum } from '../models';
+import { AuthCredentialsDto, UserEntity, RoleEntity, RoleEnum, Tokens } from '../models';
 import { AuthService } from '../services/auth.service';
-import { InsertResult } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { Auth } from 'src/shared/decorators';
+import { Auth, User } from 'src/shared/decorators';
 import { RealIP } from 'nestjs-real-ip';
+import { CacheDBService } from 'src/cache-db/services/cache-db.service';
+import { createJwtRefreshTokenKey, isEmpty } from 'src/shared/utils';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 @ApiTags('인증·인가 API')
@@ -16,6 +18,7 @@ export class AuthController {
   constructor(
     private readonly config: ConfigService,
     private readonly authService: AuthService,
+    private readonly cacheDBService: CacheDBService,
   ) {}
 
   @Get('user/:userSn')
@@ -25,7 +28,7 @@ export class AuthController {
   })
   @ApiCreatedResponse({
     type: UserEntity,
-    description: '사용자를 조회한다.',
+    description: '사용자',
   })
   @ApiParam({
     type: Number,
@@ -41,19 +44,16 @@ export class AuthController {
     summary: '사용자 생성 API',
     description: '사용자를 생성한다.',
   })
-  @ApiCreatedResponse({
-    type: InsertResult,
-    description: '사용자를 생성한다.',
-  })
   @ApiBody({
     type: AuthCredentialsDto,
     description: '사용자 생성 DTO',
   })
-  signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
+  signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): void {
     if ('production' === this.config.get<string>('NODE_ENV')) {
       throw new NotFoundException();
     }
-    return this.authService.addUser(authCredentialsDto);
+    
+    this.authService.addUser(authCredentialsDto);
   }
 
   @Post('signin')
@@ -62,22 +62,94 @@ export class AuthController {
     description: '로그인을 한다.',
   })
   @ApiCreatedResponse({
-    type: String,
-    description: '로그인을 한다.',
+    type: Object,
+    description: '액세스 토큰, 리프레시 토큰',
   })
   @ApiBody({
     type: AuthCredentialsDto,
     description: '로그인 DTO',
   })
-  signIn(
+  async signIn(
     @RealIP() ip: string,
-    @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto
-  ): Promise<{ accessToken: string }> {
-    const { userId, userPw } = authCredentialsDto;
+    @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<Tokens> {
+    this.logger.warn(`ip : ${ip}`);
 
-    this.logger.log(`userId : ${userId}, userPw : ${userPw}, ip : ${ip}`);
+    // 액세스 토큰과 리프레시 토큰을 생성하고
+    const tokens = await this.authService.signIn(authCredentialsDto);
+
+    // 리프레시 토큰은 HTTP Only Cookie에 저장한다.
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      maxAge: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
+    });
     
-    return this.authService.signIn(authCredentialsDto);
+    return tokens;
+  }
+
+  @Post('refresh')
+  @ApiOperation({
+    summary: '액세스 토큰 갱신 API',
+    description: '액세스 토큰을 갱신 한다.',
+  })
+  @ApiCreatedResponse({
+    type: Object,
+    description: '액세스 토큰, 리프레시 토큰',
+  })
+  async refreshAccessToken(
+    @RealIP() ip: string,
+    @User() user: UserEntity,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<Tokens> {
+    this.logger.warn(`Try to refresh Access Token... ip : ${ip}`);
+
+    // Redis에 저장된 리프레시 토큰을 조회한다.
+    const cachedRefreshToken: string = await this.cacheDBService.get<string>(createJwtRefreshTokenKey(user));
+
+    // Redis에 리프레시 토큰이 없거나, Redis의 것과 쿠키의 리프레시 토큰이 불일치하면 401 예외를 던진다.
+    if (this.authService.isInValidRefreshToken(req, cachedRefreshToken)) {
+      throw new UnauthorizedException();
+    }
+
+    // 액세스 토큰과 리프레시 토큰을 생성하고
+    const tokens = await this.authService.createToken(user);
+
+    // 리프레시 토큰은 HTTP Only Cookie에 저장한다.
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      maxAge: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
+    });
+    
+    return tokens;
+  }
+
+  @Post('signout')
+  @ApiOperation({
+    summary: '로그아웃 API',
+    description: '로그아웃을 한다.',
+  })
+  async signOut(
+    @User() user: UserEntity,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<void> {
+    const refreshTokenKey = createJwtRefreshTokenKey(user);
+
+    // Redis에 저장된 리프레시 토큰을 조회해서
+    const cachedRefreshToken: string = await this.cacheDBService.get<string>(refreshTokenKey);
+    
+    // 없으면 쿠키의 리프레시 토큰만 삭제하고
+    if (isEmpty(cachedRefreshToken)) {
+      res.clearCookie('refreshToken');
+      return;
+    }
+
+    // Redis에 저장된 리프레시 토큰이 있으면 삭제하고
+    await this.cacheDBService.del(refreshTokenKey);
+
+    // 쿠키의 리프레시 토큰도 삭제한다.
+    res.clearCookie('refreshToken');
   }
 
   @Get('role')
@@ -87,8 +159,8 @@ export class AuthController {
     description: '권한 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: RoleEntity,
-    description: '권한 목록을 조회한다.',
+    type: Array<RoleEntity>,
+    description: '권한 목록',
   })
   listRole(): Promise<RoleEntity[]> {
     return this.authService.listRole();

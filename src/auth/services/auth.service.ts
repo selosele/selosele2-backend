@@ -6,9 +6,12 @@ import { UserRoleRepository } from '../repositories/user-role.repository';
 import { Builder } from 'builder-pattern';
 import { JwtService } from '@nestjs/jwt';
 import { BizException } from 'src/shared/exceptions/biz/biz.exception';
-import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, RoleEnum } from '../models';
+import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, RoleEnum, Tokens } from '../models';
 import { RoleRepository } from '../repositories/role.repository';
-import { compareEncrypt, encrypt, startTransaction } from 'src/shared/utils';
+import { compareEncrypt, createJwtRefreshTokenKey, encrypt, isEmpty, startTransaction } from 'src/shared/utils';
+import { CacheDBService } from 'src/cache-db/services/cache-db.service';
+import { ConfigService } from '@nestjs/config';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +24,8 @@ export class AuthService {
     @InjectRepository(RoleRepository)
     private readonly roleRepository: RoleRepository,
     private readonly jwtService: JwtService,
+    private readonly cacheDBService: CacheDBService,
+    private readonly config: ConfigService,
   ) {}
 
   /** 사용자를 조회한다. */
@@ -29,11 +34,11 @@ export class AuthService {
   }
   
   /** 사용자를 생성한다. */
-  async addUser(authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
+  async addUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { userId, userPw } = authCredentialsDto;
 
     // ID 중복 체크
-    const foundUser: UserEntity = await this.userRepository.findOne({ where: { userId } });
+    const foundUser: UserEntity = await this.getUser(userId);
     if (foundUser) {
       throw new BizException('중복된 사용자 ID입니다.');
     }
@@ -41,31 +46,24 @@ export class AuthService {
     // 비밀번호 암호화
     authCredentialsDto.userPw = await encrypt(userPw);
 
-    let res: InsertResult = null;
-
     // 트랜잭션을 시작한다.
     await startTransaction(async (em: EntityManager) => {
 
       // 1. 사용자를 생성한다.
-      const addUserRes: InsertResult = await em.withRepository(this.userRepository).addUser(authCredentialsDto);
-
-      if (addUserRes.identifiers[0].userId) {
-        const roles: string[] = [RoleEnum.ROLE_ANONYMOUS, RoleEnum.ROLE_ADMIN];
+      const user: UserEntity = await em.withRepository(this.userRepository).addUser(authCredentialsDto);
+      const roles: string[] = [RoleEnum.ROLE_ANONYMOUS, RoleEnum.ROLE_ADMIN];
         
-        for (const role of roles) {
+      for (const role of roles) {
 
-          // 2. 사용자 권한을 생성한다.
-          const addUserRoleDto: AuthCredentialsRoleDto = Builder(AuthCredentialsRoleDto)
-                                                         .userSn(addUserRes.identifiers[0].userSn)
-                                                         .userId(userId)
-                                                         .roleId(role)
-                                                         .build();
-          res = await em.withRepository(this.userRoleRepository).addUserRole(addUserRoleDto);
-        }
+        // 2. 사용자 권한을 생성한다.
+        const addUserRoleDto: AuthCredentialsRoleDto = Builder(AuthCredentialsRoleDto)
+                                                        .userSn(user.userSn)
+                                                        .userId(userId)
+                                                        .roleId(role)
+                                                        .build();
+        await em.withRepository(this.userRoleRepository).addUserRole(addUserRoleDto);
       }
     });
-
-    return res;
   }
 
   /** 사용자 권한을 생성한다. */
@@ -74,7 +72,7 @@ export class AuthService {
   }
 
   /** 로그인을 한다. */
-  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<{accessToken: string}> {
+  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<Tokens> {
     const { userId, userPw } = authCredentialsDto;
 
     const user: UserEntity = await this.getUser(userId);
@@ -90,23 +88,43 @@ export class AuthService {
     const matchPw = await compareEncrypt(userPw, user.userPw);
 
     if (user && matchPw) {
-      // 사용자 토큰 생성
-      const payload = {
-        userSn: user.userSn,
-        userRole: user.userRole,
-      };
-      
-      const accessToken: string = this.jwtService.sign(payload);
-
-      return { accessToken };
+      return this.createToken(user);
     }
     
     throw new BizException('로그인에 실패했습니다.');
   }
 
+  /** 토큰을 생성한다. */
+  async createToken(user: UserEntity): Promise<Tokens> {
+    const payload = {
+      userSn: user.userSn,
+      userRole: user.userRole,
+    };
+
+    // 액세스 토큰 생성
+    const accessToken: string = this.jwtService.sign(payload);
+
+    // 리프레시 토큰 생성 (액세스 토큰 갱신이 목적이므로 사용자 정보를 안 넣음)
+    const refreshToken: string = this.jwtService.sign({}, {
+      expiresIn: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME')
+    });
+
+    // Redis에 리프레시 토큰을 저장
+    await this.cacheDBService.set(createJwtRefreshTokenKey(user), refreshToken, {
+      ttl: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME')
+    });
+
+    return { accessToken, refreshToken };
+  }
+
   /** 권한 목록을 조회한다. */
   async listRole(): Promise<RoleEntity[]> {
     return await this.roleRepository.listRole();
+  }
+
+  /** 유효한 리프레시 토큰인지 확인한다. */
+  isInValidRefreshToken(req: Request, refreshToken: string): boolean {
+    return isEmpty(refreshToken) || refreshToken !== req.cookies['refreshToken'];
   }
 
 }
