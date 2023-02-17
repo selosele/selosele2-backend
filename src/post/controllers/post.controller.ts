@@ -29,8 +29,8 @@ export class PostController {
     description: '포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: PostEntity,
-    description: '포스트 목록을 조회한다.',
+    type: Array<PostEntity>,
+    description: '포스트 목록',
   })
   @ApiQuery({
     type: ListPostDto,
@@ -58,8 +58,8 @@ export class PostController {
     description: '개수별 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: PostEntity,
-    description: '개수별 포스트 목록을 조회한다.',
+    type: Array<PostEntity>,
+    description: '개수별 포스트 목록',
   })
   @ApiParam({
     type: Number,
@@ -83,8 +83,8 @@ export class PostController {
     description: '포스트를 검색한다.'
   })
   @ApiCreatedResponse({
-    type: PostEntity,
-    description: '포스트를 검색한다.',
+    type: Array<PostEntity>,
+    description: '포스트 목록',
   })
   @ApiQuery({
     type: SearchPostDto,
@@ -117,8 +117,8 @@ export class PostController {
     description: '포스트의 연도 및 개수를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: PostEntity,
-    description: '포스트의 연도 및 개수를 조회한다.',
+    type: Array<PostEntity>,
+    description: '포스트의 연도 및 개수',
   })
   listYearAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<PostEntity[]> {
     const listPostDto: ListPostDto = Builder(ListPostDto)
@@ -133,8 +133,8 @@ export class PostController {
     description: '연도별 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Post,
-    description: '연도별 포스트 목록을 조회한다.',
+    type: Array<PostEntity>,
+    description: '연도별 포스트 목록',
   })
   @ApiParam({
     type: String,
@@ -163,8 +163,8 @@ export class PostController {
     description: '카테고리별 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: PostEntity,
-    description: '카테고리별 포스트 목록을 조회한다.',
+    type: Array<PostEntity>,
+    description: '카테고리별 포스트 목록',
   })
   @ApiParam({
     type: Number,
@@ -193,8 +193,8 @@ export class PostController {
     description: '태그별 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: PostEntity,
-    description: '태그별 포스트 목록을 조회한다.',
+    type: Array<PostEntity>,
+    description: '태그별 포스트 목록',
   })
   @ApiParam({
     type: Number,
@@ -219,12 +219,12 @@ export class PostController {
 
   @Get('prevnext/:id')
   @ApiOperation({
-    summary: '이전/다음 포스트 조회 API',
-    description: '이전/다음 포스트를 조회한다.'
+    summary: '이전/다음 포스트 목록 조회 API',
+    description: '이전/다음 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: PostEntity,
-    description: '이전/다음 포스트를 조회한다.',
+    type: Array<PostEntity>,
+    description: '이전/다음 포스트 목록',
   })
   @ApiParam({
     type: Number,
@@ -249,7 +249,7 @@ export class PostController {
   })
   @ApiCreatedResponse({
     type: PostEntity,
-    description: '포스트를 조회한다.',
+    description: '포스트',
   })
   @ApiParam({
     type: Number,
@@ -275,8 +275,8 @@ export class PostController {
     description: '포스트를 추가한다.'
   })
   @ApiCreatedResponse({
-    type: SavePostDto,
-    description: '포스트를 추가한다.',
+    type: PostEntity,
+    description: '포스트',
   })
   @ApiBody({
     type: SavePostDto,
@@ -291,7 +291,7 @@ export class PostController {
       ],
       fileIsRequired: false,
     })) ogImgFile: FileUploaderRequest,
-  ) {
+  ): Promise<PostEntity> {
     if (isNotFileEmpty(ogImgFile)) {
       savePostDto.ogImgFile = ogImgFile;
     }
@@ -307,8 +307,8 @@ export class PostController {
     description: '포스트를 수정한다.'
   })
   @ApiCreatedResponse({
-    type: SavePostDto,
-    description: '포스트를 수정한다.',
+    type: PostEntity,
+    description: '포스트',
   })
   @ApiBody({
     type: SavePostDto,
@@ -323,7 +323,7 @@ export class PostController {
       ],
       fileIsRequired: false,
     })) ogImgFile: FileUploaderRequest,
-  ) {
+  ): Promise<PostEntity> {
     if (isNotFileEmpty(ogImgFile)) {
       savePostDto.ogImgFile = ogImgFile;
     }
@@ -339,7 +339,7 @@ export class PostController {
   })
   @ApiCreatedResponse({
     type: DeleteResult,
-    description: '포스트 다건을 삭제한다.',
+    description: '포스트 다건을 삭제 정보',
   })
   @ApiBody({
     type: RemovePostDto,
@@ -357,7 +357,7 @@ export class PostController {
   })
   @ApiCreatedResponse({
     type: DeleteResult,
-    description: '포스트를 삭제한다.',
+    description: '포스트를 삭제 정보',
   })
   @ApiParam({
     type: Number,
@@ -376,7 +376,7 @@ export class PostController {
   })
   @ApiCreatedResponse({
     type: PostEntity,
-    description: '미리보기 포스트로 응답한다.',
+    description: '미리보기 포스트',
   })
   @ApiBody({
     type: SavePostDto,

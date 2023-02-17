@@ -266,7 +266,7 @@ export class PostRepository extends Repository<PostEntity> {
     });
   }
 
-  /** 이전/다음 포스트를 조회한다. */
+  /** 이전/다음 포스트 목록을 조회한다. */
   async listPrevAndNextPost(listPostDto: ListPostDto): Promise<PostEntity[]> {
     let query = this.createQueryBuilder('post')
       .select("post.id", "id")

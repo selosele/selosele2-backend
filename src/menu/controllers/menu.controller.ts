@@ -24,8 +24,8 @@ export class MenuController {
     description: '계층형 메뉴 목록을 조회한다(최대 2depth).',
   })
   @ApiCreatedResponse({
-    type: MenuEntity,
-    description: '계층형 메뉴 목록을 조회한다(최대 2depth).',
+    type: Array<MenuEntity>,
+    description: '계층형 메뉴 목록',
   })
   @ApiQuery({
     type: ListMenuDto,
@@ -52,7 +52,7 @@ export class MenuController {
   })
   @ApiCreatedResponse({
     type: MenuEntity,
-    description: '메뉴를 조회한다.',
+    description: '메뉴',
   })
   @ApiParam({
     type: Number,
@@ -71,7 +71,7 @@ export class MenuController {
   })
   @ApiCreatedResponse({
     type: MenuEntity,
-    description: '메뉴를 추가한다.',
+    description: '메뉴',
   })
   @ApiBody({
     type: SaveMenuDto,
@@ -89,7 +89,7 @@ export class MenuController {
   })
   @ApiCreatedResponse({
     type: MenuEntity,
-    description: '메뉴를 수정한다.',
+    description: '메뉴',
   })
   @ApiBody({
     type: SaveMenuDto,
@@ -106,8 +106,8 @@ export class MenuController {
     description: '메뉴를 삭제한다.'
   })
   @ApiCreatedResponse({
-    type: MenuEntity,
-    description: '메뉴를 삭제한다.',
+    type: DeleteResult,
+    description: '메뉴 삭제 정보',
   })
   @ApiParam({
     type: Number,

@@ -27,8 +27,8 @@ export class ContentController {
     description: '콘텐츠 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: ContentEntity,
-    description: '콘텐츠 목록을 조회한다.',
+    type: Array<ContentEntity>,
+    description: '콘텐츠 목록',
   })
   listContent(@Query(ValidationPipe) listContentDto: ListContentDto): Promise<[ContentEntity[], number]> {
     return this.contentService.listContent(listContentDto);
@@ -41,7 +41,7 @@ export class ContentController {
   })
   @ApiCreatedResponse({
     type: ContentEntity,
-    description: '콘텐츠를 조회한다.',
+    description: '콘텐츠',
   })
   @ApiParam({
     type: String,
@@ -67,8 +67,8 @@ export class ContentController {
     description: '콘텐츠를 추가한다.'
   })
   @ApiCreatedResponse({
-    type: SaveContentDto,
-    description: '콘텐츠를 추가한다.',
+    type: ContentEntity,
+    description: '콘텐츠',
   })
   @ApiBody({
     type: SaveContentDto,
@@ -83,7 +83,7 @@ export class ContentController {
       ],
       fileIsRequired: false,
     })) ogImgFile: FileUploaderRequest,
-  ) {
+  ): Promise<ContentEntity> {
     if (isNotFileEmpty(ogImgFile)) {
       saveContentDto.ogImgFile = ogImgFile;
     }
@@ -99,8 +99,8 @@ export class ContentController {
     description: '콘텐츠를 수정한다.'
   })
   @ApiCreatedResponse({
-    type: SaveContentDto,
-    description: '콘텐츠를 수정한다.',
+    type: ContentEntity,
+    description: '콘텐츠',
   })
   @ApiBody({
     type: SaveContentDto,
@@ -115,7 +115,7 @@ export class ContentController {
       ],
       fileIsRequired: false,
     })) ogImgFile: FileUploaderRequest,
-  ) {
+  ): Promise<ContentEntity> {
     if (isNotFileEmpty(ogImgFile)) {
       saveContentDto.ogImgFile = ogImgFile;
     }
@@ -131,7 +131,7 @@ export class ContentController {
   })
   @ApiCreatedResponse({
     type: DeleteResult,
-    description: '콘텐츠를 삭제한다.',
+    description: '콘텐츠 삭제 정보',
   })
   @ApiParam({
     type: Number,
@@ -150,7 +150,7 @@ export class ContentController {
   })
   @ApiCreatedResponse({
     type: DeleteResult,
-    description: '콘텐츠 다건을 삭제한다.',
+    description: '콘텐츠 다건 삭제 정보',
   })
   @ApiBody({
     type: RemoveContentDto,
@@ -168,7 +168,7 @@ export class ContentController {
   })
   @ApiCreatedResponse({
     type: ContentEntity,
-    description: '미리보기 콘텐츠로 응답한다.',
+    description: '미리보기 콘텐츠',
   })
   @ApiBody({
     type: SaveContentDto,

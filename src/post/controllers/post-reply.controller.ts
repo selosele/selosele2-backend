@@ -24,8 +24,8 @@ export class PostReplyController {
     description: '모든 포스트 댓글 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: PostReplyEntity,
-    description: '모든 포스트 댓글 목록을 조회한다.',
+    type: Array<PostReplyEntity>,
+    description: '모든 포스트 댓글 목록',
   })
   @ApiQuery({
     type: ListPostReplyDto,
@@ -42,8 +42,8 @@ export class PostReplyController {
     description: '포스트 댓글 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: PostReplyEntity,
-    description: '포스트 댓글 목록을 조회한다.',
+    type: Array<PostReplyEntity>,
+    description: '포스트 댓글 목록',
   })
   @ApiParam({
     type: Number,
@@ -61,7 +61,7 @@ export class PostReplyController {
   })
   @ApiCreatedResponse({
     type: PostReplyEntity,
-    description: '포스트 댓글을 추가한다.',
+    description: '포스트 댓글',
   })
   @ApiBody({
     type: SavePostReplyDto,
@@ -86,7 +86,7 @@ export class PostReplyController {
   })
   @ApiCreatedResponse({
     type: PostReplyEntity,
-    description: '포스트 댓글을 수정한다.',
+    description: '포스트 댓글',
   })
   @ApiBody({
     type: SavePostReplyDto,
@@ -111,8 +111,8 @@ export class PostReplyController {
     description: '삭제된 포스트 댓글을 복구한다.'
   })
   @ApiCreatedResponse({
-    type: UpdateResult,
-    description: '삭제된 포스트 댓글을 복구한다.',
+    type: Number,
+    description: '삭제된 포스트 댓글을 복구 정보',
   })
   @ApiParam({
     type: Number,
@@ -142,7 +142,7 @@ export class PostReplyController {
   })
   @ApiCreatedResponse({
     type: PostReplyEntity,
-    description: '포스트 댓글을 삭제한다.',
+    description: '포스트 댓글',
   })
   @ApiBody({
     type: SavePostReplyDto,

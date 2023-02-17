@@ -21,8 +21,8 @@ export class NotificationController {
     description: '알림 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: NotificationEntity,
-    description: '알림 목록을 조회한다.',
+    type: Array<NotificationEntity>,
+    description: '알림 목록',
   })
   @ApiQuery({
     type: ListNotificationDto,
@@ -40,8 +40,8 @@ export class NotificationController {
     description: '알림을 추가한다.',
   })
   @ApiCreatedResponse({
-    type: UpdateResult,
-    description: '알림을 추가한다.',
+    type: NotificationEntity,
+    description: '알림',
   })
   @ApiBody({
     type: AddNotificationDto,
@@ -59,7 +59,7 @@ export class NotificationController {
   })
   @ApiCreatedResponse({
     type: UpdateResult,
-    description: '알림을 확인 처리한다.',
+    description: '알림 수정 정보',
   })
   @ApiBody({
     type: Array<Number>,

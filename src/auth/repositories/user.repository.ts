@@ -1,5 +1,5 @@
 import { CustomRepository } from 'src/configs/database/CustomRepository';
-import { InsertResult, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { AuthCredentialsDto, UserEntity } from '../models';
 
 @CustomRepository(UserEntity)
@@ -27,8 +27,8 @@ export class UserRepository extends Repository<UserEntity> {
   }
 
   /** 사용자를 생성한다. */
-  async addUser(authCredentialsDto: AuthCredentialsDto): Promise<InsertResult> {
-    return await this.insert(authCredentialsDto);
+  async addUser(authCredentialsDto: AuthCredentialsDto): Promise<UserEntity> {
+    return await this.save(authCredentialsDto);
   }
 
 }

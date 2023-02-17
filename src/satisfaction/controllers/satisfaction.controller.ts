@@ -23,8 +23,8 @@ export class SatisfactionController {
     description: '만족도조사 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: SatisfactionEntity,
-    description: '만족도조사 목록을 조회한다.',
+    type: Array<SatisfactionEntity>,
+    description: '만족도조사 목록',
   })
   @ApiQuery({
     type: SearchSatisfactiontDto,
@@ -42,7 +42,7 @@ export class SatisfactionController {
   })
   @ApiCreatedResponse({
     type: SatisfactionEntity,
-    description: '만족도조사에 참여한다.',
+    description: '만족도조사',
   })
   @ApiBody({
     type: AddSatisfactiontDto,

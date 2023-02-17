@@ -22,7 +22,8 @@ export class FileUploaderController {
     description: '파일 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    description: '파일 목록을 조회한다.',
+    type: Array<FileUploaderResponse>,
+    description: '파일 목록',
   })
   listFile(): Promise<FileUploaderResponse[]> {
     return this.fileUploaderService.listFile();

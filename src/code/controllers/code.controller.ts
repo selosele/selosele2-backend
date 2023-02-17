@@ -20,8 +20,8 @@ export class CodeController {
     description: '공통코드 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: CodeEntity,
-    description: '공통코드 목록을 조회한다.',
+    type: Array<CodeEntity>,
+    description: '공통코드 목록',
   })
   listCode(): Promise<CodeEntity[]> {
     return this.codeService.listCode();
@@ -33,8 +33,8 @@ export class CodeController {
     description: '코드 접두어와 매칭되는 공통코드 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: CodeEntity,
-    description: '코드 접두어와 매칭되는 공통코드 목록을 조회한다.',
+    type: Array<CodeEntity>,
+    description: '코드 접두어와 매칭되는 공통코드 목록',
   })
   @ApiParam({
     type: String,
@@ -52,7 +52,7 @@ export class CodeController {
   })
   @ApiCreatedResponse({
     type: CodeEntity,
-    description: '공통코드를 조회한다.',
+    description: '공통코드',
   })
   @ApiParam({
     type: String,
@@ -71,7 +71,7 @@ export class CodeController {
   })
   @ApiCreatedResponse({
     type: InsertResult,
-    description: '공통코드를 추가한다.',
+    description: '공통코드 추가 정보',
   })
   @ApiBody({
     type: SaveCodeDto,
@@ -89,7 +89,7 @@ export class CodeController {
   })
   @ApiCreatedResponse({
     type: UpdateResult,
-    description: '공통코드를 수정한다.',
+    description: '공통코드 수정 정보',
   })
   @ApiBody({
     type: SaveCodeDto,
@@ -107,7 +107,7 @@ export class CodeController {
   })
   @ApiCreatedResponse({
     type: DeleteResult,
-    description: '공통코드 다건을 삭제한다.',
+    description: '공통코드 다건 삭제 정보',
   })
   @ApiBody({
     type: RemoveCodeDto,

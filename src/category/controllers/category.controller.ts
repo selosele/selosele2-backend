@@ -23,8 +23,8 @@ export class CategoryController {
     description: '카테고리 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: CategoryEntity,
-    description: '카테고리 목록을 조회한다.',
+    type: Array<CategoryEntity>,
+    description: '카테고리 목록',
   })
   listCategory(): Promise<CategoryEntity[]> {
     return this.categoryService.listCategory();
@@ -36,8 +36,8 @@ export class CategoryController {
     description: '카테고리 목록 및 개수를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: CategoryEntity,
-    description: '카테고리 목록 및 개수를 조회한다.',
+    type: Array<CategoryEntity>,
+    description: '카테고리 목록 및 개수',
   })
   listCategoryAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<CategoryEntity[]> {
     const listCategoryDto: ListCategoryDto = Builder(ListCategoryDto)
@@ -54,7 +54,7 @@ export class CategoryController {
   })
   @ApiCreatedResponse({
     type: CategoryEntity,
-    description: '카테고리를 조회한다.',
+    description: '카테고리',
   })
   @ApiParam({
     type: Number,
@@ -72,7 +72,7 @@ export class CategoryController {
   })
   @ApiCreatedResponse({
     type: CategoryEntity,
-    description: '카테고리를 추가한다.',
+    description: '카테고리',
   })
   @ApiBody({
     type: SaveCategoryDto,
@@ -89,7 +89,7 @@ export class CategoryController {
   })
   @ApiCreatedResponse({
     type: CategoryEntity,
-    description: '카테고리를 수정한다.',
+    description: '카테고리',
   })
   @ApiBody({
     type: SaveCategoryDto,
@@ -107,7 +107,7 @@ export class CategoryController {
   })
   @ApiCreatedResponse({
     type: DeleteResult,
-    description: '카테고리를 삭제한다.',
+    description: '카테고리 삭제 정보',
   })
   @ApiParam({
     type: Number,
@@ -125,8 +125,8 @@ export class CategoryController {
     description: '카테고리-포스트 계층형 구조를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: CategoryEntity,
-    description: '카테고리-포스트 계층형 구조를 조회한다.',
+    type: Array<CategoryEntity>,
+    description: '카테고리-포스트 계층형 데이타',
   })
   listTreeCategoryAndPost(): Promise<CategoryEntity[]> {
     return this.categoryService.listTreeCategoryAndPost();

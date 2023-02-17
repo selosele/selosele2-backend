@@ -19,8 +19,8 @@ export class WidgetController {
     description: '위젯 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: WidgetEntity,
-    description: '위젯 목록을 조회한다.',
+    type: Array<WidgetEntity>,
+    description: '위젯 목록',
   })
   @ApiQuery({
     type: ListWidgetDto,
@@ -37,8 +37,8 @@ export class WidgetController {
     description: '위젯을 수정한다.',
   })
   @ApiCreatedResponse({
-    type: WidgetEntity,
-    description: '위젯을 수정한다.',
+    type: Array<WidgetEntity>,
+    description: '위젯 목록',
   })
   @ApiBody({
     type: UpdateWidgetDto,
@@ -56,7 +56,7 @@ export class WidgetController {
   })
   @ApiCreatedResponse({
     type: Number,
-    description: '위젯 사용 여부를 수정한다.',
+    description: '위젯 사용 여부 수정 정보',
   })
   @ApiBody({
     type: UpdateWidgetUseYnDto,

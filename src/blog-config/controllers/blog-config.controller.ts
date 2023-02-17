@@ -25,7 +25,7 @@ export class BlogConfigController {
   })
   @ApiCreatedResponse({
     type: BlogConfigEntity,
-    description: '블로그 환경설정을 조회한다.',
+    description: '블로그 환경설정',
   })
   getBlogConfig(): Promise<BlogConfigEntity> {
     return this.blogConfigService.getBlogConfig();
@@ -40,7 +40,7 @@ export class BlogConfigController {
   })
   @ApiCreatedResponse({
     type: BlogConfigEntity,
-    description: '블로그 환경설정을 수정한다.',
+    description: '블로그 환경설정',
   })
   @ApiBody({
     type: UpdateBlogConfigDto,

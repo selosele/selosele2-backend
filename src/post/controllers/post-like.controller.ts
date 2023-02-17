@@ -21,7 +21,7 @@ export class PostLikeController {
   })
   @ApiCreatedResponse({
     type: PostLikeEntity,
-    description: '포스트 추천 정보를 조회한다.',
+    description: '포스트 추천 정보',
   })
   @ApiParam({
     type: Number,
@@ -46,7 +46,7 @@ export class PostLikeController {
   })
   @ApiCreatedResponse({
     type: Number,
-    description: '포스트를 추천/추천 해제한다.',
+    description: '포스트를 추천/추천 해제 정보',
   })
   @ApiBody({
     type: SavePostLikeDto,

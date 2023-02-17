@@ -20,8 +20,8 @@ export class GuestbookController {
     description: '방명록 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: GuestbookEntity,
-    description: '방명록 목록을 조회한다.',
+    type: Array<GuestbookEntity>,
+    description: '방명록 목록',
   })
   @ApiQuery({
     type: PaginationDto,
@@ -39,7 +39,7 @@ export class GuestbookController {
   })
   @ApiCreatedResponse({
     type: GuestbookEntity,
-    description: '방명록을 추가한다.',
+    description: '방명록',
   })
   @ApiBody({
     type: AddGuestbookDto,
@@ -63,7 +63,7 @@ export class GuestbookController {
   })
   @ApiCreatedResponse({
     type: GuestbookEntity,
-    description: '방명록을 수정한다.',
+    description: '방명록',
   })
   @ApiBody({
     type: AddGuestbookDto,
@@ -85,7 +85,7 @@ export class GuestbookController {
   })
   @ApiCreatedResponse({
     type: GuestbookEntity,
-    description: '방명록을 삭제한다.',
+    description: '방명록',
   })
   @ApiBody({
     type: RemoveGuestbookDto,

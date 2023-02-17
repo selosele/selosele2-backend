@@ -22,8 +22,8 @@ export class TagController {
     description: '태그 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: TagEntity,
-    description: '태그 목록을 조회한다.',
+    type: Array<TagEntity>,
+    description: '태그 목록',
   })
   listTag(): Promise<TagEntity[]> {
     return this.tagService.listTag();
@@ -35,8 +35,8 @@ export class TagController {
     description: '태그 목록 및 개수를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: TagEntity,
-    description: '태그 목록 및 개수를 조회한다.',
+    type: Array<TagEntity>,
+    description: '태그 목록 및 개수',
   })
   listTagAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<TagEntity[]> {
     const listTagDto: ListTagDto = Builder(ListTagDto)
@@ -53,7 +53,7 @@ export class TagController {
   })
   @ApiCreatedResponse({
     type: TagEntity,
-    description: '태그를 조회한다.',
+    description: '태그',
   })
   @ApiParam({
     type: Number,
@@ -71,7 +71,7 @@ export class TagController {
   })
   @ApiCreatedResponse({
     type: TagEntity,
-    description: '태그를 추가한다.',
+    description: '태그',
   })
   @ApiBody({
     type: SaveTagDto,
@@ -88,7 +88,7 @@ export class TagController {
   })
   @ApiCreatedResponse({
     type: TagEntity,
-    description: '태그를 수정한다.',
+    description: '태그',
   })
   @ApiBody({
     type: SaveTagDto,
@@ -106,7 +106,7 @@ export class TagController {
   })
   @ApiCreatedResponse({
     type: DeleteResult,
-    description: '태그를 삭제한다.',
+    description: '태그 삭제 정보',
   })
   @ApiParam({
     type: Number,
@@ -124,8 +124,8 @@ export class TagController {
     description: '태그-포스트 계층형 구조를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: TagEntity,
-    description: '태그-포스트 계층형 구조를 조회한다.',
+    type: Array<TagEntity>,
+    description: '태그-포스트 계층형 데이타',
   })
   listTreeTagAndPost(): Promise<TagEntity[]> {
     return this.tagService.listTreeTagAndPost();

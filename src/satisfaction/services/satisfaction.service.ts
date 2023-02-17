@@ -74,10 +74,10 @@ export class SatisfactionService {
       //   this.httpService.post('https://kapi.kakao.com/v2/api/talk/memo/default/send', body, { headers })
       //   .subscribe({
       //     next: (res) => {
-      //       this.logger.log(`카카오톡 메시지 전송 성공 : ${JSON.stringify(res.data)}`);
+      //       this.logger.log(`Success for send Kakao message : ${JSON.stringify(res.data)}`);
       //     },
       //     error: (err) => {
-      //       this.logger.debug(`카카오톡 메시지 전송 실패 : ${JSON.stringify(err.response.data)}`);
+      //       this.logger.debug(`Failure for send Kakao message : ${JSON.stringify(err.response.data)}`);
       //     }
       //   });
       // }
