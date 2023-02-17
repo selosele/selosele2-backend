@@ -71,7 +71,7 @@ export class PostReplyController {
     @IsAuthenticated() isAuthenticated: boolean,
     @RealIP() ip: string,
     @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto
-  ) {
+  ): Promise<PostReplyEntity> {
     savePostReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.isAdmin = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.ip = ip;
@@ -96,7 +96,7 @@ export class PostReplyController {
     @IsAuthenticated() isAuthenticated: boolean,
     @RealIP() ip: string,
     @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto
-  ) {
+  ): Promise<PostReplyEntity> {
     savePostReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.isAdmin = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.ip = ip;
@@ -152,7 +152,7 @@ export class PostReplyController {
     @IsAuthenticated() isAuthenticated: boolean,
     @RealIP() ip: string,
     @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto
-  ) {
+  ): Promise<PostReplyEntity> {
     savePostReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.isAdmin = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.ip = ip;

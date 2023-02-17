@@ -48,6 +48,7 @@ export class GuestbookService {
       // 1. 방명록을 추가한다.
       guestbook = await em.withRepository(this.guestbookRepository).addGuestbook(addGuestbookDto);
       guestbook.guestbookReply = [];
+      delete guestbook.authorPw;
 
       // 2. 알림을 추가한다.
       if ('N' === addGuestbookDto.adminYn) {
@@ -82,6 +83,7 @@ export class GuestbookService {
     // 방명록 수정
     const guestbook: GuestbookEntity = await this.guestbookRepository.updateGuestbook(updateGuestbookDto);
     guestbook.guestbookReply = [];
+    delete guestbook.authorPw;
     
     return guestbook;
   }

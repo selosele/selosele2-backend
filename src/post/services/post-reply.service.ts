@@ -163,6 +163,8 @@ export class PostReplyService {
       res = await this.removePostReply(savePostReplyDto);
     }
 
+    delete res.authorPw;
+
     return res;
   }
 

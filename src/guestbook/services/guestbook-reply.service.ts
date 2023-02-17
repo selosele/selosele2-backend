@@ -50,6 +50,7 @@ export class GuestbookReplyService {
 
       // 1. 방명록 댓글을 추가한다.
       guestbookReply = await em.withRepository(this.guestbookReplyRepository).addGuestbookReply(addGuestbookReplyDto);
+      delete guestbookReply.authorPw;
 
       // 2. 알림을 추가한다.
       if ('N' === addGuestbookReplyDto.adminYn) {
@@ -82,7 +83,10 @@ export class GuestbookReplyService {
     updateGuestbookReplyDto.cont = escapeHtml(cont);
 
     // 방명록 댓글 수정
-    return await this.guestbookReplyRepository.updateGuestbookReply(updateGuestbookReplyDto);
+    const guestbookReply = await this.guestbookReplyRepository.updateGuestbookReply(updateGuestbookReplyDto);
+    delete guestbookReply.authorPw;
+
+    return guestbookReply;
   }
 
   /** 방명록 댓글을 삭제한다. */
