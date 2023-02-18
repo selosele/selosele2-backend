@@ -8,10 +8,9 @@ import { JwtService } from '@nestjs/jwt';
 import { BizException } from 'src/shared/exceptions/biz/biz.exception';
 import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, RoleEnum, Tokens } from '../models';
 import { RoleRepository } from '../repositories/role.repository';
-import { compareEncrypt, createJwtRefreshTokenKey, encrypt, isEmpty, startTransaction } from 'src/shared/utils';
+import { compareEncrypt, createJwtRefreshTokenKey, encrypt, isNotEmpty, startTransaction } from 'src/shared/utils';
 import { CacheDBService } from 'src/cache-db/services/cache-db.service';
 import { ConfigService } from '@nestjs/config';
-import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -104,8 +103,9 @@ export class AuthService {
     // 액세스 토큰 생성
     const accessToken: string = this.jwtService.sign(payload);
 
-    // 리프레시 토큰 생성 (액세스 토큰 갱신이 목적이므로 사용자 정보를 안 넣음)
-    const refreshToken: string = this.jwtService.sign({}, {
+    // 리프레시 토큰 생성
+    const refreshToken: string = this.jwtService.sign(payload, {
+      secret: this.config.get<string>('JWT_REFRESH_SECRET_KEY'),
       expiresIn: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME')
     });
 
@@ -123,8 +123,8 @@ export class AuthService {
   }
 
   /** 유효한 리프레시 토큰인지 확인한다. */
-  isInValidRefreshToken(req: Request, refreshToken: string): boolean {
-    return isEmpty(refreshToken) || refreshToken !== req.cookies['refreshToken'];
+  isValidRefreshToken(refreshToken: string, cachedRefreshToken: string): boolean {
+    return isNotEmpty(cachedRefreshToken) && cachedRefreshToken === refreshToken;
   }
 
 }

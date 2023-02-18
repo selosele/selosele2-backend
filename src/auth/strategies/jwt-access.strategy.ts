@@ -7,7 +7,7 @@ import { UserRepository } from '../repositories/user.repository';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtAccessStrategy extends PassportStrategy(Strategy) {
 
   constructor(
     @InjectRepository(UserRepository)
@@ -21,10 +21,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     })
   }
 
-  async validate(payload): Promise<UserEntity> {
+  async validate(payload: any): Promise<UserEntity> {
     const { userSn } = payload;
+
+    // JWT로부터 추출한 사용자 일련번호로 사용자를 조회해서
     const user: UserEntity = await this.userRepository.getUser(userSn);
 
+    // 없으면 401 예외를 던진다.
     if (!user) {
       throw new UnauthorizedException();
     }

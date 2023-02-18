@@ -7,10 +7,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomTypeOrmModule } from 'src/configs/database/CustomTypeOrmModule';
 import { UserRepository } from './repositories/user.repository';
 import { UserRoleRepository } from './repositories/user-role.repository';
-import { JwtStrategy } from './strategies/jwt.strategy';
+import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
 import { ConfigService } from '@nestjs/config';
 import { RoleEntity, UserRoleEntity, UserEntity } from './models';
 import { RoleRepository } from './repositories/role.repository';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 
 @Module({
   imports: [
@@ -40,11 +41,13 @@ import { RoleRepository } from './repositories/role.repository';
   ],
   providers: [
     AuthService,
-    JwtStrategy
+    JwtAccessStrategy,
+    JwtRefreshStrategy
   ],
   exports: [
-    JwtStrategy,
-    PassportModule
+    PassportModule,
+    JwtAccessStrategy,
+    JwtRefreshStrategy,
   ],
 })
 export class AuthModule {}

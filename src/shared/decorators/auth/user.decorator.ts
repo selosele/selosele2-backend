@@ -6,7 +6,7 @@ import { UserEntity } from "../../../auth/models";
  * 
  * 사용 예시
  *   - @User() user: UserEntity
- *   - @User('userId') userId: string
+ *   - @User('userSn') userSn: string
  */
 export const User = createParamDecorator((data: string, context: ExecutionContext): UserEntity => {
   const req = context.switchToHttp().getRequest();
