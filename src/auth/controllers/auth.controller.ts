@@ -1,14 +1,14 @@
-import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Logger, Res } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Logger, Res, UnauthorizedException } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { AuthCredentialsDto, UserEntity, RoleEntity, RoleEnum, Tokens } from '../models';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
-import { Auth, User } from 'src/shared/decorators';
+import { Auth, RefreshTokenUser, User } from 'src/shared/decorators';
 import { RealIP } from 'nestjs-real-ip';
 import { CacheDBService } from 'src/cache-db/services/cache-db.service';
 import { createJwtRefreshTokenKey, isEmpty } from 'src/shared/utils';
 import { Response } from 'express';
-import { TokenUser } from 'src/shared/decorators/auth/token-user.decorator';
+import { AccessTokenUser } from 'src/shared/decorators/auth/access-token-user.decorator';
 
 @Controller('auth')
 @ApiTags('인증·인가 API')
@@ -75,7 +75,7 @@ export class AuthController {
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
     @Res({ passthrough: true }) res: Response,
   ): Promise<Tokens> {
-    this.logger.warn(`ip : ${ip}`);
+    this.logger.warn(`Try to login... ip : ${ip}`);
 
     // 액세스 토큰과 리프레시 토큰을 생성하고
     const tokens = await this.authService.signIn(authCredentialsDto);
@@ -90,7 +90,6 @@ export class AuthController {
   }
 
   @Post('refresh')
-  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '액세스 토큰 갱신 API',
     description: '액세스 토큰을 갱신 한다.',
@@ -101,10 +100,14 @@ export class AuthController {
   })
   async refreshAccessToken(
     @RealIP() ip: string,
-    @User() user: UserEntity,
+    @RefreshTokenUser() user: UserEntity,
     @Res({ passthrough: true }) res: Response,
   ): Promise<Tokens> {
     this.logger.warn(`Try to refresh Access Token... ip : ${ip}`);
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
 
     // 액세스 토큰과 리프레시 토큰을 생성하고
     const tokens = await this.authService.createToken(user);
@@ -124,7 +127,7 @@ export class AuthController {
     description: '로그아웃을 한다.',
   })
   async signOut(
-    @TokenUser() user: UserEntity,
+    @AccessTokenUser() user: UserEntity,
     @Res({ passthrough: true }) res: Response
   ): Promise<void> {
     const refreshTokenKey = createJwtRefreshTokenKey(user);

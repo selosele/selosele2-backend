@@ -9,7 +9,7 @@ import { UserEntity } from "../../../auth/models";
  *   - @User() user: UserEntity
  *   - @User('userSn') userSn: string
  */
-export const TokenUser = createParamDecorator((data: string, context: ExecutionContext): UserEntity => {
+export const AccessTokenUser = createParamDecorator((data: string, context: ExecutionContext): UserEntity => {
   const req = context.switchToHttp().getRequest();
   const jwtService: JwtService = new JwtService();
   const user = jwtService.decode(req.headers.authorization.replace('Bearer ', '')) as UserEntity;
