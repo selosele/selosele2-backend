@@ -103,9 +103,10 @@ export class AuthController {
     @RefreshTokenUser() user: UserEntity,
     @Res({ passthrough: true }) res: Response,
   ): Promise<Tokens> {
-    this.logger.warn(`Try to refresh the Access Token... ip : ${ip}`);
+    this.logger.warn(`Try to refresh the Access token... ip : ${ip}`);
 
     if (!user) {
+      this.logger.warn(`Refresh token not found... ip : ${ip}`);
       throw new UnauthorizedException();
     }
 

@@ -5,7 +5,7 @@ import { isEmpty } from "src/shared/utils/common/common.util";
 /** 유효한 요청인지 확인하는 데코레이터 */
 export const IsAuthenticated = createParamDecorator((data, context: ExecutionContext): boolean => {
   const req = context.switchToHttp().getRequest();
-  const accessToken: string = req.headers['authorization']?.split(' ')[1];
+  const accessToken: string = req.headers?.authorization?.split(' ')[1];
   
   if (isEmpty(accessToken)) {
     return false;
