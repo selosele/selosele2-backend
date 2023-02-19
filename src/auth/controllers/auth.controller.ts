@@ -80,7 +80,7 @@ export class AuthController {
     // 액세스 토큰과 리프레시 토큰을 생성하고
     const tokens = await this.authService.signIn(authCredentialsDto);
 
-    // 리프레시 토큰은 HTTP Only Cookie에 저장한다.
+    // 리프레시 토큰은 HttpOnly Cookie에 저장한다.
     res.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       maxAge: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
@@ -103,7 +103,7 @@ export class AuthController {
     @RefreshTokenUser() user: UserEntity,
     @Res({ passthrough: true }) res: Response,
   ): Promise<Tokens> {
-    this.logger.warn(`Try to refresh Access Token... ip : ${ip}`);
+    this.logger.warn(`Try to refresh the Access Token... ip : ${ip}`);
 
     if (!user) {
       throw new UnauthorizedException();
@@ -112,7 +112,7 @@ export class AuthController {
     // 액세스 토큰과 리프레시 토큰을 생성하고
     const tokens = await this.authService.createToken(user);
 
-    // 리프레시 토큰은 HTTP Only Cookie에 저장한다.
+    // 리프레시 토큰은 HttpOnly Cookie에 저장한다.
     res.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       maxAge: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
