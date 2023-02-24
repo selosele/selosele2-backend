@@ -9,6 +9,7 @@ import { CacheDBService } from 'src/cache-db/services/cache-db.service';
 import { createJwtRefreshTokenKey, isEmpty } from 'src/shared/utils';
 import { Response } from 'express';
 import { AccessTokenUser } from 'src/shared/decorators/auth/access-token-user.decorator';
+import { Auth2 } from 'src/shared/decorators/auth/auth.decorator2';
 
 @Controller('auth')
 @ApiTags('인증·인가 API')
@@ -123,7 +124,7 @@ export class AuthController {
   }
 
   @Post('signout')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth2(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '로그아웃 API',
     description: '로그아웃을 한다.',
