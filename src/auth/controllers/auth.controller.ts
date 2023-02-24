@@ -3,7 +3,7 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@n
 import { AuthCredentialsDto, UserEntity, RoleEntity, RoleEnum, Tokens } from '../models';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
-import { Auth, RefreshTokenUser, User } from 'src/shared/decorators';
+import { Auth, RefreshTokenUser } from 'src/shared/decorators';
 import { RealIP } from 'nestjs-real-ip';
 import { CacheDBService } from 'src/cache-db/services/cache-db.service';
 import { createJwtRefreshTokenKey, isEmpty } from 'src/shared/utils';
@@ -123,6 +123,7 @@ export class AuthController {
   }
 
   @Post('signout')
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '로그아웃 API',
     description: '로그아웃을 한다.',
@@ -131,7 +132,7 @@ export class AuthController {
     @AccessTokenUser() user: UserEntity,
     @Res({ passthrough: true }) res: Response
   ): Promise<void> {
-    const refreshTokenKey = createJwtRefreshTokenKey(user);
+    const refreshTokenKey: string = createJwtRefreshTokenKey(user);
 
     // Redis에 저장된 리프레시 토큰을 조회해서
     const cachedRefreshToken: string = await this.cacheDBService.get<string>(refreshTokenKey);
