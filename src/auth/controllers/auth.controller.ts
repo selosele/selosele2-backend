@@ -1,4 +1,4 @@
-import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Logger, Res, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Logger, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { AuthCredentialsDto, UserEntity, RoleEntity, RoleEnum, Tokens } from '../models';
 import { AuthService } from '../services/auth.service';
@@ -9,7 +9,7 @@ import { CacheDBService } from 'src/cache-db/services/cache-db.service';
 import { createJwtRefreshTokenKey, isEmpty } from 'src/shared/utils';
 import { Response } from 'express';
 import { AccessTokenUser } from 'src/shared/decorators/auth/access-token-user.decorator';
-import { Auth2 } from 'src/shared/decorators/auth/auth.decorator2';
+import { JwtRefreshGuard } from 'src/shared/guards/auth/jwt-refresh.guard';
 
 @Controller('auth')
 @ApiTags('인증·인가 API')
@@ -79,7 +79,7 @@ export class AuthController {
     this.logger.warn(`Try to login... ip : ${ip}`);
 
     // 액세스 토큰과 리프레시 토큰을 생성하고
-    const tokens = await this.authService.signIn(authCredentialsDto);
+    const tokens: Tokens = await this.authService.signIn(authCredentialsDto);
 
     // 리프레시 토큰은 HttpOnly Cookie에 저장한다.
     res.cookie('refreshToken', tokens.refreshToken, {
@@ -91,6 +91,7 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @UseGuards(JwtRefreshGuard)
   @ApiOperation({
     summary: '액세스 토큰 갱신 API',
     description: '액세스 토큰을 갱신 한다.',
@@ -112,7 +113,7 @@ export class AuthController {
     }
 
     // 액세스 토큰과 리프레시 토큰을 생성하고
-    const tokens = await this.authService.createToken(user);
+    const tokens: Tokens = await this.authService.createTokens(user);
 
     // 리프레시 토큰은 HttpOnly Cookie에 저장한다.
     res.cookie('refreshToken', tokens.refreshToken, {
@@ -124,7 +125,7 @@ export class AuthController {
   }
 
   @Post('signout')
-  @Auth2(RoleEnum.ROLE_ADMIN)
+  @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
     summary: '로그아웃 API',
     description: '로그아웃을 한다.',

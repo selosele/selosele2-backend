@@ -87,14 +87,14 @@ export class AuthService {
     const matchPw = await compareEncrypt(userPw, user.userPw);
 
     if (user && matchPw) {
-      return this.createToken(user);
+      return this.createTokens(user);
     }
     
     throw new BizException('로그인에 실패했습니다.');
   }
 
-  /** 토큰을 생성한다. */
-  async createToken(user: UserEntity): Promise<Tokens> {
+  /** 액세스 토큰과 리프레시 토큰을 생성한다. */
+  async createTokens(user: UserEntity): Promise<Tokens> {
     const payload = {
       userSn: user.userSn,
       userRole: user.userRole,
