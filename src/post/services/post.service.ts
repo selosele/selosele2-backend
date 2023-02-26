@@ -273,10 +273,10 @@ export class PostService {
                                        .pinYn('Y')
                                        .build();
     const pinPostCount: number = await this.countPost(countPostDto);
-    const blogConfig: BlogConfigEntity = await this.blogConfigRepository.getBlogConfig();
+    const pageSize: number = await this.blogConfigRepository.getPageSize();
 
     if ('Y' === savePostDto.pinYn) {
-      if ((pinPostCount + 1) >= blogConfig.pageSize) {
+      if ((pinPostCount + 1) >= pageSize) {
         throw new BizException('고정 글의 개수를 확인하세요.');
       }
     }

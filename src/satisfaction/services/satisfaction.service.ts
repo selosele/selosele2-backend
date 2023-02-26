@@ -58,9 +58,9 @@ export class SatisfactionService {
       await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
 
       // 3. 블로그 환경설정의 카카오톡 메시지 수신 여부를 조회한다.
-      // const blogConfig: BlogConfigEntity = await em.withRepository(this.blogConfigRepository).getKakaoMsgYn();
+      // const kakaoMsgYn: string = await em.withRepository(this.blogConfigRepository).getKakaoMsgYn();
 
-      // if ('Y' === blogConfig.kakaoMsgYn) {
+      // if ('Y' === kakaoMsgYn) {
 
       //   // 4. 카카오톡 액세스 토큰을 갱신한다.
       //   this.httpService.post('https://kauth.kakao.com/oauth/token');

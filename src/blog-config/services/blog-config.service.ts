@@ -20,8 +20,13 @@ export class BlogConfigService {
     return await this.blogConfigRepository.getBlogConfig();
   }
 
+  /** 메인 포스트 목록 출력 개수를 조회한다. */
+  async getPageSize(): Promise<number> {
+    return await this.blogConfigRepository.getPageSize();
+  }
+
   /** 카카오 메시지 수신 여부를 조회한다. */
-  async getKakaoMsgYn(): Promise<BlogConfigEntity> {
+  async getKakaoMsgYn(): Promise<string> {
     return await this.blogConfigRepository.getKakaoMsgYn();
   }
 
