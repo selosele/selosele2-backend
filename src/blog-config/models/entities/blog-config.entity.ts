@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('blog_config')
@@ -137,5 +137,13 @@ export class BlogConfigEntity extends BaseEntity {
     description: '카카오톡 메시지 수신 여부'
   })
   kakaoMsgYn?: string;
+
+  @UpdateDateColumn({
+    comment: '환경설정 수정일시'
+  })
+  @ApiProperty({
+    description: '환경설정 수정일시'
+  })
+  modDate?: Date;
   
 }
