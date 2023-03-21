@@ -6,7 +6,7 @@ export const md = new MarkdownIt()
                       .use(require('markdown-it-iframe'), { height: 265 })
                       .use(require('markdown-it-mark'))
                       .use(require('markdown-it-link-attributes'), {
-                        pattern: /^https:/,
+                        pattern: /^https:\/\/(?!blog\-selosele\.koyeb\.app($|\/)).*$/,
                         attrs: {
                           target: '_blank',
                           title: '새창',
