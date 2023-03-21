@@ -94,6 +94,10 @@ export class UpdateBlogConfigDto {
   @Max(100)
   ogImgPosY?: number;
 
+  /** 블로그 대표 이미지 채우기 여부 */
+  @IsNotEmpty()
+  ogImgCoverYn?: string;
+
   /** 메인 포스트 목록 출력 개수 */
   @Type(() => Number)
   @IsInt()

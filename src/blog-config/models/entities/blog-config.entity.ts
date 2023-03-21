@@ -115,6 +115,14 @@ export class BlogConfigEntity extends BaseEntity {
   ogImgPosY?: number;
 
   @Column({
+    comment: '블로그 대표 이미지 채우기 여부'
+  })
+  @ApiProperty({
+    description: '블로그 대표 이미지 채우기 여부'
+  })
+  ogImgCoverYn?: string;
+
+  @Column({
     comment: '메인 포스트 목록 출력 개수'
   })
   @ApiProperty({
