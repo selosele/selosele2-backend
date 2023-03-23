@@ -8,7 +8,7 @@
 - Frontend: Vue.js
 - DBMS: MariaDB
 - ORM: TypeORM
-- Port: 3000
+- Port: 3000(로컬)
 - API URI: ```/api/**```
 - [백엔드 API 문서](http://localhost:3000/api-docs)
 - 백엔드 구동
