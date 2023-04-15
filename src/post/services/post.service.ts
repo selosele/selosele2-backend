@@ -8,7 +8,6 @@ import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } fro
 import { SavePostDto } from '../models/dto/save-post.dto';
 import { PostRepository } from '../repositories/post.repository';
 import { BlogConfigRepository } from 'src/blog-config/repositories/blog-config.repository';
-import { BlogConfigEntity } from 'src/blog-config/models';
 import { BizException } from 'src/shared/exceptions';
 import { SavePostCategoryDto } from 'src/category/models/dto/save-post-category.dto';
 import { Builder } from 'builder-pattern';
@@ -172,7 +171,7 @@ export class PostService {
   async savePost(savePostDto: SavePostDto): Promise<PostEntity> {
     const { title, cont, ogImgFile, categoryId, delOgImg } = savePostDto;
 
-    const isValid: boolean = await this.savePostValidationCheck(savePostDto);
+    const isValid: boolean = await this.isValidSavePost(savePostDto);
     if (!isValid) return;
 
     // 포스트 내용 요약이 없으면 제목을 넣는다.
@@ -267,13 +266,25 @@ export class PostService {
     return await this.postRepository.updatePostReplyCnt(savePostDto);
   }
 
+  /** 미리보기 포스트 데이타를 가공한다.  */
+  async getPreviewPost(savePostDto: SavePostDto): Promise<PostEntity> {
+
+    // 포스트의 내용을 Markdown으로 렌더링한다.
+    savePostDto.cont = md.render(savePostDto.cont);
+
+    return <PostEntity>savePostDto;
+  }
+
   /** 포스트 추가/수정 유효성을 검사한다. */
-  async savePostValidationCheck(savePostDto: SavePostDto): Promise<boolean> {
+  private async isValidSavePost(savePostDto: SavePostDto): Promise<boolean> {
     const countPostDto: CountPostDto = Builder(CountPostDto)
                                        .pinYn('Y')
                                        .build();
-    const pinPostCount: number = await this.countPost(countPostDto);
-    const pageSize: number = await this.blogConfigRepository.getPageSize();
+
+    const [pinPostCount, pageSize]: [number, number] = await Promise.all([
+      this.countPost(countPostDto),
+      this.blogConfigRepository.getPageSize(),
+    ]);
 
     if ('Y' === savePostDto.pinYn) {
       if ((pinPostCount + 1) >= pageSize) {
@@ -282,15 +293,6 @@ export class PostService {
     }
 
     return true;
-  }
-
-  /** 미리보기 포스트 데이타를 가공한다.  */
-  async getPreviewPost(savePostDto: SavePostDto): Promise<PostEntity> {
-
-    // 포스트의 내용을 Markdown으로 렌더링한다.
-    savePostDto.cont = md.render(savePostDto.cont);
-
-    return <PostEntity>savePostDto;
   }
 
   /** 포스트 대표 이미지 파일 삭제 여부 값 존재를 확인한다. */
