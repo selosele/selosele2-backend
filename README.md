@@ -14,7 +14,3 @@
 - module, controller, service 일괄 생성 명령어: ```nest g res```
   - ```nest g res Users --no-spec``` 명령어를 치면 service, controller, module 파일이 생성됨
 - [Frontend 저장소](https://github.com/selosele/selosele2-frontend)
-- [AS-IS 저장소](https://github.com/selosele/devblog)
-- Redis 접속 예시
-  1. Redis 설치 경로 - ```D:\prog\redis```로 이동
-  2. redis-cli -h 호스트명 -p 포트번호 -a 비밀번호
