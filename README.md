@@ -8,10 +8,9 @@
 - Frontend: Vue.js
 - DBMS: MariaDB
 - ORM: TypeORM
-- Port: 3000(Local)
 - API URI: ```/api/**```
 - [API 문서](http://localhost:3000/api-docs)
-- 구동 방법
+- 구동 명령어
   - ```npm run start``` (개발)
   - ```npm run start:dev``` (watch 모드)
   - ```npm run start:prod``` (운영)
