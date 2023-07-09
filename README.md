@@ -2,12 +2,8 @@
 
 ## 기본 정보
 
-- 작업기간: 2022.09.10. ~ 2023.02.19.
-- 어플리케이션 명: selosele2
-- Backend: NestJS
-- Frontend: Vue.js
-- DBMS: MariaDB
-- ORM: TypeORM
+- 작업 기간: 2022.09.10. ~ 2023.02.19.
+- 기술 스택: NestJS, Vue.js, MariaDB, TypeORM
 - API URI: ```/api/**```
 - [API 문서](http://localhost:3000/api-docs)
 - 구동 명령어
