@@ -139,13 +139,13 @@ export class AuthController {
     // Redis에 저장된 리프레시 토큰을 조회해서
     const cachedRefreshToken: string = await this.cacheDBService.get<string>(refreshTokenKey);
     
-    // 없으면 쿠키의 리프레시 토큰만 삭제하고
+    // 없으면 쿠키의 리프레시 토큰만 삭제한다.
     if (isEmpty(cachedRefreshToken)) {
       res.clearCookie('refreshToken');
       return;
     }
 
-    // Redis에 저장된 리프레시 토큰이 있으면 삭제하고
+    // 있으면 삭제하고
     await this.cacheDBService.del(refreshTokenKey);
 
     // 쿠키의 리프레시 토큰도 삭제한다.
