@@ -11,6 +11,6 @@
   - ```npm run start:dev``` (watch 모드)
   - ```npm run start:prod``` (운영)
     - ```npm start```로 매핑함
-- module, controller, service 일괄 생성 명령어: ```nest g res```
-  - ```nest g res Users --no-spec``` 명령어를 치면 service, controller, module 파일이 생성됨
+- module, controller, service 일괄 생성 명령어: ```nest g res [디렉터리명] --no-spec```
+  - ```--no-spec```은 테스트 파일을 생성하지 않음
 - [Frontend 저장소](https://github.com/selosele/selosele2-frontend)
