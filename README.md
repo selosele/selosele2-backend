@@ -3,7 +3,7 @@
 ## 기본 정보
 
 - 작업 기간: 2022.09.10. ~ 2023.02.19.
-- 기술 스택: NestJS, Vue.js, MariaDB, TypeORM
+- 기술 스택: `NestJS`, `Vue.js`, `MariaDB`, `TypeORM`
 - API URI: ```/api/**```
 - [API 문서](http://localhost:3000/api-docs)
 - 구동 명령어
