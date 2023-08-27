@@ -271,8 +271,8 @@ export class PostController {
   @Auth(RoleEnum.ROLE_ADMIN)
   @UseInterceptors(FileInterceptor('ogImgFile'))
   @ApiOperation({
-    summary: '포스트 추가 API',
-    description: '포스트를 추가한다.'
+    summary: '포스트 등록 API',
+    description: '포스트를 등록한다.'
   })
   @ApiCreatedResponse({
     type: PostEntity,
@@ -280,7 +280,7 @@ export class PostController {
   })
   @ApiBody({
     type: SavePostDto,
-    description: '포스트 추가/수정 DTO',
+    description: '포스트 등록/수정 DTO',
   })
   addPost(
     @Body(ValidationPipe) savePostDto: SavePostDto,
@@ -312,7 +312,7 @@ export class PostController {
   })
   @ApiBody({
     type: SavePostDto,
-    description: '포스트 추가/수정 DTO',
+    description: '포스트 등록/수정 DTO',
   })
   updatePost(
     @Body(ValidationPipe) savePostDto: SavePostDto,
@@ -380,7 +380,7 @@ export class PostController {
   })
   @ApiBody({
     type: SavePostDto,
-    description: '포스트 추가/수정 DTO',
+    description: '포스트 등록/수정 DTO',
   })
   getPreviewPost(@Body(ValidationPipe) savePostDto: SavePostDto): Promise<PostEntity> {
     return this.postService.getPreviewPost(savePostDto);

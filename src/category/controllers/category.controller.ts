@@ -67,8 +67,8 @@ export class CategoryController {
 
   @Post()
   @ApiOperation({
-    summary: '카테고리 추가 API',
-    description: '카테고리를 추가한다.',
+    summary: '카테고리 등록 API',
+    description: '카테고리를 등록한다.',
   })
   @ApiCreatedResponse({
     type: CategoryEntity,
@@ -76,7 +76,7 @@ export class CategoryController {
   })
   @ApiBody({
     type: SaveCategoryDto,
-    description: '카테고리 추가/수정 DTO',
+    description: '카테고리 등록/수정 DTO',
   })
   addCategory(@Body(ValidationPipe) saveCategoryDto: SaveCategoryDto): Promise<CategoryEntity> {
     return this.categoryService.saveCategory(saveCategoryDto);
@@ -93,7 +93,7 @@ export class CategoryController {
   })
   @ApiBody({
     type: SaveCategoryDto,
-    description: '카테고리 추가/수정 DTO',
+    description: '카테고리 등록/수정 DTO',
   })
   updateCategory(@Body(ValidationPipe) saveCategoryDto: SaveCategoryDto): Promise<CategoryEntity> {
     return this.categoryService.saveCategory(saveCategoryDto);

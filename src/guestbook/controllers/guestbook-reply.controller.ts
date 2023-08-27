@@ -42,8 +42,8 @@ export class GuestbookReplyController {
 
   @Post()
   @ApiOperation({
-    summary: '방명록 댓글 추가 API',
-    description: '방명록 댓글을 추가한다.',
+    summary: '방명록 댓글 등록 API',
+    description: '방명록 댓글을 등록한다.',
   })
   @ApiCreatedResponse({
     type: GuestbookReplyEntity,
@@ -51,7 +51,7 @@ export class GuestbookReplyController {
   })
   @ApiBody({
     type: AddGuestbookReplyDto,
-    description: '방명록 댓글 추가 DTO',
+    description: '방명록 댓글 등록 DTO',
   })
   addGuestbook(
     @IsAuthenticated() isAuthenticated: boolean,

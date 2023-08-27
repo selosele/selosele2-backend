@@ -36,8 +36,8 @@ export class NotificationController {
   @Post()
   @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
-    summary: '알림 추가 API',
-    description: '알림을 추가한다.',
+    summary: '알림 등록 API',
+    description: '알림을 등록한다.',
   })
   @ApiCreatedResponse({
     type: NotificationEntity,
@@ -45,7 +45,7 @@ export class NotificationController {
   })
   @ApiBody({
     type: AddNotificationDto,
-    description: '알림 추가 DTO',
+    description: '알림 등록 DTO',
   })
   addNotification(@Body(ValidationPipe) addNotificationDto: AddNotificationDto): Promise<NotificationEntity> {
     return this.notificationService.addNotification(addNotificationDto);

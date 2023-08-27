@@ -56,8 +56,8 @@ export class PostReplyController {
 
   @Post()
   @ApiOperation({
-    summary: '포스트 댓글 추가 API',
-    description: '포스트 댓글을 추가한다.'
+    summary: '포스트 댓글 등록 API',
+    description: '포스트 댓글을 등록한다.'
   })
   @ApiCreatedResponse({
     type: PostReplyEntity,
@@ -65,7 +65,7 @@ export class PostReplyController {
   })
   @ApiBody({
     type: SavePostReplyDto,
-    description: '포스트 댓글 추가/수정/삭제 DTO',
+    description: '포스트 댓글 등록/수정/삭제 DTO',
   })
   addPostReply(
     @IsAuthenticated() isAuthenticated: boolean,
@@ -90,7 +90,7 @@ export class PostReplyController {
   })
   @ApiBody({
     type: SavePostReplyDto,
-    description: '포스트 댓글 추가/수정/삭제 DTO',
+    description: '포스트 댓글 등록/수정/삭제 DTO',
   })
   updatePostReply(
     @IsAuthenticated() isAuthenticated: boolean,
@@ -146,7 +146,7 @@ export class PostReplyController {
   })
   @ApiBody({
     type: SavePostReplyDto,
-    description: '포스트 댓글 추가/수정/삭제 DTO',
+    description: '포스트 댓글 등록/수정/삭제 DTO',
   })
   removePostReply(
     @IsAuthenticated() isAuthenticated: boolean,

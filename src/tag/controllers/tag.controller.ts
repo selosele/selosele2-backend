@@ -66,8 +66,8 @@ export class TagController {
 
   @Post()
   @ApiOperation({
-    summary: '태그 추가 API',
-    description: '태그를 추가한다.',
+    summary: '태그 등록 API',
+    description: '태그를 등록한다.',
   })
   @ApiCreatedResponse({
     type: TagEntity,
@@ -75,7 +75,7 @@ export class TagController {
   })
   @ApiBody({
     type: SaveTagDto,
-    description: '태그 추가/수정 DTO',
+    description: '태그 등록/수정 DTO',
   })
   addCategory(@Body(ValidationPipe) saveTagDto: SaveTagDto): Promise<TagEntity> {
     return this.tagService.saveTag(saveTagDto);
@@ -92,7 +92,7 @@ export class TagController {
   })
   @ApiBody({
     type: SaveTagDto,
-    description: '태그 추가/수정 DTO',
+    description: '태그 등록/수정 DTO',
   })
   saveTag(@Body(ValidationPipe) saveTagDto: SaveTagDto): Promise<TagEntity> {
     return this.tagService.saveTag(saveTagDto);

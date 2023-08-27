@@ -66,16 +66,16 @@ export class CodeController {
   @Post()
   @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
-    summary: '공통코드 추가 API',
-    description: '공통코드를 추가한다.'
+    summary: '공통코드 등록 API',
+    description: '공통코드를 등록한다.'
   })
   @ApiCreatedResponse({
     type: InsertResult,
-    description: '공통코드 추가 정보',
+    description: '공통코드 등록 정보',
   })
   @ApiBody({
     type: SaveCodeDto,
-    description: '공통코드 추가/수정 DTO',
+    description: '공통코드 등록/수정 DTO',
   })
   addCode(@Body(ValidationPipe) SaveCodeDto: SaveCodeDto): Promise<InsertResult | UpdateResult> {
     return this.codeService.saveCode(SaveCodeDto);
@@ -93,7 +93,7 @@ export class CodeController {
   })
   @ApiBody({
     type: SaveCodeDto,
-    description: '공통코드 추가/수정 DTO',
+    description: '공통코드 등록/수정 DTO',
   })
   updateCode(@Body(ValidationPipe) SaveCodeDto: SaveCodeDto): Promise<InsertResult | UpdateResult> {
     return this.codeService.saveCode(SaveCodeDto);

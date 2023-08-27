@@ -63,8 +63,8 @@ export class ContentController {
   @Auth(RoleEnum.ROLE_ADMIN)
   @UseInterceptors(FileInterceptor('ogImgFile'))
   @ApiOperation({
-    summary: '콘텐츠 추가 API',
-    description: '콘텐츠를 추가한다.'
+    summary: '콘텐츠 등록 API',
+    description: '콘텐츠를 등록한다.'
   })
   @ApiCreatedResponse({
     type: ContentEntity,
@@ -72,7 +72,7 @@ export class ContentController {
   })
   @ApiBody({
     type: SaveContentDto,
-    description: '콘텐츠 추가/수정 DTO',
+    description: '콘텐츠 등록/수정 DTO',
   })
   addContent(
     @Body(ValidationPipe) saveContentDto: SaveContentDto,
@@ -104,7 +104,7 @@ export class ContentController {
   })
   @ApiBody({
     type: SaveContentDto,
-    description: '콘텐츠 추가/수정 DTO',
+    description: '콘텐츠 등록/수정 DTO',
   })
   updatePost(
     @Body(ValidationPipe) saveContentDto: SaveContentDto,
@@ -172,7 +172,7 @@ export class ContentController {
   })
   @ApiBody({
     type: SaveContentDto,
-    description: '콘텐츠 추가/수정 DTO',
+    description: '콘텐츠 등록/수정 DTO',
   })
   getPreviewContent(@Body(ValidationPipe) saveContentDto: SaveContentDto): Promise<ContentEntity> {
     return this.contentService.getPreviewContent(saveContentDto);

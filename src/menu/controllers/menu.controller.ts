@@ -66,8 +66,8 @@ export class MenuController {
   @Post()
   @Auth(RoleEnum.ROLE_ADMIN)
   @ApiOperation({
-    summary: '메뉴 추가 API',
-    description: '메뉴를 추가한다.',
+    summary: '메뉴 등록 API',
+    description: '메뉴를 등록한다.',
   })
   @ApiCreatedResponse({
     type: MenuEntity,
@@ -75,7 +75,7 @@ export class MenuController {
   })
   @ApiBody({
     type: SaveMenuDto,
-    description: '메뉴 추가/수정/삭제 DTO',
+    description: '메뉴 등록/수정/삭제 DTO',
   })
   addCategory(@Body(ValidationPipe) saveMenuDto: SaveMenuDto): Promise<MenuEntity> {
     return this.menuService.saveMenu(saveMenuDto);
@@ -93,7 +93,7 @@ export class MenuController {
   })
   @ApiBody({
     type: SaveMenuDto,
-    description: '메뉴 추가/수정/삭제 DTO',
+    description: '메뉴 등록/수정/삭제 DTO',
   })
   updateMenu(@Body(ValidationPipe) saveMenuDto: SaveMenuDto): Promise<MenuEntity> {
     return this.menuService.saveMenu(saveMenuDto);
