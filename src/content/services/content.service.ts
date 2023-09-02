@@ -94,7 +94,7 @@ export class ContentService {
       // 2. 연결메뉴명을 수정한다.
       if ('Y' === updateMenuNameYn) {
         const updateContentMenuDto: UpdateContentMenuDto = Builder(UpdateContentMenuDto)
-                                                           .link('/content' + saveContentDto.link)
+                                                           .link(`/content${saveContentDto.link}`)
                                                            .name(saveContentDto.title)
                                                            .build();
         await em.withRepository(this.menuRepository).updateContentMenu(updateContentMenuDto);
