@@ -30,7 +30,7 @@ export class MenuService {
     return await this.menuRepository.getMenu(id);
   }
 
-  /** 메뉴를 추가/수정한다. */
+  /** 메뉴를 등록/수정한다. */
   async saveMenu(saveMenuDto: SaveMenuDto): Promise<MenuEntity> {
     let menu: MenuEntity = null;
 
@@ -68,7 +68,7 @@ export class MenuService {
   
       for (const role of roles) {
 
-        // 3. 메뉴 권한을 추가한다.
+        // 3. 메뉴 권한을 등록한다.
         const addMenuRoleDto: SaveMenuRoleDto = Builder(SaveMenuRoleDto)
                                                 .menuId(role.menuId)
                                                 .roleId(role.roleId)

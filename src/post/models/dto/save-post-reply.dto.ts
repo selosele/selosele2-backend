@@ -1,6 +1,6 @@
 import { IsEmpty, IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
 
-/** 포스트 댓글 추가/수정/삭제 DTO */
+/** 포스트 댓글 등록/수정/삭제 DTO */
 export class SavePostReplyDto {
 
   /** 포스트 댓글 ID */

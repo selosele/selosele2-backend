@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
-/** 메뉴 추가/수정/삭제 DTO */
+/** 메뉴 등록/수정/삭제 DTO */
 export class SaveMenuDto {
 
   /** 메뉴 ID */

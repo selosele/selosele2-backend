@@ -55,7 +55,7 @@ export class ContentService {
     return content;
   }
 
-  /** 콘텐츠를 추가/수정한다. */
+  /** 콘텐츠를 등록/수정한다. */
   async saveContent(saveContentDto: SaveContentDto): Promise<ContentEntity> {
     const { title, cont, ogImgFile, delOgImg, updateMenuNameYn } = saveContentDto;
 

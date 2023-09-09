@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsEmpty, IsInt, IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
 
-/** 방명록 댓글 추가 DTO */
+/** 방명록 댓글 등록 DTO */
 export class AddGuestbookReplyDto {
 
   /** 상위 방명록 ID */

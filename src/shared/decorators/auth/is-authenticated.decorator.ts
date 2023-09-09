@@ -17,7 +17,7 @@ export const IsAuthenticated = createParamDecorator((data, context: ExecutionCon
     });
     const isExpired = new Date().getTime() > decodedToken.exp * 1000;
     
-    // JWT Access Token 만료 여부에 따른 boolean 값을 반환한다.
+    // JWT 액세스 토큰 만료 여부에 따른 boolean 값을 반환한다.
     return !isExpired;
   } catch (err) {
     return false;

@@ -22,9 +22,7 @@ export class CategoryRepository extends Repository<CategoryEntity> {
         .addSelect("category.id", "id")
         .addSelect("category.nm", "nm")
       .leftJoin(PostCategoryEntity, "postCategory", "category.id = postCategory.category_id")
-      .leftJoin(PostEntity, "post", "postCategory.post_id = post.id");
-
-    query = query
+      .leftJoin(PostEntity, "post", "postCategory.post_id = post.id")
       .where("post.tmp_yn = 'N'");
 
     if ('N' === listCategoryDto?.isLogin) {
@@ -47,7 +45,7 @@ export class CategoryRepository extends Repository<CategoryEntity> {
     });
   }
 
-  /** 카테고리를 추가/수정한다. */
+  /** 카테고리를 등록/수정한다. */
   async saveCategory(saveCategoryDto: SaveCategoryDto): Promise<CategoryEntity> {
     return await this.save(saveCategoryDto);
   }

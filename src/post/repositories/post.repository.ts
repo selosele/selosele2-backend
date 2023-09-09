@@ -381,7 +381,7 @@ export class PostRepository extends Repository<PostEntity> {
     });
   }
 
-  /** 포스트를 추가/수정한다. */
+  /** 포스트를 등록/수정한다. */
   async savePost(savePostDto: SavePostDto): Promise<PostEntity> {
     return await this.save(savePostDto);
   }

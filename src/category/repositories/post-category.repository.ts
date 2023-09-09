@@ -11,9 +11,7 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
   async listPostCategory(listPostDto: ListPostDto): Promise<PostCategoryEntity[]> {
     let query = this.createQueryBuilder('postCategory')
       .leftJoin("postCategory.post", "post", "post.id = postCategory.post_id")
-      .leftJoinAndSelect("postCategory.category", "category", "category.id = postCategory.category_id");
-
-    query = query
+      .leftJoinAndSelect("postCategory.category", "category", "category.id = postCategory.category_id")
       .where("post.tmp_yn = 'N'");
 
     if ('N' === listPostDto?.isLogin) {
@@ -94,7 +92,7 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
     return await query.getMany();
   }
 
-  /** 포스트 카테고리를 추가/수정한다. */
+  /** 포스트 카테고리를 등록/수정한다. */
   async savePostCategory(savePostCategoryDto: SavePostCategoryDto): Promise<PostCategoryEntity> {
     return await this.save(savePostCategoryDto);
   }

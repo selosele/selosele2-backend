@@ -33,7 +33,7 @@ export class GuestbookReplyService {
     return await this.guestbookReplyRepository.getGuestbookReply(id);
   }
 
-  /** 방명록 댓글을 추가한다. */
+  /** 방명록 댓글을 등록한다. */
   async addGuestbookReply(addGuestbookReplyDto: AddGuestbookReplyDto): Promise<GuestbookReplyEntity> {
     const { authorPw, cont } = addGuestbookReplyDto;
 
@@ -48,11 +48,11 @@ export class GuestbookReplyService {
     // 트랜잭션을 시작한다.
     await startTransaction(async (em: EntityManager) => {
 
-      // 1. 방명록 댓글을 추가한다.
+      // 1. 방명록 댓글을 등록한다.
       guestbookReply = await em.withRepository(this.guestbookReplyRepository).addGuestbookReply(addGuestbookReplyDto);
       delete guestbookReply.authorPw;
 
-      // 2. 알림을 추가한다.
+      // 2. 알림을 등록한다.
       if ('N' === addGuestbookReplyDto.adminYn) {
         const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
                                                         .cnncId(guestbookReply.id)

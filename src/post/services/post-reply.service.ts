@@ -59,7 +59,7 @@ export class PostReplyService {
     return await this.postReplyRepository.getPostReply(id);
   }
 
-  /** 포스트 댓글을 추가/수정한다. */
+  /** 포스트 댓글을 등록/수정한다. */
   async savePostReply(savePostReplyDto: SavePostReplyDto): Promise<PostReplyEntity> {
     const { authorPw, cont, group, parentReplyId } = savePostReplyDto;
     
@@ -76,7 +76,7 @@ export class PostReplyService {
 
     let res: PostReplyEntity = null;
 
-    // 추가
+    // 등록
     if ('E01001' === savePostReplyDto.crudType) {
 
       // 비밀번호 암호화
@@ -88,13 +88,13 @@ export class PostReplyService {
       // 트랜잭션을 시작한다.
       await startTransaction(async (em: EntityManager) => {
 
-        // 1. 댓글을 추가한다
+        // 1. 댓글을 등록한다
         res = await em.withRepository(this.postReplyRepository).savePostReply(savePostReplyDto);
 
         // 2. 포스트 댓글의 그룹을 수정한다.
         if (isEmpty(group)) {
 
-          // 1 depth 댓글은 추가한 댓글의 ID 값을 group 값에 넣어주고, 2 depth 댓글은 상위 댓글의 ID 값을 group 값에 넣어준다.
+          // 1 depth 댓글은 등록한 댓글의 ID 값을 group 값에 넣어주고, 2 depth 댓글은 상위 댓글의 ID 값을 group 값에 넣어준다.
           await em.withRepository(this.postReplyRepository).updatePostReplyGroup(res.id);
         }
 
@@ -126,7 +126,7 @@ export class PostReplyService {
                                          .build();
         await em.withRepository(this.postRepository).updatePostReplyCnt(savePostDto);
 
-        // 7. 알림을 추가한다.
+        // 7. 알림을 등록한다.
         if ('N' === savePostReplyDto.isLogin) {
           const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
                                                          .cnncId(res.id)

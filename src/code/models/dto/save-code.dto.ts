@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
-/** 공통코드 추가/수정 DTO */
+/** 공통코드 등록/수정 DTO */
 export class SaveCodeDto {
 
   /** 기존 코드 ID */

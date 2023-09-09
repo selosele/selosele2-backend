@@ -23,7 +23,7 @@ export class CodeService {
     return await this.codeRepository.getCode(id);
   }
 
-  /** 공통코드를 추가/수정한다. */
+  /** 공통코드를 등록/수정한다. */
   async saveCode(saveCodeDto: SaveCodeDto): Promise<InsertResult | UpdateResult> {
     if (isEmpty(saveCodeDto?.originId)) {
       saveCodeDto.id = saveCodeDto.prefix + saveCodeDto.val;

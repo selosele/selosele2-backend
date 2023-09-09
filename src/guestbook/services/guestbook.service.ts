@@ -30,7 +30,7 @@ export class GuestbookService {
     return await this.guestbookRepository.getGuestbook(id);
   }
 
-  /** 방명록을 추가한다. */
+  /** 방명록을 등록한다. */
   async addGuestbook(addGuestbookDto: AddGuestbookDto): Promise<GuestbookEntity> {
     const { authorPw, cont } = addGuestbookDto;
 
@@ -45,12 +45,12 @@ export class GuestbookService {
     // 트랜잭션을 시작한다.
     await startTransaction(async (em: EntityManager) => {
 
-      // 1. 방명록을 추가한다.
+      // 1. 방명록을 등록한다.
       guestbook = await em.withRepository(this.guestbookRepository).addGuestbook(addGuestbookDto);
       guestbook.guestbookReply = [];
       delete guestbook.authorPw;
 
-      // 2. 알림을 추가한다.
+      // 2. 알림을 등록한다.
       if ('N' === addGuestbookDto.adminYn) {
         const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
                                                         .cnncId(guestbook.id)

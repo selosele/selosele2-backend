@@ -1,7 +1,7 @@
 import { Expose, Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
-/** 태그 추가/수정 DTO */
+/** 태그 등록/수정 DTO */
 export class SaveTagDto {
 
   /** 태그 ID */

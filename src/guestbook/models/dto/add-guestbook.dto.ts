@@ -1,6 +1,6 @@
 import { IsEmpty, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
-/** 방명록 추가 DTO */
+/** 방명록 등록 DTO */
 export class AddGuestbookDto {
 
   /** 방명록 작성자 */

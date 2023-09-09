@@ -1,7 +1,7 @@
 import { Type } from "class-transformer";
 import { IsInt, IsNotEmpty } from "class-validator";
 
-/** 포스트 카테고리 추가/수정 DTO */
+/** 포스트 카테고리 등록/수정 DTO */
 export class SavePostCategoryDto {
 
   /** 포스트 ID */

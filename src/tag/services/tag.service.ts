@@ -27,7 +27,7 @@ export class TagService {
     return await this.tagRepository.getTag(id);
   }
 
-  /** 태그를 추가/수정한다. */
+  /** 태그를 등록/수정한다. */
   async saveTag(saveTagDto: SaveTagDto): Promise<TagEntity> {
     return await this.tagRepository.saveTag(saveTagDto);
   }

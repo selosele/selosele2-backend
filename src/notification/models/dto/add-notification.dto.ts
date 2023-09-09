@@ -1,6 +1,6 @@
 import { IsEmpty, IsNotEmpty, IsOptional } from 'class-validator';
 
-/** 알림 추가 DTO */
+/** 알림 등록 DTO */
 export class AddNotificationDto {
 
   /** 알림 연결 ID */

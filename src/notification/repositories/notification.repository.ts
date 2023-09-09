@@ -21,7 +21,7 @@ export class NotificationRepository extends Repository<NotificationEntity> {
     });
   }
 
-  /** 알림을 추가한다. */
+  /** 알림을 등록한다. */
   async addNotification(addNotificationDto: AddNotificationDto): Promise<NotificationEntity> {
     return this.save(addNotificationDto);
   }

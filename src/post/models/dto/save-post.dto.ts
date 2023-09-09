@@ -4,7 +4,7 @@ import { FileUploaderRequest } from "src/file-uploader/models/file-uploader.mode
 import { isNotBlank } from "src/shared/utils";
 import { SaveTagDto } from "src/tag/models";
 
-/** 포스트 추가/수정 DTO */
+/** 포스트 등록/수정 DTO */
 export class SavePostDto {
 
   /** 포스트 ID */

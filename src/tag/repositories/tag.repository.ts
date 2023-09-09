@@ -22,9 +22,7 @@ export class TagRepository extends Repository<TagEntity> {
         .addSelect("tag.id", "id")
         .addSelect("tag.nm", "nm")
       .leftJoin(PostTagEntity, "postTag", "tag.id = postTag.tag_id")
-      .leftJoin(PostEntity, "post", "postTag.post_id = post.id");
-
-    query = query
+      .leftJoin(PostEntity, "post", "postTag.post_id = post.id")
       .where("post.tmp_yn = 'N'");
 
     if ('N' === listTagDto?.isLogin) {
@@ -47,7 +45,7 @@ export class TagRepository extends Repository<TagEntity> {
     });
   }
 
-  /** 태그를 추가/수정한다. */
+  /** 태그를 등록/수정한다. */
   async saveTag(saveTagDto: SaveTagDto): Promise<TagEntity> {
     return await this.save(saveTagDto);
   }

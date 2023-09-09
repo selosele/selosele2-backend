@@ -27,7 +27,7 @@ export class CategoryService {
     return await this.categoryRepository.getCategory(id);
   }
 
-  /** 카테고리를 추가/수정한다. */
+  /** 카테고리를 등록/수정한다. */
   async saveCategory(saveCategoryDto: SaveCategoryDto): Promise<CategoryEntity> {
     return await this.categoryRepository.saveCategory(saveCategoryDto);
   }

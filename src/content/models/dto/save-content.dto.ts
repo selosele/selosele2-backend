@@ -3,7 +3,7 @@ import { IsEmpty, IsInt, IsNotEmpty, IsOptional, MaxLength } from "class-validat
 import { FileUploaderRequest } from "src/file-uploader/models/file-uploader.model";
 import { isNotBlank } from "src/shared/utils";
 
-/** 콘텐츠 추가/수정 DTO */
+/** 콘텐츠 등록/수정 DTO */
 export class SaveContentDto {
 
   /** 콘텐츠 ID */

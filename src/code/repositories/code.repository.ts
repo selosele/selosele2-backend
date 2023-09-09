@@ -25,7 +25,7 @@ export class CodeRepository extends Repository<CodeEntity> {
     });
   }
 
-  /** 공통코드를 추가한다. */
+  /** 공통코드를 등록한다. */
   async addCode(saveCodeDto: SaveCodeDto): Promise<InsertResult> {
     return await this.insert(saveCodeDto);
   }

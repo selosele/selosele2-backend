@@ -41,10 +41,10 @@ export class PostLikeService {
       // 트랜잭션을 시작한다.
       await startTransaction(async (em: EntityManager) => {
 
-        // 1. 추천을 추가한다.
+        // 1. 추천을 등록한다.
         res = await em.withRepository(this.postLikeRepository).addPostLike(savePostLikeDto);
   
-        // 2. 알림을 추가한다.
+        // 2. 알림을 등록한다.
         const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
                                                        .cnncId(res.id)
                                                        .typeCd('D02001')

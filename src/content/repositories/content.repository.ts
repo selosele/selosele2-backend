@@ -44,7 +44,7 @@ export class ContentRepository extends Repository<ContentEntity> {
     });
   }
 
-  /** 콘텐츠를 추가/수정한다. */
+  /** 콘텐츠를 등록/수정한다. */
   async saveContent(saveContentDto: SaveContentDto): Promise<ContentEntity> {
     return await this.save(saveContentDto);
   }

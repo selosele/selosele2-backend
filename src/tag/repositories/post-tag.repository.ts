@@ -70,9 +70,7 @@ export class PostTagRepository extends Repository<PostTagEntity> {
     }
 
     query = query
-      .andWhere("post.tmp_yn = 'N'");
-
-    query = query
+      .andWhere("post.tmp_yn = 'N'")
       .groupBy("post.id")
         .addGroupBy("tag.id")
       .orderBy("post.reg_date", "DESC")
@@ -82,7 +80,7 @@ export class PostTagRepository extends Repository<PostTagEntity> {
     return await query.getMany();
   }
 
-  /** 포스트 태그를 추가/수정한다. */
+  /** 포스트 태그를 등록/수정한다. */
   async savePostTag(savePostTagDto: SavePostTagDto): Promise<PostTagEntity> {
     return await this.save(savePostTagDto);
   }

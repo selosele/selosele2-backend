@@ -51,7 +51,7 @@ export class MenuRepository extends Repository<MenuEntity> {
     });
   }
 
-  /** 메뉴를 추가/수정한다. */
+  /** 메뉴를 등록/수정한다. */
   async saveMenu(saveMenuDto: SaveMenuDto): Promise<MenuEntity> {
     return await this.save(saveMenuDto)
   }

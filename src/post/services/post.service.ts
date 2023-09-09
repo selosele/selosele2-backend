@@ -167,7 +167,7 @@ export class PostService {
     return await this.postRepository.countPost(countPostDto);
   }
 
-  /** 포스트를 추가/수정한다. */
+  /** 포스트를 등록/수정한다. */
   async savePost(savePostDto: SavePostDto): Promise<PostEntity> {
     const { title, cont, ogImgFile, categoryId, delOgImg } = savePostDto;
 
@@ -275,7 +275,7 @@ export class PostService {
     return <PostEntity>savePostDto;
   }
 
-  /** 포스트 추가/수정 유효성을 검사한다. */
+  /** 포스트 등록/수정 유효성을 검사한다. */
   private async isValidSavePost(savePostDto: SavePostDto): Promise<boolean> {
     const countPostDto: CountPostDto = Builder(CountPostDto)
                                        .pinYn('Y')

@@ -68,7 +68,7 @@ export class PostReplyRepository extends Repository<PostReplyEntity> {
     });
   }
 
-  /** 포스트 댓글을 추가/수정한다. */
+  /** 포스트 댓글을 등록/수정한다. */
   async savePostReply(savePostReplyDto: SavePostReplyDto): Promise<PostReplyEntity> {
     return await this.save(savePostReplyDto);
   }

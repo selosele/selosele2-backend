@@ -44,10 +44,10 @@ export class SatisfactionService {
     // 트랜잭션을 시작한다.
     await startTransaction(async (em: EntityManager) => {
 
-      // 1. 만족도조사를 추가한다.
+      // 1. 만족도조사를 등록한다.
       res = await em.withRepository(this.satisfactionRepository).addSatisfaction(addSatisfactiontDto);
 
-      // 2. 알림을 추가한다.
+      // 2. 알림을 등록한다.
       const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
                                                      .cnncId(res.id)
                                                      .typeCd('D02005')
