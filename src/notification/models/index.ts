@@ -1,6 +1,6 @@
-//DTO
+// DTO
 export * from './dto/add-notification.dto';
 export * from './dto/list-notification.dto';
 
-//Entities
+// Entities
 export * from './entities/notification.entity';

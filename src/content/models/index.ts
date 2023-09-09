@@ -1,8 +1,8 @@
-//DTO
+// DTO
 export * from './dto/get-content.dto';
 export * from './dto/list-content.dto';
 export * from './dto/remove-content.dto';
 export * from './dto/save-content.dto';
 
-//Entities
+// Entities
 export * from './entities/content.entity';

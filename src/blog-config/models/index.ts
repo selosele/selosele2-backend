@@ -1,5 +1,5 @@
-//DTO
+// DTO
 export * from './dto/update-blog-config.dto';
 
-//Entities
+// Entities
 export * from './entities/blog-config.entity';
