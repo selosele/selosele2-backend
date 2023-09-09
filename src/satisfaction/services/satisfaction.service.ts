@@ -73,8 +73,8 @@ export class SatisfactionService {
 
       //   this.httpService.post('https://kapi.kakao.com/v2/api/talk/memo/default/send', body, { headers })
       //   .subscribe({
-      //     next: (res) => {
-      //       this.logger.log(`Success for send Kakao message : ${JSON.stringify(res.data)}`);
+      //     next: (resp) => {
+      //       this.logger.log(`Success for send Kakao message : ${JSON.stringify(resp.data)}`);
       //     },
       //     error: (err) => {
       //       this.logger.debug(`Failure for send Kakao message : ${JSON.stringify(err.response.data)}`);

@@ -19,14 +19,14 @@ export class BlogConfigRepository extends Repository<BlogConfigEntity> {
   async getPageSize(): Promise<number> {
     return await this.findOne({
       where: { id: this.ID }
-    }).then(res => res.pageSize);
+    }).then(blogConfig => blogConfig.pageSize);
   }
 
   /** 카카오 메시지 수신 여부를 조회한다. */
   async getKakaoMsgYn(): Promise<string> {
     return await this.findOne({
       where: { id: this.ID }
-    }).then(res => res.kakaoMsgYn);
+    }).then(blogConfig => blogConfig.kakaoMsgYn);
   }
 
   /** 블로그 환경설정을 수정한다. */

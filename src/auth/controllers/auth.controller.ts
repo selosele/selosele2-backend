@@ -74,7 +74,7 @@ export class AuthController {
   async signIn(
     @RealIP() ip: string,
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
-    @Res({ passthrough: true }) res: Response,
+    @Res({ passthrough: true }) resp: Response,
   ): Promise<Tokens> {
     this.logger.warn(`Try to login... ip : ${ip}`);
 
@@ -82,7 +82,7 @@ export class AuthController {
     const tokens: Tokens = await this.authService.signIn(authCredentialsDto);
 
     // 리프레시 토큰은 HttpOnly Cookie에 저장한다.
-    res.cookie('refreshToken', tokens.refreshToken, {
+    resp.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       maxAge: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
     });
@@ -103,7 +103,7 @@ export class AuthController {
   async refreshAccessToken(
     @RealIP() ip: string,
     @RefreshTokenUser() user: UserEntity,
-    @Res({ passthrough: true }) res: Response,
+    @Res({ passthrough: true }) resp: Response,
   ): Promise<Tokens> {
     this.logger.warn(`Try to refresh the Access token... ip : ${ip}`);
 
@@ -116,7 +116,7 @@ export class AuthController {
     const tokens: Tokens = await this.authService.createTokens(user);
 
     // 리프레시 토큰은 HttpOnly Cookie에 저장한다.
-    res.cookie('refreshToken', tokens.refreshToken, {
+    resp.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       maxAge: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
     });
@@ -132,7 +132,7 @@ export class AuthController {
   })
   async signOut(
     @AccessTokenUser() user: UserEntity,
-    @Res({ passthrough: true }) res: Response
+    @Res({ passthrough: true }) resp: Response
   ): Promise<void> {
     const refreshTokenKey: string = createJwtRefreshTokenKey(user);
 
@@ -141,7 +141,7 @@ export class AuthController {
     
     // 없으면 쿠키의 리프레시 토큰만 삭제한다.
     if (isEmpty(cachedRefreshToken)) {
-      res.clearCookie('refreshToken');
+      resp.clearCookie('refreshToken');
       return;
     }
 
@@ -149,7 +149,7 @@ export class AuthController {
     await this.cacheDBService.del(refreshTokenKey);
 
     // 쿠키의 리프레시 토큰도 삭제한다.
-    res.clearCookie('refreshToken');
+    resp.clearCookie('refreshToken');
   }
 
   @Get('role')
