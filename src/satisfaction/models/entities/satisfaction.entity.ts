@@ -35,6 +35,14 @@ export class SatisfactionEntity extends BaseEntity {
   comment?: string;
 
   @Column({
+    comment: '만족도 의견 유형 코드'
+  })
+  @ApiProperty({
+    description: '만족도 의견 유형 코드'
+  })
+  commentTypeCd?: string;
+
+  @Column({
     comment: '참여자 IP',
     select: false,
   })

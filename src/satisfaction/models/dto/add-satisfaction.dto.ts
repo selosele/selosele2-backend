@@ -19,6 +19,10 @@ export class AddSatisfactiontDto {
   @IsOptional()
   @MaxLength(1000)
   comment?: string;
+
+  /** 만족도 의견 유형 코드 */
+  @IsOptional()
+  commentTypeCd?: string;
   
   /** 참여자 IP */
   @IsEmpty()
