@@ -26,18 +26,6 @@ export function isIn(target: any, ...value: any[]): boolean {
   return value.some(v => v === target);
 }
 
-/** 값이 배열인지 확인 */
-export function isArray(value: any): boolean {
-  return Array.isArray(value);
-}
-
-/** 배열에 중복된 값이 있는지 확인 (객체 배열은 사용 불가) */
-export function arrayHasDuplicateValue(value: any[]): boolean {
-  const setCollection: Set<any> = new Set(value.map(d => d.trim()));
-  
-  return setCollection.size < value.map(d => d.trim()).length;
-}
-
 /** 업로드 파일이 없는지 확인 */
 export function isFileEmpty(value: FileUploaderRequest): boolean {
   return isEmpty(value) || 0 === Object.values(value).length;
