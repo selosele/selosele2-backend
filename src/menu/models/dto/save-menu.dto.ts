@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, MaxLength, Min } from 'class-validator';
 
 /** 메뉴 등록/수정/삭제 DTO */
 export class SaveMenuDto {
@@ -29,17 +29,19 @@ export class SaveMenuDto {
   /** 메뉴 정렬 순서 */
   @Type(() => Number)
   @IsInt()
+  @Min(1)
   @IsNotEmpty()
   sort?: number;
 
   /** 메뉴 계층 */
   @Type(() => Number)
   @IsInt()
+  @Min(1)
   @IsNotEmpty()
   depth?: number;
 
   /** 메뉴 권한 */
-  @IsNotEmpty()
+  @IsOptional()
   role: string;
 
   /** 메뉴 사용 여부 */
