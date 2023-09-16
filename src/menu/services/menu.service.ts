@@ -48,11 +48,12 @@ export class MenuService {
   
       let roles: SaveMenuRoleDto[] = [];
     
-      if ('0' === saveMenuDto.role) {
+      // '모든 권한 허용'일 경우
+      if ('' === saveMenuDto.role) {
         const roleList = await this.roleRepository.listRole();
         
         for (const role of roleList) {
-          // 선택한 값이 '모든 권한 허용'일 경우에는 모든 권한을 추가하고
+          // 모든 권한을 추가하고
           roles.push({
             menuId: menu.id,
             roleId: role.roleId,
