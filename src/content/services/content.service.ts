@@ -27,7 +27,7 @@ export class ContentService {
   async listContent(listContentDto?: ListContentDto): Promise<[ContentEntity[], number]> {
     const contentList: [ContentEntity[], number] = await this.contentRepository.listContent(listContentDto);
 
-    contentList[0].map(c => {
+    contentList[0].forEach(c => {
 
       // 콘텐츠 데이타에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       c.rawText = getRawText(c.cont);

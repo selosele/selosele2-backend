@@ -4,7 +4,7 @@ import { PostCategoryRepository } from 'src/category/repositories/post-category.
 import { PaginationDto } from 'src/shared/models';
 import { deserialize, escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, santinizeHtmlOption, startTransaction } from 'src/shared/utils';
 import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
-import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
+import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, GetPostLikeDto, PostLikeEntity } from '../models';
 import { SavePostDto } from '../models/dto/save-post.dto';
 import { PostRepository } from '../repositories/post.repository';
 import { BlogConfigRepository } from 'src/blog-config/repositories/blog-config.repository';
@@ -18,6 +18,8 @@ import { SaveTagDto, TagEntity } from 'src/tag/models';
 import { FileUploaderService } from 'src/file-uploader/services/file-uploader.service';
 import { FileUploaderResponse } from 'src/file-uploader/models/file-uploader.model';
 import { CountPostDto } from '../models/dto/count-post.dto';
+import { PostReplyRepository } from '../repositories/post-reply.repository';
+import { PostLikeService } from './post-like.service';
 
 @Injectable()
 export class PostService {
@@ -25,6 +27,8 @@ export class PostService {
   constructor(
     @InjectRepository(PostRepository)
     private readonly postRepository: PostRepository,
+    @InjectRepository(PostReplyRepository)
+    private readonly postReplyRepository: PostReplyRepository,
     @InjectRepository(PostCategoryRepository)
     private readonly postCategoryRepository: PostCategoryRepository,
     @InjectRepository(PostTagRepository)
@@ -34,6 +38,7 @@ export class PostService {
     @InjectRepository(BlogConfigRepository)
     private readonly blogConfigRepository: BlogConfigRepository,
     private readonly fileUploaderService: FileUploaderService,
+    private readonly postLikeService: PostLikeService,
   ) {}
 
   /** 메인 포스트 목록을 조회한다. */
@@ -46,7 +51,7 @@ export class PostService {
       this.postCategoryRepository.listPostCategory(listPostDto),
     ]);
 
-    postList[0].map(p => {
+    postList[0].forEach(p => {
 
       // 포스트 데이타에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       p.rawText = getRawText(p.cont).substring(0, 180);
@@ -62,7 +67,7 @@ export class PostService {
   async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
     const postList: [PostEntity[], number] = await this.postRepository.listPost(listPostDto);
 
-    postList[0].map(p => {
+    postList[0].forEach(p => {
 
       // 포스트 데이타에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       p.rawText = getRawText(p.cont);
@@ -96,7 +101,7 @@ export class PostService {
       this.postCategoryRepository.listPostCategorySearch(searchPostDto, paginationDto),
     ]);
 
-    post[0].map(p => {
+    post[0].forEach(p => {
       // 포스트 데이타에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       p.rawText = getRawText(p.cont);
 
@@ -136,23 +141,38 @@ export class PostService {
     return await this.postRepository.listPostByTag(listPostDto, paginationDto);
   }
 
-  /** 이전/다음 포스트 목록을 조회한다. */
-  async listPrevAndNextPost(listPostDto: ListPostDto): Promise<PostEntity[]> {
-    return await this.postRepository.listPrevAndNextPost(listPostDto);
-  }
-
   /** 포스트를 조회한다. */
   async getPost(getPostDto: GetPostDto): Promise<PostEntity> {
     const post: PostEntity = await this.postRepository.getPost(getPostDto);
 
+    // 포스트가 없으면 404 예외를 던진다.
     if (isEmpty(post)) {
       throw new NotFoundException();
     }
 
-    // 관리자 외 비밀글 조회를 방지한다.
+    // 관리자 외 비밀 포스트 조회를 방지한다.
     if (isNotEmpty(post) && 'N' === getPostDto.isLogin && 'Y' === post.secretYn) {
       throw new NotFoundException();
     }
+
+    // 사용자 포스트 추천 정보를 조회한다.
+    const getPostLikeDto: GetPostLikeDto = Builder(GetPostLikeDto)
+                                           .postId(getPostDto.id)
+                                           .ip(getPostDto.ip)
+                                           .build();
+    const userPostLike: PostLikeEntity = await this.postLikeService.getPostLike(getPostLikeDto);
+    post.setUserPostLike(userPostLike);
+
+    // 이전/다음 포스트 목록을 조회한다.
+    const listPostDto: ListPostDto = Builder(ListPostDto)
+                                    .id(getPostDto.id)
+                                    .isLogin(getPostDto.isLogin)
+                                    .build();
+    const prevAndNext: PostEntity[] = await this.postRepository.listPrevAndNextPost(listPostDto);
+    post.setPrevAndNext(prevAndNext);
+
+    // 포스트 댓글 목록을 조회한다.
+    post.postReply = await this.postReplyRepository.listPostReply(getPostDto.id);
 
     post.rawText = post.cont;
 
@@ -288,7 +308,7 @@ export class PostService {
 
     if ('Y' === savePostDto.pinYn) {
       if ((pinPostCount + 1) >= pageSize) {
-        throw new BizException('고정 글의 개수를 확인하세요.');
+        throw new BizException('고정 포스트의 개수를 확인하세요.');
       }
     }
 

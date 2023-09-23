@@ -20,7 +20,7 @@ export class PostLikeService {
     private readonly notificationRepository: NotificationRepository,
   ) {}
 
-  /** 포스트 추천 정보를 조회한다. */
+  /** 사용자 포스트 추천 정보를 조회한다. */
   async getPostLike(getPostLikeDto: GetPostLikeDto): Promise<PostLikeEntity> {
     return await this.postLikeRepository.getPostLike(getPostLikeDto);
   }

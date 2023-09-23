@@ -41,7 +41,7 @@ export class PostController {
     @IsAuthenticated() isAuthenticated: boolean,
     @Query(ValidationPipe) listPostDto: ListPostDto,
   ): Promise<[PostEntity[], number]> {
-    // 비밀글 조회를 위한 세팅
+    // 비밀 포스트 조회를 위한 세팅
     listPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
     // 메인 포스트 목록 조회
@@ -105,7 +105,7 @@ export class PostController {
 
     this.logger.warn(`q : ${searchPostDto.q}, ip: ${ip}`);
 
-    // 비밀글 조회를 위한 세팅
+    // 비밀 포스트 조회를 위한 세팅
     searchPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
     
     return this.postService.listPostSearch(searchPostDto, paginationDto);
@@ -217,31 +217,6 @@ export class PostController {
     return this.postService.listPostByTag(listPostDto, paginationDto);
   }
 
-  @Get('prevnext/:id')
-  @ApiOperation({
-    summary: '이전/다음 포스트 목록 조회 API',
-    description: '이전/다음 포스트 목록을 조회한다.'
-  })
-  @ApiCreatedResponse({
-    type: Array<PostEntity>,
-    description: '이전/다음 포스트 목록',
-  })
-  @ApiParam({
-    type: Number,
-    name: 'id',
-    description: '포스트 ID',
-  })
-  listPrevAndNextPost(
-    @IsAuthenticated() isAuthenticated: boolean,
-    @Param('id', ParseIntPipe) id: number
-  ): Promise<PostEntity[]> {
-    const listPostDto: ListPostDto = Builder(ListPostDto)
-                                    .id(id)
-                                    .isLogin(isAuthenticated ? 'Y' : 'N')
-                                    .build();
-    return this.postService.listPrevAndNextPost(listPostDto);
-  }
-
   @Get(':id')
   @ApiOperation({
     summary: '포스트 상세 조회 API',
@@ -258,10 +233,12 @@ export class PostController {
   })
   getPost(
     @IsAuthenticated() isAuthenticated: boolean,
-    @Param('id', ParseIntPipe) id: number
+    @Param('id', ParseIntPipe) id: number,
+    @RealIP() ip: string,
   ): Promise<PostEntity> {
     const getPostDto: GetPostDto = Builder(GetPostDto)
                                   .id(id)
+                                  .ip(ip)
                                   .isLogin(isAuthenticated ? 'Y' : 'N')
                                   .build();
     return this.postService.getPost(getPostDto);

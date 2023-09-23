@@ -33,8 +33,8 @@ export class PostReplyRepository extends Repository<PostReplyEntity> {
   }
 
   /** 포스트 댓글 목록을 조회한다. */
-  async listPostReply(postId: number): Promise<[PostReplyEntity[], number]> {
-    return await this.findAndCount({
+  async listPostReply(postId: number): Promise<PostReplyEntity[]> {
+    return await this.find({
       select: [
         'id', 'parentId', 'parentReplyId',
         'group', 'sort', 'depth',

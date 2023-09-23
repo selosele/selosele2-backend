@@ -9,7 +9,6 @@ import { SavePostReplyDto } from "../models/dto/save-post-reply.dto";
 import { SavePostDto } from "../models/dto/save-post.dto";
 import { PostReplyRepository } from "../repositories/post-reply.repository";
 import { PostRepository } from "../repositories/post.repository";
-import { PostService } from "./post.service";
 import { UpdatePostReplySortDto } from "../models/dto/update-post-reply-sort.dto";
 import { GetPostReplyDto } from "../models/dto/get-post-reply.dto";
 import { ListPostReplyDto } from "../models/dto/list-post-reply.dto";
@@ -26,7 +25,6 @@ export class PostReplyService {
     private readonly postRepository: PostRepository,
     @InjectRepository(NotificationRepository)
     private readonly notificationRepository: NotificationRepository,
-    private readonly postService: PostService,
   ) {}
 
   /** 모든 포스트 댓글 목록을 조회한다. */
@@ -35,10 +33,10 @@ export class PostReplyService {
   }
 
   /** 포스트 댓글 목록을 조회한다. */
-  async listPostReply(postId: number): Promise<[PostReplyEntity[], number]> {
-    const replyList: [PostReplyEntity[], number] = await this.postReplyRepository.listPostReply(postId);
+  async listPostReply(postId: number): Promise<PostReplyEntity[]> {
+    const replyList: PostReplyEntity[] = await this.postReplyRepository.listPostReply(postId);
 
-    replyList[0].map(d => {
+    replyList.forEach(d => {
 
       // 삭제된 댓글인 경우
       if ('Y' === d.delYn) {
@@ -67,9 +65,9 @@ export class PostReplyService {
     const getPostDto: GetPostDto = Builder(GetPostDto)
                                    .id(savePostReplyDto.parentId)
                                    .build();
-    const parentPost: PostEntity = await this.postService.getPost(getPostDto);
+    const parentPost: PostEntity = await this.postRepository.getPost(getPostDto);
 
-    // 임시저장 글, 비밀 글에 인증되지 않은 사용자의 댓글 저장을 방지한다.
+    // 임시저장 및 비밀 포스트에 인증되지 않은 사용자의 댓글 저장을 방지한다.
     if (this.isNotAllowedPost(savePostReplyDto, parentPost)) {
       throw new NotFoundException();
     }
@@ -188,7 +186,7 @@ export class PostReplyService {
     const getPostDto: GetPostDto = Builder(GetPostDto)
                                    .id(savePostReplyDto.parentId)
                                    .build();
-    const parentPost: PostEntity = await this.postService.getPost(getPostDto);
+    const parentPost: PostEntity = await this.postRepository.getPost(getPostDto);
 
     let res: PostReplyEntity = null;
 
@@ -228,6 +226,7 @@ export class PostReplyService {
   async updatePostReplyDelYn(savePostReplyDto: SavePostReplyDto): Promise<UpdateResult> {
     let res: UpdateResult = null;
 
+    // 트랜잭션을 시작한다.
     await startTransaction(async (em: EntityManager) => {
 
       // 1. 포스트 댓글의 삭제 여부 값을 N으로 변경한다.
@@ -237,7 +236,7 @@ export class PostReplyService {
       const getPostDto: GetPostDto = Builder(GetPostDto)
                                      .id(savePostReplyDto.parentId)
                                      .build();
-      const parentPost: PostEntity = await this.postService.getPost(getPostDto);
+      const parentPost: PostEntity = await em.withRepository(this.postRepository).getPost(getPostDto);
 
       // 3. 댓글 개수를 조회한다.
       const postReplyCount: number = await em.withRepository(this.postReplyRepository).countPostReply(savePostReplyDto.parentId);
@@ -271,7 +270,7 @@ export class PostReplyService {
     return true;
   }
 
-  /** 임시저장 글, 비밀 글에 인증되지 않은 사용자의 댓글 저장을 방지한다. */
+  /** 임시저장 및 비밀 포스트에 인증되지 않은 사용자의 댓글 저장을 방지한다. */
   private isNotAllowedPost(savePostReplyDto: SavePostReplyDto, parentPost: PostEntity): boolean {
     return 'N' === savePostReplyDto.isAdmin && ('Y' === parentPost.secretYn || 'Y' === parentPost.tmpYn);
   }

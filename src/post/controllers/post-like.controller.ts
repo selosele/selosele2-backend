@@ -16,12 +16,12 @@ export class PostLikeController {
 
   @Get(':id')
   @ApiOperation({
-    summary: '포스트 추천 정보 조회 API',
-    description: '포스트 추천 정보를 조회한다.',
+    summary: '사용자 포스트 추천 정보 조회 API',
+    description: '사용자 포스트 추천 정보를 조회한다.',
   })
   @ApiCreatedResponse({
     type: PostLikeEntity,
-    description: '포스트 추천 정보',
+    description: '사용자 포스트 추천 정보',
   })
   @ApiParam({
     type: Number,

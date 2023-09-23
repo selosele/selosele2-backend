@@ -50,7 +50,7 @@ export class PostReplyController {
     name: 'postId',
     description: '포스트 ID',
   })
-  listPostReply(@Param('postId', ParseIntPipe) postId: number): Promise<[PostReplyEntity[], number]> {
+  listPostReply(@Param('postId', ParseIntPipe) postId: number): Promise<PostReplyEntity[]> {
     return this.postReplyService.listPostReply(postId);
   }
 
