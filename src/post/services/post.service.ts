@@ -79,11 +79,6 @@ export class PostService {
     return postList;
   }
 
-  /** 개수별 포스트 목록을 조회한다. */
-  async listPostByLimit(listPostDto: ListPostDto): Promise<PostEntity[]> {
-    return await this.postRepository.listPostByLimit(listPostDto);
-  }
-
   /** 포스트를 검색한다. */
   async listPostSearch(
     searchPostDto: SearchPostDto,

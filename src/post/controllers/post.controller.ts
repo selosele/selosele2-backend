@@ -52,31 +52,6 @@ export class PostController {
     return this.postService.listPost(listPostDto);
   }
 
-  @Get('/limit/:limit')
-  @ApiOperation({
-    summary: '개수별 포스트 목록 조회 API',
-    description: '개수별 포스트 목록을 조회한다.'
-  })
-  @ApiCreatedResponse({
-    type: Array<PostEntity>,
-    description: '개수별 포스트 목록',
-  })
-  @ApiParam({
-    type: Number,
-    name: 'limit',
-    description: '개수',
-  })
-  listPostByLimit(
-    @IsAuthenticated() isAuthenticated: boolean,
-    @Param('limit', ParseIntPipe) limit: number
-  ): Promise<PostEntity[]> {
-    const listPostDto: ListPostDto = Builder(ListPostDto)
-                                    .limit(limit)
-                                    .isLogin(isAuthenticated ? 'Y' : 'N')
-                                    .build();
-    return this.postService.listPostByLimit(listPostDto);
-  }
-
   @Get('search')
   @ApiOperation({
     summary: '포스트 검색 API',

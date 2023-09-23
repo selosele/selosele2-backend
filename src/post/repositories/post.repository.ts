@@ -46,21 +46,6 @@ export class PostRepository extends Repository<PostEntity> {
     });
   }
 
-  /** 개수별 포스트 목록을 조회한다. */
-  async listPostByLimit(listPostDto: ListPostDto): Promise<PostEntity[]> {
-    return await this.find({
-      select: ['id', 'title', 'ogImgUrl'],
-      where: {
-        tmpYn: 'N',
-        ...('N' === listPostDto?.isLogin && { secretYn: 'N' }),
-      },
-      order: {
-        regDate: 'DESC',
-      },
-      take: listPostDto?.limit,
-    });
-  }
-
   /** 포스트를 검색한다. */
   async listPostSearch(
     searchPostDto: SearchPostDto,
