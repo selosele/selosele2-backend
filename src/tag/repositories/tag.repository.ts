@@ -7,7 +7,7 @@ import { ListTagDto, SaveTagDto, PostTagEntity, TagEntity } from '../models';
 export class TagRepository extends Repository<TagEntity> {
 
   /** 태그 목록을 조회한다. */
-  async listTag(listTagDto?: ListTagDto): Promise<TagEntity[]> {
+  async listTag(): Promise<TagEntity[]> {
     return await this.find({
       order: {
         nm: 'ASC',

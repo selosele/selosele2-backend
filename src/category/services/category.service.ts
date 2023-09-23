@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
 import { ListCategoryDto, SaveCategoryDto, CategoryEntity } from '../models';
 import { CategoryRepository } from '../repositories/category.repository';
+import { TagRepository } from 'src/tag/repositories/tag.repository';
+import { ListTagDto, TagEntity } from 'src/tag/models';
 
 @Injectable()
 export class CategoryService {
@@ -10,16 +12,21 @@ export class CategoryService {
   constructor(
     @InjectRepository(CategoryRepository)
     private readonly categoryRepository: CategoryRepository,
+    @InjectRepository(TagRepository)
+    private readonly tagRepository: TagRepository,
   ) {}
 
   /** 카테고리 목록을 조회한다. */
-  async listCategory(listCategoryDto?: ListCategoryDto): Promise<CategoryEntity[]> {
-    return await this.categoryRepository.listCategory(listCategoryDto);
+  async listCategory(): Promise<CategoryEntity[]> {
+    return await this.categoryRepository.listCategory();
   }
 
-  /** 카테고리 목록 및 개수를 조회한다. */
-  async listCategoryAndCount(listCategoryDto: ListCategoryDto): Promise<CategoryEntity[]> {
-    return await this.categoryRepository.listCategoryAndCount(listCategoryDto);
+  /** 카테고리, 태그 목록 및 개수를 조회한다. */
+  async listCategoryAndCount(listCategoryDto: ListCategoryDto): Promise<[CategoryEntity[], TagEntity[]]> {
+    return await Promise.all([
+      this.categoryRepository.listCategoryAndCount(listCategoryDto),
+      this.tagRepository.listTagAndCount(listCategoryDto as ListTagDto),
+    ]);
   }
 
   /** 카테고리를 조회한다. */

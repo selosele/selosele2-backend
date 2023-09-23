@@ -8,6 +8,7 @@ import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { DeleteResult } from 'typeorm';
 import { ListCategoryDto, SaveCategoryDto, CategoryEntity } from '../models';
 import { CategoryService } from '../services/category.service';
+import { TagEntity } from 'src/tag/models';
 
 @Controller('category')
 @ApiTags('카테고리 API')
@@ -32,14 +33,14 @@ export class CategoryController {
 
   @Get('list/count')
   @ApiOperation({
-    summary: '카테고리 목록 및 개수 조회 API',
-    description: '카테고리 목록 및 개수를 조회한다.'
+    summary: '카테고리, 태그 목록 및 개수 조회 API',
+    description: '카테고리, 태그 목록 및 개수를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<CategoryEntity>,
-    description: '카테고리 목록 및 개수',
+    type: Array<[CategoryEntity, TagEntity]>,
+    description: '카테고리, 태그 목록 및 개수',
   })
-  listCategoryAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<CategoryEntity[]> {
+  listCategoryAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<[CategoryEntity[], TagEntity[]]> {
     const listCategoryDto: ListCategoryDto = Builder(ListCategoryDto)
                                             .isLogin(isAuthenticated ? 'Y' : 'N')
                                             .build();

@@ -8,6 +8,7 @@ export class PostLikeRepository extends Repository<PostLikeEntity> {
   /** 사용자 포스트 추천 정보를 조회한다. */
   async getPostLike(savePostLikeDto: SavePostLikeDto): Promise<PostLikeEntity> {
     return await this.findOne({
+      select: ['id'],
       where: {
         postId: savePostLikeDto.postId,
         ip: savePostLikeDto.ip,

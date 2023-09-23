@@ -1,11 +1,10 @@
 import { Controller, Get, Post, Put, Body, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 import { Delete, Param } from '@nestjs/common/decorators';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { Builder } from 'builder-pattern';
 import { RoleEnum } from 'src/auth/models';
-import { Auth, IsAuthenticated } from 'src/shared/decorators';
+import { Auth } from 'src/shared/decorators';
 import { DeleteResult } from 'typeorm';
-import { ListTagDto, SaveTagDto, TagEntity } from '../models';
+import { SaveTagDto, TagEntity } from '../models';
 import { TagService } from '../services/tag.service';
 
 @Controller('tag')
@@ -27,22 +26,6 @@ export class TagController {
   })
   listTag(): Promise<TagEntity[]> {
     return this.tagService.listTag();
-  }
-
-  @Get('list/count')
-  @ApiOperation({
-    summary: '태그 목록 및 개수 조회 API',
-    description: '태그 목록 및 개수를 조회한다.'
-  })
-  @ApiCreatedResponse({
-    type: Array<TagEntity>,
-    description: '태그 목록 및 개수',
-  })
-  listTagAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<TagEntity[]> {
-    const listTagDto: ListTagDto = Builder(ListTagDto)
-                                  .isLogin(isAuthenticated ? 'Y' : 'N')
-                                  .build();
-    return this.tagService.listTagAndCount(listTagDto);
   }
 
   @Get(':id')

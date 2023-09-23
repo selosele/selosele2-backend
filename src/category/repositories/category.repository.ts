@@ -7,7 +7,7 @@ import { ListCategoryDto, SaveCategoryDto, CategoryEntity, PostCategoryEntity } 
 export class CategoryRepository extends Repository<CategoryEntity> {
 
   /** 카테고리 목록을 조회한다. */
-  async listCategory(listCategoryDto?: ListCategoryDto): Promise<CategoryEntity[]> {
+  async listCategory(): Promise<CategoryEntity[]> {
     return await this.find({
       order: {
         nm: 'ASC',
