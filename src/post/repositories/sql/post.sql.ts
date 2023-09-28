@@ -22,8 +22,7 @@ export const listPostMainSql = (listPostDto: ListPostDto): string => {
         FROM post
           LEFT JOIN post_category AS postCategory ON postCategory.post_id = post.id
           LEFT JOIN post_like AS postLike ON postLike.post_id = post.id
-        WHERE 1=1
-          AND post.pin_yn = 'Y'
+        WHERE post.pin_yn = 'Y'
           ${'N' === listPostDto?.isLogin ?
           "AND post.tmp_yn = 'N'" : ""
           }
@@ -51,8 +50,7 @@ export const listPostMainSql = (listPostDto: ListPostDto): string => {
         FROM post
           LEFT JOIN post_category AS postCategory ON postCategory.post_id = post.id
           LEFT JOIN post_like AS postLike ON postLike.post_id = post.id
-        WHERE 1=1
-          AND post.pin_yn = 'N'
+        WHERE post.pin_yn = 'N'
           ${'N' === listPostDto?.isLogin ?
           "AND post.tmp_yn = 'N'" : ""
           }
