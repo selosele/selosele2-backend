@@ -62,9 +62,9 @@ export class PostReplyService {
     const { authorPw, cont, group, parentReplyId } = savePostReplyDto;
     
     // 상위 포스트를 조회한다.
-    const getPostDto: GetPostDto = Builder(GetPostDto)
-                                   .id(savePostReplyDto.parentId)
-                                   .build();
+    const getPostDto = Builder(GetPostDto)
+                        .id(savePostReplyDto.parentId)
+                        .build();
     const parentPost: PostEntity = await this.postRepository.getPost(getPostDto);
 
     // 임시저장 및 비밀 포스트에 인증되지 않은 사용자의 댓글 저장을 방지한다.
@@ -99,17 +99,17 @@ export class PostReplyService {
         if (isNotEmpty(parentReplyId)) {
 
           // 3. 마지막 포스트 댓글을 조회한다.
-          const getPostReplyDto: GetPostReplyDto = Builder(GetPostReplyDto)
-                                                   .id(res.id)
-                                                   .group(parentReplyId)
-                                                   .build();
+          const getPostReplyDto = Builder(GetPostReplyDto)
+                                  .id(res.id)
+                                  .group(parentReplyId)
+                                  .build();
           const lastPostReply: PostReplyEntity = await em.withRepository(this.postReplyRepository).getLastPostReply(getPostReplyDto);
 
           // 4. 포스트 댓글의 순서를 수정한다.
-          const updatePostReplySortDto: UpdatePostReplySortDto = Builder(UpdatePostReplySortDto)
-                                                                 .id(res.id)
-                                                                 .sort(lastPostReply.sort + 1)
-                                                                 .build();
+          const updatePostReplySortDto = Builder(UpdatePostReplySortDto)
+                                          .id(res.id)
+                                          .sort(lastPostReply.sort + 1)
+                                          .build();
           await em.withRepository(this.postReplyRepository).updatePostReplySort(updatePostReplySortDto);
         }
   
@@ -117,23 +117,23 @@ export class PostReplyService {
         const postReplyCount: number = await em.withRepository(this.postReplyRepository).countPostReply(res.parentId);
         
         // 6. 상위 포스트의 댓글 개수 컬럼을 수정한다.
-        const savePostDto: SavePostDto = Builder(SavePostDto)
-                                         .id(res.parentId)
-                                         .replyCnt(postReplyCount)
-                                         .modDate(parentPost.modDate)
-                                         .build();
+        const savePostDto = Builder(SavePostDto)
+                            .id(res.parentId)
+                            .replyCnt(postReplyCount)
+                            .modDate(parentPost.modDate)
+                            .build();
         await em.withRepository(this.postRepository).updatePostReplyCnt(savePostDto);
 
         // 7. 알림을 등록한다.
         if ('N' === savePostReplyDto.isLogin) {
-          const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
-                                                         .cnncId(res.id)
-                                                         .typeCd('D02002')
-                                                         .link(`/post/${savePostReplyDto.parentId}#postReply${res.id}`)
-                                                         .senderIp(savePostReplyDto.ip)
-                                                         .senderNm(savePostReplyDto.author)
-                                                         .title(savePostReplyDto.title)
-                                                         .build();
+          const addNotificationDto = Builder(AddNotificationDto)
+                                      .cnncId(res.id)
+                                      .typeCd('D02002')
+                                      .link(`/post/${savePostReplyDto.parentId}#postReply${res.id}`)
+                                      .senderIp(savePostReplyDto.ip)
+                                      .senderNm(savePostReplyDto.author)
+                                      .title(savePostReplyDto.title)
+                                      .build();
           await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
         }
       });
@@ -183,9 +183,9 @@ export class PostReplyService {
     savePostReplyDto.authorPw = await encrypt(authorPw);
 
     // 상위 포스트를 조회한다.
-    const getPostDto: GetPostDto = Builder(GetPostDto)
-                                   .id(savePostReplyDto.parentId)
-                                   .build();
+    const getPostDto = Builder(GetPostDto)
+                        .id(savePostReplyDto.parentId)
+                        .build();
     const parentPost: PostEntity = await this.postRepository.getPost(getPostDto);
 
     let res: PostReplyEntity = null;
@@ -201,11 +201,11 @@ export class PostReplyService {
       const postReplyCount: number = await em.withRepository(this.postReplyRepository).countPostReply(res.parentId);
       
       // 3. 상위 포스트의 댓글 개수 컬럼을 수정한다.
-      const savePostDto: SavePostDto = Builder(SavePostDto)
-                                       .id(res.parentId)
-                                       .replyCnt(postReplyCount)
-                                       .modDate(parentPost.modDate)
-                                       .build();
+      const savePostDto = Builder(SavePostDto)
+                          .id(res.parentId)
+                          .replyCnt(postReplyCount)
+                          .modDate(parentPost.modDate)
+                          .build();
       await em.withRepository(this.postRepository).updatePostReplyCnt(savePostDto);
     });
 
@@ -233,20 +233,20 @@ export class PostReplyService {
       res = await em.withRepository(this.postReplyRepository).updatePostReplyDelYn(savePostReplyDto);
 
       // 2. 상위 포스트를 조회한다.
-      const getPostDto: GetPostDto = Builder(GetPostDto)
-                                     .id(savePostReplyDto.parentId)
-                                     .build();
+      const getPostDto = Builder(GetPostDto)
+                          .id(savePostReplyDto.parentId)
+                          .build();
       const parentPost: PostEntity = await em.withRepository(this.postRepository).getPost(getPostDto);
 
       // 3. 댓글 개수를 조회한다.
       const postReplyCount: number = await em.withRepository(this.postReplyRepository).countPostReply(savePostReplyDto.parentId);
 
       // 4. 상위 포스트의 댓글 개수 컬럼을 수정한다.
-      const savePostDto: SavePostDto = Builder(SavePostDto)
-                                       .id(savePostReplyDto.parentId)
-                                       .replyCnt(postReplyCount)
-                                       .modDate(parentPost.modDate)
-                                       .build();
+      const savePostDto = Builder(SavePostDto)
+                          .id(savePostReplyDto.parentId)
+                          .replyCnt(postReplyCount)
+                          .modDate(parentPost.modDate)
+                          .build();
       await em.withRepository(this.postRepository).updatePostReplyCnt(savePostDto);
     });
 

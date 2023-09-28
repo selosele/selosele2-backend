@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { BizException } from 'src/shared/exceptions/biz/biz-exception';
 import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, RoleEnum, Tokens } from '../models';
 import { RoleRepository } from '../repositories/role.repository';
-import { compareEncrypt, createJwtRefreshTokenKey, encrypt, isNotEmpty, startTransaction } from 'src/shared/utils';
+import { compareEncrypt, createJwtRefreshTokenKey, encrypt, isNotBlank, startTransaction } from 'src/shared/utils';
 import { CacheDBService } from 'src/cache-db/services/cache-db.service';
 import { ConfigService } from '@nestjs/config';
 
@@ -55,11 +55,11 @@ export class AuthService {
       for (const role of roles) {
 
         // 2. 사용자 권한을 생성한다.
-        const addUserRoleDto: AuthCredentialsRoleDto = Builder(AuthCredentialsRoleDto)
-                                                        .userSn(user.userSn)
-                                                        .userId(userId)
-                                                        .roleId(role)
-                                                        .build();
+        const addUserRoleDto = Builder(AuthCredentialsRoleDto)
+                                .userSn(user.userSn)
+                                .userId(userId)
+                                .roleId(role)
+                                .build();
         await em.withRepository(this.userRoleRepository).addUserRole(addUserRoleDto);
       }
     });
@@ -87,7 +87,7 @@ export class AuthService {
     const matchPw = await compareEncrypt(userPw, user.userPw);
 
     if (user && matchPw) {
-      return this.createTokens(user);
+      return await this.createTokens(user);
     }
     
     throw new BizException('로그인에 실패했습니다.');
@@ -124,7 +124,7 @@ export class AuthService {
 
   /** 유효한 리프레시 토큰인지 확인한다. */
   isValidRefreshToken(refreshToken: string, cachedRefreshToken: string): boolean {
-    return isNotEmpty(cachedRefreshToken) && cachedRefreshToken === refreshToken;
+    return isNotBlank(cachedRefreshToken) && cachedRefreshToken === refreshToken;
   }
 
 }

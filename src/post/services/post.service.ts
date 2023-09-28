@@ -151,18 +151,18 @@ export class PostService {
     }
 
     // 사용자 포스트 추천 정보를 조회한다.
-    const getPostLikeDto: GetPostLikeDto = Builder(GetPostLikeDto)
-                                           .postId(getPostDto.id)
-                                           .ip(getPostDto.ip)
-                                           .build();
+    const getPostLikeDto = Builder(GetPostLikeDto)
+                            .postId(getPostDto.id)
+                            .ip(getPostDto.ip)
+                            .build();
     const userPostLike: PostLikeEntity = await this.postLikeService.getPostLike(getPostLikeDto);
     post.setUserPostLike(userPostLike);
 
     // 이전/다음 포스트 목록을 조회한다.
-    const listPostDto: ListPostDto = Builder(ListPostDto)
-                                    .id(getPostDto.id)
-                                    .isLogin(getPostDto.isLogin)
-                                    .build();
+    const listPostDto = Builder(ListPostDto)
+                        .id(getPostDto.id)
+                        .isLogin(getPostDto.isLogin)
+                        .build();
     const prevAndNext: PostEntity[] = await this.postRepository.listPrevAndNextPost(listPostDto);
     post.setPrevAndNext(prevAndNext);
 
@@ -222,10 +222,10 @@ export class PostService {
       post = await em.withRepository(this.postRepository).savePost(savePostDto);
 
       // 2. 포스트 카테고리를 저장한다.
-      const savePostCategoryDto: SavePostCategoryDto = Builder(SavePostCategoryDto)
-                                                       .postId(post.id)
-                                                       .categoryId(categoryId)
-                                                       .build();
+      const savePostCategoryDto = Builder(SavePostCategoryDto)
+                                  .postId(post.id)
+                                  .categoryId(categoryId)
+                                  .build();
       await em.withRepository(this.postCategoryRepository).removePostCategory(savePostCategoryDto);
       await em.withRepository(this.postCategoryRepository).savePostCategory(savePostCategoryDto);
 
@@ -233,25 +233,25 @@ export class PostService {
         const saveTagList: SaveTagDto[] = deserialize(Array<SaveTagDto>, savePostDto.saveTagList); // JSON -> Array 역직렬화
 
         // 3. 포스트 태그를 삭제한다.
-        const removePostTagDto: SavePostTagDto = Builder(SavePostTagDto)
-                                                 .postId(post.id)
-                                                 .build();
+        const removePostTagDto = Builder(SavePostTagDto)
+                                  .postId(post.id)
+                                  .build();
         await em.withRepository(this.postTagRepository).removePostTag(removePostTagDto);
 
         for (const saveTag of saveTagList) {
 
           // 4. 태그를 저장한다.
-          const saveTagDto: SaveTagDto = Builder(SaveTagDto)
-                                         .id(saveTag.id)
-                                         .nm(saveTag.nm)
-                                         .build();
+          const saveTagDto = Builder(SaveTagDto)
+                              .id(saveTag.id)
+                              .nm(saveTag.nm)
+                              .build();
           const tag: TagEntity = await em.withRepository(this.tagRepository).saveTag(saveTagDto);
 
           // 5. 포스트 태그를 저장한다.
-          const savePostTagDto: SavePostTagDto = Builder(SavePostTagDto)
-                                                 .postId(post.id)
-                                                 .tagId(tag.id)
-                                                 .build();
+          const savePostTagDto = Builder(SavePostTagDto)
+                                  .postId(post.id)
+                                  .tagId(tag.id)
+                                  .build();
           await em.withRepository(this.postTagRepository).savePostTag(savePostTagDto);
         }
       }
@@ -292,9 +292,9 @@ export class PostService {
 
   /** 포스트 등록/수정 유효성을 검사한다. */
   private async isValidSavePost(savePostDto: SavePostDto): Promise<boolean> {
-    const countPostDto: CountPostDto = Builder(CountPostDto)
-                                       .pinYn('Y')
-                                       .build();
+    const countPostDto = Builder(CountPostDto)
+                          .pinYn('Y')
+                          .build();
 
     const [pinPostCount, pageSize]: [number, number] = await Promise.all([
       this.countPost(countPostDto),

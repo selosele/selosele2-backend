@@ -52,10 +52,10 @@ export class ContentController {
     @IsAuthenticated() isAuthenticated: boolean,
     @Param('link') link: string
   ): Promise<ContentEntity> {
-    const getContentDto: GetContentDto = Builder(GetContentDto)
-                                         .link('/' + link)
-                                         .isLogin(isAuthenticated ? 'Y' : 'N')
-                                         .build();
+    const getContentDto = Builder(GetContentDto)
+                          .link(`/${link}`)
+                          .isLogin(isAuthenticated ? 'Y' : 'N')
+                          .build();
     return this.contentService.getContent(getContentDto);
   }
 

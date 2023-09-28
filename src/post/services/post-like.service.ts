@@ -45,13 +45,13 @@ export class PostLikeService {
         res = await em.withRepository(this.postLikeRepository).addPostLike(savePostLikeDto);
   
         // 2. 알림을 등록한다.
-        const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
-                                                       .cnncId(res.id)
-                                                       .typeCd('D02001')
-                                                       .link(`/post/${savePostLikeDto.postId}`)
-                                                       .senderIp(savePostLikeDto.ip)
-                                                       .title(savePostLikeDto.title)
-                                                       .build();
+        const addNotificationDto = Builder(AddNotificationDto)
+                                    .cnncId(res.id)
+                                    .typeCd('D02001')
+                                    .link(`/post/${savePostLikeDto.postId}`)
+                                    .senderIp(savePostLikeDto.ip)
+                                    .title(savePostLikeDto.title)
+                                    .build();
         await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
       });
 

@@ -48,13 +48,13 @@ export class SatisfactionService {
       res = await em.withRepository(this.satisfactionRepository).addSatisfaction(addSatisfactiontDto);
 
       // 2. 알림을 등록한다.
-      const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
-                                                     .cnncId(res.id)
-                                                     .typeCd('D02005')
-                                                     .link(addSatisfactiontDto.pagePath)
-                                                     .senderIp(addSatisfactiontDto.ip)
-                                                     .title(addSatisfactiontDto.pageTitle)
-                                                     .build();
+      const addNotificationDto = Builder(AddNotificationDto)
+                                  .cnncId(res.id)
+                                  .typeCd('D02005')
+                                  .link(addSatisfactiontDto.pagePath)
+                                  .senderIp(addSatisfactiontDto.ip)
+                                  .title(addSatisfactiontDto.pageTitle)
+                                  .build();
       await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
 
       // 3. 블로그 환경설정의 카카오톡 메시지 수신 여부를 조회한다.

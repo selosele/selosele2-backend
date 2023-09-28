@@ -41,9 +41,9 @@ export class CategoryController {
     description: '카테고리, 태그 목록 및 개수',
   })
   listCategoryAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<[CategoryEntity[], TagEntity[]]> {
-    const listCategoryDto: ListCategoryDto = Builder(ListCategoryDto)
-                                            .isLogin(isAuthenticated ? 'Y' : 'N')
-                                            .build();
+    const listCategoryDto = Builder(ListCategoryDto)
+                            .isLogin(isAuthenticated ? 'Y' : 'N')
+                            .build();
     return this.categoryService.listCategoryAndCount(listCategoryDto);
   }
 

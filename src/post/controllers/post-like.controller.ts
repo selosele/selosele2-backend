@@ -32,10 +32,10 @@ export class PostLikeController {
     @RealIP() ip: string,
     @Param('id', ParseIntPipe) id: number
   ): Promise<PostLikeEntity> {
-    const getPostLikeDto: GetPostLikeDto = Builder(GetPostLikeDto)
-                                          .postId(id)
-                                          .ip(ip)
-                                          .build();
+    const getPostLikeDto = Builder(GetPostLikeDto)
+                            .postId(id)
+                            .ip(ip)
+                            .build();
     return this.postLikeService.getPostLike(getPostLikeDto);
   }
 

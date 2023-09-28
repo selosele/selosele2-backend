@@ -14,17 +14,17 @@ export class NotificationService {
 
   /** 알림 목록을 조회한다. */
   async listNotification(listNotificationDto?: ListNotificationDto): Promise<[NotificationEntity[], number]> {
-    return this.notificationRepository.listNotification(listNotificationDto);
+    return await this.notificationRepository.listNotification(listNotificationDto);
   }
 
   /** 알림을 등록한다. */
   async addNotification(addNotificationDto: AddNotificationDto): Promise<NotificationEntity> {
-    return this.notificationRepository.addNotification(addNotificationDto);
+    return await this.notificationRepository.addNotification(addNotificationDto);
   }
 
   /** 알림 확인 여부를 수정한다. */
   async updateNotificationCheckYn(idList: number[]): Promise<UpdateResult> {
-    return this.notificationRepository.updateNotificationCheckYn(idList);
+    return await this.notificationRepository.updateNotificationCheckYn(idList);
   }
 
 }

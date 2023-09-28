@@ -54,13 +54,13 @@ export class GuestbookReplyService {
 
       // 2. 알림을 등록한다.
       if ('N' === addGuestbookReplyDto.adminYn) {
-        const addNotificationDto: AddNotificationDto = Builder(AddNotificationDto)
-                                                        .cnncId(guestbookReply.id)
-                                                        .typeCd('D02004')
-                                                        .link('/guestbook')
-                                                        .senderIp(addGuestbookReplyDto.ip)
-                                                        .senderNm(addGuestbookReplyDto.author)
-                                                        .build();
+        const addNotificationDto = Builder(AddNotificationDto)
+                                    .cnncId(guestbookReply.id)
+                                    .typeCd('D02004')
+                                    .link('/guestbook')
+                                    .senderIp(addGuestbookReplyDto.ip)
+                                    .senderNm(addGuestbookReplyDto.author)
+                                    .build();
         await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
       }
     });
@@ -98,7 +98,7 @@ export class GuestbookReplyService {
       if (!isValid) throw new BizException('비밀번호를 확인하세요.');
     }
     
-    return this.guestbookReplyRepository.removeGuestbookReply(<GuestbookReplyEntity>removeGuestbookReplyDto);
+    return await this.guestbookReplyRepository.removeGuestbookReply(<GuestbookReplyEntity>removeGuestbookReplyDto);
   }
 
   /** 방명록 댓글 작성자의 비밀번호를 비교한다. */

@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { Auth, RefreshTokenUser } from 'src/shared/decorators';
 import { RealIP } from 'nestjs-real-ip';
 import { CacheDBService } from 'src/cache-db/services/cache-db.service';
-import { createJwtRefreshTokenKey, isEmpty } from 'src/shared/utils';
+import { createJwtRefreshTokenKey, isBlank } from 'src/shared/utils';
 import { Response } from 'express';
 import { AccessTokenUser } from 'src/shared/decorators/auth/access-token-user.decorator';
 import { JwtRefreshGuard } from 'src/shared/guards/auth/jwt-refresh.guard';
@@ -140,7 +140,7 @@ export class AuthController {
     const cachedRefreshToken: string = await this.cacheDBService.get<string>(refreshTokenKey);
     
     // 없으면 쿠키의 리프레시 토큰만 삭제한다.
-    if (isEmpty(cachedRefreshToken)) {
+    if (isBlank(cachedRefreshToken)) {
       resp.clearCookie('refreshToken');
       return;
     }

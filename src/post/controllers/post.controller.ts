@@ -96,9 +96,9 @@ export class PostController {
     description: '포스트의 연도 및 개수',
   })
   listYearAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<PostEntity[]> {
-    const listPostDto: ListPostDto = Builder(ListPostDto)
-                                    .isLogin(isAuthenticated ? 'Y' : 'N')
-                                    .build();
+    const listPostDto = Builder(ListPostDto)
+                        .isLogin(isAuthenticated ? 'Y' : 'N')
+                        .build();
     return this.postService.listYearAndCount(listPostDto);
   }
 
@@ -125,10 +125,10 @@ export class PostController {
     @Param('year') year: string,
     @Query() paginationDto: PaginationDto
   ): Promise<[PostEntity[], number]> {
-    const listPostDto: ListPostDto = Builder(ListPostDto)
-                                    .year(year)
-                                    .isLogin(isAuthenticated ? 'Y' : 'N')
-                                    .build();
+    const listPostDto = Builder(ListPostDto)
+                        .year(year)
+                        .isLogin(isAuthenticated ? 'Y' : 'N')
+                        .build();
     return this.postService.listPostByYear(listPostDto, paginationDto);
   }
 
@@ -155,10 +155,10 @@ export class PostController {
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Query() paginationDto: PaginationDto
   ): Promise<[PostEntity[], number]> {
-    const listPostDto: ListPostDto = Builder(ListPostDto)
-                                    .categoryId(categoryId)
-                                    .isLogin(isAuthenticated ? 'Y' : 'N')
-                                    .build();
+    const listPostDto = Builder(ListPostDto)
+                        .categoryId(categoryId)
+                        .isLogin(isAuthenticated ? 'Y' : 'N')
+                        .build();
     return this.postService.listPostByCategory(listPostDto, paginationDto);
   }
 
@@ -185,10 +185,10 @@ export class PostController {
     @Param('tagId', ParseIntPipe) tagId: number,
     @Query() paginationDto: PaginationDto
   ): Promise<[PostEntity[], number]> {
-    const listPostDto: ListPostDto = Builder(ListPostDto)
-                                    .tagId(tagId)
-                                    .isLogin(isAuthenticated ? 'Y' : 'N')
-                                    .build();
+    const listPostDto = Builder(ListPostDto)
+                        .tagId(tagId)
+                        .isLogin(isAuthenticated ? 'Y' : 'N')
+                        .build();
     return this.postService.listPostByTag(listPostDto, paginationDto);
   }
 
@@ -211,11 +211,11 @@ export class PostController {
     @Param('id', ParseIntPipe) id: number,
     @RealIP() ip: string,
   ): Promise<PostEntity> {
-    const getPostDto: GetPostDto = Builder(GetPostDto)
-                                  .id(id)
-                                  .ip(ip)
-                                  .isLogin(isAuthenticated ? 'Y' : 'N')
-                                  .build();
+    const getPostDto = Builder(GetPostDto)
+                        .id(id)
+                        .ip(ip)
+                        .isLogin(isAuthenticated ? 'Y' : 'N')
+                        .build();
     return this.postService.getPost(getPostDto);
   }
 

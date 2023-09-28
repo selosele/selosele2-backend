@@ -36,11 +36,11 @@ export class MenuController {
     @IsAuthenticated() isAuthenticated: boolean,
     @Query(ValidationPipe) listMenuDto: ListMenuDto,
   ): Promise<MenuEntity[]> {
-    const dto: ListMenuDto = Builder(ListMenuDto)
-                             .useYn(listMenuDto?.useYn)
-                             .isLogin(isAuthenticated ? 'Y' : 'N')
-                             .roleIds(isAuthenticated ? [RoleEnum.ROLE_ADMIN] : [RoleEnum.ROLE_ANONYMOUS])
-                             .build();
+    const dto = Builder(ListMenuDto)
+                .useYn(listMenuDto?.useYn)
+                .isLogin(isAuthenticated ? 'Y' : 'N')
+                .roleIds(isAuthenticated ? [RoleEnum.ROLE_ADMIN] : [RoleEnum.ROLE_ANONYMOUS])
+                .build();
     return this.menuService.listTreeMenu(dto);
   }
 
