@@ -1,7 +1,6 @@
 import { CustomRepository } from 'src/configs/database/CustomRepository';
 import { PaginationDto } from 'src/shared/models';
 import { isNotEmpty } from 'src/shared/utils';
-import { sqlManager } from 'src/shared/utils/database/sql-manager.util';
 import { Brackets, DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { GetPostDto, ListPostDto, SearchPostDto, PostEntity } from '../models';
 import { CountPostDto } from '../models/dto/count-post.dto';
@@ -13,14 +12,14 @@ export class PostRepository extends Repository<PostEntity> {
 
   /** 메인 포스트 목록을 조회한다. */
   async listPostMain(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
-    const sql: string = listPostMainSql(listPostDto);
-    
-    const params = [
+    const query = await this.manager.query(listPostMainSql(listPostDto), [
       listPostDto?.categoryId,
       listPostDto?.categoryId
-    ];
+    ]);
 
-    return await sqlManager(this.manager).queryAndCount<PostEntity>(sql, params);
+    const posts: PostEntity[] = this.create(query);
+
+    return [posts, posts.length];
   }
 
   /** 포스트 목록을 조회한다. */
