@@ -5,7 +5,7 @@ import { EntityManager, InsertResult } from 'typeorm';
 import { UserRoleRepository } from '../repositories/user-role.repository';
 import { Builder } from 'builder-pattern';
 import { JwtService } from '@nestjs/jwt';
-import { BizException } from 'src/shared/exceptions/biz/biz.exception';
+import { BizException } from 'src/shared/exceptions/biz/biz-exception';
 import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, RoleEnum, Tokens } from '../models';
 import { RoleRepository } from '../repositories/role.repository';
 import { compareEncrypt, createJwtRefreshTokenKey, encrypt, isNotEmpty, startTransaction } from 'src/shared/utils';

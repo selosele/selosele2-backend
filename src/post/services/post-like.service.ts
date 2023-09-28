@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Builder } from "builder-pattern";
 import { AddNotificationDto } from "src/notification/models";
 import { NotificationRepository } from "src/notification/repositories/notification.repository";
-import { BizException } from "src/shared/exceptions/biz/biz.exception";
+import { BizException } from "src/shared/exceptions/biz/biz-exception";
 import { startTransaction } from "src/shared/utils";
 import { isEmpty } from "src/shared/utils/common/common.util";
 import { DeleteResult, EntityManager } from "typeorm";

@@ -6,7 +6,7 @@ import { SatisfactionService } from '../services/satisfaction.service';
 import { RealIP } from 'nestjs-real-ip';
 import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { RoleEnum } from 'src/auth/models';
-import { BizException } from 'src/shared/exceptions/biz/biz.exception';
+import { BizException } from 'src/shared/exceptions/biz/biz-exception';
 
 @Controller('satisfaction')
 @ApiTags('만족도조사 API')

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
 import { SatisfactionRepository } from '../repositories/satisfaction.repository';
-import { BizException } from 'src/shared/exceptions/biz/biz.exception';
+import { BizException } from 'src/shared/exceptions/biz/biz-exception';
 import { escapeHtml, kakaoUtil, startTransaction } from 'src/shared/utils';
 import { NotificationRepository } from 'src/notification/repositories/notification.repository';
 import { Builder } from 'builder-pattern';

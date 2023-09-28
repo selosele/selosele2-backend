@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/shared/models';
 import { AddGuestbookDto, RemoveGuestbookDto, UpdateGuestbookDto, GuestbookEntity } from '../models';
 import { GuestbookRepository } from '../repositories/guestbook.repository';
-import { BizException } from 'src/shared/exceptions/biz/biz.exception';
+import { BizException } from 'src/shared/exceptions/biz/biz-exception';
 import { compareEncrypt, encrypt, escapeHtml, startTransaction } from 'src/shared/utils';
 import { EntityManager } from 'typeorm';
 import { AddNotificationDto } from 'src/notification/models';
