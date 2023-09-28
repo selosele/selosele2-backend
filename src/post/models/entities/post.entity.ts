@@ -146,6 +146,11 @@ export class PostEntity extends BaseEntity {
   // START : 가상 필드
 
   @ApiProperty({
+    description: '포스트 추천 수'
+  })
+  likeCnt?: number;
+
+  @ApiProperty({
     description: '사용자 포스트 추천'
   })
   userPostLike?: unknown;

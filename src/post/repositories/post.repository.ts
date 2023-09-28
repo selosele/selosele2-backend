@@ -5,21 +5,52 @@ import { Brackets, DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { GetPostDto, ListPostDto, SearchPostDto, PostEntity } from '../models';
 import { CountPostDto } from '../models/dto/count-post.dto';
 import { SavePostDto } from '../models/dto/save-post.dto';
-import { listPostMainSql } from './sql/post.sql';
 
 @CustomRepository(PostEntity)
 export class PostRepository extends Repository<PostEntity> {
 
   /** 메인 포스트 목록을 조회한다. */
   async listPostMain(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
-    const query = await this.manager.query(listPostMainSql(listPostDto), [
-      listPostDto?.categoryId,
-      listPostDto?.categoryId
+    let query = this.createQueryBuilder('post')
+      .select("post.id", "id")
+          .distinct(true)
+        .addSelect("COUNT(postLike.id) OVER (PARTITION BY postLike.id)", "likeCnt")
+        .addSelect("post.title", "title")
+        .addSelect("post.reg_date", "regDate")
+        .addSelect("post.reply_cnt", "replyCnt")
+        .addSelect("post.cont", "cont")
+        .addSelect("post.og_img_url", "ogImgUrl")
+        .addSelect("post.secret_yn", "secretYn")
+        .addSelect("post.pin_yn", "pinYn")
+        .addSelect("post.tmp_yn", "tmpYn")
+        .addSelect("postCategory.category_id", "categoryId")
+      .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
+      .leftJoin("post.postLike", "postLike", "postLike.post_id = post.id")
+      .where("1=1")
+
+    if ('N' === listPostDto?.isLogin) {
+      query = query
+        .andWhere("post.tmp_yn = :tmp_yn", { tmp_yn: 'N' })
+        .andWhere("post.secret_yn = :secret_yn", { secret_yn: 'N' });
+    }
+
+    if (isNotEmpty(listPostDto?.categoryId) && 0 < listPostDto?.categoryId) {
+      query = query
+        .andWhere("postCategory.category_id = :category_id", { category_id: listPostDto.categoryId });
+    }
+
+    query = query
+      .groupBy("post.id")
+        .addGroupBy("postCategory.category_id")
+      .orderBy("post.pin_yn", "DESC")
+        .addOrderBy("post.reg_date", "DESC");
+
+    const posts = await query.getRawMany();
+
+    return await Promise.all([
+      posts,
+      posts.length,
     ]);
-
-    const posts: PostEntity[] = this.create(query);
-
-    return [posts, posts.length];
   }
 
   /** 포스트 목록을 조회한다. */
