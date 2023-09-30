@@ -8,7 +8,7 @@ export class NotificationRepository extends Repository<NotificationEntity> {
 
   /** 알림 목록을 조회한다. */
   async listNotification(listNotificationDto?: ListNotificationDto): Promise<[NotificationEntity[], number]> {
-    return this.findAndCount({
+    return await this.findAndCount({
       where: {
         ...(isNotEmpty(listNotificationDto.typeCd) && {
           typeCd: listNotificationDto.typeCd
@@ -23,12 +23,12 @@ export class NotificationRepository extends Repository<NotificationEntity> {
 
   /** 알림을 등록한다. */
   async addNotification(addNotificationDto: AddNotificationDto): Promise<NotificationEntity> {
-    return this.save(addNotificationDto);
+    return await this.save(addNotificationDto);
   }
 
   /** 알림 확인 여부를 수정한다. */
   async updateNotificationCheckYn(idList: number[]): Promise<UpdateResult> {
-    return this.update(idList, {
+    return await this.update(idList, {
       checkYn: 'Y',
     });
   }

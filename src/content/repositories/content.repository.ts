@@ -10,7 +10,7 @@ export class ContentRepository extends Repository<ContentEntity> {
 
   /** 콘텐츠 목록을 조회한다. */
   async listContent(listContentDto?: ListContentDto): Promise<[ContentEntity[], number]> {
-    return this.findAndCount({
+    return await this.findAndCount({
       select: [
         'id', 'link', 'title',
         'cont', 'ogImg', 'ogImgUrl',
