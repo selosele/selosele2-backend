@@ -19,6 +19,14 @@ export class TagEntity extends BaseEntity {
   })
   nm?: string;
 
+  @Column({
+    comment: '태그 설명'
+  })
+  @ApiProperty({
+    description: '태그 설명'
+  })
+  desc?: string;
+
   @CreateDateColumn({
     comment: '태그 등록일시'
   })

@@ -19,6 +19,14 @@ export class CategoryEntity extends BaseEntity {
   })
   nm?: string;
 
+  @Column({
+    comment: '카테고리 설명'
+  })
+  @ApiProperty({
+    description: '카테고리 설명'
+  })
+  desc?: string;
+
   @CreateDateColumn({
     comment: '카테고리 등록일시'
   })

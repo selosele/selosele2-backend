@@ -214,6 +214,7 @@ export class PostRepository extends Repository<PostEntity> {
           category: {
             id: false,
             nm: true,
+            desc: true,
             regDate: false,
           },
         },
@@ -256,6 +257,7 @@ export class PostRepository extends Repository<PostEntity> {
           tag: {
             id: false,
             nm: true,
+            desc: true,
             regDate: false,
           },
         },
