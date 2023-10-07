@@ -16,7 +16,7 @@ import { join } from 'path';
 import { GuestbookModule } from './guestbook/guestbook.module';
 import { ContentModule } from './content/content.module';
 import { APP_FILTER } from '@nestjs/core';
-import { BizExceptionFilter } from './shared/exceptions/biz/biz-exception.filter';
+import { BizExceptionFilter } from './shared/exceptions/biz/biz-exception-filter';
 import { FileUploaderModule } from './file-uploader/file-uploader.module';
 import { NotificationModule } from './notification/notification.module';
 import { CacheDBModule } from './cache-db/cache-db.module';
