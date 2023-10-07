@@ -20,6 +20,7 @@ import { FileUploaderResponse } from 'src/file-uploader/models/file-uploader.mod
 import { CountPostDto } from '../models/dto/count-post.dto';
 import { PostReplyRepository } from '../repositories/post-reply.repository';
 import { PostLikeService } from './post-like.service';
+import { PostReplyService } from './post-reply.service';
 
 @Injectable()
 export class PostService {
@@ -27,8 +28,6 @@ export class PostService {
   constructor(
     @InjectRepository(PostRepository)
     private readonly postRepository: PostRepository,
-    @InjectRepository(PostReplyRepository)
-    private readonly postReplyRepository: PostReplyRepository,
     @InjectRepository(PostCategoryRepository)
     private readonly postCategoryRepository: PostCategoryRepository,
     @InjectRepository(PostTagRepository)
@@ -39,6 +38,7 @@ export class PostService {
     private readonly blogConfigRepository: BlogConfigRepository,
     private readonly fileUploaderService: FileUploaderService,
     private readonly postLikeService: PostLikeService,
+    private readonly postReplyService: PostReplyService,
   ) {}
 
   /** 메인 포스트 목록을 조회한다. */
@@ -167,7 +167,7 @@ export class PostService {
     post.setPrevAndNext(prevAndNext);
 
     // 포스트 댓글 목록을 조회한다.
-    post.postReply = await this.postReplyRepository.listPostReply(getPostDto.id);
+    post.postReply = await this.postReplyService.listPostReply(getPostDto.id);
 
     post.rawText = post.cont;
 
