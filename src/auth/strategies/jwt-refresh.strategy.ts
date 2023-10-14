@@ -43,8 +43,10 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh-
       throw new UnauthorizedException();
     }
 
+    const refreshTokenKey: string = createJwtRefreshTokenKey(user)
+
     // Redis에 저장된 리프레시 토큰을 조회해서
-    const cachedRefreshToken: string = await this.cacheDBService.get<string>(createJwtRefreshTokenKey(user));
+    const cachedRefreshToken: string = await this.cacheDBService.get<string>(refreshTokenKey);
     
     // 쿠키의 것과 불일치하면 401 예외를 던진다.
     if (!this.authService.isValidRefreshToken(refreshToken, cachedRefreshToken)) {
