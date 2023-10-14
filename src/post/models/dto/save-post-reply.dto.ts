@@ -33,7 +33,7 @@ export class SavePostReplyDto {
   author?: string;
 
   /** 포스트 댓글 작성자 비밀번호 */
-  @IsNotEmpty()
+  @IsOptional()
   @MinLength(8)
   @MaxLength(15)
   authorPw?: string;

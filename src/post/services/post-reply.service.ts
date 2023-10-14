@@ -168,19 +168,19 @@ export class PostReplyService {
 
   /** 포스트 댓글을 삭제한다. */
   async removePostReply(savePostReplyDto: SavePostReplyDto): Promise<PostReplyEntity> {
-    const { authorPw } = savePostReplyDto;
-
+    
     // 관리자가 아닌 경우는 비밀번호를 비교한다.
     if ('N' === savePostReplyDto.isLogin) {
+      const { authorPw } = savePostReplyDto;
       const isValid: boolean = await this.compareAuthorPassword(savePostReplyDto);
 
       if (!isValid) {
         throw new BizException('비밀번호를 확인하세요.');
       }
-    }
 
-    // 비밀번호 암호화
-    savePostReplyDto.authorPw = await encrypt(authorPw);
+      // 비밀번호 암호화
+      savePostReplyDto.authorPw = await encrypt(authorPw);
+    }
 
     // 상위 포스트를 조회한다.
     const getPostDto = Builder(GetPostDto)
