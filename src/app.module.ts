@@ -28,7 +28,7 @@ import { CacheDBModule } from './cache-db/cache-db.module';
       ignoreEnvFile: 'production' === process.env.NODE_ENV,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', 'client'),
     }),
     TypeOrmModule.forRoot(typeORMConfig),
     CacheDBModule,
