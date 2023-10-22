@@ -20,5 +20,5 @@
   - `npm run start:dev` (로컬)
   - `npm start` (운영)
   - `redis-server` (로컬 Redis 구동)
-    - 먼저 실행하고 백엔드 구동 -> 프론트엔드 구동 순서로 실행
+    - 먼저 실행하고 `nvm use 16.14.2` 실행 후, 백엔드 구동 -> 프론트엔드 구동 순서로 실행
 - [Frontend 저장소](https://github.com/selosele/selosele2-frontend)
