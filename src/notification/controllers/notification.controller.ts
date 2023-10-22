@@ -29,7 +29,9 @@ export class NotificationController {
     name: 'listNotificationDto',
     description: '알림 목록 조회 DTO',
   })
-  listNotification(@Query(ValidationPipe) listNotificationDto: ListNotificationDto): Promise<[NotificationEntity[], number]> {
+  listNotification(
+    @Query(ValidationPipe) listNotificationDto: ListNotificationDto
+  ): Promise<[NotificationEntity[], number]> {
     return this.notificationService.listNotification(listNotificationDto);
   }
 
@@ -47,7 +49,9 @@ export class NotificationController {
     type: AddNotificationDto,
     description: '알림 등록 DTO',
   })
-  addNotification(@Body(ValidationPipe) addNotificationDto: AddNotificationDto): Promise<NotificationEntity> {
+  addNotification(
+    @Body(ValidationPipe) addNotificationDto: AddNotificationDto
+  ): Promise<NotificationEntity> {
     return this.notificationService.addNotification(addNotificationDto);
   }
 
@@ -65,7 +69,9 @@ export class NotificationController {
     type: Array<Number>,
     description: '알림 ID 목록',
   })
-  updateNotificationCheckYn(@Body() idList: number[]): Promise<UpdateResult> {
+  updateNotificationCheckYn(
+    @Body() idList: number[]
+  ): Promise<UpdateResult> {
     return this.notificationService.updateNotificationCheckYn(idList);
   }
 

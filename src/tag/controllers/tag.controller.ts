@@ -43,7 +43,9 @@ export class TagController {
     name: 'id',
     description: '태그 ID',
   })
-  getCategory(@Param('id', ParseIntPipe) id: number): Promise<TagEntity> {
+  getCategory(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<TagEntity> {
     return this.tagService.getTag(id);
   }
 
@@ -60,7 +62,9 @@ export class TagController {
     type: SaveTagDto,
     description: '태그 등록/수정 DTO',
   })
-  addCategory(@Body(ValidationPipe) saveTagDto: SaveTagDto): Promise<TagEntity> {
+  addCategory(
+    @Body(ValidationPipe) saveTagDto: SaveTagDto
+  ): Promise<TagEntity> {
     return this.tagService.saveTag(saveTagDto);
   }
 
@@ -77,7 +81,9 @@ export class TagController {
     type: SaveTagDto,
     description: '태그 등록/수정 DTO',
   })
-  saveTag(@Body(ValidationPipe) saveTagDto: SaveTagDto): Promise<TagEntity> {
+  saveTag(
+    @Body(ValidationPipe) saveTagDto: SaveTagDto
+  ): Promise<TagEntity> {
     return this.tagService.saveTag(saveTagDto);
   }
 
@@ -96,7 +102,9 @@ export class TagController {
     name: 'id',
     description: '태그 ID',
   })
-  removeTag(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
+  removeTag(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<DeleteResult> {
     return this.tagService.removeTag(id);
   }
 

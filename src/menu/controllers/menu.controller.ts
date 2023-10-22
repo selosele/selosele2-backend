@@ -59,7 +59,9 @@ export class MenuController {
     name: 'id',
     description: '메뉴 ID',
   })
-  getMenu(@Param('id', ParseIntPipe) id: number): Promise<MenuEntity> {
+  getMenu(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<MenuEntity> {
     return this.menuService.getMenu(id);
   }
 
@@ -77,7 +79,9 @@ export class MenuController {
     type: SaveMenuDto,
     description: '메뉴 등록/수정/삭제 DTO',
   })
-  addCategory(@Body(ValidationPipe) saveMenuDto: SaveMenuDto): Promise<MenuEntity> {
+  addCategory(
+    @Body(ValidationPipe) saveMenuDto: SaveMenuDto
+  ): Promise<MenuEntity> {
     return this.menuService.saveMenu(saveMenuDto);
   }
 
@@ -95,7 +99,9 @@ export class MenuController {
     type: SaveMenuDto,
     description: '메뉴 등록/수정/삭제 DTO',
   })
-  updateMenu(@Body(ValidationPipe) saveMenuDto: SaveMenuDto): Promise<MenuEntity> {
+  updateMenu(
+    @Body(ValidationPipe) saveMenuDto: SaveMenuDto
+  ): Promise<MenuEntity> {
     return this.menuService.saveMenu(saveMenuDto);
   }
 
@@ -114,7 +120,9 @@ export class MenuController {
     name: 'id',
     description: '메뉴 ID',
   })
-  removeMenu(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
+  removeMenu(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<DeleteResult> {
     return this.menuService.removeMenu(id);
   }
 

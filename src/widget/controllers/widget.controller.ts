@@ -26,7 +26,9 @@ export class WidgetController {
     type: ListWidgetDto,
     description: '위젯 목록 조회 DTO',
   })
-  listWidget(@Query(ValidationPipe) listWidgetDto: ListWidgetDto): Promise<WidgetEntity[]> {
+  listWidget(
+    @Query(ValidationPipe) listWidgetDto: ListWidgetDto
+  ): Promise<WidgetEntity[]> {
     return this.widgetService.listWidget(listWidgetDto);
   }
 
@@ -44,7 +46,9 @@ export class WidgetController {
     type: UpdateWidgetDto,
     description: '위젯 수정 DTO',
   })
-  updateWidget(@Body(ValidationPipe) updateWidgetDto: UpdateWidgetDto[]): Promise<WidgetEntity[]> {
+  updateWidget(
+    @Body(ValidationPipe) updateWidgetDto: UpdateWidgetDto[]
+  ): Promise<WidgetEntity[]> {
     return this.widgetService.updateWidget(updateWidgetDto);
   }
 
@@ -62,7 +66,9 @@ export class WidgetController {
     type: UpdateWidgetUseYnDto,
     description: '위젯 사용 여부 수정 DTO',
   })
-  updateWidgetUseYn(@Body(ValidationPipe) updateWidgetUseYnDto: UpdateWidgetUseYnDto): Promise<number> {
+  updateWidgetUseYn(
+    @Body(ValidationPipe) updateWidgetUseYnDto: UpdateWidgetUseYnDto
+  ): Promise<number> {
     return this.widgetService.updateWidgetUseYn(updateWidgetUseYnDto);
   }
 

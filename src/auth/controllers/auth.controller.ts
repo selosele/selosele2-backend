@@ -3,8 +3,7 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@n
 import { AuthCredentialsDto, UserEntity, RoleEntity, RoleEnum, Tokens } from '../models';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
-import { Auth, RefreshTokenUser } from 'src/shared/decorators';
-import { RealIP } from 'nestjs-real-ip';
+import { Auth, Ip, RefreshTokenUser } from 'src/shared/decorators';
 import { CacheDBService } from 'src/cache-db/services/cache-db.service';
 import { createJwtRefreshTokenKey, isBlank } from 'src/shared/utils';
 import { Response } from 'express';
@@ -37,7 +36,9 @@ export class AuthController {
     name: 'userSn',
     description: '사용자 일련번호',
   })
-  getUser(@Param('userSn', ParseIntPipe) userSn: number): Promise<UserEntity> {
+  getUser(
+    @Param('userSn', ParseIntPipe) userSn: number
+  ): Promise<UserEntity> {
     return this.authService.getUser(userSn);
   }
 
@@ -50,7 +51,9 @@ export class AuthController {
     type: AuthCredentialsDto,
     description: '사용자 생성 DTO',
   })
-  signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): void {
+  signUp(
+    @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto
+  ): void {
     if ('production' === this.config.get<string>('NODE_ENV')) {
       throw new NotFoundException();
     }
@@ -72,7 +75,7 @@ export class AuthController {
     description: '로그인 DTO',
   })
   async signIn(
-    @RealIP() ip: string,
+    @Ip() ip: string,
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
     @Res({ passthrough: true }) resp: Response,
   ): Promise<Tokens> {
@@ -101,7 +104,7 @@ export class AuthController {
     description: '액세스 토큰, 리프레시 토큰',
   })
   async refreshAccessToken(
-    @RealIP() ip: string,
+    @Ip() ip: string,
     @RefreshTokenUser() user: UserEntity,
     @Res({ passthrough: true }) resp: Response,
   ): Promise<Tokens> {

@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { RealIP } from 'nestjs-real-ip';
-import { IsAuthenticated } from 'src/shared/decorators';
+import { Ip, IsAuthenticated } from 'src/shared/decorators';
 import { PaginationDto } from 'src/shared/models';
 import { AddGuestbookDto, RemoveGuestbookDto, UpdateGuestbookDto, GuestbookEntity } from '../models';
 import { GuestbookService } from '../services/guestbook.service';
@@ -28,7 +27,9 @@ export class GuestbookController {
     name: 'paginationDto',
     description: '페이지네이션 DTO',
   })
-  listGuestbook(@Query(ValidationPipe) paginationDto: PaginationDto): Promise<[GuestbookEntity[], number]> {
+  listGuestbook(
+    @Query(ValidationPipe) paginationDto: PaginationDto
+  ): Promise<[GuestbookEntity[], number]> {
     return this.guestbookService.listGuestbook(paginationDto);
   }
 
@@ -46,9 +47,9 @@ export class GuestbookController {
     description: '방명록 등록 DTO',
   })
   addGuestbook(
+    @Ip() ip: string,
+    @Body(ValidationPipe) addGuestbookDto: AddGuestbookDto,
     @IsAuthenticated() isAuthenticated: boolean,
-    @RealIP() ip: string,
-    @Body(ValidationPipe) addGuestbookDto: AddGuestbookDto
   ): Promise<GuestbookEntity> {
     addGuestbookDto.ip = ip;
     addGuestbookDto.adminYn = isAuthenticated ? 'Y' : 'N';
@@ -70,7 +71,7 @@ export class GuestbookController {
     description: '방명록 수정 DTO',
   })
   updateGuestbook(
-    @RealIP() ip: string,
+    @Ip() ip: string,
     @Body(ValidationPipe) updateGuestbookDto: UpdateGuestbookDto
   ): Promise<GuestbookEntity> {
     updateGuestbookDto.ip = ip;

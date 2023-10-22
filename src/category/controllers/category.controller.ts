@@ -40,7 +40,9 @@ export class CategoryController {
     type: Array<[CategoryEntity, TagEntity]>,
     description: '카테고리, 태그 목록 및 개수',
   })
-  listCategoryAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<[CategoryEntity[], TagEntity[]]> {
+  listCategoryAndCount(
+    @IsAuthenticated() isAuthenticated: boolean
+  ): Promise<[CategoryEntity[], TagEntity[]]> {
     const listCategoryDto = Builder(ListCategoryDto)
                             .isLogin(isAuthenticated ? 'Y' : 'N')
                             .build();
@@ -62,7 +64,9 @@ export class CategoryController {
     name: 'id',
     description: '카테고리 ID',
   })
-  getCategory(@Param('id', ParseIntPipe) id: number): Promise<CategoryEntity> {
+  getCategory(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<CategoryEntity> {
     return this.categoryService.getCategory(id);
   }
 
@@ -79,7 +83,9 @@ export class CategoryController {
     type: SaveCategoryDto,
     description: '카테고리 등록/수정 DTO',
   })
-  addCategory(@Body(ValidationPipe) saveCategoryDto: SaveCategoryDto): Promise<CategoryEntity> {
+  addCategory(
+    @Body(ValidationPipe) saveCategoryDto: SaveCategoryDto
+  ): Promise<CategoryEntity> {
     return this.categoryService.saveCategory(saveCategoryDto);
   }
 
@@ -96,7 +102,9 @@ export class CategoryController {
     type: SaveCategoryDto,
     description: '카테고리 등록/수정 DTO',
   })
-  updateCategory(@Body(ValidationPipe) saveCategoryDto: SaveCategoryDto): Promise<CategoryEntity> {
+  updateCategory(
+    @Body(ValidationPipe) saveCategoryDto: SaveCategoryDto
+  ): Promise<CategoryEntity> {
     return this.categoryService.saveCategory(saveCategoryDto);
   }
 
@@ -115,7 +123,9 @@ export class CategoryController {
     name: 'id',
     description: '카테고리 ID',
   })
-  removeCategory(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
+  removeCategory(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<DeleteResult> {
     return this.categoryService.removeCategory(id);
   }
 

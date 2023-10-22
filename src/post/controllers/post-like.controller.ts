@@ -1,8 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, ValidationPipe } from "@nestjs/common";
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { Builder } from "builder-pattern";
-import { RealIP } from "nestjs-real-ip";
-import { IsAuthenticated } from "src/shared/decorators";
+import { Ip, IsAuthenticated } from "src/shared/decorators";
 import { GetPostLikeDto, SavePostLikeDto, PostLikeEntity } from "../models";
 import { PostLikeService } from "../services/post-like.service";
 
@@ -29,7 +28,7 @@ export class PostLikeController {
     description: '포스트 ID',
   })
   getPostLike(
-    @RealIP() ip: string,
+    @Ip() ip: string,
     @Param('id', ParseIntPipe) id: number
   ): Promise<PostLikeEntity> {
     const getPostLikeDto = Builder(GetPostLikeDto)
@@ -53,9 +52,9 @@ export class PostLikeController {
     description: '포스트 추천 DTO',
   })
   savePostLike(
+    @Ip() ip: string,
+    @Body(ValidationPipe) savePostLikeDto: SavePostLikeDto,
     @IsAuthenticated() isAuthenticated: boolean,
-    @RealIP() ip: string,
-    @Body(ValidationPipe) savePostLikeDto: SavePostLikeDto
   ): Promise<number> {
     savePostLikeDto.ip = ip;
     savePostLikeDto.isLogin = isAuthenticated ? 'Y' : 'N';

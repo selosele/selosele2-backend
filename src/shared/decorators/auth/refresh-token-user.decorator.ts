@@ -4,7 +4,7 @@ import { isEmpty } from "src/shared/utils";
 import { UserEntity } from "../../../auth/models";
 
 /**
- * JWT 리프레시 토큰으로부터 인증된 사용자 정보를 가져오는 데코레이터
+ * JWT 리프레시 토큰으로부터 인증된 사용자 정보를 반환하는 데코레이터
  * 
  * 사용 예시
  *   - @RefreshTokenUser() user: UserEntity

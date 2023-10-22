@@ -1,10 +1,8 @@
 import { Body, Query, Controller, Post, Get, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { InsertResult } from 'typeorm';
 import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
 import { SatisfactionService } from '../services/satisfaction.service';
-import { RealIP } from 'nestjs-real-ip';
-import { Auth, IsAuthenticated } from 'src/shared/decorators';
+import { Auth, Ip, IsAuthenticated } from 'src/shared/decorators';
 import { RoleEnum } from 'src/auth/models';
 import { BizException } from 'src/shared/exceptions/biz/biz-exception';
 
@@ -31,7 +29,9 @@ export class SatisfactionController {
     name: 'searchSatisfactiontDto',
     description: '만족도조사 검색 DTO',
   })
-  listSatisfaction(@Query(ValidationPipe) searchSatisfactiontDto: SearchSatisfactiontDto): Promise<SatisfactionEntity[]> {
+  listSatisfaction(
+    @Query(ValidationPipe) searchSatisfactiontDto: SearchSatisfactiontDto
+  ): Promise<SatisfactionEntity[]> {
     return this.satisfactionService.listSatisfaction(searchSatisfactiontDto);
   }
 
@@ -49,8 +49,8 @@ export class SatisfactionController {
     description: '만족도조사 참여 DTO',
   })
   addSatisfaction(
+    @Ip() ip: string,
     @Body(ValidationPipe) addSatisfactiontDto: AddSatisfactiontDto,
-    @RealIP() ip: string,
     @IsAuthenticated() isAuthenticated: boolean
   ): Promise<SatisfactionEntity> {
     if (isAuthenticated) {

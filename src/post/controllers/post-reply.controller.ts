@@ -1,8 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from "@nestjs/common";
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { RealIP } from "nestjs-real-ip";
 import { RoleEnum } from "src/auth/models";
-import { Auth, IsAuthenticated } from "src/shared/decorators";
+import { Auth, Ip, IsAuthenticated } from "src/shared/decorators";
 import { UpdateResult } from "typeorm";
 import { PostReplyEntity } from "../models";
 import { ListPostReplyDto } from "../models/dto/list-post-reply.dto";
@@ -32,7 +31,9 @@ export class PostReplyController {
     name: 'listPostReplyDto',
     description: '포스트 댓글 목록 조회 DTO',
   })
-  listPostReplyAll(@Query(ValidationPipe) listPostReplyDto: ListPostReplyDto,): Promise<PostReplyEntity[]> {
+  listPostReplyAll(
+    @Query(ValidationPipe) listPostReplyDto: ListPostReplyDto
+  ): Promise<PostReplyEntity[]> {
     return this.postReplyService.listPostReplyAll(listPostReplyDto);
   }
 
@@ -50,7 +51,9 @@ export class PostReplyController {
     name: 'postId',
     description: '포스트 ID',
   })
-  listPostReply(@Param('postId', ParseIntPipe) postId: number): Promise<PostReplyEntity[]> {
+  listPostReply(
+    @Param('postId', ParseIntPipe) postId: number
+  ): Promise<PostReplyEntity[]> {
     return this.postReplyService.listPostReply(postId);
   }
 
@@ -68,9 +71,9 @@ export class PostReplyController {
     description: '포스트 댓글 등록/수정/삭제 DTO',
   })
   addPostReply(
-    @IsAuthenticated() isAuthenticated: boolean,
-    @RealIP() ip: string,
-    @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto
+    @Ip() ip: string,
+    @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto,
+    @IsAuthenticated() isAuthenticated: boolean
   ): Promise<PostReplyEntity> {
     savePostReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.isAdmin = isAuthenticated ? 'Y' : 'N';
@@ -93,9 +96,9 @@ export class PostReplyController {
     description: '포스트 댓글 등록/수정/삭제 DTO',
   })
   updatePostReply(
-    @IsAuthenticated() isAuthenticated: boolean,
-    @RealIP() ip: string,
-    @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto
+    @Ip() ip: string,
+    @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto,
+    @IsAuthenticated() isAuthenticated: boolean
   ): Promise<PostReplyEntity> {
     savePostReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.isAdmin = isAuthenticated ? 'Y' : 'N';
@@ -120,7 +123,7 @@ export class PostReplyController {
     description: '포스트 댓글 ID',
   })
   async updatePostReplyDelYn(
-    @RealIP() ip: string,
+    @Ip() ip: string,
     @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto[]
   ): Promise<number> {
     let cnt: number = 0;
@@ -149,9 +152,9 @@ export class PostReplyController {
     description: '포스트 댓글 등록/수정/삭제 DTO',
   })
   removePostReply(
-    @IsAuthenticated() isAuthenticated: boolean,
-    @RealIP() ip: string,
-    @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto
+    @Ip() ip: string,
+    @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto,
+    @IsAuthenticated() isAuthenticated: boolean
   ): Promise<PostReplyEntity> {
     savePostReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.isAdmin = isAuthenticated ? 'Y' : 'N';

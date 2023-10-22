@@ -3,7 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { isEmpty } from "src/shared/utils";
 
 /** 유효한 요청인지 확인하는 데코레이터 */
-export const IsAuthenticated = createParamDecorator((data, context: ExecutionContext): boolean => {
+export const IsAuthenticated = createParamDecorator((data: unknown, context: ExecutionContext): boolean => {
   const req = context.switchToHttp().getRequest();
   const accessToken: string = req.headers?.authorization?.split(' ')[1];
   

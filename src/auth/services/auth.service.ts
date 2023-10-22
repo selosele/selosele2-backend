@@ -106,12 +106,12 @@ export class AuthService {
     // 리프레시 토큰 생성
     const refreshToken: string = this.jwtService.sign(payload, {
       secret: this.config.get<string>('JWT_REFRESH_SECRET_KEY'),
-      expiresIn: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME')
+      expiresIn: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
     });
 
     // Redis에 리프레시 토큰을 저장
     await this.cacheDBService.set(createJwtRefreshTokenKey(user), refreshToken, {
-      ttl: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME')
+      ttl: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
     });
 
     return { accessToken, refreshToken };

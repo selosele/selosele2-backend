@@ -8,3 +8,4 @@ export * from './auth/user.decorator';
 
 // common
 export * from './common/static-implements.decorator';
+export * from './common/ip.decorator';

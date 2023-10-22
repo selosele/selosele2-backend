@@ -41,7 +41,9 @@ export class CodeController {
     name: 'prefix',
     description: '코드 접두어',
   })
-  listCodeByPrefix(@Param('prefix') prefix: string): Promise<CodeEntity[]> {
+  listCodeByPrefix(
+    @Param('prefix') prefix: string
+  ): Promise<CodeEntity[]> {
     return this.codeService.listCode(prefix);
   }
 
@@ -59,7 +61,9 @@ export class CodeController {
     name: 'id',
     description: '코드 ID',
   })
-  getCode(@Param('id') id: string): Promise<CodeEntity> {
+  getCode(
+    @Param('id') id: string
+  ): Promise<CodeEntity> {
     return this.codeService.getCode(id);
   }
 
@@ -77,7 +81,9 @@ export class CodeController {
     type: SaveCodeDto,
     description: '공통코드 등록/수정 DTO',
   })
-  addCode(@Body(ValidationPipe) SaveCodeDto: SaveCodeDto): Promise<InsertResult | UpdateResult> {
+  addCode(
+    @Body(ValidationPipe) SaveCodeDto: SaveCodeDto
+  ): Promise<InsertResult | UpdateResult> {
     return this.codeService.saveCode(SaveCodeDto);
   }
 
@@ -95,7 +101,9 @@ export class CodeController {
     type: SaveCodeDto,
     description: '공통코드 등록/수정 DTO',
   })
-  updateCode(@Body(ValidationPipe) SaveCodeDto: SaveCodeDto): Promise<InsertResult | UpdateResult> {
+  updateCode(
+    @Body(ValidationPipe) SaveCodeDto: SaveCodeDto
+  ): Promise<InsertResult | UpdateResult> {
     return this.codeService.saveCode(SaveCodeDto);
   }
 
@@ -113,7 +121,9 @@ export class CodeController {
     type: RemoveCodeDto,
     description: '공통코드 삭제 DTO',
   })
-  removeCodes(@Body(ValidationPipe) removeCodeDto: RemoveCodeDto[]): Promise<DeleteResult> {
+  removeCodes(
+    @Body(ValidationPipe) removeCodeDto: RemoveCodeDto[]
+  ): Promise<DeleteResult> {
     return this.codeService.removeCodes(removeCodeDto);
   }
 

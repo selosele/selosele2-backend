@@ -30,7 +30,9 @@ export class ContentController {
     type: Array<ContentEntity>,
     description: '콘텐츠 목록',
   })
-  listContent(@Query(ValidationPipe) listContentDto: ListContentDto): Promise<[ContentEntity[], number]> {
+  listContent(
+    @Query(ValidationPipe) listContentDto: ListContentDto
+  ): Promise<[ContentEntity[], number]> {
     return this.contentService.listContent(listContentDto);
   }
 
@@ -138,7 +140,9 @@ export class ContentController {
     name: 'id',
     description: '콘텐츠 ID',
   })
-  removeContent(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
+  removeContent(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<DeleteResult> {
     return this.contentService.removeContent(id);
   }
 
@@ -156,7 +160,9 @@ export class ContentController {
     type: RemoveContentDto,
     description: '콘텐츠 삭제 DTO',
   })
-  removeContents(@Body(ValidationPipe) removeContentDto: RemoveContentDto[]): Promise<DeleteResult> {
+  removeContents(
+    @Body(ValidationPipe) removeContentDto: RemoveContentDto[]
+  ): Promise<DeleteResult> {
     return this.contentService.removeContents(removeContentDto);
   }
 
@@ -174,7 +180,9 @@ export class ContentController {
     type: SaveContentDto,
     description: '콘텐츠 등록/수정 DTO',
   })
-  getPreviewContent(@Body(ValidationPipe) saveContentDto: SaveContentDto): Promise<ContentEntity> {
+  getPreviewContent(
+    @Body(ValidationPipe) saveContentDto: SaveContentDto
+  ): Promise<ContentEntity> {
     return this.contentService.getPreviewContent(saveContentDto);
   }
 

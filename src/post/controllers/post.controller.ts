@@ -2,10 +2,9 @@ import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Dele
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import { RealIP } from 'nestjs-real-ip';
 import { RoleEnum } from 'src/auth/models';
 import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
-import { Auth, IsAuthenticated } from 'src/shared/decorators';
+import { Auth, Ip, IsAuthenticated } from 'src/shared/decorators';
 import { PaginationDto } from 'src/shared/models';
 import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator } from 'src/shared/utils';
 import { DeleteResult } from 'typeorm';
@@ -72,10 +71,10 @@ export class PostController {
     description: '페이지네이션 DTO',
   })
   listPostSearch(
-    @RealIP() ip: string,
-    @IsAuthenticated() isAuthenticated: boolean,
+    @Ip() ip: string,
     @Query(ValidationPipe) searchPostDto: SearchPostDto,
     @Query(ValidationPipe) paginationDto: PaginationDto,
+    @IsAuthenticated() isAuthenticated: boolean
   ): Promise<[PostEntity[], number]> {
 
     this.logger.warn(`q : ${searchPostDto.q}, ip: ${ip}`);
@@ -95,7 +94,9 @@ export class PostController {
     type: Array<PostEntity>,
     description: '포스트의 연도 및 개수',
   })
-  listYearAndCount(@IsAuthenticated() isAuthenticated: boolean): Promise<PostEntity[]> {
+  listYearAndCount(
+    @IsAuthenticated() isAuthenticated: boolean
+  ): Promise<PostEntity[]> {
     const listPostDto = Builder(ListPostDto)
                         .isLogin(isAuthenticated ? 'Y' : 'N')
                         .build();
@@ -207,9 +208,9 @@ export class PostController {
     description: '포스트 ID',
   })
   getPost(
-    @IsAuthenticated() isAuthenticated: boolean,
+    @Ip() ip: string,
     @Param('id', ParseIntPipe) id: number,
-    @RealIP() ip: string,
+    @IsAuthenticated() isAuthenticated: boolean
   ): Promise<PostEntity> {
     const getPostDto = Builder(GetPostDto)
                         .id(id)
@@ -297,7 +298,9 @@ export class PostController {
     type: RemovePostDto,
     description: '포스트 삭제 DTO',
   })
-  removePosts(@Body(ValidationPipe) removePostDto: RemovePostDto[]): Promise<DeleteResult> {
+  removePosts(
+    @Body(ValidationPipe) removePostDto: RemovePostDto[]
+  ): Promise<DeleteResult> {
     return this.postService.removePosts(removePostDto);
   }
 
@@ -316,7 +319,9 @@ export class PostController {
     name: 'id',
     description: '포스트 ID',
   })
-  removePost(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
+  removePost(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<DeleteResult> {
     return this.postService.removePost(id);
   }
 
@@ -334,7 +339,9 @@ export class PostController {
     type: SavePostDto,
     description: '포스트 등록/수정 DTO',
   })
-  getPreviewPost(@Body(ValidationPipe) savePostDto: SavePostDto): Promise<PostEntity> {
+  getPreviewPost(
+    @Body(ValidationPipe) savePostDto: SavePostDto
+  ): Promise<PostEntity> {
     return this.postService.getPreviewPost(savePostDto);
   }
 

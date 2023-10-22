@@ -2,7 +2,7 @@ import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { UserEntity } from "../../../auth/models";
 
 /**
- * 인증된 사용자 정보를 가져오는 데코레이터
+ * 인증된 사용자 정보를 반환하는 데코레이터
  * 
  * 사용 예시
  *   - @User() user: UserEntity
