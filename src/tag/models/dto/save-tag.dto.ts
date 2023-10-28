@@ -18,7 +18,7 @@ export class SaveTagDto {
   nm?: string;
 
   /** 태그 설명 */
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(100)
   desc?: string;
 

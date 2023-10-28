@@ -16,7 +16,7 @@ export class SaveCategoryDto {
   nm?: string;
 
   /** 카테고리 설명 */
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(100)
   desc?: string;
 
