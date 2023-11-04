@@ -16,7 +16,7 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   synchronize: false,
   namingStrategy: new SnakeNamingStrategy(),
   timezone: '+09:00', //'Asia/Seoul'
-  //logging: 'development' === process.env.NODE_ENV,
+  //logging: ('development' === process.env.NODE_ENV),
 };
 
 export const dataSorce: DataSource = new DataSource({

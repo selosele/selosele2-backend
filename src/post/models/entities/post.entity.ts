@@ -39,10 +39,10 @@ export class PostEntity extends BaseEntity {
   modDate?: Date;
 
   @Column({
-    comment: '포스트 댓글수'
+    comment: '포스트 댓글 수'
   })
   @ApiProperty({
-    description: '포스트 댓글수'
+    description: '포스트 댓글 수'
   })
   replyCnt?: number;
   
@@ -142,32 +142,5 @@ export class PostEntity extends BaseEntity {
     description: '포스트 댓글'
   })
   postReply?: PostReplyEntity[];
-
-  // START : 가상 필드
-
-  @ApiProperty({
-    description: '포스트 추천 수'
-  })
-  likeCnt?: number;
-
-  @ApiProperty({
-    description: '사용자 포스트 추천'
-  })
-  userPostLike?: unknown;
-
-  setUserPostLike(postLike: PostLikeEntity): void {
-    this.userPostLike = postLike;
-  }
-
-  @ApiProperty({
-    description: '이전/다음 포스트 목록'
-  })
-  prevAndNext?: unknown;
-
-  setPrevAndNext(posts: PostEntity[]): void {
-    this.prevAndNext = posts;
-  }
-
-  // END : 가상 필드
   
 }

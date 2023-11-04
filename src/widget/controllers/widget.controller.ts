@@ -1,9 +1,10 @@
 import { Controller, Get, Query, ValidationPipe, Put, Body } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { RoleEnum } from 'src/auth/models';
+import { Roles } from 'src/auth/models';
 import { Auth } from 'src/shared/decorators';
-import { ListWidgetDto, UpdateWidgetUseYnDto, UpdateWidgetDto, WidgetEntity } from '../models';
+import { ListWidgetDto, UpdateWidgetUseYnDto, UpdateWidgetDto, WidgetDto, WidgetEntity } from '../models';
 import { WidgetService } from '../services/widget.service';
+import { serialize } from 'src/shared/utils';
 
 @Controller('widget')
 @ApiTags('위젯 API')
@@ -19,41 +20,45 @@ export class WidgetController {
     description: '위젯 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<WidgetEntity>,
-    description: '위젯 목록',
+    type: Array<WidgetDto>,
+    description: '위젯 DTO 목록',
   })
   @ApiQuery({
     type: ListWidgetDto,
     description: '위젯 목록 조회 DTO',
   })
-  listWidget(
+  async listWidget(
     @Query(ValidationPipe) listWidgetDto: ListWidgetDto
-  ): Promise<WidgetEntity[]> {
-    return this.widgetService.listWidget(listWidgetDto);
+  ): Promise<WidgetDto[]> {
+    const widgets: WidgetEntity[] = await this.widgetService.listWidget(listWidgetDto);
+
+    return serialize<WidgetDto[]>(widgets);
   }
 
   @Put()
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '위젯 수정 API',
     description: '위젯을 수정한다.',
   })
   @ApiCreatedResponse({
-    type: Array<WidgetEntity>,
-    description: '위젯 목록',
+    type: Array<WidgetDto>,
+    description: '위젯 DTO 목록',
   })
   @ApiBody({
     type: UpdateWidgetDto,
     description: '위젯 수정 DTO',
   })
-  updateWidget(
+  async updateWidget(
     @Body(ValidationPipe) updateWidgetDto: UpdateWidgetDto[]
-  ): Promise<WidgetEntity[]> {
-    return this.widgetService.updateWidget(updateWidgetDto);
+  ): Promise<WidgetDto[]> {
+    const widgets: WidgetEntity[] = await this.widgetService.updateWidget(updateWidgetDto);
+
+    return serialize<WidgetDto[]>(widgets);
   }
 
   @Put('use')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '위젯 사용 여부 수정 API',
     description: '위젯 사용 여부를 수정한다.',
@@ -66,10 +71,10 @@ export class WidgetController {
     type: UpdateWidgetUseYnDto,
     description: '위젯 사용 여부 수정 DTO',
   })
-  updateWidgetUseYn(
+  async updateWidgetUseYn(
     @Body(ValidationPipe) updateWidgetUseYnDto: UpdateWidgetUseYnDto
   ): Promise<number> {
-    return this.widgetService.updateWidgetUseYn(updateWidgetUseYnDto);
+    return await this.widgetService.updateWidgetUseYn(updateWidgetUseYnDto);
   }
 
 }

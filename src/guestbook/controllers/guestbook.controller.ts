@@ -4,6 +4,8 @@ import { Ip, IsAuthenticated } from 'src/shared/decorators';
 import { PaginationDto } from 'src/shared/models';
 import { AddGuestbookDto, RemoveGuestbookDto, UpdateGuestbookDto, GuestbookEntity } from '../models';
 import { GuestbookService } from '../services/guestbook.service';
+import { GuestbookDto } from '../models/dto/guestbook.dto';
+import { serialize } from 'src/shared/utils';
 
 @Controller('guestbook')
 @ApiTags('방명록 API')
@@ -19,18 +21,23 @@ export class GuestbookController {
     description: '방명록 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: Array<GuestbookEntity>,
-    description: '방명록 목록',
+    type: Array<GuestbookDto>,
+    description: '방명록 DTO 목록',
   })
   @ApiQuery({
     type: PaginationDto,
     name: 'paginationDto',
     description: '페이지네이션 DTO',
   })
-  listGuestbook(
+  async listGuestbook(
     @Query(ValidationPipe) paginationDto: PaginationDto
-  ): Promise<[GuestbookEntity[], number]> {
-    return this.guestbookService.listGuestbook(paginationDto);
+  ): Promise<[GuestbookDto[], number]> {
+    const guestbooks: [GuestbookEntity[], number] = await this.guestbookService.listGuestbook(paginationDto);
+
+    return [
+      serialize<GuestbookDto[]>(guestbooks[0]),
+      guestbooks[1],
+    ];
   }
 
   @Post()
@@ -39,22 +46,24 @@ export class GuestbookController {
     description: '방명록을 등록한다.',
   })
   @ApiCreatedResponse({
-    type: GuestbookEntity,
-    description: '방명록',
+    type: GuestbookDto,
+    description: '방명록 DTO',
   })
   @ApiBody({
     type: AddGuestbookDto,
     description: '방명록 등록 DTO',
   })
-  addGuestbook(
+  async addGuestbook(
     @Ip() ip: string,
     @Body(ValidationPipe) addGuestbookDto: AddGuestbookDto,
     @IsAuthenticated() isAuthenticated: boolean,
-  ): Promise<GuestbookEntity> {
+  ): Promise<GuestbookDto> {
     addGuestbookDto.ip = ip;
     addGuestbookDto.adminYn = isAuthenticated ? 'Y' : 'N';
 
-    return this.guestbookService.addGuestbook(addGuestbookDto);
+    const guestbook: GuestbookEntity = await this.guestbookService.addGuestbook(addGuestbookDto);
+
+    return serialize<GuestbookDto>(guestbook);
   }
 
   @Put()
@@ -63,20 +72,22 @@ export class GuestbookController {
     description: '방명록을 수정한다.',
   })
   @ApiCreatedResponse({
-    type: GuestbookEntity,
-    description: '방명록',
+    type: GuestbookDto,
+    description: '방명록 DTO',
   })
   @ApiBody({
     type: AddGuestbookDto,
     description: '방명록 수정 DTO',
   })
-  updateGuestbook(
+  async updateGuestbook(
     @Ip() ip: string,
     @Body(ValidationPipe) updateGuestbookDto: UpdateGuestbookDto
-  ): Promise<GuestbookEntity> {
+  ): Promise<GuestbookDto> {
     updateGuestbookDto.ip = ip;
 
-    return this.guestbookService.updateGuestbook(updateGuestbookDto);
+    const guestbook: GuestbookEntity = await this.guestbookService.updateGuestbook(updateGuestbookDto);
+
+    return serialize<GuestbookDto>(guestbook);
   }
 
   @Post('remove')
@@ -85,20 +96,22 @@ export class GuestbookController {
     description: '방명록을 삭제한다.',
   })
   @ApiCreatedResponse({
-    type: GuestbookEntity,
-    description: '방명록',
+    type: GuestbookDto,
+    description: '방명록 DTO',
   })
   @ApiBody({
     type: RemoveGuestbookDto,
     description: '방명록 삭제 DTO',
   })
-  removeGuestbook(
+  async removeGuestbook(
     @IsAuthenticated() isAuthenticated: boolean,
     @Body(ValidationPipe) removeGuestbookDto: RemoveGuestbookDto
-  ): Promise<GuestbookEntity> {
+  ): Promise<GuestbookDto> {
     removeGuestbookDto.isLogin = isAuthenticated ? 'Y' : 'N';
+
+    const guestbook: GuestbookEntity = await this.guestbookService.removeGuestbook(removeGuestbookDto);
     
-    return this.guestbookService.removeGuestbook(removeGuestbookDto);
+    return serialize<GuestbookDto>(guestbook);
   }
 
 }

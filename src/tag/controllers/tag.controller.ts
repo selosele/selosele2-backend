@@ -1,11 +1,13 @@
 import { Controller, Get, Post, Put, Body, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 import { Delete, Param } from '@nestjs/common/decorators';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { RoleEnum } from 'src/auth/models';
+import { Roles } from 'src/auth/models';
 import { Auth } from 'src/shared/decorators';
 import { DeleteResult } from 'typeorm';
 import { SaveTagDto, TagEntity } from '../models';
 import { TagService } from '../services/tag.service';
+import { TagDto } from '../models/dto/tag.dto';
+import { serialize } from 'src/shared/utils';
 
 @Controller('tag')
 @ApiTags('태그 API')
@@ -21,32 +23,36 @@ export class TagController {
     description: '태그 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<TagEntity>,
-    description: '태그 목록',
+    type: Array<TagDto>,
+    description: '태그 DTO 목록',
   })
-  listTag(): Promise<TagEntity[]> {
-    return this.tagService.listTag();
+  async listTag(): Promise<TagDto[]> {
+    const tags: TagEntity[] = await this.tagService.listTag();
+
+    return serialize<TagDto[]>(tags);
   }
 
   @Get(':id')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '태그 조회 API',
     description: '태그를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: TagEntity,
-    description: '태그',
+    type: TagDto,
+    description: '태그 DTO',
   })
   @ApiParam({
     type: Number,
     name: 'id',
     description: '태그 ID',
   })
-  getCategory(
+  async getTag(
     @Param('id', ParseIntPipe) id: number
-  ): Promise<TagEntity> {
-    return this.tagService.getTag(id);
+  ): Promise<TagDto> {
+    const tag: TagEntity = await this.tagService.getTag(id);
+
+    return serialize<TagDto>(tag);
   }
 
   @Post()
@@ -55,17 +61,19 @@ export class TagController {
     description: '태그를 등록한다.',
   })
   @ApiCreatedResponse({
-    type: TagEntity,
-    description: '태그',
+    type: TagDto,
+    description: '태그 DTO',
   })
   @ApiBody({
     type: SaveTagDto,
     description: '태그 등록/수정 DTO',
   })
-  addCategory(
+  async addCategory(
     @Body(ValidationPipe) saveTagDto: SaveTagDto
-  ): Promise<TagEntity> {
-    return this.tagService.saveTag(saveTagDto);
+  ): Promise<TagDto> {
+    const tag: TagEntity = await this.tagService.saveTag(saveTagDto);
+
+    return serialize<TagDto>(tag);
   }
 
   @Put()
@@ -74,21 +82,23 @@ export class TagController {
     description: '태그를 수정한다.',
   })
   @ApiCreatedResponse({
-    type: TagEntity,
-    description: '태그',
+    type: TagDto,
+    description: '태그 DTO',
   })
   @ApiBody({
     type: SaveTagDto,
     description: '태그 등록/수정 DTO',
   })
-  saveTag(
+  async saveTag(
     @Body(ValidationPipe) saveTagDto: SaveTagDto
-  ): Promise<TagEntity> {
-    return this.tagService.saveTag(saveTagDto);
+  ): Promise<TagDto> {
+    const tag: TagEntity = await this.tagService.saveTag(saveTagDto);
+
+    return serialize<TagDto>(tag);
   }
 
   @Delete(':id')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '태그 삭제 API',
     description: '태그를 삭제한다.'
@@ -102,24 +112,26 @@ export class TagController {
     name: 'id',
     description: '태그 ID',
   })
-  removeTag(
+  async removeTag(
     @Param('id', ParseIntPipe) id: number
   ): Promise<DeleteResult> {
-    return this.tagService.removeTag(id);
+    return await this.tagService.removeTag(id);
   }
 
   @Get('list/tree')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '태그-포스트 계층형 구조 조회 API',
     description: '태그-포스트 계층형 구조를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<TagEntity>,
-    description: '태그-포스트 계층형 데이타',
+    type: Array<TagDto>,
+    description: '태그 DTO 목록',
   })
-  listTreeTagAndPost(): Promise<TagEntity[]> {
-    return this.tagService.listTreeTagAndPost();
+  async listTreeTagAndPost(): Promise<TagDto[]> {
+    const tags: TagEntity[] = await this.tagService.listTreeTagAndPost();
+
+    return serialize<TagDto[]>(tags);
   }
 
 }

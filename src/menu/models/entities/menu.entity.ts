@@ -76,10 +76,16 @@ export class MenuEntity extends BaseEntity {
   modDate?: Date;
   
   @ManyToOne(() => MenuEntity, (menu) => menu.children)
-  parent: MenuEntity;
+  @ApiProperty({
+    description: '상위 메뉴'
+  })
+  parent?: MenuEntity;
 
   @OneToMany(() => MenuEntity, (menu) => menu.parent)
-  children: MenuEntity[];
+  @ApiProperty({
+    description: '하위 메뉴'
+  })
+  children?: MenuEntity[];
 
   @OneToMany(() => MenuRoleEntity, menuRole => menuRole.menu)
   @JoinColumn({ referencedColumnName: 'id' })

@@ -1,10 +1,12 @@
 import { Body, Controller, Get, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { RoleEnum } from 'src/auth/models';
+import { Roles } from 'src/auth/models';
 import { Auth } from 'src/shared/decorators';
 import { UpdateResult } from 'typeorm';
 import { AddNotificationDto, ListNotificationDto, NotificationEntity } from '../models';
 import { NotificationService } from '../services/notification.service';
+import { NotificationDto } from '../models/dto/notification.dto';
+import { serialize } from 'src/shared/utils';
 
 @Controller('notification')
 @ApiTags('알림 API')
@@ -15,48 +17,55 @@ export class NotificationController {
   ) {}
 
   @Get()
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '알림 목록 조회 API',
     description: '알림 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: Array<NotificationEntity>,
-    description: '알림 목록',
+    type: Array<NotificationDto>,
+    description: '알림 DTO 목록',
   })
   @ApiQuery({
     type: ListNotificationDto,
     name: 'listNotificationDto',
     description: '알림 목록 조회 DTO',
   })
-  listNotification(
+  async listNotification(
     @Query(ValidationPipe) listNotificationDto: ListNotificationDto
-  ): Promise<[NotificationEntity[], number]> {
-    return this.notificationService.listNotification(listNotificationDto);
+  ): Promise<[NotificationDto[], number]> {
+    const notifications: [NotificationEntity[], number] = await this.notificationService.listNotification(listNotificationDto);
+
+    return [
+      serialize<NotificationDto[]>(notifications[0]),
+      notifications[1],
+    ];
   }
 
   @Post()
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '알림 등록 API',
     description: '알림을 등록한다.',
   })
   @ApiCreatedResponse({
-    type: NotificationEntity,
-    description: '알림',
+    type: NotificationDto,
+    description: '알림 DTO',
   })
   @ApiBody({
     type: AddNotificationDto,
     description: '알림 등록 DTO',
   })
-  addNotification(
+  async addNotification(
     @Body(ValidationPipe) addNotificationDto: AddNotificationDto
-  ): Promise<NotificationEntity> {
-    return this.notificationService.addNotification(addNotificationDto);
+  ): Promise<NotificationDto> {
+    const notification: NotificationEntity = await this.notificationService.addNotification(addNotificationDto);
+
+    return serialize<NotificationDto>(notification);
   }
 
   @Put()
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '알림 확인 API',
     description: '알림을 확인 처리한다.',
@@ -69,10 +78,10 @@ export class NotificationController {
     type: Array<Number>,
     description: '알림 ID 목록',
   })
-  updateNotificationCheckYn(
+  async updateNotificationCheckYn(
     @Body() idList: number[]
   ): Promise<UpdateResult> {
-    return this.notificationService.updateNotificationCheckYn(idList);
+    return await this.notificationService.updateNotificationCheckYn(idList);
   }
 
 }

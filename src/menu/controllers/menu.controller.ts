@@ -4,11 +4,13 @@ import { Post, Put } from '@nestjs/common/decorators/http/request-mapping.decora
 import { Body } from '@nestjs/common/decorators/http/route-params.decorator';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import { RoleEnum } from 'src/auth/models';
+import { Roles } from 'src/auth/models';
 import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { DeleteResult } from 'typeorm';
 import { ListMenuDto, SaveMenuDto, MenuEntity } from '../models';
 import { MenuService } from '../services/menu.service';
+import { MenuDto } from '../models/dto/menu.dto';
+import { serialize } from 'src/shared/utils';
 
 @Controller('menu')
 @ApiTags('메뉴 API')
@@ -24,89 +26,98 @@ export class MenuController {
     description: '계층형 메뉴 목록을 조회한다(최대 2depth).',
   })
   @ApiCreatedResponse({
-    type: Array<MenuEntity>,
-    description: '계층형 메뉴 목록',
+    type: Array<MenuDto>,
+    description: '메뉴 DTO 목록',
   })
   @ApiQuery({
     type: ListMenuDto,
     name: 'listMenuDto',
     description: '메뉴 목록 조회 DTO',
   })
-  listTreeMenu(
+  async listTreeMenu(
     @IsAuthenticated() isAuthenticated: boolean,
     @Query(ValidationPipe) listMenuDto: ListMenuDto,
-  ): Promise<MenuEntity[]> {
+  ): Promise<MenuDto[]> {
     const dto = Builder(ListMenuDto)
                 .useYn(listMenuDto?.useYn)
                 .isLogin(isAuthenticated ? 'Y' : 'N')
-                .roleIds(isAuthenticated ? [RoleEnum.ROLE_ADMIN] : [RoleEnum.ROLE_ANONYMOUS])
+                .roleIds(isAuthenticated ? [Roles.ROLE_ADMIN] : [Roles.ROLE_ANONYMOUS])
                 .build();
-    return this.menuService.listTreeMenu(dto);
+
+    const menus: MenuEntity[] = await this.menuService.listTreeMenu(dto);
+
+    return serialize<MenuDto[]>(menus);
   }
 
   @Get(':id')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '메뉴 조회 API',
     description: '메뉴를 조회한다.',
   })
   @ApiCreatedResponse({
-    type: MenuEntity,
-    description: '메뉴',
+    type: MenuDto,
+    description: '메뉴 DTO',
   })
   @ApiParam({
     type: Number,
     name: 'id',
     description: '메뉴 ID',
   })
-  getMenu(
+  async getMenu(
     @Param('id', ParseIntPipe) id: number
-  ): Promise<MenuEntity> {
-    return this.menuService.getMenu(id);
+  ): Promise<MenuDto> {
+    const menu: MenuEntity = await this.menuService.getMenu(id);
+
+    return serialize<MenuDto>(menu);
   }
 
   @Post()
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '메뉴 등록 API',
     description: '메뉴를 등록한다.',
   })
   @ApiCreatedResponse({
-    type: MenuEntity,
-    description: '메뉴',
+    type: MenuDto,
+    description: '메뉴 DTO',
   })
   @ApiBody({
     type: SaveMenuDto,
     description: '메뉴 등록/수정/삭제 DTO',
   })
-  addCategory(
+  async addCategory(
     @Body(ValidationPipe) saveMenuDto: SaveMenuDto
-  ): Promise<MenuEntity> {
-    return this.menuService.saveMenu(saveMenuDto);
+  ): Promise<MenuDto> {
+    const menu: MenuEntity = await this.menuService.saveMenu(saveMenuDto);
+
+    return serialize<MenuDto>(menu);
   }
 
   @Put()
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '메뉴 수정 API',
     description: '메뉴를 수정한다.',
   })
   @ApiCreatedResponse({
-    type: MenuEntity,
-    description: '메뉴',
+    type: MenuDto,
+    description: '메뉴 DTO',
   })
   @ApiBody({
     type: SaveMenuDto,
     description: '메뉴 등록/수정/삭제 DTO',
   })
-  updateMenu(
+  async updateMenu(
     @Body(ValidationPipe) saveMenuDto: SaveMenuDto
-  ): Promise<MenuEntity> {
-    return this.menuService.saveMenu(saveMenuDto);
+  ): Promise<MenuDto> {
+    const menu: MenuEntity = await this.menuService.saveMenu(saveMenuDto);
+    
+    return serialize<MenuDto>(menu);
   }
 
   @Delete(':id')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '메뉴 삭제 API',
     description: '메뉴를 삭제한다.'
@@ -120,10 +131,10 @@ export class MenuController {
     name: 'id',
     description: '메뉴 ID',
   })
-  removeMenu(
+  async removeMenu(
     @Param('id', ParseIntPipe) id: number
   ): Promise<DeleteResult> {
-    return this.menuService.removeMenu(id);
+    return await this.menuService.removeMenu(id);
   }
 
 }

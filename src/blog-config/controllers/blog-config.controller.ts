@@ -1,14 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
 import { BlogConfigService } from '../services/blog-config.service';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiBody } from '@nestjs/swagger';
-import { BlogConfigEntity, UpdateBlogConfigDto } from '../models';
+import { BlogConfigEntity, BlogConfigDto, UpdateBlogConfigDto } from '../models';
 import { Body, Put, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
 import { Auth } from 'src/shared/decorators';
-import { RoleEnum } from 'src/auth/models';
+import { Roles } from 'src/auth/models';
 import { ParseFilePipe, ValidationPipe } from '@nestjs/common/pipes';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
-import { FileTypeValidator, MaxFileSizeValidator } from 'src/shared/utils';
+import { FileTypeValidator, MaxFileSizeValidator, serialize } from 'src/shared/utils';
 
 @Controller('blogconfig')
 @ApiTags('블로그 환경설정 API')
@@ -24,29 +24,31 @@ export class BlogConfigController {
     description: '블로그 환경설정을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: BlogConfigEntity,
-    description: '블로그 환경설정',
+    type: BlogConfigDto,
+    description: '블로그 환경설정 DTO',
   })
-  getBlogConfig(): Promise<BlogConfigEntity> {
-    return this.blogConfigService.getBlogConfig();
+  async getBlogConfig(): Promise<BlogConfigDto> {
+    const blogConfig: BlogConfigEntity = await this.blogConfigService.getBlogConfig();
+    
+    return serialize<BlogConfigDto>(blogConfig);
   }
 
   @Put()
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @UseInterceptors(AnyFilesInterceptor())
   @ApiOperation({
     summary: '블로그 환경설정 수정 API',
     description: '블로그 환경설정을 수정한다.'
   })
   @ApiCreatedResponse({
-    type: BlogConfigEntity,
-    description: '블로그 환경설정',
+    type: BlogConfigDto,
+    description: '블로그 환경설정 DTO',
   })
   @ApiBody({
     type: UpdateBlogConfigDto,
     description: '블로그 환경설정 수정 DTO',
   })
-  updateBlogConfig(
+  async updateBlogConfig(
     @Body(ValidationPipe) updateBlogConfigDto: UpdateBlogConfigDto,
     @UploadedFiles(new ParseFilePipe({
       validators: [
@@ -54,10 +56,12 @@ export class BlogConfigController {
         new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
       ],
     })) files: FileUploaderRequest[],
-  ): Promise<BlogConfigEntity> {
+  ): Promise<BlogConfigDto> {
     updateBlogConfigDto.files = files;
+
+    const blogConfig: BlogConfigEntity = await this.blogConfigService.updateBlogConfig(updateBlogConfigDto);
     
-    return this.blogConfigService.updateBlogConfig(updateBlogConfigDto);
+    return serialize<BlogConfigDto>(blogConfig);
   }
   
 }

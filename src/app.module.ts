@@ -25,7 +25,7 @@ import { CacheDBModule } from './cache-db/cache-db.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      ignoreEnvFile: 'production' === process.env.NODE_ENV,
+      ignoreEnvFile: ('production' === process.env.NODE_ENV),
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),

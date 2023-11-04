@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserEntity } from 'src/auth/models';
+import { UserDto } from 'src/auth/models';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -20,7 +20,7 @@ export class RoleGuard implements CanActivate {
     }
 
     const req = context.switchToHttp().getRequest();
-    const user: UserEntity = req.user;
+    const user: UserDto = req.user;
     
     if (!user) {
       throw new ForbiddenException('사용자를 찾을 수 없습니다.');

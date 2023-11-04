@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from 'src/category/repositories/post-category.repository';
 import { PaginationDto } from 'src/shared/models';
-import { deserialize, escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, santinizeHtmlOption, startTransaction } from 'src/shared/utils';
+import { deserialize, escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, santinizeHtmlOption, serialize, startTransaction } from 'src/shared/utils';
 import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
-import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, GetPostLikeDto, PostLikeEntity } from '../models';
+import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, GetPostLikeDto, PostLikeEntity, PostReplyEntity } from '../models';
 import { SavePostDto } from '../models/dto/save-post.dto';
 import { PostRepository } from '../repositories/post.repository';
 import { BlogConfigRepository } from 'src/blog-config/repositories/blog-config.repository';
@@ -18,9 +18,11 @@ import { SaveTagDto, TagEntity } from 'src/tag/models';
 import { FileUploaderService } from 'src/file-uploader/services/file-uploader.service';
 import { FileUploaderResponse } from 'src/file-uploader/models/file-uploader.model';
 import { CountPostDto } from '../models/dto/count-post.dto';
-import { PostReplyRepository } from '../repositories/post-reply.repository';
 import { PostLikeService } from './post-like.service';
 import { PostReplyService } from './post-reply.service';
+import { PostLikeDto } from '../models/dto/post-like.dto';
+import { PostDto } from '../models/dto/post.dto';
+import { PostReplyDto } from '../models/dto/post-reply.dto';
 
 @Injectable()
 export class PostService {
@@ -137,7 +139,7 @@ export class PostService {
   }
 
   /** 포스트를 조회한다. */
-  async getPost(getPostDto: GetPostDto): Promise<PostEntity> {
+  async getPost(getPostDto: GetPostDto): Promise<PostDto> {
     const post: PostEntity = await this.postRepository.getPost(getPostDto);
 
     // 포스트가 없으면 404 예외를 던진다.
@@ -150,13 +152,15 @@ export class PostService {
       throw new NotFoundException();
     }
 
+    const postDto: PostDto = serialize<PostDto>(post);
+
     // 사용자 포스트 추천 정보를 조회한다.
     const getPostLikeDto = Builder(GetPostLikeDto)
                             .postId(getPostDto.id)
                             .ip(getPostDto.ip)
                             .build();
     const userPostLike: PostLikeEntity = await this.postLikeService.getPostLike(getPostLikeDto);
-    post.setUserPostLike(userPostLike);
+    postDto.userPostLike = serialize<PostLikeDto>(userPostLike);
 
     // 이전/다음 포스트 목록을 조회한다.
     const listPostDto = Builder(ListPostDto)
@@ -164,17 +168,19 @@ export class PostService {
                         .isLogin(getPostDto.isLogin)
                         .build();
     const prevAndNext: PostEntity[] = await this.postRepository.listPrevAndNextPost(listPostDto);
-    post.setPrevAndNext(prevAndNext);
+    postDto.prevAndNext = serialize<PostDto[]>(prevAndNext);
 
     // 포스트 댓글 목록을 조회한다.
-    post.postReply = await this.postReplyService.listPostReply(getPostDto.id);
+    const postReplys: PostReplyEntity[] = await this.postReplyService.listPostReply(getPostDto.id);
+    const postReplyDto: PostReplyDto[] = serialize<PostReplyDto[]>(postReplys);
+    postDto.postReply = postReplyDto;
 
-    post.rawText = post.cont;
+    postDto.rawText = postDto.cont;
 
     // 포스트의 내용을 Markdown으로 렌더링한다.
-    post.cont = md.render(post.cont);
+    postDto.cont = md.render(postDto.cont);
 
-    return post;
+    return postDto;
   }
 
   /** 포스트의 개수를 조회한다. */

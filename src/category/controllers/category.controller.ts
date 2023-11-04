@@ -3,12 +3,14 @@ import { Delete, Param } from '@nestjs/common/decorators';
 import { ValidationPipe } from '@nestjs/common/pipes';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import { RoleEnum } from 'src/auth/models';
+import { Roles } from 'src/auth/models';
 import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { DeleteResult } from 'typeorm';
-import { ListCategoryDto, SaveCategoryDto, CategoryEntity } from '../models';
+import { ListCategoryDto, SaveCategoryDto, CategoryDto, CategoryEntity } from '../models';
 import { CategoryService } from '../services/category.service';
 import { TagEntity } from 'src/tag/models';
+import { serialize } from 'src/shared/utils';
+import { TagDto } from 'src/tag/models';
 
 @Controller('category')
 @ApiTags('카테고리 API')
@@ -24,11 +26,13 @@ export class CategoryController {
     description: '카테고리 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<CategoryEntity>,
-    description: '카테고리 목록',
+    type: Array<CategoryDto>,
+    description: '카테고리 DTO 목록',
   })
-  listCategory(): Promise<CategoryEntity[]> {
-    return this.categoryService.listCategory();
+  async listCategory(): Promise<CategoryDto[]> {
+    const categories: CategoryEntity[] = await this.categoryService.listCategory();
+    
+    return serialize<CategoryDto[]>(categories);
   }
 
   @Get('list/count')
@@ -37,37 +41,45 @@ export class CategoryController {
     description: '카테고리, 태그 목록 및 개수를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<[CategoryEntity, TagEntity]>,
-    description: '카테고리, 태그 목록 및 개수',
+    type: Array<[CategoryDto, TagDto]>,
+    description: '카테고리 DTO 목록, 태그 DTO 목록',
   })
-  listCategoryAndCount(
+  async listCategoryAndCount(
     @IsAuthenticated() isAuthenticated: boolean
-  ): Promise<[CategoryEntity[], TagEntity[]]> {
+  ): Promise<[CategoryDto[], TagDto[]]> {
     const listCategoryDto = Builder(ListCategoryDto)
                             .isLogin(isAuthenticated ? 'Y' : 'N')
                             .build();
-    return this.categoryService.listCategoryAndCount(listCategoryDto);
+
+    const categoriesAndTags: [CategoryEntity[], TagEntity[]] = await this.categoryService.listCategoryAndCount(listCategoryDto);
+
+    return [
+      serialize<CategoryDto[]>(categoriesAndTags[0]),
+      serialize<TagDto[]>(categoriesAndTags[1]),
+    ];
   }
 
   @Get(':id')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '카테고리 조회 API',
     description: '카테고리를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: CategoryEntity,
-    description: '카테고리',
+    type: CategoryDto,
+    description: '카테고리 DTO',
   })
   @ApiParam({
     type: Number,
     name: 'id',
     description: '카테고리 ID',
   })
-  getCategory(
+  async getCategory(
     @Param('id', ParseIntPipe) id: number
-  ): Promise<CategoryEntity> {
-    return this.categoryService.getCategory(id);
+  ): Promise<CategoryDto> {
+    const category: CategoryEntity = await this.categoryService.getCategory(id);
+
+    return serialize<CategoryDto>(category);
   }
 
   @Post()
@@ -76,17 +88,19 @@ export class CategoryController {
     description: '카테고리를 등록한다.',
   })
   @ApiCreatedResponse({
-    type: CategoryEntity,
-    description: '카테고리',
+    type: CategoryDto,
+    description: '카테고리 DTO',
   })
   @ApiBody({
     type: SaveCategoryDto,
     description: '카테고리 등록/수정 DTO',
   })
-  addCategory(
+  async addCategory(
     @Body(ValidationPipe) saveCategoryDto: SaveCategoryDto
-  ): Promise<CategoryEntity> {
-    return this.categoryService.saveCategory(saveCategoryDto);
+  ): Promise<CategoryDto> {
+    const category: CategoryEntity = await this.categoryService.saveCategory(saveCategoryDto);
+
+    return serialize<CategoryDto>(category);
   }
 
   @Put()
@@ -95,21 +109,23 @@ export class CategoryController {
     description: '카테고리를 수정한다.',
   })
   @ApiCreatedResponse({
-    type: CategoryEntity,
-    description: '카테고리',
+    type: CategoryDto,
+    description: '카테고리 DTO',
   })
   @ApiBody({
     type: SaveCategoryDto,
     description: '카테고리 등록/수정 DTO',
   })
-  updateCategory(
+  async updateCategory(
     @Body(ValidationPipe) saveCategoryDto: SaveCategoryDto
-  ): Promise<CategoryEntity> {
-    return this.categoryService.saveCategory(saveCategoryDto);
+  ): Promise<CategoryDto> {
+    const category: CategoryEntity = await this.categoryService.saveCategory(saveCategoryDto);
+
+    return serialize<CategoryDto>(category);
   }
 
   @Delete(':id')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '카테고리 삭제 API',
     description: '카테고리를 삭제한다.'
@@ -123,24 +139,26 @@ export class CategoryController {
     name: 'id',
     description: '카테고리 ID',
   })
-  removeCategory(
+  async removeCategory(
     @Param('id', ParseIntPipe) id: number
   ): Promise<DeleteResult> {
-    return this.categoryService.removeCategory(id);
+    return await this.categoryService.removeCategory(id);
   }
 
   @Get('list/tree')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '카테고리-포스트 계층형 구조 조회 API',
     description: '카테고리-포스트 계층형 구조를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<CategoryEntity>,
-    description: '카테고리-포스트 계층형 데이타',
+    type: Array<CategoryDto>,
+    description: '카테고리 DTO 목록',
   })
-  listTreeCategoryAndPost(): Promise<CategoryEntity[]> {
-    return this.categoryService.listTreeCategoryAndPost();
+  async listTreeCategoryAndPost(): Promise<CategoryDto[]> {
+    const categories: CategoryEntity[] = await this.categoryService.listTreeCategoryAndPost();
+
+    return serialize<CategoryDto[]>(categories);
   }
 
 }

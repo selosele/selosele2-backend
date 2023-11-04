@@ -37,12 +37,3 @@ export class RoleEntity extends BaseEntity {
   userRole?: UserRoleEntity[];
 
 }
-
-export enum RoleEnum {
-  ROLE_ANONYMOUS = 'ROLE_ANONYMOUS',
-  ROLE_ADMIN = 'ROLE_ADMIN',
-};
-
-export const RoleDefaultList = [
-  RoleEnum.ROLE_ANONYMOUS,
-];

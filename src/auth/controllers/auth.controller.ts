@@ -1,11 +1,11 @@
 import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Logger, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { AuthCredentialsDto, UserEntity, RoleEntity, RoleEnum, Tokens } from '../models';
+import { AuthCredentialsDto, UserDto, RoleDto, UserEntity, RoleEntity, Roles, Tokens } from '../models';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { Auth, Ip, RefreshTokenUser } from 'src/shared/decorators';
 import { CacheDBService } from 'src/cache-db/services/cache-db.service';
-import { createJwtRefreshTokenKey, isBlank } from 'src/shared/utils';
+import { createJwtRefreshTokenKey, isBlank, serialize } from 'src/shared/utils';
 import { Response } from 'express';
 import { AccessTokenUser } from 'src/shared/decorators/auth/access-token-user.decorator';
 import { JwtRefreshGuard } from 'src/shared/guards/auth/jwt-refresh.guard';
@@ -28,18 +28,20 @@ export class AuthController {
     description: '사용자를 조회한다.',
   })
   @ApiCreatedResponse({
-    type: UserEntity,
-    description: '사용자',
+    type: UserDto,
+    description: '사용자 DTO',
   })
   @ApiParam({
     type: Number,
     name: 'userSn',
     description: '사용자 일련번호',
   })
-  getUser(
+  async getUser(
     @Param('userSn', ParseIntPipe) userSn: number
-  ): Promise<UserEntity> {
-    return this.authService.getUser(userSn);
+  ): Promise<UserDto> {
+    const user: UserEntity = await this.authService.getUser(userSn);
+
+    return serialize<UserDto>(user);
   }
 
   @Post('user')
@@ -51,14 +53,14 @@ export class AuthController {
     type: AuthCredentialsDto,
     description: '사용자 생성 DTO',
   })
-  signUp(
+  async signUp(
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto
-  ): void {
+  ): Promise<void> {
     if ('production' === this.config.get<string>('NODE_ENV')) {
       throw new NotFoundException();
     }
     
-    this.authService.addUser(authCredentialsDto);
+    await this.authService.addUser(authCredentialsDto);
   }
 
   @Post('signin')
@@ -105,7 +107,7 @@ export class AuthController {
   })
   async refreshAccessToken(
     @Ip() ip: string,
-    @RefreshTokenUser() user: UserEntity,
+    @RefreshTokenUser() user: UserDto,
     @Res({ passthrough: true }) resp: Response,
   ): Promise<Tokens> {
     this.logger.warn(`Try to refresh the Access token... ip : ${ip}`);
@@ -128,13 +130,13 @@ export class AuthController {
   }
 
   @Post('signout')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '로그아웃 API',
     description: '로그아웃을 한다.',
   })
   async signOut(
-    @AccessTokenUser() user: UserEntity,
+    @AccessTokenUser() user: UserDto,
     @Res({ passthrough: true }) resp: Response
   ): Promise<void> {
     const refreshTokenKey: string = createJwtRefreshTokenKey(user);
@@ -156,17 +158,19 @@ export class AuthController {
   }
 
   @Get('role')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '권한 목록 조회 API',
     description: '권한 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: Array<RoleEntity>,
-    description: '권한 목록',
+    type: Array<RoleDto>,
+    description: '권한 DTO 목록',
   })
-  listRole(): Promise<RoleEntity[]> {
-    return this.authService.listRole();
+  async listRole(): Promise<RoleDto[]> {
+    const roles: RoleEntity[] = await this.authService.listRole();
+
+    return serialize<RoleDto[]>(roles);
   }
 
 }

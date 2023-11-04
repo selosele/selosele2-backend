@@ -3,8 +3,10 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@n
 import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
 import { SatisfactionService } from '../services/satisfaction.service';
 import { Auth, Ip, IsAuthenticated } from 'src/shared/decorators';
-import { RoleEnum } from 'src/auth/models';
+import { Roles } from 'src/auth/models';
 import { BizException } from 'src/shared/exceptions/biz/biz-exception';
+import { SatisfactionDto } from '../models/dto/satisfaction.dto';
+import { serialize } from 'src/shared/utils';
 
 @Controller('satisfaction')
 @ApiTags('만족도조사 API')
@@ -15,24 +17,26 @@ export class SatisfactionController {
   ) {}
 
   @Get()
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '만족도조사 목록 조회 API',
     description: '만족도조사 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: Array<SatisfactionEntity>,
-    description: '만족도조사 목록',
+    type: Array<SatisfactionDto>,
+    description: '만족도조사 DTO 목록',
   })
   @ApiQuery({
     type: SearchSatisfactiontDto,
     name: 'searchSatisfactiontDto',
     description: '만족도조사 검색 DTO',
   })
-  listSatisfaction(
+  async listSatisfaction(
     @Query(ValidationPipe) searchSatisfactiontDto: SearchSatisfactiontDto
-  ): Promise<SatisfactionEntity[]> {
-    return this.satisfactionService.listSatisfaction(searchSatisfactiontDto);
+  ): Promise<SatisfactionDto[]> {
+    const Satisfactions: SatisfactionEntity[] = await this.satisfactionService.listSatisfaction(searchSatisfactiontDto);
+
+    return serialize<SatisfactionDto[]>(Satisfactions);
   }
 
   @Post()
@@ -41,25 +45,27 @@ export class SatisfactionController {
     description: '만족도조사에 참여한다.',
   })
   @ApiCreatedResponse({
-    type: SatisfactionEntity,
-    description: '만족도조사',
+    type: SatisfactionDto,
+    description: '만족도조사 DTO',
   })
   @ApiBody({
     type: AddSatisfactiontDto,
     description: '만족도조사 참여 DTO',
   })
-  addSatisfaction(
+  async addSatisfaction(
     @Ip() ip: string,
     @Body(ValidationPipe) addSatisfactiontDto: AddSatisfactiontDto,
     @IsAuthenticated() isAuthenticated: boolean
-  ): Promise<SatisfactionEntity> {
+  ): Promise<SatisfactionDto> {
     if (isAuthenticated) {
       throw new BizException('관리자는 참여할 수 없습니다.');
     }
 
     addSatisfactiontDto.ip = ip;
+
+    const Satisfaction: SatisfactionEntity = await this.satisfactionService.addSatisfaction(addSatisfactiontDto);
     
-    return this.satisfactionService.addSatisfaction(addSatisfactiontDto);
+    return serialize<SatisfactionDto>(Satisfaction);
   }
 
 }

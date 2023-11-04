@@ -2,16 +2,17 @@ import { Controller, Get, Body, ValidationPipe, Post, Param, Delete, ParseIntPip
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import { RoleEnum } from 'src/auth/models';
+import { Roles } from 'src/auth/models';
 import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
 import { Auth, IsAuthenticated } from 'src/shared/decorators';
-import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator } from 'src/shared/utils';
+import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } from 'src/shared/utils';
 import { DeleteResult } from 'typeorm';
 import { RemoveContentDto, ContentEntity } from '../models';
 import { GetContentDto } from '../models/dto/get-content.dto';
 import { ListContentDto } from '../models/dto/list-content.dto';
 import { SaveContentDto } from '../models/dto/save-content.dto';
 import { ContentService } from '../services/content.service';
+import { ContentDto } from '../models/dto/content.dto';
 
 @Controller('content')
 @ApiTags('콘텐츠 API')
@@ -27,13 +28,18 @@ export class ContentController {
     description: '콘텐츠 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<ContentEntity>,
-    description: '콘텐츠 목록',
+    type: Array<ContentDto>,
+    description: '콘텐츠 DTO 목록',
   })
-  listContent(
+  async listContent(
     @Query(ValidationPipe) listContentDto: ListContentDto
-  ): Promise<[ContentEntity[], number]> {
-    return this.contentService.listContent(listContentDto);
+  ): Promise<[ContentDto[], number]> {
+    const contents: [ContentEntity[], number] = await this.contentService.listContent(listContentDto);
+
+    return [
+      serialize<ContentDto[]>(contents[0]),
+      contents[1],
+    ];
   }
 
   @Get(':link')
@@ -42,41 +48,44 @@ export class ContentController {
     description: '콘텐츠를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: ContentEntity,
-    description: '콘텐츠',
+    type: ContentDto,
+    description: '콘텐츠 DTO',
   })
   @ApiParam({
     type: String,
     name: 'link',
     description: '콘텐츠 링크',
   })
-  getContent(
+  async getContent(
     @IsAuthenticated() isAuthenticated: boolean,
     @Param('link') link: string
-  ): Promise<ContentEntity> {
+  ): Promise<ContentDto> {
     const getContentDto = Builder(GetContentDto)
                           .link(`/${link}`)
                           .isLogin(isAuthenticated ? 'Y' : 'N')
                           .build();
-    return this.contentService.getContent(getContentDto);
+
+    const content: ContentEntity = await this.contentService.getContent(getContentDto);
+
+    return serialize<ContentDto>(content);
   }
 
   @Post()
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @UseInterceptors(FileInterceptor('ogImgFile'))
   @ApiOperation({
     summary: '콘텐츠 등록 API',
     description: '콘텐츠를 등록한다.'
   })
   @ApiCreatedResponse({
-    type: ContentEntity,
-    description: '콘텐츠',
+    type: ContentDto,
+    description: '콘텐츠 DTO',
   })
   @ApiBody({
     type: SaveContentDto,
     description: '콘텐츠 등록/수정 DTO',
   })
-  addContent(
+  async addContent(
     @Body(ValidationPipe) saveContentDto: SaveContentDto,
     @UploadedFile(new ParseFilePipe({
       validators: [
@@ -85,30 +94,32 @@ export class ContentController {
       ],
       fileIsRequired: false,
     })) ogImgFile: FileUploaderRequest,
-  ): Promise<ContentEntity> {
+  ): Promise<ContentDto> {
     if (isNotFileEmpty(ogImgFile)) {
       saveContentDto.ogImgFile = ogImgFile;
     }
 
-    return this.contentService.saveContent(saveContentDto);
+    const content: ContentEntity = await this.contentService.saveContent(saveContentDto);
+
+    return serialize<ContentDto>(content);
   }
 
   @Put()
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @UseInterceptors(FileInterceptor('ogImgFile'))
   @ApiOperation({
     summary: '콘텐츠 수정 API',
     description: '콘텐츠를 수정한다.'
   })
   @ApiCreatedResponse({
-    type: ContentEntity,
-    description: '콘텐츠',
+    type: ContentDto,
+    description: '콘텐츠 DTO',
   })
   @ApiBody({
     type: SaveContentDto,
     description: '콘텐츠 등록/수정 DTO',
   })
-  updatePost(
+  async updatePost(
     @Body(ValidationPipe) saveContentDto: SaveContentDto,
     @UploadedFile(new ParseFilePipe({
       validators: [
@@ -117,16 +128,18 @@ export class ContentController {
       ],
       fileIsRequired: false,
     })) ogImgFile: FileUploaderRequest,
-  ): Promise<ContentEntity> {
+  ): Promise<ContentDto> {
     if (isNotFileEmpty(ogImgFile)) {
       saveContentDto.ogImgFile = ogImgFile;
     }
 
-    return this.contentService.saveContent(saveContentDto);
+    const content: ContentEntity = await this.contentService.saveContent(saveContentDto);
+
+    return serialize<ContentDto>(content);
   }
 
   @Delete(':id')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '콘텐츠 삭제 API',
     description: '콘텐츠를 삭제한다.'
@@ -140,14 +153,14 @@ export class ContentController {
     name: 'id',
     description: '콘텐츠 ID',
   })
-  removeContent(
+  async removeContent(
     @Param('id', ParseIntPipe) id: number
   ): Promise<DeleteResult> {
-    return this.contentService.removeContent(id);
+    return await this.contentService.removeContent(id);
   }
 
   @Post('remove')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '콘텐츠 다건 삭제 API',
     description: '콘텐츠 다건을 삭제한다.'
@@ -160,30 +173,32 @@ export class ContentController {
     type: RemoveContentDto,
     description: '콘텐츠 삭제 DTO',
   })
-  removeContents(
+  async removeContents(
     @Body(ValidationPipe) removeContentDto: RemoveContentDto[]
   ): Promise<DeleteResult> {
-    return this.contentService.removeContents(removeContentDto);
+    return await this.contentService.removeContents(removeContentDto);
   }
 
   @Post('preview')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '콘텐츠 미리보기 API',
     description: '미리보기 콘텐츠로 응답한다.'
   })
   @ApiCreatedResponse({
-    type: ContentEntity,
-    description: '미리보기 콘텐츠',
+    type: ContentDto,
+    description: '콘텐츠 DTO',
   })
   @ApiBody({
     type: SaveContentDto,
     description: '콘텐츠 등록/수정 DTO',
   })
-  getPreviewContent(
+  async getPreviewContent(
     @Body(ValidationPipe) saveContentDto: SaveContentDto
-  ): Promise<ContentEntity> {
-    return this.contentService.getPreviewContent(saveContentDto);
+  ): Promise<ContentDto> {
+    const content: ContentEntity = await this.contentService.getPreviewContent(saveContentDto);
+
+    return serialize<ContentDto>(content);
   }
 
 }

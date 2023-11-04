@@ -1,9 +1,11 @@
-import { Controller, Post, Body, ValidationPipe, Get, Query, Put, Delete } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, Get, Query, Put } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Ip, IsAuthenticated } from 'src/shared/decorators';
 import { PaginationDto } from 'src/shared/models';
 import { ListGuestbookReplyDto, AddGuestbookReplyDto, RemoveGuestbookReplyDto, UpdateGuestbookReplyDto, GuestbookReplyEntity } from '../models';
 import { GuestbookReplyService } from "../services/guestbook-reply.service";
+import { GuestbookReplyDto } from '../models/dto/guestbook-reply.dto';
+import { serialize } from 'src/shared/utils';
 
 @Controller('guestbookreply')
 @ApiTags('방명록 댓글 API')
@@ -19,8 +21,8 @@ export class GuestbookReplyController {
     description: '방명록 댓글 목록을 조회한다.',
   })
   @ApiCreatedResponse({
-    type: Array<GuestbookReplyEntity>,
-    description: '방명록 댓글 목록',
+    type: Array<GuestbookReplyDto>,
+    description: '방명록 댓글 DTO 목록',
   })
   @ApiQuery({
     type: ListGuestbookReplyDto,
@@ -32,11 +34,16 @@ export class GuestbookReplyController {
     name: 'paginationDto',
     description: '페이지네이션 DTO',
   })
-  listGuestbookReply(
+  async listGuestbookReply(
     @Query(ValidationPipe) listGuestbookReplyDto: ListGuestbookReplyDto,
     @Query(ValidationPipe) paginationDto: PaginationDto
-  ): Promise<[GuestbookReplyEntity[], number]> {
-    return this.guestbookReplyService.listGuestbookReply(listGuestbookReplyDto, paginationDto);
+  ): Promise<[GuestbookReplyDto[], number]> {
+    const guestbookReplys: [GuestbookReplyEntity[], number] = await this.guestbookReplyService.listGuestbookReply(listGuestbookReplyDto, paginationDto);
+
+    return [
+      serialize<GuestbookReplyDto[]>(guestbookReplys[0]),
+      guestbookReplys[1],
+    ];
   }
 
   @Post()
@@ -45,22 +52,24 @@ export class GuestbookReplyController {
     description: '방명록 댓글을 등록한다.',
   })
   @ApiCreatedResponse({
-    type: GuestbookReplyEntity,
-    description: '방명록 댓글',
+    type: GuestbookReplyDto,
+    description: '방명록 댓글 DTO',
   })
   @ApiBody({
     type: AddGuestbookReplyDto,
     description: '방명록 댓글 등록 DTO',
   })
-  addGuestbook(
+  async addGuestbook(
     @Ip() ip: string,
     @Body(ValidationPipe) addGuestbookReplyDto: AddGuestbookReplyDto,
     @IsAuthenticated() isAuthenticated: boolean,
-  ): Promise<GuestbookReplyEntity> {
+  ): Promise<GuestbookReplyDto> {
     addGuestbookReplyDto.ip = ip;
     addGuestbookReplyDto.adminYn = isAuthenticated ? 'Y' : 'N';
 
-    return this.guestbookReplyService.addGuestbookReply(addGuestbookReplyDto);
+    const guestbookReply: GuestbookReplyEntity = await this.guestbookReplyService.addGuestbookReply(addGuestbookReplyDto);
+
+    return serialize<GuestbookReplyDto>(guestbookReply);
   }
 
   @Put()
@@ -69,20 +78,22 @@ export class GuestbookReplyController {
     description: '방명록 댓글을 수정한다.',
   })
   @ApiCreatedResponse({
-    type: GuestbookReplyEntity,
-    description: '방명록 댓글',
+    type: GuestbookReplyDto,
+    description: '방명록 댓글 DTO',
   })
   @ApiBody({
     type: UpdateGuestbookReplyDto,
     description: '방명록 댓글 수정 DTO',
   })
-  updateGuestbook(
+  async updateGuestbook(
     @Ip() ip: string,
     @Body(ValidationPipe) updateGuestbookReplyDto: UpdateGuestbookReplyDto
-  ): Promise<GuestbookReplyEntity> {
+  ): Promise<GuestbookReplyDto> {
     updateGuestbookReplyDto.ip = ip;
 
-    return this.guestbookReplyService.updateGuestbookReply(updateGuestbookReplyDto);
+    const guestbookReply: GuestbookReplyEntity = await this.guestbookReplyService.updateGuestbookReply(updateGuestbookReplyDto);
+
+    return serialize<GuestbookReplyDto>(guestbookReply);
   }
 
   @Post('remove')
@@ -91,20 +102,22 @@ export class GuestbookReplyController {
     description: '방명록 댓글을 삭제한다.',
   })
   @ApiCreatedResponse({
-    type: GuestbookReplyEntity,
+    type: GuestbookReplyDto,
     description: '방명록 댓글',
   })
   @ApiBody({
     type: RemoveGuestbookReplyDto,
     description: '방명록 댓글 삭제 DTO',
   })
-  removeGuestbookReply(
+  async removeGuestbookReply(
     @IsAuthenticated() isAuthenticated: boolean,
     @Body(ValidationPipe) removeGuestbookReplyDto: RemoveGuestbookReplyDto
-  ): Promise<GuestbookReplyEntity> {
+  ): Promise<GuestbookReplyDto> {
     removeGuestbookReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
-    return this.guestbookReplyService.removeGuestbookReply(removeGuestbookReplyDto);
+    const guestbookReply: GuestbookReplyEntity = await this.guestbookReplyService.removeGuestbookReply(removeGuestbookReplyDto);
+
+    return serialize<GuestbookReplyDto>(guestbookReply);
   }
 
 }

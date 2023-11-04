@@ -2,15 +2,16 @@ import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Dele
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import { RoleEnum } from 'src/auth/models';
+import { Roles } from 'src/auth/models';
 import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
 import { Auth, Ip, IsAuthenticated } from 'src/shared/decorators';
 import { PaginationDto } from 'src/shared/models';
-import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator } from 'src/shared/utils';
+import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } from 'src/shared/utils';
 import { DeleteResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
 import { SavePostDto } from '../models/dto/save-post.dto';
 import { PostService } from '../services/post.service';
+import { PostDto } from '../models/dto/post.dto';
 
 @Controller('post')
 @ApiTags('포스트 API')
@@ -28,27 +29,34 @@ export class PostController {
     description: '포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<PostEntity>,
-    description: '포스트 목록',
+    type: Array<PostDto>,
+    description: '포스트 DTO 목록',
   })
   @ApiQuery({
     type: ListPostDto,
     name: 'listPostDto',
     description: '포스트 목록 조회 DTO',
   })
-  listPost(
+  async listPost(
     @IsAuthenticated() isAuthenticated: boolean,
     @Query(ValidationPipe) listPostDto: ListPostDto,
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<[PostDto[], number]> {
     // 비밀 포스트 조회를 위한 세팅
     listPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
+    let posts: [PostEntity[], number];
+
     // 메인 포스트 목록 조회
     if ('D01001' === listPostDto.pageType) {
-      return this.postService.listPostMain(listPostDto);
+      posts = await this.postService.listPostMain(listPostDto);
+    } else {
+      posts = await this.postService.listPost(listPostDto);
     }
 
-    return this.postService.listPost(listPostDto);
+    return [
+      serialize<PostDto[]>(posts[0]),
+      posts[1],
+    ];
   }
 
   @Get('search')
@@ -57,8 +65,8 @@ export class PostController {
     description: '포스트를 검색한다.'
   })
   @ApiCreatedResponse({
-    type: Array<PostEntity>,
-    description: '포스트 목록',
+    type: Array<PostDto>,
+    description: '포스트 DTO 목록',
   })
   @ApiQuery({
     type: SearchPostDto,
@@ -70,19 +78,24 @@ export class PostController {
     name: 'paginationDto',
     description: '페이지네이션 DTO',
   })
-  listPostSearch(
+  async listPostSearch(
     @Ip() ip: string,
     @Query(ValidationPipe) searchPostDto: SearchPostDto,
     @Query(ValidationPipe) paginationDto: PaginationDto,
     @IsAuthenticated() isAuthenticated: boolean
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<[PostDto[], number]> {
 
     this.logger.warn(`q : ${searchPostDto.q}, ip: ${ip}`);
 
     // 비밀 포스트 조회를 위한 세팅
     searchPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
+
+    const posts: [PostEntity[], number] = await this.postService.listPostSearch(searchPostDto, paginationDto);
     
-    return this.postService.listPostSearch(searchPostDto, paginationDto);
+    return [
+      serialize<PostDto[]>(posts[0]),
+      posts[1],
+    ];
   }
 
   @Get('year')
@@ -91,16 +104,19 @@ export class PostController {
     description: '포스트의 연도 및 개수를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<PostEntity>,
-    description: '포스트의 연도 및 개수',
+    type: Array<PostDto>,
+    description: '포스트 DTO 목록',
   })
-  listYearAndCount(
+  async listYearAndCount(
     @IsAuthenticated() isAuthenticated: boolean
-  ): Promise<PostEntity[]> {
+  ): Promise<PostDto[]> {
     const listPostDto = Builder(ListPostDto)
                         .isLogin(isAuthenticated ? 'Y' : 'N')
                         .build();
-    return this.postService.listYearAndCount(listPostDto);
+
+    const posts: PostEntity[] = await this.postService.listYearAndCount(listPostDto);
+
+    return serialize<PostDto[]>(posts);
   }
 
   @Get('year/:year')
@@ -109,8 +125,8 @@ export class PostController {
     description: '연도별 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<PostEntity>,
-    description: '연도별 포스트 목록',
+    type: Array<PostDto>,
+    description: '포스트 DTO 목록',
   })
   @ApiParam({
     type: String,
@@ -121,16 +137,22 @@ export class PostController {
     type: PaginationDto,
     description: '페이지네이션 DTO',
   })
-  listPostByYear(
+  async listPostByYear(
     @IsAuthenticated() isAuthenticated: boolean,
     @Param('year') year: string,
     @Query() paginationDto: PaginationDto
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<[PostDto[], number]> {
     const listPostDto = Builder(ListPostDto)
                         .year(year)
                         .isLogin(isAuthenticated ? 'Y' : 'N')
                         .build();
-    return this.postService.listPostByYear(listPostDto, paginationDto);
+
+    const posts: [PostEntity[], number] = await this.postService.listPostByYear(listPostDto, paginationDto);
+
+    return [
+      serialize<PostDto[]>(posts[0]),
+      posts[1],
+    ];
   }
 
   @Get('category/:categoryId')
@@ -139,8 +161,8 @@ export class PostController {
     description: '카테고리별 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<PostEntity>,
-    description: '카테고리별 포스트 목록',
+    type: Array<PostDto>,
+    description: '포스트 DTO 목록',
   })
   @ApiParam({
     type: Number,
@@ -151,16 +173,22 @@ export class PostController {
     type: PaginationDto,
     description: '페이지네이션 DTO',
   })
-  listPostByCategory(
+  async listPostByCategory(
     @IsAuthenticated() isAuthenticated: boolean,
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Query() paginationDto: PaginationDto
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<[PostDto[], number]> {
     const listPostDto = Builder(ListPostDto)
                         .categoryId(categoryId)
                         .isLogin(isAuthenticated ? 'Y' : 'N')
                         .build();
-    return this.postService.listPostByCategory(listPostDto, paginationDto);
+
+    const posts: [PostEntity[], number] = await this.postService.listPostByCategory(listPostDto, paginationDto);
+
+    return [
+      serialize<PostDto[]>(posts[0]),
+      posts[1],
+    ];
   }
 
   @Get('tag/:tagId')
@@ -169,8 +197,8 @@ export class PostController {
     description: '태그별 포스트 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<PostEntity>,
-    description: '태그별 포스트 목록',
+    type: Array<PostDto>,
+    description: '포스트 DTO 목록',
   })
   @ApiParam({
     type: Number,
@@ -181,16 +209,22 @@ export class PostController {
     type: PaginationDto,
     description: '페이지네이션 DTO',
   })
-  listPostByTag(
+  async listPostByTag(
     @IsAuthenticated() isAuthenticated: boolean,
     @Param('tagId', ParseIntPipe) tagId: number,
     @Query() paginationDto: PaginationDto
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<[PostDto[], number]> {
     const listPostDto = Builder(ListPostDto)
                         .tagId(tagId)
                         .isLogin(isAuthenticated ? 'Y' : 'N')
                         .build();
-    return this.postService.listPostByTag(listPostDto, paginationDto);
+
+    const posts: [PostEntity[], number] = await this.postService.listPostByTag(listPostDto, paginationDto);
+
+    return [
+      serialize<PostDto[]>(posts[0]),
+      posts[1],
+    ];
   }
 
   @Get(':id')
@@ -199,43 +233,43 @@ export class PostController {
     description: '포스트를 조회한다.'
   })
   @ApiCreatedResponse({
-    type: PostEntity,
-    description: '포스트',
+    type: PostDto,
+    description: '포스트 DTO',
   })
   @ApiParam({
     type: Number,
     name: 'id',
     description: '포스트 ID',
   })
-  getPost(
+  async getPost(
     @Ip() ip: string,
     @Param('id', ParseIntPipe) id: number,
     @IsAuthenticated() isAuthenticated: boolean
-  ): Promise<PostEntity> {
+  ): Promise<PostDto> {
     const getPostDto = Builder(GetPostDto)
                         .id(id)
                         .ip(ip)
                         .isLogin(isAuthenticated ? 'Y' : 'N')
                         .build();
-    return this.postService.getPost(getPostDto);
+    return await this.postService.getPost(getPostDto);
   }
 
   @Post()
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @UseInterceptors(FileInterceptor('ogImgFile'))
   @ApiOperation({
     summary: '포스트 등록 API',
     description: '포스트를 등록한다.'
   })
   @ApiCreatedResponse({
-    type: PostEntity,
-    description: '포스트',
+    type: PostDto,
+    description: '포스트 DTO',
   })
   @ApiBody({
     type: SavePostDto,
     description: '포스트 등록/수정 DTO',
   })
-  addPost(
+  async addPost(
     @Body(ValidationPipe) savePostDto: SavePostDto,
     @UploadedFile(new ParseFilePipe({
       validators: [
@@ -244,30 +278,32 @@ export class PostController {
       ],
       fileIsRequired: false,
     })) ogImgFile: FileUploaderRequest,
-  ): Promise<PostEntity> {
+  ): Promise<PostDto> {
     if (isNotFileEmpty(ogImgFile)) {
       savePostDto.ogImgFile = ogImgFile;
     }
 
-    return this.postService.savePost(savePostDto);
+    const post: PostEntity = await this.postService.savePost(savePostDto);
+
+    return serialize<PostDto>(post);
   }
 
   @Put()
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @UseInterceptors(FileInterceptor('ogImgFile'))
   @ApiOperation({
     summary: '포스트 수정 API',
     description: '포스트를 수정한다.'
   })
   @ApiCreatedResponse({
-    type: PostEntity,
-    description: '포스트',
+    type: PostDto,
+    description: '포스트 DTO',
   })
   @ApiBody({
     type: SavePostDto,
     description: '포스트 등록/수정 DTO',
   })
-  updatePost(
+  async updatePost(
     @Body(ValidationPipe) savePostDto: SavePostDto,
     @UploadedFile(new ParseFilePipe({
       validators: [
@@ -276,16 +312,18 @@ export class PostController {
       ],
       fileIsRequired: false,
     })) ogImgFile: FileUploaderRequest,
-  ): Promise<PostEntity> {
+  ): Promise<PostDto> {
     if (isNotFileEmpty(ogImgFile)) {
       savePostDto.ogImgFile = ogImgFile;
     }
 
-    return this.postService.savePost(savePostDto);
+    const post: PostEntity = await this.postService.savePost(savePostDto);
+
+    return serialize<PostDto>(post);
   }
 
   @Post('remove')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '포스트 다건 삭제 API',
     description: '포스트 다건을 삭제한다.'
@@ -298,14 +336,14 @@ export class PostController {
     type: RemovePostDto,
     description: '포스트 삭제 DTO',
   })
-  removePosts(
+  async removePosts(
     @Body(ValidationPipe) removePostDto: RemovePostDto[]
   ): Promise<DeleteResult> {
-    return this.postService.removePosts(removePostDto);
+    return await this.postService.removePosts(removePostDto);
   }
 
   @Delete(':id')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '포스트 삭제 API',
     description: '포스트를 삭제한다.'
@@ -319,30 +357,32 @@ export class PostController {
     name: 'id',
     description: '포스트 ID',
   })
-  removePost(
+  async removePost(
     @Param('id', ParseIntPipe) id: number
   ): Promise<DeleteResult> {
-    return this.postService.removePost(id);
+    return await this.postService.removePost(id);
   }
 
   @Post('preview')
-  @Auth(RoleEnum.ROLE_ADMIN)
+  @Auth(Roles.ROLE_ADMIN)
   @ApiOperation({
     summary: '포스트 미리보기 API',
     description: '미리보기 포스트로 응답한다.'
   })
   @ApiCreatedResponse({
-    type: PostEntity,
-    description: '미리보기 포스트',
+    type: PostDto,
+    description: '포스트 DTO',
   })
   @ApiBody({
     type: SavePostDto,
     description: '포스트 등록/수정 DTO',
   })
-  getPreviewPost(
+  async getPreviewPost(
     @Body(ValidationPipe) savePostDto: SavePostDto
-  ): Promise<PostEntity> {
-    return this.postService.getPreviewPost(savePostDto);
+  ): Promise<PostDto> {
+    const post: PostEntity = await this.postService.getPreviewPost(savePostDto);
+
+    return serialize<PostDto>(post);
   }
 
 }

@@ -4,6 +4,8 @@ import { Builder } from "builder-pattern";
 import { Ip, IsAuthenticated } from "src/shared/decorators";
 import { GetPostLikeDto, SavePostLikeDto, PostLikeEntity } from "../models";
 import { PostLikeService } from "../services/post-like.service";
+import { PostLikeDto } from "../models/dto/post-like.dto";
+import { serialize } from "src/shared/utils";
 
 @Controller('postlike')
 @ApiTags('포스트 추천 API')
@@ -19,23 +21,26 @@ export class PostLikeController {
     description: '사용자 포스트 추천 정보를 조회한다.',
   })
   @ApiCreatedResponse({
-    type: PostLikeEntity,
-    description: '사용자 포스트 추천 정보',
+    type: PostLikeDto,
+    description: '포스트 추천 DTO',
   })
   @ApiParam({
     type: Number,
     name: 'id',
     description: '포스트 ID',
   })
-  getPostLike(
+  async getPostLike(
     @Ip() ip: string,
     @Param('id', ParseIntPipe) id: number
-  ): Promise<PostLikeEntity> {
+  ): Promise<PostLikeDto> {
     const getPostLikeDto = Builder(GetPostLikeDto)
                             .postId(id)
                             .ip(ip)
                             .build();
-    return this.postLikeService.getPostLike(getPostLikeDto);
+
+    const postLike: PostLikeEntity = await this.postLikeService.getPostLike(getPostLikeDto);
+
+    return serialize<PostLikeDto>(postLike);
   }
 
   @Post()
@@ -51,7 +56,7 @@ export class PostLikeController {
     type: SavePostLikeDto,
     description: '포스트 추천 DTO',
   })
-  savePostLike(
+  async savePostLike(
     @Ip() ip: string,
     @Body(ValidationPipe) savePostLikeDto: SavePostLikeDto,
     @IsAuthenticated() isAuthenticated: boolean,
@@ -59,7 +64,7 @@ export class PostLikeController {
     savePostLikeDto.ip = ip;
     savePostLikeDto.isLogin = isAuthenticated ? 'Y' : 'N';
     
-    return this.postLikeService.savePostLike(savePostLikeDto);
+    return await this.postLikeService.savePostLike(savePostLikeDto);
   }
 
 }

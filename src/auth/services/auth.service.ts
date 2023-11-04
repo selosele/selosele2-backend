@@ -6,7 +6,7 @@ import { UserRoleRepository } from '../repositories/user-role.repository';
 import { Builder } from 'builder-pattern';
 import { JwtService } from '@nestjs/jwt';
 import { BizException } from 'src/shared/exceptions/biz/biz-exception';
-import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, RoleEnum, Tokens } from '../models';
+import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, Roles, Tokens, UserDto } from '../models';
 import { RoleRepository } from '../repositories/role.repository';
 import { compareEncrypt, createJwtRefreshTokenKey, encrypt, isNotBlank, startTransaction } from 'src/shared/utils';
 import { CacheDBService } from 'src/cache-db/services/cache-db.service';
@@ -50,7 +50,7 @@ export class AuthService {
 
       // 1. 사용자를 생성한다.
       const user: UserEntity = await em.withRepository(this.userRepository).addUser(authCredentialsDto);
-      const roles: string[] = [RoleEnum.ROLE_ANONYMOUS, RoleEnum.ROLE_ADMIN];
+      const roles: string[] = [Roles.ROLE_ANONYMOUS, Roles.ROLE_ADMIN];
         
       for (const role of roles) {
 
@@ -94,7 +94,7 @@ export class AuthService {
   }
 
   /** 액세스 토큰과 리프레시 토큰을 생성한다. */
-  async createTokens(user: UserEntity): Promise<Tokens> {
+  async createTokens(user: UserDto): Promise<Tokens> {
     const payload = {
       userSn: user.userSn,
       userRole: user.userRole,

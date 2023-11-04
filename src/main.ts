@@ -6,9 +6,7 @@ import { setupCors, getLogLevels, setupSwagger, setupValidation } from './shared
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-
-    // 로그 레벨 설정
-    logger: getLogLevels(process.env.NODE_ENV),
+    logger: getLogLevels(process.env.NODE_ENV), // 로그 레벨 설정
   });
 
   // API 호출 전역 접두사 설정
@@ -21,19 +19,17 @@ async function bootstrap() {
   app.disable('x-powered-by');
 
   if ('production' === process.env.NODE_ENV) {
-    // Cors 설정
-    setupCors(app);
+    setupCors(app); // Cors 설정
   }
 
   if ('development' === process.env.NODE_ENV) {
-    // Swagger 설정
-    setupSwagger(app);
+    setupSwagger(app); // Swagger 설정
   }
 
   // 유효성 검증 설정
   setupValidation(app);
 
-  const port = process.env.PORT || 3000;
+  const port = (process.env.PORT || 3000);
 
   await app.listen(port);
 
