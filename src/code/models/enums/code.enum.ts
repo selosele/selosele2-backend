@@ -1,7 +1,7 @@
-import { CodeDto } from "../dto/code.dto";
+import { Code } from "../types/code.type";
 
 /** 코드 값 정의 */
-export const Codes: CodeDto[] = [
+export const Codes: Code[] = [
   { id: 'A01001', prefix: 'A01', val: '001', nm: '전체', desc: '포스트 검색조건', useYn: 'Y' },
   { id: 'A01002', prefix: 'A01', val: '002', nm: '제목', desc: '포스트 검색조건', useYn: 'Y' },
   { id: 'A01003', prefix: 'A01', val: '003', nm: '내용', desc: '포스트 검색조건', useYn: 'N' },

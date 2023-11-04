@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { CodeDto } from '../models';
+import { Code } from '../models';
 import { CodeService } from '../services/code.service';
 
 @Controller('code')
@@ -17,10 +17,10 @@ export class CodeController {
     description: '공통코드 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<CodeDto>,
+    type: Array<Code>,
     description: '공통코드 DTO 목록',
   })
-  async listCode(): Promise<CodeDto[]> {
+  async listCode(): Promise<Code[]> {
     return await this.codeService.listCode();
   }
 
@@ -29,10 +29,6 @@ export class CodeController {
     summary: '공통코드 조회 API',
     description: '공통코드를 조회한다.',
   })
-  @ApiCreatedResponse({
-    type: CodeDto,
-    description: '공통코드',
-  })
   @ApiParam({
     type: String,
     name: 'id',
@@ -40,7 +36,7 @@ export class CodeController {
   })
   async getCode(
     @Param('id') id: string
-  ): Promise<CodeDto> {
+  ): Promise<Code> {
     return await this.codeService.getCode(id);
   }
 

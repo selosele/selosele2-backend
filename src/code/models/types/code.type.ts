@@ -1,5 +1,5 @@
 /** 코드 DTO */
-export class CodeDto {
+export type Code = {
 
   /** 코드 ID */
   id?: string;
@@ -17,6 +17,6 @@ export class CodeDto {
   desc?: string;
 
   /** 코드 사용 여부 */
-  useYn?: string;
+  useYn?: 'Y' | 'N';
   
 }
