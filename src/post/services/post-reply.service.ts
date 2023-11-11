@@ -13,7 +13,8 @@ import { UpdatePostReplySortDto } from "../models/dto/update-post-reply-sort.dto
 import { GetPostReplyDto } from "../models/dto/get-post-reply.dto";
 import { ListPostReplyDto } from "../models/dto/list-post-reply.dto";
 import { NotificationRepository } from "src/notification/repositories/notification.repository";
-import { AddNotificationDto } from "src/notification/models";
+import { AddNotificationDto, NotificationCodes } from "src/notification/models";
+import { GlobalCodes } from "src/shared/codes/code";
 
 @Injectable()
 export class PostReplyService {
@@ -75,7 +76,7 @@ export class PostReplyService {
     let res: PostReplyEntity = null;
 
     // 등록
-    if ('E01001' === savePostReplyDto.crudType) {
+    if (GlobalCodes.CRUD_CREATE.id === savePostReplyDto.crudType) {
 
       // 비밀번호 암호화
       savePostReplyDto.authorPw = await encrypt(authorPw);
@@ -128,7 +129,7 @@ export class PostReplyService {
         if ('N' === savePostReplyDto.isLogin) {
           const addNotificationDto = Builder(AddNotificationDto)
                                       .cnncId(res.id)
-                                      .typeCd('D02002')
+                                      .typeCd(NotificationCodes.POST_REPLY.id)
                                       .link(`/post/${savePostReplyDto.parentId}#postReply${res.id}`)
                                       .senderIp(savePostReplyDto.ip)
                                       .senderNm(savePostReplyDto.author)
@@ -139,7 +140,7 @@ export class PostReplyService {
       });
     }
     // 수정
-    else if ('E01003' === savePostReplyDto.crudType) {
+    else if (GlobalCodes.CRUD_UPDATE.id === savePostReplyDto.crudType) {
 
       // 비밀번호 비교
       const isValid: boolean = await this.compareAuthorPassword(savePostReplyDto);
@@ -157,7 +158,7 @@ export class PostReplyService {
       res = await this.postReplyRepository.savePostReply(savePostReplyDto);
     }
     // 삭제
-    else if ('E01004' === savePostReplyDto.crudType) {
+    else if (GlobalCodes.CRUD_DELETE.id === savePostReplyDto.crudType) {
       res = await this.removePostReply(savePostReplyDto);
     }
 

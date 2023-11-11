@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Builder } from "builder-pattern";
-import { AddNotificationDto } from "src/notification/models";
+import { AddNotificationDto, NotificationCodes } from "src/notification/models";
 import { NotificationRepository } from "src/notification/repositories/notification.repository";
 import { BizException } from "src/shared/exceptions/biz/biz-exception";
 import { startTransaction } from "src/shared/utils";
@@ -47,7 +47,7 @@ export class PostLikeService {
         // 2. 알림을 등록한다.
         const addNotificationDto = Builder(AddNotificationDto)
                                     .cnncId(res.id)
-                                    .typeCd('D02001')
+                                    .typeCd(NotificationCodes.POST_LIKE.id)
                                     .link(`/post/${savePostLikeDto.postId}`)
                                     .senderIp(savePostLikeDto.ip)
                                     .title(savePostLikeDto.title)

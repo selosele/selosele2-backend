@@ -20,8 +20,8 @@ export class CodeController {
     type: Array<Code>,
     description: '공통코드 DTO 목록',
   })
-  async listCode(): Promise<Code[]> {
-    return await this.codeService.listCode();
+  listCode(): Code[] {
+    return this.codeService.listCode();
   }
 
   @Get(':id')
@@ -34,10 +34,10 @@ export class CodeController {
     name: 'id',
     description: '코드 ID',
   })
-  async getCode(
+  getCode(
     @Param('id') id: string
-  ): Promise<Code> {
-    return await this.codeService.getCode(id);
+  ): Code {
+    return this.codeService.getCode(id);
   }
 
 }

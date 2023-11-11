@@ -1,4 +1,4 @@
-/** 코드 DTO */
+/** 공통코드 Type */
 export type Code = {
 
   /** 코드 ID */

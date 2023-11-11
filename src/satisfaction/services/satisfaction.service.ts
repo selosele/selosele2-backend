@@ -7,7 +7,7 @@ import { BizException } from 'src/shared/exceptions/biz/biz-exception';
 import { escapeHtml, kakaoUtil, startTransaction } from 'src/shared/utils';
 import { NotificationRepository } from 'src/notification/repositories/notification.repository';
 import { Builder } from 'builder-pattern';
-import { AddNotificationDto } from 'src/notification/models';
+import { AddNotificationDto, NotificationCodes } from 'src/notification/models';
 import { HttpService } from '@nestjs/axios/dist/http.service';
 import { BlogConfigRepository } from 'src/blog-config/repositories/blog-config.repository';
 import { BlogConfigEntity } from 'src/blog-config/models';
@@ -50,7 +50,7 @@ export class SatisfactionService {
       // 2. 알림을 등록한다.
       const addNotificationDto = Builder(AddNotificationDto)
                                   .cnncId(res.id)
-                                  .typeCd('D02005')
+                                  .typeCd(NotificationCodes.SATISFACTION.id)
                                   .link(addSatisfactiontDto.pagePath)
                                   .senderIp(addSatisfactiontDto.ip)
                                   .title(addSatisfactiontDto.pageTitle)

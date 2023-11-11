@@ -6,7 +6,7 @@ import { PaginationDto } from 'src/shared/models';
 import { BizException } from 'src/shared/exceptions';
 import { compareEncrypt, encrypt, escapeHtml, startTransaction } from 'src/shared/utils';
 import { EntityManager } from 'typeorm';
-import { AddNotificationDto } from 'src/notification/models';
+import { AddNotificationDto, NotificationCodes } from 'src/notification/models';
 import { Builder } from 'builder-pattern';
 import { NotificationRepository } from 'src/notification/repositories/notification.repository';
 
@@ -56,7 +56,7 @@ export class GuestbookReplyService {
       if ('N' === addGuestbookReplyDto.adminYn) {
         const addNotificationDto = Builder(AddNotificationDto)
                                     .cnncId(guestbookReply.id)
-                                    .typeCd('D02004')
+                                    .typeCd(NotificationCodes.GUESTBOOK_REPLY.id)
                                     .link('/guestbook')
                                     .senderIp(addGuestbookReplyDto.ip)
                                     .senderNm(addGuestbookReplyDto.author)

@@ -6,7 +6,7 @@ import { GuestbookRepository } from '../repositories/guestbook.repository';
 import { BizException } from 'src/shared/exceptions/biz/biz-exception';
 import { compareEncrypt, encrypt, escapeHtml, startTransaction } from 'src/shared/utils';
 import { EntityManager } from 'typeorm';
-import { AddNotificationDto } from 'src/notification/models';
+import { AddNotificationDto, NotificationCodes } from 'src/notification/models';
 import { Builder } from 'builder-pattern';
 import { NotificationRepository } from 'src/notification/repositories/notification.repository';
 
@@ -54,7 +54,7 @@ export class GuestbookService {
       if ('N' === addGuestbookDto.adminYn) {
         const addNotificationDto = Builder(AddNotificationDto)
                                     .cnncId(guestbook.id)
-                                    .typeCd('D02003')
+                                    .typeCd(NotificationCodes.GUESTBOOK.id)
                                     .link('/guestbook')
                                     .senderIp(addGuestbookDto.ip)
                                     .senderNm(addGuestbookDto.author)

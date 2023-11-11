@@ -1,19 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { Code, Codes } from '../models';
+import { Code } from '../models';
+import { NotificationCodes } from 'src/notification/models';
+import { PostCodes } from 'src/post/models/codes/code';
+import { SatisfactionCodes } from 'src/satisfaction/models';
+import { GlobalCodes } from 'src/shared/codes/code';
 
 @Injectable()
 export class CodeService {
   
-  constructor() {}
-
   /** 공통코드 목록을 조회한다. */
-  async listCode(): Promise<Code[]> {
-    return Codes;
+  listCode(): Code[] {
+    return this.listAllCodes();
   }
 
   /** 공통코드를 조회한다. */
-  async getCode(id: string): Promise<Code> {
-    return Codes.find(d => d.id === id);
+  getCode(id: string): Code {
+    return this.listAllCodes().find(d => d.id === id);
+  }
+
+  /** 각 업무단의 공통코드 목록을 모아서 반환한다. */
+  listAllCodes(): Code[] {
+    return [
+      ...Object.values(GlobalCodes),
+      ...Object.values(NotificationCodes),
+      ...Object.values(PostCodes),
+      ...Object.values(SatisfactionCodes),
+    ].sort((a,b) => a.id.localeCompare(b.id)) as Code[];
   }
 
 }
