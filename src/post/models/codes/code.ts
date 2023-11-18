@@ -1,5 +1,5 @@
 /** 포스트 공통코드 */
-export const PostCodes = {
+export const postCodes = {
   SEARCH_ALL:      { id: 'A01001', prefix: 'A01', val: '001', nm: '전체', desc: '포스트 검색조건', useYn: 'Y' },
   SEARCH_TITLE:    { id: 'A01002', prefix: 'A01', val: '002', nm: '제목', desc: '포스트 검색조건', useYn: 'Y' },
   SEARCH_CONTENT:  { id: 'A01003', prefix: 'A01', val: '003', nm: '내용', desc: '포스트 검색조건', useYn: 'N' },

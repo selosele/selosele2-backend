@@ -1,5 +1,5 @@
 /** 알림 공통코드 */
-export const NotificationCodes = {
+export const notificationCodes = {
   POST_LIKE:       { id: 'D02001', prefix: 'D02', val: '001', nm: '포스트 추천', desc: '알림 유형', useYn: 'Y' },
   POST_REPLY:      { id: 'D02002', prefix: 'D02', val: '002', nm: '포스트 댓글', desc: '알림 유형', useYn: 'Y' },
   GUESTBOOK:       { id: 'D02003', prefix: 'D02', val: '003', nm: '방명록', desc: '알림 유형', useYn: 'Y' },

@@ -1,5 +1,5 @@
 /** 모든 업무단에서 사용되는 공통코드 */
-export const GlobalCodes = {
+export const globalCodes = {
   SNS_TWITTER:   { id: 'C01001', prefix: 'C01', val: '001', nm: '트위터', desc: 'SNS', useYn: 'Y' },
   SNS_FACEBOOK:  { id: 'C01002', prefix: 'C01', val: '002', nm: '페이스북', desc: 'SNS', useYn: 'Y' },
 
@@ -14,6 +14,8 @@ export const GlobalCodes = {
   CRUD_READ:     { id: 'E01002', prefix: 'E01', val: '002', nm: '조회', desc: 'CRUD 유형', useYn: 'Y' },
   CRUD_UPDATE:   { id: 'E01003', prefix: 'E01', val: '003', nm: '수정', desc: 'CRUD 유형', useYn: 'Y' },
   CRUD_DELETE:   { id: 'E01004', prefix: 'E01', val: '004', nm: '삭제', desc: 'CRUD 유형', useYn: 'Y' },
+
+  NICKNAME:      { id: 'F01001', prefix: 'F01', val: '001', nm: '관리자', desc: '닉네임', useYn: 'Y' },
 
   RESPONSE_OK:   { id: 'G01001', prefix: 'G01', val: '001', nm: 'OK', desc: '응답 상태 코드', useYn: 'Y' },
   RESPONSE_NO:   { id: 'G01002', prefix: 'G01', val: '002', nm: 'NO', desc: '응답 상태 코드', useYn: 'Y' },

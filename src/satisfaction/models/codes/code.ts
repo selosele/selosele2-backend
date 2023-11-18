@@ -1,5 +1,5 @@
 /** 만족도조사 공통코드 */
-export const SatisfactionCodes = {
+export const satisfactionCodes = {
   VERY_BAD:      { id: 'B01001', prefix: 'B01', val: '001', nm: '매우 불만족', desc: '만족도조사 점수', useYn: 'Y' },
   BAD:           { id: 'B01002', prefix: 'B01', val: '002', nm: '불만족', desc: '만족도조사 점수', useYn: 'Y' },
   NORMAL:        { id: 'B01003', prefix: 'B01', val: '003', nm: '보통', desc: '만족도조사 점수', useYn: 'Y' },
