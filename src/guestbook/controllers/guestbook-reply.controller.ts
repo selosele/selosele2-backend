@@ -2,9 +2,8 @@ import { Controller, Post, Body, ValidationPipe, Get, Query, Put } from '@nestjs
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Ip, IsAuthenticated } from 'src/shared/decorators';
 import { PaginationDto } from 'src/shared/models';
-import { ListGuestbookReplyDto, AddGuestbookReplyDto, RemoveGuestbookReplyDto, UpdateGuestbookReplyDto, GuestbookReplyEntity } from '../models';
+import { ListGuestbookReplyDto, AddGuestbookReplyDto, RemoveGuestbookReplyDto, UpdateGuestbookReplyDto, GuestbookReplyEntity, GuestbookReplyDto } from '../models';
 import { GuestbookReplyService } from "../services/guestbook-reply.service";
-import { GuestbookReplyDto } from '../models/dto/guestbook-reply.dto';
 import { serialize } from 'src/shared/utils';
 
 @Controller('guestbookreply')

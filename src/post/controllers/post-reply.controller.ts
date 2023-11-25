@@ -3,11 +3,8 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags 
 import { Roles } from "src/auth/models";
 import { Auth, Ip, IsAuthenticated } from "src/shared/decorators";
 import { UpdateResult } from "typeorm";
-import { PostReplyEntity } from "../models";
-import { ListPostReplyDto } from "../models/dto/list-post-reply.dto";
-import { SavePostReplyDto } from "../models/dto/save-post-reply.dto";
+import { ListPostReplyDto, PostReplyDto, PostReplyEntity, SavePostReplyDto } from "../models";
 import { PostReplyService } from "../services/post-reply.service";
-import { PostReplyDto } from "../models/dto/post-reply.dto";
 import { serialize } from "src/shared/utils";
 
 @Controller('postreply')

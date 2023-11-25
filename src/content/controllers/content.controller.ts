@@ -7,12 +7,8 @@ import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.mode
 import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } from 'src/shared/utils';
 import { DeleteResult } from 'typeorm';
-import { RemoveContentDto, ContentEntity } from '../models';
-import { GetContentDto } from '../models/dto/get-content.dto';
-import { ListContentDto } from '../models/dto/list-content.dto';
-import { SaveContentDto } from '../models/dto/save-content.dto';
+import { RemoveContentDto, ContentEntity, GetContentDto, ContentDto, SaveContentDto, ListContentDto } from '../models';
 import { ContentService } from '../services/content.service';
-import { ContentDto } from '../models/dto/content.dto';
 
 @Controller('content')
 @ApiTags('콘텐츠 API')

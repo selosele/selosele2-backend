@@ -1,11 +1,7 @@
 import { CustomRepository } from "src/configs/database/CustomRepository";
 import { isNotEmpty } from "src/shared/utils";
 import { Repository, UpdateResult } from "typeorm";
-import { PostReplyEntity } from "../models";
-import { GetPostReplyDto } from "../models/dto/get-post-reply.dto";
-import { ListPostReplyDto } from "../models/dto/list-post-reply.dto";
-import { SavePostReplyDto } from "../models/dto/save-post-reply.dto";
-import { UpdatePostReplySortDto } from "../models/dto/update-post-reply-sort.dto";
+import { GetPostReplyDto, ListPostReplyDto, PostReplyEntity, SavePostReplyDto, UpdatePostReplySortDto } from "../models";
 
 @CustomRepository(PostReplyEntity)
 export class PostReplyRepository extends Repository<PostReplyEntity> {

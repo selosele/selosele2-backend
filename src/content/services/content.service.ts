@@ -3,14 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Builder } from 'builder-pattern';
 import { FileUploaderResponse } from 'src/file-uploader/models/file-uploader.model';
 import { FileUploaderService } from 'src/file-uploader/services/file-uploader.service';
-import { UpdateContentMenuDto } from 'src/menu/models/dto/update-content-menu.dto';
 import { MenuRepository } from 'src/menu/repositories/menu.repository';
 import { escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotFileEmpty, md, santinizeHtmlOption, startTransaction } from 'src/shared/utils';
 import { DeleteResult, EntityManager } from 'typeorm';
-import { RemoveContentDto, GetContentDto, ContentEntity } from '../models';
-import { ListContentDto } from '../models/dto/list-content.dto';
-import { SaveContentDto } from '../models/dto/save-content.dto';
+import { RemoveContentDto, GetContentDto, ContentEntity, SaveContentDto, ListContentDto } from '../models';
 import { ContentRepository } from '../repositories/content.repository';
+import { UpdateContentMenuDto } from 'src/menu/models';
 
 @Injectable()
 export class ContentService {

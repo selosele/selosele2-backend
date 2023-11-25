@@ -1,7 +1,7 @@
-import { PostCategoryDto } from "src/category/models/dto/post-category.dto";
-import { PostTagDto } from "src/tag/models/dto/post-tag.dto";
+import { PostTagDto } from "src/tag/models";
 import { PostLikeDto } from "./post-like.dto";
 import { PostReplyDto } from "./post-reply.dto";
+import { PostCategoryDto } from "src/category/models";
 
 /** 포스트 DTO */
 export class PostDto {

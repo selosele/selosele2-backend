@@ -3,9 +3,8 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@n
 import { Roles } from 'src/auth/models';
 import { Auth } from 'src/shared/decorators';
 import { UpdateResult } from 'typeorm';
-import { AddNotificationDto, ListNotificationDto, NotificationEntity } from '../models';
+import { AddNotificationDto, ListNotificationDto, NotificationDto, NotificationEntity } from '../models';
 import { NotificationService } from '../services/notification.service';
-import { NotificationDto } from '../models/dto/notification.dto';
 import { serialize } from 'src/shared/utils';
 
 @Controller('notification')

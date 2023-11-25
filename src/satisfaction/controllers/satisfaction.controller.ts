@@ -1,11 +1,10 @@
 import { Body, Query, Controller, Post, Get, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
+import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity, SatisfactionDto } from '../models';
 import { SatisfactionService } from '../services/satisfaction.service';
 import { Auth, Ip, IsAuthenticated } from 'src/shared/decorators';
 import { Roles } from 'src/auth/models';
 import { BizException } from 'src/shared/exceptions/biz/biz-exception';
-import { SatisfactionDto } from '../models/dto/satisfaction.dto';
 import { serialize } from 'src/shared/utils';
 
 @Controller('satisfaction')

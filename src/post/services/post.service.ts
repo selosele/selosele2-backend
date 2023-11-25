@@ -4,7 +4,7 @@ import { PostCategoryRepository } from 'src/category/repositories/post-category.
 import { PaginationDto } from 'src/shared/models';
 import { deserialize, escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, santinizeHtmlOption, serialize, startTransaction } from 'src/shared/utils';
 import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
-import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, GetPostLikeDto, PostLikeEntity, PostReplyEntity } from '../models';
+import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, GetPostLikeDto, PostLikeEntity, PostReplyEntity, PostDto, PostLikeDto, PostReplyDto } from '../models';
 import { SavePostDto } from '../models/dto/save-post.dto';
 import { PostRepository } from '../repositories/post.repository';
 import { BlogConfigRepository } from 'src/blog-config/repositories/blog-config.repository';
@@ -20,9 +20,6 @@ import { FileUploaderResponse } from 'src/file-uploader/models/file-uploader.mod
 import { CountPostDto } from '../models/dto/count-post.dto';
 import { PostLikeService } from './post-like.service';
 import { PostReplyService } from './post-reply.service';
-import { PostLikeDto } from '../models/dto/post-like.dto';
-import { PostDto } from '../models/dto/post.dto';
-import { PostReplyDto } from '../models/dto/post-reply.dto';
 
 @Injectable()
 export class PostService {

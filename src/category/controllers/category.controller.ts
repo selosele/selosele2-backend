@@ -8,9 +8,8 @@ import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { DeleteResult } from 'typeorm';
 import { ListCategoryDto, SaveCategoryDto, CategoryDto, CategoryEntity } from '../models';
 import { CategoryService } from '../services/category.service';
-import { TagEntity } from 'src/tag/models';
+import { TagDto, TagEntity } from 'src/tag/models';
 import { serialize } from 'src/shared/utils';
-import { TagDto } from 'src/tag/models';
 
 @Controller('category')
 @ApiTags('카테고리 API')

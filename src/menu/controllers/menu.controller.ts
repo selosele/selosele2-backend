@@ -7,9 +7,8 @@ import { Builder } from 'builder-pattern';
 import { Roles } from 'src/auth/models';
 import { Auth, IsAuthenticated } from 'src/shared/decorators';
 import { DeleteResult } from 'typeorm';
-import { ListMenuDto, SaveMenuDto, MenuEntity } from '../models';
+import { ListMenuDto, SaveMenuDto, MenuEntity, MenuDto } from '../models';
 import { MenuService } from '../services/menu.service';
-import { MenuDto } from '../models/dto/menu.dto';
 import { serialize } from 'src/shared/utils';
 
 @Controller('menu')

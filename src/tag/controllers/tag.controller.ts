@@ -4,9 +4,8 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@n
 import { Roles } from 'src/auth/models';
 import { Auth } from 'src/shared/decorators';
 import { DeleteResult } from 'typeorm';
-import { SaveTagDto, TagEntity } from '../models';
+import { SaveTagDto, TagDto, TagEntity } from '../models';
 import { TagService } from '../services/tag.service';
-import { TagDto } from '../models/dto/tag.dto';
 import { serialize } from 'src/shared/utils';
 
 @Controller('tag')

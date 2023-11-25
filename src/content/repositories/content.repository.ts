@@ -1,9 +1,6 @@
 import { CustomRepository } from "src/configs/database/CustomRepository";
 import { DeleteResult, Repository } from "typeorm";
-import { ContentEntity } from "../models";
-import { GetContentDto } from "../models/dto/get-content.dto";
-import { ListContentDto } from "../models/dto/list-content.dto";
-import { SaveContentDto } from "../models/dto/save-content.dto";
+import { ContentEntity, GetContentDto, ListContentDto, SaveContentDto } from "../models";
 
 @CustomRepository(ContentEntity)
 export class ContentRepository extends Repository<ContentEntity> {

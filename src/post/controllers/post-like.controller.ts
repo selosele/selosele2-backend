@@ -2,9 +2,8 @@ import { Body, Controller, Get, Param, ParseIntPipe, Post, ValidationPipe } from
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { Builder } from "builder-pattern";
 import { Ip, IsAuthenticated } from "src/shared/decorators";
-import { GetPostLikeDto, SavePostLikeDto, PostLikeEntity } from "../models";
+import { GetPostLikeDto, SavePostLikeDto, PostLikeEntity, PostLikeDto } from "../models";
 import { PostLikeService } from "../services/post-like.service";
-import { PostLikeDto } from "../models/dto/post-like.dto";
 import { serialize } from "src/shared/utils";
 
 @Controller('postlike')
