@@ -3,14 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
 import { SatisfactionRepository } from '../repositories/satisfaction.repository';
-import { BizException } from 'src/shared/exceptions/biz/biz-exception';
-import { escapeHtml, kakaoUtil, startTransaction } from 'src/shared/utils';
-import { NotificationRepository } from 'src/notification/repositories/notification.repository';
+import { BizException } from '@/shared/exceptions/biz/biz-exception';
+import { escapeHtml, kakaoUtil, startTransaction } from '@/shared/utils';
+import { NotificationRepository } from '@/notification/repositories/notification.repository';
 import { Builder } from 'builder-pattern';
-import { AddNotificationDto, notificationCodes } from 'src/notification/models';
+import { AddNotificationDto, notificationCodes } from '@/notification/models';
 import { HttpService } from '@nestjs/axios/dist/http.service';
-import { BlogConfigRepository } from 'src/blog-config/repositories/blog-config.repository';
-import { BlogConfigEntity } from 'src/blog-config/models';
+import { BlogConfigRepository } from '@/blog-config/repositories/blog-config.repository';
+import { BlogConfigEntity } from '@/blog-config/models';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

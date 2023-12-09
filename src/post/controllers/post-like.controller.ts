@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, ValidationPipe } from "@nestjs/common";
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { Builder } from "builder-pattern";
-import { Ip, IsAuthenticated } from "src/shared/decorators";
+import { Ip, IsAuthenticated } from "@/shared/decorators";
 import { GetPostLikeDto, SavePostLikeDto, PostLikeEntity, PostLikeDto } from "../models";
 import { PostLikeService } from "../services/post-like.service";
-import { serialize } from "src/shared/utils";
+import { serialize } from "@/shared/utils";
 
 @Controller('postlike')
 @ApiTags('포스트 추천 API')

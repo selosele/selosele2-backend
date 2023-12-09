@@ -6,8 +6,8 @@ import { UserEntity } from '../models';
 import { UserRepository } from '../repositories/user.repository';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from '../services/auth.service';
-import { CacheDBService } from 'src/cache-db/services/cache-db.service';
-import { createJwtRefreshTokenKey } from 'src/shared/utils';
+import { CacheDBService } from '@/cache-db/services/cache-db.service';
+import { createJwtRefreshTokenKey } from '@/shared/utils';
 import { Request } from 'express';
 
 @Injectable()

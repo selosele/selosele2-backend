@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Code } from '../models';
-import { notificationCodes } from 'src/notification/models';
-import { postCodes } from 'src/post/models/codes/code';
-import { satisfactionCodes } from 'src/satisfaction/models';
-import { globalCodes } from 'src/shared/codes/code';
+import { notificationCodes } from '@/notification/models';
+import { postCodes } from '@/post/models/codes/code';
+import { satisfactionCodes } from '@/satisfaction/models';
+import { globalCodes } from '@/shared/codes/code';
 
 @Injectable()
 export class CodeService {

@@ -1,6 +1,6 @@
-import { CustomRepository } from 'src/configs/database/CustomRepository';
 import { InsertResult, Repository } from 'typeorm';
 import { AuthCredentialsRoleDto, UserRoleEntity } from '../models';
+import { CustomRepository } from '@/configs/database/CustomRepository';
 
 @CustomRepository(UserRoleEntity)
 export class UserRoleRepository extends Repository<UserRoleEntity> {

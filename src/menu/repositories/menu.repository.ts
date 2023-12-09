@@ -1,5 +1,5 @@
-import { CustomRepository } from 'src/configs/database/CustomRepository';
-import { isNotEmpty } from 'src/shared/utils';
+import { CustomRepository } from '@/configs/database/CustomRepository';
+import { isNotEmpty } from '@/shared/utils';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ListMenuDto, SaveMenuDto, UpdateContentMenuDto, MenuEntity } from '../models';
 

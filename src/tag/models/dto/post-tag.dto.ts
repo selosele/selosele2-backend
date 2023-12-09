@@ -1,4 +1,4 @@
-import { PostDto } from "src/post/models";
+import { PostDto } from "@/post/models";
 import { TagDto } from "./tag.dto";
 
 /** 포스트 태그 DTO */

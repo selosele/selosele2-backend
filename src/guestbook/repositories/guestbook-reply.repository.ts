@@ -1,5 +1,5 @@
-import { CustomRepository } from "src/configs/database/CustomRepository";
-import { PaginationDto } from "src/shared/models";
+import { CustomRepository } from "@/configs/database/CustomRepository";
+import { PaginationDto } from "@/shared/models";
 import { Repository } from "typeorm";
 import { AddGuestbookReplyDto, UpdateGuestbookReplyDto, ListGuestbookReplyDto, GuestbookReplyEntity } from "../models";
 

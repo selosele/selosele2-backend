@@ -4,7 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './services/auth.service';
 import { AuthController } from './controllers/auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomTypeOrmModule } from 'src/configs/database/CustomTypeOrmModule';
+import { CustomTypeOrmModule } from '@/configs/database/CustomTypeOrmModule';
 import { UserRepository } from './repositories/user.repository';
 import { UserRoleRepository } from './repositories/user-role.repository';
 import { JwtAccessStrategy } from './strategies/jwt-access.strategy';

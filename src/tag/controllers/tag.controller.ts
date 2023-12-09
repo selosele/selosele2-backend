@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Put, Body, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 import { Delete, Param } from '@nestjs/common/decorators';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/auth/models';
-import { Auth } from 'src/shared/decorators';
+import { Roles } from '@/auth/models';
+import { Auth } from '@/shared/decorators';
 import { DeleteResult } from 'typeorm';
 import { SaveTagDto, TagDto, TagEntity } from '../models';
 import { TagService } from '../services/tag.service';
-import { serialize } from 'src/shared/utils';
+import { serialize } from '@/shared/utils';
 
 @Controller('tag')
 @ApiTags('태그 API')

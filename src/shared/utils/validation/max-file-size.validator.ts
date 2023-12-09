@@ -1,5 +1,5 @@
 import { MaxFileSizeValidator as DefaultMaxFileSizeValidator } from '@nestjs/common';
-import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
+import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
 
 /** 파일 최대 용량 확인 validator */
 export class MaxFileSizeValidator extends DefaultMaxFileSizeValidator {

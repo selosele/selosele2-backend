@@ -1,5 +1,5 @@
-import { CustomRepository } from 'src/configs/database/CustomRepository';
 import { Repository } from 'typeorm';
+import { CustomRepository } from '@/configs/database/CustomRepository';
 import { RoleEntity } from '../models';
 
 @CustomRepository(RoleEntity)

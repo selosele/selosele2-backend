@@ -1,15 +1,15 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Builder } from "builder-pattern";
-import { BizException } from "src/shared/exceptions";
-import { compareEncrypt, encrypt, escapeHtml, isEmpty, isNotEmpty, startTransaction } from "src/shared/utils";
+import { BizException } from "@/shared/exceptions";
+import { compareEncrypt, encrypt, escapeHtml, isEmpty, isNotEmpty, startTransaction } from "@/shared/utils";
 import { EntityManager, UpdateResult } from "typeorm";
 import { PostEntity, PostReplyEntity, GetPostDto, ListPostReplyDto, SavePostReplyDto, GetPostReplyDto, UpdatePostReplySortDto, SavePostDto } from "../models";
 import { PostReplyRepository } from "../repositories/post-reply.repository";
 import { PostRepository } from "../repositories/post.repository";
-import { NotificationRepository } from "src/notification/repositories/notification.repository";
-import { AddNotificationDto, notificationCodes } from "src/notification/models";
-import { globalCodes } from "src/shared/codes/code";
+import { NotificationRepository } from "@/notification/repositories/notification.repository";
+import { AddNotificationDto, notificationCodes } from "@/notification/models";
+import { globalCodes } from "@/shared/codes/code";
 
 @Injectable()
 export class PostReplyService {

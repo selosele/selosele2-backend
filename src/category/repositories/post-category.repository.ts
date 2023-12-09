@@ -1,6 +1,6 @@
-import { CustomRepository } from "src/configs/database/CustomRepository";
-import { ListPostDto, SearchPostDto } from "src/post/models";
-import { PaginationDto } from "src/shared/models";
+import { CustomRepository } from "@/configs/database/CustomRepository";
+import { ListPostDto, SearchPostDto } from "@/post/models";
+import { PaginationDto } from "@/shared/models";
 import { Brackets, DeleteResult, Repository } from "typeorm";
 import { SavePostCategoryDto, PostCategoryEntity } from "../models";
 

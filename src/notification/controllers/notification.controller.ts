@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/auth/models';
-import { Auth } from 'src/shared/decorators';
+import { Roles } from '@/auth/models';
+import { Auth } from '@/shared/decorators';
 import { UpdateResult } from 'typeorm';
 import { AddNotificationDto, ListNotificationDto, NotificationDto, NotificationEntity } from '../models';
 import { NotificationService } from '../services/notification.service';
-import { serialize } from 'src/shared/utils';
+import { serialize } from '@/shared/utils';
 
 @Controller('notification')
 @ApiTags('알림 API')

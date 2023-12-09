@@ -1,10 +1,10 @@
 import { Controller, Get, Query, ValidationPipe, Put, Body } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/auth/models';
-import { Auth } from 'src/shared/decorators';
+import { Roles } from '@/auth/models';
+import { Auth } from '@/shared/decorators';
 import { ListWidgetDto, UpdateWidgetUseYnDto, UpdateWidgetDto, WidgetDto, WidgetEntity } from '../models';
 import { WidgetService } from '../services/widget.service';
-import { serialize } from 'src/shared/utils';
+import { serialize } from '@/shared/utils';
 
 @Controller('widget')
 @ApiTags('위젯 API')

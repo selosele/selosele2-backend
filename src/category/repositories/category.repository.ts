@@ -1,5 +1,5 @@
-import { CustomRepository } from 'src/configs/database/CustomRepository';
-import { PostEntity } from 'src/post/models';
+import { CustomRepository } from '@/configs/database/CustomRepository';
+import { PostEntity } from '@/post/models';
 import { DeleteResult, Repository } from 'typeorm';
 import { ListCategoryDto, SaveCategoryDto, CategoryEntity, PostCategoryEntity } from '../models';
 

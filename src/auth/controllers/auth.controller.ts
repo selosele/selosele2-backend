@@ -1,14 +1,13 @@
 import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Logger, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { AuthCredentialsDto, UserDto, RoleDto, UserEntity, RoleEntity, Roles, Tokens } from '../models';
-import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
-import { Auth, Ip, RefreshTokenUser } from 'src/shared/decorators';
-import { CacheDBService } from 'src/cache-db/services/cache-db.service';
-import { createJwtRefreshTokenKey, isBlank, serialize } from 'src/shared/utils';
+import { AccessTokenUser, Auth, Ip, RefreshTokenUser } from '@/shared/decorators';
 import { Response } from 'express';
-import { AccessTokenUser } from 'src/shared/decorators/auth/access-token-user.decorator';
-import { JwtRefreshGuard } from 'src/shared/guards/auth/jwt-refresh.guard';
+import { AuthService } from '../services/auth.service';
+import { CacheDBService } from '@/cache-db/services/cache-db.service';
+import { AuthCredentialsDto, RoleDto, RoleEntity, Roles, Tokens, UserDto, UserEntity } from '../models';
+import { createJwtRefreshTokenKey, isBlank, serialize } from '@/shared/utils';
+import { JwtRefreshGuard } from '@/shared/guards/auth/jwt-refresh.guard';
 
 @Controller('auth')
 @ApiTags('인증·인가 API')

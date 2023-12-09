@@ -1,10 +1,10 @@
 import { Controller, Post, Body, ValidationPipe, Get, Query, Put } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Ip, IsAuthenticated } from 'src/shared/decorators';
-import { PaginationDto } from 'src/shared/models';
+import { Ip, IsAuthenticated } from '@/shared/decorators';
+import { PaginationDto } from '@/shared/models';
 import { ListGuestbookReplyDto, AddGuestbookReplyDto, RemoveGuestbookReplyDto, UpdateGuestbookReplyDto, GuestbookReplyEntity, GuestbookReplyDto } from '../models';
 import { GuestbookReplyService } from "../services/guestbook-reply.service";
-import { serialize } from 'src/shared/utils';
+import { serialize } from '@/shared/utils';
 
 @Controller('guestbookreply')
 @ApiTags('방명록 댓글 API')

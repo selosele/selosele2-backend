@@ -1,6 +1,6 @@
-import { CustomRepository } from 'src/configs/database/CustomRepository';
-import { PaginationDto } from 'src/shared/models';
-import { isNotEmpty } from 'src/shared/utils';
+import { CustomRepository } from '@/configs/database/CustomRepository';
+import { PaginationDto } from '@/shared/models';
+import { isNotEmpty } from '@/shared/utils';
 import { Between, Brackets, DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { GetPostDto, ListPostDto, SearchPostDto, PostEntity } from '../models';
 import { CountPostDto } from '../models/dto/count-post.dto';

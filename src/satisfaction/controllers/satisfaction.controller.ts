@@ -2,10 +2,10 @@ import { Body, Query, Controller, Post, Get, ValidationPipe } from '@nestjs/comm
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity, SatisfactionDto } from '../models';
 import { SatisfactionService } from '../services/satisfaction.service';
-import { Auth, Ip, IsAuthenticated } from 'src/shared/decorators';
-import { Roles } from 'src/auth/models';
-import { BizException } from 'src/shared/exceptions/biz/biz-exception';
-import { serialize } from 'src/shared/utils';
+import { Auth, Ip, IsAuthenticated } from '@/shared/decorators';
+import { Roles } from '@/auth/models';
+import { BizException } from '@/shared/exceptions/biz/biz-exception';
+import { serialize } from '@/shared/utils';
 
 @Controller('satisfaction')
 @ApiTags('만족도조사 API')

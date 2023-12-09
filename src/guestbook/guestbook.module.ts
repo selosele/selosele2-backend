@@ -2,15 +2,15 @@ import { Module } from '@nestjs/common';
 import { GuestbookService } from './services/guestbook.service';
 import { GuestbookController } from './controllers/guestbook.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomTypeOrmModule } from 'src/configs/database/CustomTypeOrmModule';
+import { CustomTypeOrmModule } from '@/configs/database/CustomTypeOrmModule';
 import { GuestbookEntity, GuestbookReplyEntity } from './models';
 import { GuestbookRepository } from './repositories/guestbook.repository';
 import { GuestbookReplyRepository } from './repositories/guestbook-reply.repository';
 import { GuestbookReplyService } from './services/guestbook-reply.service';
 import { GuestbookReplyController } from './controllers/guestbook-reply.controller';
-import { NotificationService } from 'src/notification/services/notification.service';
-import { NotificationRepository } from 'src/notification/repositories/notification.repository';
-import { NotificationEntity } from 'src/notification/models';
+import { NotificationService } from '@/notification/services/notification.service';
+import { NotificationRepository } from '@/notification/repositories/notification.repository';
+import { NotificationEntity } from '@/notification/models';
 
 @Module({
   imports: [

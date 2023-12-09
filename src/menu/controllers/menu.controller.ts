@@ -4,12 +4,12 @@ import { Post, Put } from '@nestjs/common/decorators/http/request-mapping.decora
 import { Body } from '@nestjs/common/decorators/http/route-params.decorator';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import { Roles } from 'src/auth/models';
-import { Auth, IsAuthenticated } from 'src/shared/decorators';
+import { Roles } from '@/auth/models';
+import { Auth, IsAuthenticated } from '@/shared/decorators';
 import { DeleteResult } from 'typeorm';
 import { ListMenuDto, SaveMenuDto, MenuEntity, MenuDto } from '../models';
 import { MenuService } from '../services/menu.service';
-import { serialize } from 'src/shared/utils';
+import { serialize } from '@/shared/utils';
 
 @Controller('menu')
 @ApiTags('메뉴 API')

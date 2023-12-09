@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomTypeOrmModule } from 'src/configs/database/CustomTypeOrmModule';
+import { CustomTypeOrmModule } from '@/configs/database/CustomTypeOrmModule';
 import { NotificationController } from './controllers/notification.controller';
 import { NotificationEntity } from './models';
 import { NotificationRepository } from './repositories/notification.repository';

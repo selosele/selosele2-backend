@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { isEmpty } from "src/shared/utils";
+import { isEmpty } from "@/shared/utils";
 import { UserDto } from "../../../auth/models";
 
 /**

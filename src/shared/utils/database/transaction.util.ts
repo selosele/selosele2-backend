@@ -1,4 +1,4 @@
-import { dataSorce } from 'src/configs/database/typeorm.config';
+import { dataSorce } from '@/configs/database/typeorm.config';
 import { EntityManager } from 'typeorm';
 
 /** 트랜잭션 유틸 */

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Builder } from 'builder-pattern';
-import { RoleRepository } from 'src/auth/repositories/role.repository';
-import { startTransaction } from 'src/shared/utils';
+import { RoleRepository } from '@/auth/repositories/role.repository';
+import { startTransaction } from '@/shared/utils';
 import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
 import { ListMenuDto, SaveMenuRoleDto, SaveMenuDto, MenuEntity, UpdateContentMenuDto } from '../models';
 import { MenuRoleRepository } from '../repositories/menu-role.repository';

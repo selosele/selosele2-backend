@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginationDto } from 'src/shared/models';
+import { PaginationDto } from '@/shared/models';
 import { AddGuestbookDto, RemoveGuestbookDto, UpdateGuestbookDto, GuestbookEntity } from '../models';
 import { GuestbookRepository } from '../repositories/guestbook.repository';
-import { BizException } from 'src/shared/exceptions/biz/biz-exception';
-import { compareEncrypt, encrypt, escapeHtml, startTransaction } from 'src/shared/utils';
+import { BizException } from '@/shared/exceptions/biz/biz-exception';
+import { compareEncrypt, encrypt, escapeHtml, startTransaction } from '@/shared/utils';
 import { EntityManager } from 'typeorm';
-import { AddNotificationDto, notificationCodes } from 'src/notification/models';
+import { AddNotificationDto, notificationCodes } from '@/notification/models';
 import { Builder } from 'builder-pattern';
-import { NotificationRepository } from 'src/notification/repositories/notification.repository';
+import { NotificationRepository } from '@/notification/repositories/notification.repository';
 
 @Injectable()
 export class GuestbookService {

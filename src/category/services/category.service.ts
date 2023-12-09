@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
 import { ListCategoryDto, SaveCategoryDto, CategoryEntity } from '../models';
 import { CategoryRepository } from '../repositories/category.repository';
-import { TagRepository } from 'src/tag/repositories/tag.repository';
-import { ListTagDto, TagEntity } from 'src/tag/models';
+import { TagRepository } from '@/tag/repositories/tag.repository';
+import { ListTagDto, TagEntity } from '@/tag/models';
 
 @Injectable()
 export class CategoryService {

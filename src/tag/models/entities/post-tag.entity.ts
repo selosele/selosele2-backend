@@ -1,6 +1,6 @@
 import { BaseEntity, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { PostEntity } from 'src/post/models';
+import { PostEntity } from '@/post/models';
 import { TagEntity } from './tag.entity';
 
 @Entity('post_tag')

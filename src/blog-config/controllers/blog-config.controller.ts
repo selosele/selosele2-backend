@@ -3,12 +3,12 @@ import { BlogConfigService } from '../services/blog-config.service';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiBody } from '@nestjs/swagger';
 import { BlogConfigEntity, BlogConfigDto, UpdateBlogConfigDto } from '../models';
 import { Body, Put, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
-import { Auth } from 'src/shared/decorators';
-import { Roles } from 'src/auth/models';
+import { Auth } from '@/shared/decorators';
+import { Roles } from '@/auth/models';
 import { ParseFilePipe, ValidationPipe } from '@nestjs/common/pipes';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
-import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
-import { FileTypeValidator, MaxFileSizeValidator, serialize } from 'src/shared/utils';
+import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
+import { FileTypeValidator, MaxFileSizeValidator, serialize } from '@/shared/utils';
 
 @Controller('blogconfig')
 @ApiTags('블로그 환경설정 API')

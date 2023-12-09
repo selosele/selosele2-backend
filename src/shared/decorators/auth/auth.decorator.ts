@@ -1,5 +1,5 @@
 import { applyDecorators, UseGuards, SetMetadata } from '@nestjs/common';
-import { JwtAccessGuard, RoleGuard } from 'src/shared/guards';
+import { JwtAccessGuard, RoleGuard } from '@/shared/guards';
 
 /** 인증·인가 데코레이터 */
 export function Auth(...roles: string[]) {

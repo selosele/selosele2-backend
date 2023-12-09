@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsNumber, IsOptional, Max, MaxLength, Min } from 'class-validator';
-import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
+import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
 
 /** 블로그 환경설정 수정 DTO */
 export class UpdateBlogConfigDto {

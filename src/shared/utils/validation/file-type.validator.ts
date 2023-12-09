@@ -1,5 +1,5 @@
 import { FileTypeValidator as DefaultFileSizeValidator } from '@nestjs/common';
-import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
+import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
 
 /** 파일 유형 확인 validator */
 export class FileTypeValidator extends DefaultFileSizeValidator {

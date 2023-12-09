@@ -1,4 +1,4 @@
-import { CustomRepository } from "src/configs/database/CustomRepository";
+import { CustomRepository } from "@/configs/database/CustomRepository";
 import { Repository } from "typeorm";
 import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from "../models";
 

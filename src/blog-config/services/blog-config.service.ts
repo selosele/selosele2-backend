@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BlogConfigEntity, UpdateBlogConfigDto } from '../models';
 import { BlogConfigRepository } from '../repositories/blog-config.repository';
-import { FileUploaderService } from 'src/file-uploader/services/file-uploader.service';
-import { FileUploaderRequest, FileUploaderResponse } from 'src/file-uploader/models/file-uploader.model';
-import { isNotBlank, isNotEmpty } from 'src/shared/utils';
+import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
+import { FileUploaderRequest, FileUploaderResponse } from '@/file-uploader/models/file-uploader.model';
+import { isNotBlank, isNotEmpty } from '@/shared/utils';
 
 @Injectable()
 export class BlogConfigService {

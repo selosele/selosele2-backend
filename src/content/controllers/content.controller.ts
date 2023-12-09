@@ -2,10 +2,10 @@ import { Controller, Get, Body, ValidationPipe, Post, Param, Delete, ParseIntPip
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import { Roles } from 'src/auth/models';
-import { FileUploaderRequest } from 'src/file-uploader/models/file-uploader.model';
-import { Auth, IsAuthenticated } from 'src/shared/decorators';
-import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } from 'src/shared/utils';
+import { Roles } from '@/auth/models';
+import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
+import { Auth, IsAuthenticated } from '@/shared/decorators';
+import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } from '@/shared/utils';
 import { DeleteResult } from 'typeorm';
 import { RemoveContentDto, ContentEntity, GetContentDto, ContentDto, SaveContentDto, ListContentDto } from '../models';
 import { ContentService } from '../services/content.service';

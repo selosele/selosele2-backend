@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from "@nestjs/common";
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { Roles } from "src/auth/models";
-import { Auth, Ip, IsAuthenticated } from "src/shared/decorators";
+import { Roles } from "@/auth/models";
+import { Auth, Ip, IsAuthenticated } from "@/shared/decorators";
 import { UpdateResult } from "typeorm";
 import { ListPostReplyDto, PostReplyDto, PostReplyEntity, SavePostReplyDto } from "../models";
 import { PostReplyService } from "../services/post-reply.service";
-import { serialize } from "src/shared/utils";
+import { serialize } from "@/shared/utils";
 
 @Controller('postreply')
 @ApiTags('포스트 댓글 API')

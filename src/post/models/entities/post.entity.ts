@@ -1,7 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { PostCategoryEntity } from 'src/category/models';
-import { PostTagEntity } from 'src/tag/models';
+import { PostCategoryEntity } from '@/category/models';
+import { PostTagEntity } from '@/tag/models';
 import { PostLikeEntity } from './post-like.entity';
 import { PostReplyEntity } from './post-reply.entity';
 

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomTypeOrmModule } from 'src/configs/database/CustomTypeOrmModule';
+import { CustomTypeOrmModule } from '@/configs/database/CustomTypeOrmModule';
 import { BlogConfigController } from './controllers/blog-config.controller';
 import { BlogConfigEntity } from './models';
 import { BlogConfigRepository } from './repositories/blog-config.repository';
 import { BlogConfigService } from './services/blog-config.service';
-import { FileUploaderService } from 'src/file-uploader/services/file-uploader.service';
+import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
 
 @Module({
   imports: [

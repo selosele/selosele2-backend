@@ -1,4 +1,4 @@
-import { PostDto } from "src/post/models";
+import { PostDto } from "@/post/models";
 import { CategoryDto } from "./category.dto";
 
 /** 포스트 카테고리 DTO */

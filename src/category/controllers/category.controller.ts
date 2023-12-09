@@ -3,13 +3,13 @@ import { Delete, Param } from '@nestjs/common/decorators';
 import { ValidationPipe } from '@nestjs/common/pipes';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import { Roles } from 'src/auth/models';
-import { Auth, IsAuthenticated } from 'src/shared/decorators';
+import { Roles } from '@/auth/models';
+import { Auth, IsAuthenticated } from '@/shared/decorators';
 import { DeleteResult } from 'typeorm';
 import { ListCategoryDto, SaveCategoryDto, CategoryDto, CategoryEntity } from '../models';
 import { CategoryService } from '../services/category.service';
-import { TagDto, TagEntity } from 'src/tag/models';
-import { serialize } from 'src/shared/utils';
+import { TagDto, TagEntity } from '@/tag/models';
+import { serialize } from '@/shared/utils';
 
 @Controller('category')
 @ApiTags('카테고리 API')
