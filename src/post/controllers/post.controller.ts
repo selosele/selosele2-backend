@@ -8,10 +8,8 @@ import { Auth, Ip, IsAuthenticated } from '@/shared/decorators';
 import { PaginationDto } from '@/shared/models';
 import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } from '@/shared/utils';
 import { DeleteResult } from 'typeorm';
-import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity } from '../models';
-import { SavePostDto } from '../models/dto/save-post.dto';
+import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, PostDto, SavePostDto } from '../models';
 import { PostService } from '../services/post.service';
-import { PostDto } from '../models/dto/post.dto';
 
 @Controller('post')
 @ApiTags('포스트 API')
