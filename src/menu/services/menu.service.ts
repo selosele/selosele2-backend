@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Builder } from 'builder-pattern';
 import { RoleRepository } from '@/auth/repositories/role.repository';
-import { startTransaction } from '@/shared/utils';
-import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
+import { DataSource, DeleteResult, EntityManager, UpdateResult } from 'typeorm';
 import { ListMenuDto, SaveMenuRoleDto, SaveMenuDto, MenuEntity, UpdateContentMenuDto } from '../models';
 import { MenuRoleRepository } from '../repositories/menu-role.repository';
 import { MenuRepository } from '../repositories/menu.repository';
@@ -18,6 +17,7 @@ export class MenuService {
     private readonly menuRoleRepository: MenuRoleRepository,
     @InjectRepository(RoleRepository)
     private readonly roleRepository: RoleRepository,
+    private readonly dataSource: DataSource,
   ) {}
 
   /** 계층형 메뉴 목록을 조회한다(최대 2depth). */
@@ -35,7 +35,7 @@ export class MenuService {
     let menu: MenuEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (em: EntityManager) => {
+    await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
       // 1. 메뉴를 저장한다.
       menu = await em.withRepository(this.menuRepository).saveMenu(saveMenuDto);
@@ -86,7 +86,7 @@ export class MenuService {
     let res: DeleteResult = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (em: EntityManager) => {
+    await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
       // 1. 메뉴 권한을 삭제한다.
       const removeMenuRoleDto = Builder(SaveMenuRoleDto)

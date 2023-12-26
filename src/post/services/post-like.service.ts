@@ -4,9 +4,8 @@ import { Builder } from "builder-pattern";
 import { AddNotificationDto, notificationCodes } from "@/notification/models";
 import { NotificationRepository } from "@/notification/repositories/notification.repository";
 import { BizException } from "@/shared/exceptions/biz/biz-exception";
-import { startTransaction } from "@/shared/utils";
 import { isEmpty } from "@/shared/utils/common/common.util";
-import { DeleteResult, EntityManager } from "typeorm";
+import { DataSource, DeleteResult, EntityManager } from "typeorm";
 import { GetPostLikeDto, SavePostLikeDto, PostLikeEntity } from "../models";
 import { PostLikeRepository } from "../repositories/post-like.repository";
 
@@ -18,6 +17,7 @@ export class PostLikeService {
     private readonly postLikeRepository: PostLikeRepository,
     @InjectRepository(NotificationRepository)
     private readonly notificationRepository: NotificationRepository,
+    private readonly dataSource: DataSource,
   ) {}
 
   /** 사용자 포스트 추천 정보를 조회한다. */
@@ -39,7 +39,7 @@ export class PostLikeService {
       let res: PostLikeEntity = null;
 
       // 트랜잭션을 시작한다.
-      await startTransaction(async (em: EntityManager) => {
+      await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
         // 1. 추천을 등록한다.
         res = await em.withRepository(this.postLikeRepository).addPostLike(savePostLikeDto);

@@ -1,4 +1,4 @@
-import { CustomRepository } from "@/configs/database/CustomRepository";
+import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { PaginationDto } from "@/shared/models";
 import { Repository } from "typeorm";
 import { AddGuestbookDto, UpdateGuestbookDto, GuestbookEntity } from "../models";

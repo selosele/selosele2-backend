@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { GuestbookService } from './services/guestbook.service';
 import { GuestbookController } from './controllers/guestbook.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomTypeOrmModule } from '@/configs/database/CustomTypeOrmModule';
+import { CustomRepositoryModule } from '@/database/repository/custom-repository.module';
 import { GuestbookEntity, GuestbookReplyEntity } from './models';
 import { GuestbookRepository } from './repositories/guestbook.repository';
 import { GuestbookReplyRepository } from './repositories/guestbook-reply.repository';
@@ -11,15 +11,17 @@ import { GuestbookReplyController } from './controllers/guestbook-reply.controll
 import { NotificationService } from '@/notification/services/notification.service';
 import { NotificationRepository } from '@/notification/repositories/notification.repository';
 import { NotificationEntity } from '@/notification/models';
+import { DatabaseModule } from '@/database/database.module';
 
 @Module({
   imports: [
+    DatabaseModule,
     TypeOrmModule.forFeature([
       GuestbookEntity,
       GuestbookReplyEntity,
       NotificationEntity
     ]),
-    CustomTypeOrmModule.forCustomRepository([
+    CustomRepositoryModule.forCustomRepository([
       GuestbookRepository,
       GuestbookReplyRepository,
       NotificationRepository

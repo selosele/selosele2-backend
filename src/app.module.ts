@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { CodeModule } from './code/code.module';
 import { BlogConfigModule } from './blog-config/blog-config.module';
 import { MenuModule } from './menu/menu.module';
 import { PostModule } from './post/post.module';
 import { ConfigModule } from '@nestjs/config';
-import { typeORMConfig } from './configs/database/typeorm.config';
 import { WidgetModule } from './widget/widget.module';
 import { CategoryModule } from './category/category.module';
 import { TagModule } from './tag/tag.module';
@@ -30,7 +28,6 @@ import { CacheDBModule } from './cache-db/cache-db.module';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
     }),
-    TypeOrmModule.forRoot(typeORMConfig),
     CacheDBModule,
     FileUploaderModule,
     AuthModule,

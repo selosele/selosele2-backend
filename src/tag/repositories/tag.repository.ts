@@ -1,4 +1,4 @@
-import { CustomRepository } from '@/configs/database/CustomRepository';
+import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { PostEntity } from '@/post/models';
 import { DeleteResult, Repository } from 'typeorm';
 import { ListTagDto, SaveTagDto, PostTagEntity, TagEntity } from '../models';

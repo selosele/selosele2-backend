@@ -4,8 +4,8 @@ import { Builder } from 'builder-pattern';
 import { FileUploaderResponse } from '@/file-uploader/models/file-uploader.model';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
 import { MenuRepository } from '@/menu/repositories/menu.repository';
-import { escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotFileEmpty, md, santinizeHtmlOption, startTransaction } from '@/shared/utils';
-import { DeleteResult, EntityManager } from 'typeorm';
+import { escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotFileEmpty, md, santinizeHtmlOption } from '@/shared/utils';
+import { DataSource, DeleteResult, EntityManager } from 'typeorm';
 import { RemoveContentDto, GetContentDto, ContentEntity, SaveContentDto, ListContentDto } from '../models';
 import { ContentRepository } from '../repositories/content.repository';
 import { UpdateContentMenuDto } from '@/menu/models';
@@ -19,6 +19,7 @@ export class ContentService {
     @InjectRepository(MenuRepository)
     private readonly menuRepository: MenuRepository,
     private readonly fileUploaderService: FileUploaderService,
+    private readonly dataSource: DataSource,
   ) {}
 
   /** 콘텐츠 목록을 조회한다. */
@@ -84,7 +85,7 @@ export class ContentService {
     let content: ContentEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (em: EntityManager) => {
+    await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
       // 1. 콘텐츠를 저장한다.
       content = await em.withRepository(this.contentRepository).saveContent(saveContentDto);

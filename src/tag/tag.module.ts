@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TagService } from './services/tag.service';
 import { TagController } from './controllers/tag.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomTypeOrmModule } from '@/configs/database/CustomTypeOrmModule';
+import { CustomRepositoryModule } from '@/database/repository/custom-repository.module';
 import { TagEntity, PostTagEntity } from './models';
 import { TagRepository } from './repositories/tag.repository';
 import { PostTagRepository } from './repositories/post-tag.repository';
@@ -13,7 +13,7 @@ import { PostTagRepository } from './repositories/post-tag.repository';
       TagEntity,
       PostTagEntity
     ]),
-    CustomTypeOrmModule.forCustomRepository([
+    CustomRepositoryModule.forCustomRepository([
       TagRepository,
       PostTagRepository
     ]),

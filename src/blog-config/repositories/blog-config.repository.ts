@@ -1,4 +1,4 @@
-import { CustomRepository } from '@/configs/database/CustomRepository';
+import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { Repository } from 'typeorm';
 import { BlogConfigEntity, UpdateBlogConfigDto } from '../models';
 

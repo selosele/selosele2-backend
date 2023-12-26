@@ -7,7 +7,7 @@ import { AuthService } from '../services/auth.service';
 import { CacheDBService } from '@/cache-db/services/cache-db.service';
 import { AuthCredentialsDto, RoleDto, RoleEntity, Roles, Tokens, UserDto, UserEntity } from '../models';
 import { createJwtRefreshTokenKey, isBlank, serialize } from '@/shared/utils';
-import { JwtRefreshGuard } from '@/shared/guards/auth/jwt-refresh.guard';
+import { JwtRefreshGuard } from '@/shared/guards';
 
 @Controller('auth')
 @ApiTags('인증·인가 API')

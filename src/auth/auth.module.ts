@@ -4,7 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './services/auth.service';
 import { AuthController } from './controllers/auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomTypeOrmModule } from '@/configs/database/CustomTypeOrmModule';
+import { CustomRepositoryModule } from '@/database/repository/custom-repository.module';
 import { UserRepository } from './repositories/user.repository';
 import { UserRoleRepository } from './repositories/user-role.repository';
 import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
@@ -12,12 +12,14 @@ import { ConfigService } from '@nestjs/config';
 import { RoleEntity, UserRoleEntity, UserEntity } from './models';
 import { RoleRepository } from './repositories/role.repository';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { DatabaseModule } from '@/database/database.module';
 
 @Module({
   imports: [
+    DatabaseModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
-      useFactory: (config: ConfigService) => ({
+      useFactory: async (config: ConfigService) => ({
         secret: config.get<string>('JWT_ACCESS_SECRET_KEY'),
         signOptions: {
           expiresIn: +config.get<number>('JWT_ACCESS_EXPIRATION_TIME'),
@@ -30,7 +32,7 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
       UserRoleEntity,
       RoleEntity
     ]),
-    CustomTypeOrmModule.forCustomRepository([
+    CustomRepositoryModule.forCustomRepository([
       UserRepository,
       UserRoleRepository,
       RoleRepository

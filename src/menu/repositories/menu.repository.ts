@@ -1,4 +1,4 @@
-import { CustomRepository } from '@/configs/database/CustomRepository';
+import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { isNotEmpty } from '@/shared/utils';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ListMenuDto, SaveMenuDto, UpdateContentMenuDto, MenuEntity } from '../models';

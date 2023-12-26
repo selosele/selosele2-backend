@@ -3,7 +3,7 @@ import { PostService } from './services/post.service';
 import { PostController } from './controllers/post.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostEntity, PostLikeEntity, PostReplyEntity } from './models';
-import { CustomTypeOrmModule } from '@/configs/database/CustomTypeOrmModule';
+import { CustomRepositoryModule } from '@/database/repository/custom-repository.module';
 import { PostRepository } from './repositories/post.repository';
 import { PostCategoryRepository } from '@/category/repositories/post-category.repository';
 import { PostCategoryEntity } from '@/category/models';
@@ -22,9 +22,11 @@ import { FileUploaderService } from '@/file-uploader/services/file-uploader.serv
 import { NotificationService } from '@/notification/services/notification.service';
 import { NotificationRepository } from '@/notification/repositories/notification.repository';
 import { NotificationEntity } from '@/notification/models';
+import { DatabaseModule } from '@/database/database.module';
 
 @Module({
   imports: [
+    DatabaseModule,
     TypeOrmModule.forFeature([
       PostEntity,
       PostCategoryEntity,
@@ -35,7 +37,7 @@ import { NotificationEntity } from '@/notification/models';
       BlogConfigEntity,
       NotificationEntity
     ]),
-    CustomTypeOrmModule.forCustomRepository([
+    CustomRepositoryModule.forCustomRepository([
       PostRepository,
       PostCategoryRepository,
       PostTagRepository,

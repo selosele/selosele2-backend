@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../repositories/user.repository';
-import { EntityManager, InsertResult } from 'typeorm';
+import { DataSource, EntityManager, InsertResult } from 'typeorm';
 import { UserRoleRepository } from '../repositories/user-role.repository';
 import { Builder } from 'builder-pattern';
 import { JwtService } from '@nestjs/jwt';
 import { BizException } from '@/shared/exceptions/biz/biz-exception';
 import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, Roles, Tokens, UserDto } from '../models';
 import { RoleRepository } from '../repositories/role.repository';
-import { compareEncrypt, createJwtRefreshTokenKey, encrypt, isNotBlank, startTransaction } from '@/shared/utils';
+import { compareEncrypt, createJwtRefreshTokenKey, encrypt, isNotBlank } from '@/shared/utils';
 import { CacheDBService } from '@/cache-db/services/cache-db.service';
 import { ConfigService } from '@nestjs/config';
 
@@ -25,6 +25,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly cacheDBService: CacheDBService,
     private readonly config: ConfigService,
+    private readonly dataSource: DataSource,
   ) {}
 
   /** 사용자를 조회한다. */
@@ -46,7 +47,7 @@ export class AuthService {
     authCredentialsDto.userPw = await encrypt(userPw);
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (em: EntityManager) => {
+    await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
       // 1. 사용자를 생성한다.
       const user: UserEntity = await em.withRepository(this.userRepository).addUser(authCredentialsDto);

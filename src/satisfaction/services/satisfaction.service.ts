@@ -1,16 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
 import { SatisfactionRepository } from '../repositories/satisfaction.repository';
 import { BizException } from '@/shared/exceptions/biz/biz-exception';
-import { escapeHtml, kakaoUtil, startTransaction } from '@/shared/utils';
+import { escapeHtml, kakaoUtil } from '@/shared/utils';
 import { NotificationRepository } from '@/notification/repositories/notification.repository';
 import { Builder } from 'builder-pattern';
 import { AddNotificationDto, notificationCodes } from '@/notification/models';
 import { HttpService } from '@nestjs/axios/dist/http.service';
 import { BlogConfigRepository } from '@/blog-config/repositories/blog-config.repository';
-import { BlogConfigEntity } from '@/blog-config/models';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -27,6 +26,7 @@ export class SatisfactionService {
     private readonly blogConfigRepository: BlogConfigRepository,
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
+    private readonly dataSource: DataSource,
   ) {}
 
   /** 만족도조사에 참여한다. */
@@ -42,7 +42,7 @@ export class SatisfactionService {
     let res: SatisfactionEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (em: EntityManager) => {
+    await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
       // 1. 만족도조사를 등록한다.
       res = await em.withRepository(this.satisfactionRepository).addSatisfaction(addSatisfactiontDto);

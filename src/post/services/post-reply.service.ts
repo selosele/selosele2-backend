@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Builder } from "builder-pattern";
 import { BizException } from "@/shared/exceptions";
-import { compareEncrypt, encrypt, escapeHtml, isEmpty, isNotEmpty, startTransaction } from "@/shared/utils";
-import { EntityManager, UpdateResult } from "typeorm";
+import { compareEncrypt, encrypt, escapeHtml, isEmpty, isNotEmpty } from "@/shared/utils";
+import { DataSource, EntityManager, UpdateResult } from "typeorm";
 import { PostEntity, PostReplyEntity, GetPostDto, ListPostReplyDto, SavePostReplyDto, GetPostReplyDto, UpdatePostReplySortDto, SavePostDto } from "../models";
 import { PostReplyRepository } from "../repositories/post-reply.repository";
 import { PostRepository } from "../repositories/post.repository";
@@ -21,6 +21,7 @@ export class PostReplyService {
     private readonly postRepository: PostRepository,
     @InjectRepository(NotificationRepository)
     private readonly notificationRepository: NotificationRepository,
+    private readonly dataSource: DataSource,
   ) {}
 
   /** 모든 포스트 댓글 목록을 조회한다. */
@@ -80,7 +81,7 @@ export class PostReplyService {
       savePostReplyDto.cont = escapeHtml(cont);
 
       // 트랜잭션을 시작한다.
-      await startTransaction(async (em: EntityManager) => {
+      await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
         // 1. 댓글을 등록한다
         res = await em.withRepository(this.postReplyRepository).savePostReply(savePostReplyDto);
@@ -187,7 +188,7 @@ export class PostReplyService {
     let res: PostReplyEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (em: EntityManager) => {
+    await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
       // 1. 댓글을 삭제한다.
       savePostReplyDto.delYn = 'Y';
@@ -223,7 +224,7 @@ export class PostReplyService {
     let res: UpdateResult = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (em: EntityManager) => {
+    await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
       // 1. 포스트 댓글의 삭제 여부 값을 N으로 변경한다.
       res = await em.withRepository(this.postReplyRepository).updatePostReplyDelYn(savePostReplyDto);

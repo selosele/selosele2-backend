@@ -4,8 +4,8 @@ import { AddGuestbookReplyDto, UpdateGuestbookReplyDto, RemoveGuestbookReplyDto,
 import { GuestbookReplyRepository } from '../repositories/guestbook-reply.repository';
 import { PaginationDto } from '@/shared/models';
 import { BizException } from '@/shared/exceptions';
-import { compareEncrypt, encrypt, escapeHtml, startTransaction } from '@/shared/utils';
-import { EntityManager } from 'typeorm';
+import { compareEncrypt, encrypt, escapeHtml } from '@/shared/utils';
+import { DataSource, EntityManager } from 'typeorm';
 import { AddNotificationDto, notificationCodes } from '@/notification/models';
 import { Builder } from 'builder-pattern';
 import { NotificationRepository } from '@/notification/repositories/notification.repository';
@@ -18,6 +18,7 @@ export class GuestbookReplyService {
     private readonly guestbookReplyRepository: GuestbookReplyRepository,
     @InjectRepository(NotificationRepository)
     private readonly notificationRepository: NotificationRepository,
+    private readonly dataSource: DataSource,
   ) {}
 
   /** 방명록 댓글 목록을 조회한다. */
@@ -46,7 +47,7 @@ export class GuestbookReplyService {
     let guestbookReply: GuestbookReplyEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (em: EntityManager) => {
+    await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
       // 1. 방명록 댓글을 등록한다.
       guestbookReply = await em.withRepository(this.guestbookReplyRepository).addGuestbookReply(addGuestbookReplyDto);

@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from '@/category/repositories/post-category.repository';
 import { PaginationDto } from '@/shared/models';
-import { deserialize, escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, santinizeHtmlOption, serialize, startTransaction } from '@/shared/utils';
-import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
+import { deserialize, escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, santinizeHtmlOption, serialize } from '@/shared/utils';
+import { DataSource, DeleteResult, EntityManager, UpdateResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, GetPostLikeDto, PostLikeEntity, PostReplyEntity, PostDto, PostLikeDto, PostReplyDto } from '../models';
 import { SavePostDto } from '../models/dto/save-post.dto';
 import { PostRepository } from '../repositories/post.repository';
@@ -38,6 +38,7 @@ export class PostService {
     private readonly fileUploaderService: FileUploaderService,
     private readonly postLikeService: PostLikeService,
     private readonly postReplyService: PostReplyService,
+    private readonly dataSource: DataSource,
   ) {}
 
   /** 메인 포스트 목록을 조회한다. */
@@ -219,7 +220,7 @@ export class PostService {
     let post: PostEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (em: EntityManager) => {
+    await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
       // 1. 포스트를 저장한다.
       post = await em.withRepository(this.postRepository).savePost(savePostDto);

@@ -1,4 +1,4 @@
-import { CustomRepository } from '@/configs/database/CustomRepository';
+import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { isNotEmpty } from '@/shared/utils';
 import { Repository, UpdateResult } from 'typeorm';
 import { AddNotificationDto, ListNotificationDto, NotificationEntity } from '../models';

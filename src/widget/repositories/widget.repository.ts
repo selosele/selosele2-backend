@@ -1,4 +1,4 @@
-import { CustomRepository } from '@/configs/database/CustomRepository';
+import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { Repository, UpdateResult } from 'typeorm';
 import { ListWidgetDto, UpdateWidgetDto, WidgetEntity } from '../models';
 

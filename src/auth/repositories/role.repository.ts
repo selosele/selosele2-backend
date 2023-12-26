@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { CustomRepository } from '@/configs/database/CustomRepository';
+import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { RoleEntity } from '../models';
 
 @CustomRepository(RoleEntity)

@@ -1,5 +1,5 @@
 import { PostCategoryEntity } from "@/category/models";
-import { CustomRepository } from "@/configs/database/CustomRepository";
+import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { SearchPostDto } from "@/post/models";
 import { PaginationDto } from "@/shared/models";
 import { Brackets, DeleteResult, Repository } from "typeorm";

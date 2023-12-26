@@ -4,8 +4,8 @@ import { PaginationDto } from '@/shared/models';
 import { AddGuestbookDto, RemoveGuestbookDto, UpdateGuestbookDto, GuestbookEntity } from '../models';
 import { GuestbookRepository } from '../repositories/guestbook.repository';
 import { BizException } from '@/shared/exceptions/biz/biz-exception';
-import { compareEncrypt, encrypt, escapeHtml, startTransaction } from '@/shared/utils';
-import { EntityManager } from 'typeorm';
+import { compareEncrypt, encrypt, escapeHtml } from '@/shared/utils';
+import { DataSource, EntityManager } from 'typeorm';
 import { AddNotificationDto, notificationCodes } from '@/notification/models';
 import { Builder } from 'builder-pattern';
 import { NotificationRepository } from '@/notification/repositories/notification.repository';
@@ -18,6 +18,7 @@ export class GuestbookService {
     private readonly guestbookRepository: GuestbookRepository,
     @InjectRepository(NotificationRepository)
     private readonly notificationRepository: NotificationRepository,
+    private readonly dataSource: DataSource,
   ) {}
 
   /** 방명록 목록을 조회한다. */
@@ -43,7 +44,7 @@ export class GuestbookService {
     let guestbook: GuestbookEntity = null;
 
     // 트랜잭션을 시작한다.
-    await startTransaction(async (em: EntityManager) => {
+    await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
       // 1. 방명록을 등록한다.
       guestbook = await em.withRepository(this.guestbookRepository).addGuestbook(addGuestbookDto);
