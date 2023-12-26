@@ -138,7 +138,7 @@ export class AuthController {
     @AccessTokenUser() user: UserDto,
     @Res({ passthrough: true }) resp: Response
   ): Promise<void> {
-    const refreshTokenKey: string = createJwtRefreshTokenKey(user);
+    const refreshTokenKey: string = createJwtRefreshTokenKey(user, this.config.get<string>('JWT_REFRESH_SECRET_REDIS_KEY'));
 
     // Redis에 저장된 리프레시 토큰을 조회해서
     const cachedRefreshToken: string = await this.cacheDBService.get<string>(refreshTokenKey);

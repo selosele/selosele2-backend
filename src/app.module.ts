@@ -23,6 +23,7 @@ import { CacheDBModule } from './cache-db/cache-db.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: './.env.dev',
       ignoreEnvFile: ('production' === process.env.NODE_ENV),
     }),
     ServeStaticModule.forRoot({

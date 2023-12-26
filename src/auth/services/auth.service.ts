@@ -110,8 +110,10 @@ export class AuthService {
       expiresIn: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
     });
 
+    const jwtRedisKey = this.config.get<string>('JWT_REFRESH_SECRET_REDIS_KEY');
+
     // Redis에 리프레시 토큰을 저장
-    await this.cacheDBService.set(createJwtRefreshTokenKey(user), refreshToken, {
+    await this.cacheDBService.set(createJwtRefreshTokenKey(user, jwtRedisKey), refreshToken, {
       ttl: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
     });
 
