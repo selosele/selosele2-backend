@@ -5,6 +5,7 @@
 # env files
 .env
 .env.*
+env.*
 *.env
 
 # Logs
