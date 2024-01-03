@@ -29,7 +29,7 @@ export class ListPostDto {
 
   /** 페이지 유형 */
   @IsOptional()
-  pageType?: string;
+  pageType?: string = 'D01001';
 
   /** 로그인 여부 */
   @IsEmpty()
