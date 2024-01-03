@@ -66,7 +66,7 @@ export class PostTagRepository extends Repository<PostTagEntity> {
 
     if ('N' === searchPostDto?.isLogin) {
       query = query
-        .andWhere("post.secret_yn = :secret_yn", { secret_yn: 'N' })
+        .andWhere("post.secret_yn = 'N'")
     }
 
     query = query

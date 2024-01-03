@@ -12,8 +12,7 @@ export class PostRepository extends Repository<PostEntity> {
   /** 메인 포스트 목록을 조회한다. */
   async listPostMain(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
     let query = this.createQueryBuilder('post')
-      .select("post.id", "id")
-          .distinct(true)
+      .select("post.id", "id").distinct(true)
         .addSelect("COUNT(postLike.id) OVER (PARTITION BY postLike.id)", "likeCnt")
         .addSelect("post.title", "title")
         .addSelect("post.reg_date", "regDate")
@@ -30,8 +29,8 @@ export class PostRepository extends Repository<PostEntity> {
 
     if ('N' === listPostDto?.isLogin) {
       query = query
-        .andWhere("post.tmp_yn = :tmp_yn", { tmp_yn: 'N' })
-        .andWhere("post.secret_yn = :secret_yn", { secret_yn: 'N' });
+        .andWhere("post.tmp_yn = 'N'")
+        .andWhere("post.secret_yn = 'N'");
     }
 
     if (isNotEmpty(listPostDto?.categoryId) && 0 < listPostDto?.categoryId) {
@@ -133,7 +132,7 @@ export class PostRepository extends Repository<PostEntity> {
 
     if ('N' === searchPostDto?.isLogin) {
       query = query
-        .andWhere("post.secret_yn = :secret_yn", { secret_yn: 'N' });
+        .andWhere("post.secret_yn = 'N'");
     }
 
     query = query
@@ -152,14 +151,13 @@ export class PostRepository extends Repository<PostEntity> {
   /** 포스트의 연도 및 개수를 조회한다. */
   async listYearAndCount(listPostDto: ListPostDto): Promise<PostEntity[]> {
     let query = this.createQueryBuilder('post')
-      .select("YEAR(reg_date)", "year")
-          .distinct(true)
+      .select("EXTRACT(YEAR FROM reg_date)", "year").distinct(true)
         .addSelect("COUNT('year')", "count")
       .where("tmp_yn = 'N'");
 
     if ('N' === listPostDto?.isLogin) {
       query = query
-        .andWhere("secret_yn = :secret_yn", { secret_yn: 'N' });
+        .andWhere("secret_yn = 'N'");
     }
 
     query = query
@@ -297,7 +295,7 @@ export class PostRepository extends Repository<PostEntity> {
 
     if ('N' === listPostDto?.isLogin) {
       prevSubQuery = prevSubQuery
-        .andWhere("prev.secret_yn = :secret_yn", { secret_yn: 'N' });
+        .andWhere("prev.secret_yn = 'N'");
     }
 
     prevSubQuery = prevSubQuery
@@ -310,7 +308,7 @@ export class PostRepository extends Repository<PostEntity> {
 
     if ('N' === listPostDto?.isLogin) {
       nextSubQuery = nextSubQuery
-        .andWhere("next.secret_yn = :secret_yn", { secret_yn: 'N' });
+        .andWhere("next.secret_yn = 'N'");
     }
 
     nextSubQuery = nextSubQuery

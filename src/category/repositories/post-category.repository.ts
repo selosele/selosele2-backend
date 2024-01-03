@@ -16,7 +16,7 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
 
     if ('N' === listPostDto?.isLogin) {
       query = query
-        .andWhere("post.secret_yn = :secret_yn", { secret_yn: 'N' });
+        .andWhere("post.secret_yn = 'N'");
     }
 
     query = query
@@ -75,7 +75,7 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
 
     if ('N' === searchPostDto?.isLogin) {
       query = query
-        .andWhere("post.secret_yn = :secret_yn", { secret_yn: 'N' });
+        .andWhere("post.secret_yn = 'N'");
     }
 
     query = query
