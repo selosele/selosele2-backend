@@ -4,7 +4,7 @@ import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { setupCors, getLogLevels, setupSwagger, setupValidation } from './shared/utils';
 import { ConfigService } from '@nestjs/config';
-import os from 'os';
+import * as os from 'os';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
