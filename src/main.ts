@@ -43,7 +43,5 @@ async function bootstrap() {
   if ('development' === config.get<string>('NODE_ENV')) {
     console.log(`Server running at http://localhost:${port}..`);
   }
-
-  console.log(`운영 배포 테스트 host: ${os.hostname()}, port: ${port}`);
 }
 bootstrap();
