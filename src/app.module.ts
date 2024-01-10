@@ -25,9 +25,10 @@ import { CacheDBModule } from './cache-db/cache-db.module';
       isGlobal: true,
       ignoreEnvFile: ('production' === process.env.NODE_ENV),
     }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client'),
-    }),
+    // 2024.01.10. 운영 환경에서 WAS, WEB 분리로 인한 주석처리
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', 'client'),
+    // }),
     CacheDBModule,
     FileUploaderModule,
     AuthModule,
