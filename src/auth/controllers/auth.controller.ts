@@ -82,6 +82,11 @@ export class AuthController {
   ): Promise<Tokens> {
     this.logger.warn(`Try to login... ip : ${ip}`);
 
+    // 국가별 아이피 차단 2024.01.10. 추가
+    if (ip.startsWith('1.2.3.') || ip.startsWith('4.5.6.')) {
+      throw new UnauthorizedException();
+    }
+
     // 액세스 토큰과 리프레시 토큰을 생성하고
     const tokens: Tokens = await this.authService.signIn(authCredentialsDto);
 
