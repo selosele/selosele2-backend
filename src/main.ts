@@ -4,6 +4,7 @@ import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { setupCors, getLogLevels, setupSwagger, setupValidation } from './shared/utils';
 import { ConfigService } from '@nestjs/config';
+import os from 'os';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -43,6 +44,6 @@ async function bootstrap() {
     console.log(`Server running at http://localhost:${port}..`);
   }
 
-  console.log(`운영 배포 테스트 port: ${port}`);
+  console.log(`운영 배포 테스트 host: ${os.hostname()}, port: ${port}`);
 }
 bootstrap();
