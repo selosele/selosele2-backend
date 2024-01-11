@@ -23,9 +23,9 @@ async function bootstrap() {
   // x-powered-by 헤더 삭제
   app.disable('x-powered-by');
 
-  if ('production' === config.get<string>('NODE_ENV')) {
-    setupCors(app, config.get<string>('LOC_ORIGIN')); // Cors 설정
-  }
+  // if ('production' === config.get<string>('NODE_ENV')) {
+  //   setupCors(app, config.get<string>('LOC_ORIGIN')); // Cors 설정
+  // }
 
   //if ('development' === config.get<string>('NODE_ENV')) {
     setupSwagger(app); // Swagger 설정
