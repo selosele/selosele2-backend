@@ -8,10 +8,10 @@ import * as fs from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    httpsOptions: {
-      key: fs.readFileSync('/etc/letsencrypt/live/blog.selosele.com/privkey.pem'),
-      cert: fs.readFileSync('/etc/letsencrypt/live/blog.selosele.com/fullchain.pem'),
-    },
+    // httpsOptions: {
+    //   key: fs.readFileSync('/etc/letsencrypt/live/blog.selosele.com/privkey.pem'),
+    //   cert: fs.readFileSync('/etc/letsencrypt/live/blog.selosele.com/fullchain.pem'),
+    // },
   });
 
   /** 환경변수 service */
