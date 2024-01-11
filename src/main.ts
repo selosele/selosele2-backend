@@ -44,7 +44,8 @@ async function bootstrap() {
 
   /** 서버 정보 */
   const server = await app.getHttpServer();
-  console.log(server);
+  console.log('server >>>', server);
+  console.log('address >>>', server.address());
 
   if ('development' === config.get<string>('NODE_ENV')) {
     console.log(`Server running at http://localhost:${port}..`);
