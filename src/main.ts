@@ -5,15 +5,12 @@ import { AppModule } from './app.module';
 import { setupCors, getLogLevels, setupSwagger, setupValidation } from './shared/utils';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
-import * as path from 'path';
 
 async function bootstrap() {
-  const certPath = path.resolve(__dirname, 'config');
-
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     httpsOptions: {
-      key: fs.readFileSync(path.join(certPath, 'privkey.pem')),
-      cert: fs.readFileSync(path.join(certPath, 'fullchain.pem')),
+      key: fs.readFileSync(process.env.PRIVATE_KEY_PATH),
+      cert: fs.readFileSync(process.env.CERT_PATH),
     },
   });
 
