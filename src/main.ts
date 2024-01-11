@@ -27,9 +27,9 @@ async function bootstrap() {
     setupCors(app, config.get<string>('LOC_ORIGIN')); // Cors 설정
   }
 
-  if ('development' === config.get<string>('NODE_ENV')) {
+  //if ('development' === config.get<string>('NODE_ENV')) {
     setupSwagger(app); // Swagger 설정
-  }
+  //}
 
   // 유효성 검증 설정
   setupValidation(app);
@@ -44,7 +44,7 @@ async function bootstrap() {
 
   /** 서버 정보 */
   const server = await app.getHttpServer();
-  console.log('server >>>', server);
+  //console.log('server >>>', server);
   console.log('address >>>', server.address());
   // console.log('request >>>', server._events.request);
 
