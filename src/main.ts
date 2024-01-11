@@ -4,7 +4,6 @@ import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { setupCors, getLogLevels, setupSwagger, setupValidation } from './shared/utils';
 import { ConfigService } from '@nestjs/config';
-import * as os from 'os';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -35,10 +34,13 @@ async function bootstrap() {
   // 유효성 검증 설정
   setupValidation(app);
 
+  /** host */
+  const host = '0.0.0.0';
+
   /** port */
   const port = (config.get<number>('PORT') || 3000);
 
-  await app.listen(port);
+  await app.listen(port, host);
 
   if ('development' === config.get<string>('NODE_ENV')) {
     console.log(`Server running at http://localhost:${port}..`);
