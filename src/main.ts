@@ -4,14 +4,14 @@ import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { setupCors, getLogLevels, setupSwagger, setupValidation } from './shared/utils';
 import { ConfigService } from '@nestjs/config';
-// import * as fs from 'fs';
+import * as fs from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    // httpsOptions: {
-    //   key: fs.readFileSync('path/to/private-key.pem'),
-    //   cert: fs.readFileSync('path/to/certificate.pem'),
-    // },
+    httpsOptions: {
+      key: fs.readFileSync('/etc/letsencrypt/live/blog.selosele.com/privkey.pem'),
+      cert: fs.readFileSync('/etc/letsencrypt/live/blog.selosele.com/fullchain.pem'),
+    },
   });
 
   /** 환경변수 service */
