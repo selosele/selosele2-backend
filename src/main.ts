@@ -8,7 +8,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 async function bootstrap() {
-  const certPath = path.resolve(__dirname, '../../../etc/letsencrypt/live/blog.selosele.com');
+  const certPath = path.resolve(__dirname, '../../../../etc/letsencrypt/live/blog.selosele.com');
   
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     httpsOptions: {
