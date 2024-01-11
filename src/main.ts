@@ -8,12 +8,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 async function bootstrap() {
-  const certPath = path.resolve(__dirname, '../../../../etc/letsencrypt/live/blog.selosele.com');
-  
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     httpsOptions: {
-      key: fs.readFileSync(path.join(certPath, 'privkey.pem')),
-      cert: fs.readFileSync(path.join(certPath, 'fullchain.pem')),
+      key: fs.readFileSync(path.join(__dirname, 'privkey.pem')),
+      cert: fs.readFileSync(path.join(__dirname, 'fullchain.pem')),
     },
   });
 
