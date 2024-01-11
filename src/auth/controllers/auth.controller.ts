@@ -38,7 +38,6 @@ export class AuthController {
   async getUser(
     @Param('userSn', ParseIntPipe) userSn: number
   ): Promise<UserDto> {
-    console.log('userSn >>>', userSn);
     const user: UserEntity = await this.authService.getUser(userSn);
 
     return serialize<UserDto>(user);
