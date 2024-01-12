@@ -6,7 +6,7 @@ import { Response } from 'express';
 import { AuthService } from '../services/auth.service';
 import { CacheDBService } from '@/cache-db/services/cache-db.service';
 import { AuthCredentialsDto, RoleDto, RoleEntity, Roles, Tokens, UserDto, UserEntity } from '../models';
-import { createJwtRefreshTokenKey, isBlank, serialize } from '@/shared/utils';
+import { createJwtRefreshTokenKey, getIpInfo, isBlackIp, isBlank, serialize } from '@/shared/utils';
 import { JwtRefreshGuard } from '@/shared/guards';
 
 @Controller('auth')
@@ -55,10 +55,10 @@ export class AuthController {
   async signUp(
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto
   ): Promise<void> {
-    if ('production' === this.config.get<string>('NODE_ENV')) {
+    // 운영 환경이거나 국가별 아이피 차단 로직에 걸리면 404 예외를 던진다.
+    if ('production' === this.config.get<string>('NODE_ENV') || isBlackIp(getIpInfo['country'])) {
       throw new NotFoundException();
     }
-    
     await this.authService.addUser(authCredentialsDto);
   }
 
@@ -82,10 +82,10 @@ export class AuthController {
   ): Promise<Tokens> {
     this.logger.warn(`Try to login... ip : ${ip}`);
 
-    // 국가별 아이피 차단 코드 작업 중 2024.01.10. 추가
-    // if (ip.startsWith('1.2.3.') || ip.startsWith('4.5.6.')) {
-    //   throw new NotFoundException();
-    // }
+    // 국가별 아이피 차단
+    if (isBlackIp(getIpInfo['country'])) {
+      throw new NotFoundException();
+    }
 
     // 액세스 토큰과 리프레시 토큰을 생성하고
     const tokens: Tokens = await this.authService.signIn(authCredentialsDto);
@@ -115,6 +115,11 @@ export class AuthController {
     @Res({ passthrough: true }) resp: Response,
   ): Promise<Tokens> {
     this.logger.warn(`Try to refresh the Access token... ip : ${ip}`);
+
+    // 국가별 아이피 차단
+    if (isBlackIp(getIpInfo['country'])) {
+      throw new NotFoundException();
+    }
 
     if (!user) {
       this.logger.warn(`Refresh token not found... ip : ${ip}`);
