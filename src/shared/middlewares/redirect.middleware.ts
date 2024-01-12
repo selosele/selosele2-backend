@@ -13,7 +13,7 @@ export class RedirectMiddleware implements NestMiddleware {
     const origin = this.config.get<string>('LOC_ORIGIN');
     const host = req.get('host');
 
-    if (host === 'http://www.blog.selosele.com:3000') {
+    if (host === 'http://www.blog.selosele.com') {
       return resp.redirect(301, `${origin}${req.url}`);
     }
     next();
