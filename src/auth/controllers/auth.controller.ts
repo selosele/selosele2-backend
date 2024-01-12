@@ -84,7 +84,7 @@ export class AuthController {
 
     // 국가별 아이피 차단 코드 작업 중 2024.01.10. 추가
     // if (ip.startsWith('1.2.3.') || ip.startsWith('4.5.6.')) {
-    //   throw new UnauthorizedException();
+    //   throw new NotFoundException();
     // }
 
     // 액세스 토큰과 리프레시 토큰을 생성하고
