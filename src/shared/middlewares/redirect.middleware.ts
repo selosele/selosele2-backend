@@ -12,6 +12,7 @@ export class RedirectMiddleware implements NestMiddleware {
   use(req: Request, resp: Response, next: () => void): void {
     const origin = this.config.get<string>('LOC_ORIGIN');
     const host = req.get('host');
+    console.log('host >>>', host);
 
     if (host === 'http://www.blog.selosele.com') {
       return resp.redirect(301, `${origin}${req.url}`);
