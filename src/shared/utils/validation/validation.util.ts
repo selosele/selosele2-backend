@@ -1,6 +1,6 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 
-/** 유효성 검증 유틸 */
+/** 유효성 검증을 설정한다. */
 export function setupValidation(app: INestApplication): void {
   app.useGlobalPipes(
     new ValidationPipe({

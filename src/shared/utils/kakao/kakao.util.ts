@@ -17,7 +17,7 @@ export class kakaoUtil {
     
   }
 
-  /** 카카오톡 메시지 전송 header */
+  /** 카카오톡 메시지 전송 header를 반환한다. */
   static getSendMessageHeaders(token: string): { "Content-Type": string, "Authorization": string } {
     return {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -25,7 +25,7 @@ export class kakaoUtil {
     }
   }
 
-  /** 카카오톡 메시지 전송 body */
+  /** 카카오톡 메시지 전송 body를 반환한다. */
   static getSendMessageBody(text: string, url: string): { "template_object": string } {
     return {
       "template_object": JSON.stringify(new SendKakaoMessageDto(text, url))

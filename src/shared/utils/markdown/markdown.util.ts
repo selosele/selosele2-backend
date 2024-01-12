@@ -1,7 +1,7 @@
 import MarkdownIt = require('markdown-it');
 import anchor from 'markdown-it-anchor';
 
-/** Markdown 설정 유틸 */
+/** Markdown을 설정한다. */
 export const md = new MarkdownIt()
                       .use(require('markdown-it-iframe'), { height: 265 })
                       .use(require('markdown-it-mark'))

@@ -12,4 +12,4 @@ export function getRawText(str: string): string {
   };
 
   return nodeHTMLParser.parse(str, opt).rawText;
-};
+}

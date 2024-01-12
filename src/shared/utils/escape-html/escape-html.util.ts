@@ -1,6 +1,6 @@
 import * as sanitizeHtml from 'sanitize-html';
 
-/** escape html 유틸 */
+/** HTML을 escape한다. */
 export function escapeHtml(plain: string, option?: sanitizeHtml.IOptions): string {
   return sanitizeHtml(plain, option);
 }
