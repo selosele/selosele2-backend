@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { CodeModule } from './code/code.module';
 import { BlogConfigModule } from './blog-config/blog-config.module';
@@ -18,6 +18,7 @@ import { BizExceptionFilter } from './shared/exceptions/biz/biz-exception-filter
 import { FileUploaderModule } from './file-uploader/file-uploader.module';
 import { NotificationModule } from './notification/notification.module';
 import { CacheDBModule } from './cache-db/cache-db.module';
+import { RedirectMiddleware } from './shared/middlewares/redirect.middleware';
 
 @Module({
   imports: [
@@ -52,4 +53,10 @@ import { CacheDBModule } from './cache-db/cache-db.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RedirectMiddleware).forRoutes('*');
+  }
+
+}

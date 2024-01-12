@@ -25,7 +25,7 @@ export class SatisfactionService {
     @InjectRepository(BlogConfigRepository)
     private readonly blogConfigRepository: BlogConfigRepository,
     private readonly httpService: HttpService,
-    private readonly configService: ConfigService,
+    private readonly config: ConfigService,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -67,7 +67,7 @@ export class SatisfactionService {
 
       //   // 5. 카카오톡 메시지를 전송한다.
       //   const text = `${addSatisfactiontDto.pageTitle} 페이지에 만족도 평가가 등록되었습니다.`;
-      //   const url = `${this.configService.get<string>('PAGE_ORIGIN')}${addSatisfactiontDto.pagePath}`;
+      //   const url = `${this.config.get<string>('PAGE_ORIGIN')}${addSatisfactiontDto.pagePath}`;
       //   const headers = kakaoUtil.getSendMessageHeaders('token');
       //   const body = kakaoUtil.getSendMessageBody(text, url);
 
