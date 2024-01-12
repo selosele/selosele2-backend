@@ -21,6 +21,12 @@
 4. `npm run start:dev` (백엔드 구동)
 5. `npm start` (프론트엔드 구동)
 
+## 운영환경 구동 절차
+
+1. `npm start` (백엔드 구동)
+    - Node.js 16.14.2 버전의 인터프리터를 사용하여 애플리케이션을 실행하도록 설정함
+    - `nvm use 16.14.2` 명령 실행 필요하지 않음
+
 ## etc.
 
 - [API 문서](http://localhost:3000/api-docs)
