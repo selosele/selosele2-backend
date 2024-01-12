@@ -9,12 +9,12 @@ export class RedirectMiddleware implements NestMiddleware {
     private readonly config: ConfigService,
   ) {}
 
-  use(req: Request, res: Response, next: () => void): void {
+  use(req: Request, resp: Response, next: () => void): void {
     const origin = this.config.get<string>('LOC_ORIGIN');
     const host = req.get('host');
 
     if (host === 'http://www.blog.selosele.com:3000') {
-      return res.redirect(301, `${origin}${req.url}`);
+      return resp.redirect(301, `${origin}${req.url}`);
     }
     next();
   }
