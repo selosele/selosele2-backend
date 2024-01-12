@@ -8,10 +8,10 @@ import * as fs from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    // httpsOptions: {
-    //   key: fs.readFileSync(process.env.PRIVATE_KEY_PATH),
-    //   cert: fs.readFileSync(process.env.CERT_PATH),
-    // },
+    httpsOptions: {
+      key: fs.readFileSync(process.env.PRIVATE_KEY_PATH),
+      cert: fs.readFileSync(process.env.CERT_PATH),
+    },
   });
 
   /** 환경변수 service */
