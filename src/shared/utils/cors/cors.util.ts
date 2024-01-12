@@ -1,6 +1,6 @@
 import { INestApplication, NotFoundException } from '@nestjs/common';
 
-/** Cors 유틸 */
+/** CORS 설정 유틸 */
 export function setupCors(app: INestApplication, locOrigin: string): void {
   const whitelist = [locOrigin];
 
