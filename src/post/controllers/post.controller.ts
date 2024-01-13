@@ -10,6 +10,7 @@ import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } fr
 import { DeleteResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, PostDto, SavePostDto } from '../models';
 import { PostService } from '../services/post.service';
+import { ListIndexSearchDto } from '@/index-search/models';
 
 @Controller('post')
 @ApiTags('포스트 API')
@@ -88,7 +89,7 @@ export class PostController {
     // 비밀 포스트 조회를 위한 세팅
     searchPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
-    const posts: [PostEntity[], number] = await this.postService.listPostSearch(searchPostDto, paginationDto);
+    const posts: [ListIndexSearchDto[], number] = await this.postService.listPostSearch(searchPostDto, paginationDto);
     
     return [
       serialize<PostDto[]>(posts[0]),

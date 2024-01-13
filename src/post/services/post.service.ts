@@ -20,6 +20,9 @@ import { FileUploaderResponse } from '@/file-uploader/models/file-uploader.model
 import { CountPostDto } from '../models/dto/count-post.dto';
 import { PostLikeService } from './post-like.service';
 import { PostReplyService } from './post-reply.service';
+import { IndexSearchRepository } from '@/index-search/repositories/index-search.repository';
+import { IndexSearchService } from '@/index-search/services/index-search.service';
+import { ListIndexSearchDto } from '@/index-search/models';
 
 @Injectable()
 export class PostService {
@@ -35,9 +38,12 @@ export class PostService {
     private readonly tagRepository: TagRepository,
     @InjectRepository(BlogConfigRepository)
     private readonly blogConfigRepository: BlogConfigRepository,
+    @InjectRepository(IndexSearchRepository)
+    private readonly indexSearchRepository: IndexSearchRepository,
     private readonly fileUploaderService: FileUploaderService,
     private readonly postLikeService: PostLikeService,
     private readonly postReplyService: PostReplyService,
+    private readonly indexSerchService: IndexSearchService,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -83,7 +89,7 @@ export class PostService {
   async listPostSearch(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<[ListIndexSearchDto[], number]> {
 
     // HTML Escape
     searchPostDto.q = escapeHtml(searchPostDto.q);
@@ -91,7 +97,7 @@ export class PostService {
     const [post, postCategory] = await Promise.all([
       
       // 포스트 목록 조회
-      this.postRepository.listPostSearch(searchPostDto, paginationDto),
+      this.indexSerchService.listIndexSearch(searchPostDto, paginationDto),
       // 카테고리 조회
       this.postCategoryRepository.listPostCategorySearch(searchPostDto, paginationDto),
     ]);

@@ -1,8 +1,8 @@
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { PaginationDto } from '@/shared/models';
 import { isNotEmpty } from '@/shared/utils';
-import { Between, Brackets, DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { GetPostDto, ListPostDto, SearchPostDto, PostEntity } from '../models';
+import { Between, DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { GetPostDto, ListPostDto, PostEntity } from '../models';
 import { CountPostDto } from '../models/dto/count-post.dto';
 import { SavePostDto } from '../models/dto/save-post.dto';
 
@@ -73,79 +73,6 @@ export class PostRepository extends Repository<PostEntity> {
         id: 'DESC',
       },
     });
-  }
-
-  /** 포스트를 검색한다. */
-  async listPostSearch(
-    searchPostDto: SearchPostDto,
-    paginationDto: PaginationDto,
-  ): Promise<[PostEntity[], number]> {
-    let query = this.createQueryBuilder('post')
-      .select("post.id", "id")
-        .addSelect("post.title", "title")
-        .addSelect("post.reg_date", "regDate")
-        .addSelect("SUBSTR(post.cont, 1, 180)", "cont")
-        .addSelect("post.og_img_url", "ogImgUrl")
-        .addSelect("post.secret_yn", "secretYn")
-        .addSelect("post.pin_yn", "pinYn");
-
-    const caseSensitive = 'Y' === searchPostDto.c ? 'BINARY ' : '';
-
-    // 전체 검색
-    if ('001' === searchPostDto.t) {
-      query = query
-        .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
-        .leftJoin("post.postTag", "postTag", "postTag.post_id = post.id")
-        .leftJoin("postCategory.category", "category", "category.id = postCategory.category_id")
-        .where(new Brackets(qb => {
-          qb.where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` })
-            .orWhere(caseSensitive + "post.cont LIKE :cont", { cont: `%${searchPostDto.q}%` })
-            .orWhere(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
-        }));
-    }
-    
-    // 제목으로 검색
-    if ('002' === searchPostDto.t) {
-      query = query
-        .where(new Brackets(qb => {
-          qb.where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` });
-        }));
-    }
-
-    // 내용으로 검색
-    if ('003' === searchPostDto.t) {
-      query = query
-        .where(new Brackets(qb => {
-          qb.where(caseSensitive + "post.cont LIKE :cont", { cont: `%${searchPostDto.q}%` });
-        }));
-    }
-
-    // 카테고리로 검색
-    if ('004' === searchPostDto.t) {
-      query = query
-        .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
-        .leftJoin("postCategory.category", "category", "category.id = postCategory.category_id")
-        .where(new Brackets(qb => {
-          qb.where(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` });
-        }));
-    }
-
-    if ('N' === searchPostDto?.isLogin) {
-      query = query
-        .andWhere("post.secret_yn = 'N'");
-    }
-
-    query = query
-      .andWhere("post.tmp_yn = 'N'")
-      .groupBy("post.id")
-      .orderBy("post.reg_date", "DESC")
-      .limit(paginationDto.pageSize)
-      .offset(paginationDto.getSkipSize());
-
-    return await Promise.all([
-      query.getRawMany(),
-      query.getCount(),
-    ]);
   }
 
   /** 포스트의 연도 및 개수를 조회한다. */

@@ -23,6 +23,9 @@ import { NotificationService } from '@/notification/services/notification.servic
 import { NotificationRepository } from '@/notification/repositories/notification.repository';
 import { NotificationEntity } from '@/notification/models';
 import { DatabaseModule } from '@/database/database.module';
+import { IndexSearchService } from '@/index-search/services/index-search.service';
+import { IndexSearchEntity } from '@/index-search/models';
+import { IndexSearchRepository } from '@/index-search/repositories/index-search.repository';
 
 @Module({
   imports: [
@@ -35,7 +38,8 @@ import { DatabaseModule } from '@/database/database.module';
       PostReplyEntity,
       TagEntity,
       BlogConfigEntity,
-      NotificationEntity
+      NotificationEntity,
+      IndexSearchEntity
     ]),
     CustomRepositoryModule.forCustomRepository([
       PostRepository,
@@ -45,7 +49,8 @@ import { DatabaseModule } from '@/database/database.module';
       PostReplyRepository,
       TagRepository,
       BlogConfigRepository,
-      NotificationRepository
+      NotificationRepository,
+      IndexSearchRepository
     ]),
   ],
   controllers: [
@@ -58,7 +63,8 @@ import { DatabaseModule } from '@/database/database.module';
     PostLikeService,
     PostReplyService,
     FileUploaderService,
-    NotificationService
+    NotificationService,
+    IndexSearchService
   ]
 })
 export class PostModule {}

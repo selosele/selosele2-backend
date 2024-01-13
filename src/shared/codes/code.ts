@@ -10,6 +10,9 @@ export const globalCodes = {
   PAGE_TAG:       { id: 'D01005', prefix: 'D01', val: '005', nm: '태그', desc: '페이지 유형', useYn: 'Y' },
   PAGE_SEARCH:    { id: 'D01006', prefix: 'D01', val: '006', nm: '검색', desc: '페이지 유형', useYn: 'Y' },
 
+  SEARCH_POST:    { id: 'D03001', prefix: 'D03', val: '001', nm: '포스트', desc: '검색 유형', useYn: 'Y' },
+  SEARCH_CONTENT: { id: 'D03002', prefix: 'D03', val: '002', nm: '콘텐츠', desc: '검색 유형', useYn: 'Y' },
+
   CRUD_CREATE:    { id: 'E01001', prefix: 'E01', val: '001', nm: '생성', desc: 'CRUD 유형', useYn: 'Y' },
   CRUD_READ:      { id: 'E01002', prefix: 'E01', val: '002', nm: '조회', desc: 'CRUD 유형', useYn: 'Y' },
   CRUD_UPDATE:    { id: 'E01003', prefix: 'E01', val: '003', nm: '수정', desc: 'CRUD 유형', useYn: 'Y' },
