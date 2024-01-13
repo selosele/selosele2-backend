@@ -23,10 +23,10 @@ export class PostEntity extends BaseEntity {
   title?: string;
 
   @CreateDateColumn({
-    comment: '포스트 작성일시'
+    comment: '포스트 등록일시'
   })
   @ApiProperty({
-    description: '포스트 작성일시'
+    description: '포스트 등록일시'
   })
   regDate?: Date;
 

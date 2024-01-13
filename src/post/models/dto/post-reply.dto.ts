@@ -30,7 +30,7 @@ export class PostReplyDto {
   /** 포스트 댓글 내용 */
   cont?: string;
 
-  /** 포스트 댓글 작성일시 */
+  /** 포스트 댓글 등록일시 */
   regDate?: Date;
 
   /** 포스트 댓글 수정일시 */

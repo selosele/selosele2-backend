@@ -12,7 +12,7 @@ export class PostDto {
   /** 포스트 제목 */
   title?: string;
 
-  /** 포스트 작성일시 */
+  /** 포스트 등록일시 */
   regDate?: Date;
 
   /** 포스트 수정일시 */

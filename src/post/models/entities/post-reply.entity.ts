@@ -85,10 +85,10 @@ export class PostReplyEntity extends BaseEntity {
   cont?: string;
 
   @CreateDateColumn({
-    comment: '포스트 댓글 작성일시'
+    comment: '포스트 댓글 등록일시'
   })
   @ApiProperty({
-    description: '포스트 댓글 작성일시'
+    description: '포스트 댓글 등록일시'
   })
   regDate?: Date;
 

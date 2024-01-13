@@ -10,7 +10,7 @@ export class ContentDto {
   /** 콘텐츠 제목 */
   title?: string;
 
-  /** 콘텐츠 작성일시 */
+  /** 콘텐츠 등록일시 */
   regDate?: Date;
 
   /** 콘텐츠 수정일시 */
