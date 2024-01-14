@@ -13,8 +13,8 @@ export class CodeService {
     return [
       ...Object.values(globalCodes),
       ...Object.values(notificationCodes),
-      ...Object.values(searchCodes),
       ...Object.values(satisfactionCodes),
+      ...Object.values(searchCodes),
     ].sort((a,b) => a.id.localeCompare(b.id)) as Code[];
   }
 

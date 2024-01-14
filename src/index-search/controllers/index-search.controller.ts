@@ -3,15 +3,17 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IndexSearchService } from '../services/index-search.service';
 import { Auth, Ip } from '@/shared/decorators';
 import { Roles } from '@/auth/models';
+import { IndexSearchLogService } from '../services/index-search-log.service';
 
 @Controller('indexsearch')
-@ApiTags('검색 및 색인 API')
+@ApiTags('검색 색인 API')
 export class IndexSearchController {
 
   private readonly logger = new Logger(IndexSearchController.name);
 
   constructor(
     private readonly indexSearchService: IndexSearchService,
+    private readonly indexSearchLogService: IndexSearchLogService,
   ) {}
 
   @Post()

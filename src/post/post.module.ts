@@ -26,6 +26,7 @@ import { DatabaseModule } from '@/database/database.module';
 import { IndexSearchService } from '@/index-search/services/index-search.service';
 import { IndexSearchEntity } from '@/index-search/models';
 import { IndexSearchRepository } from '@/index-search/repositories/index-search.repository';
+import { IndexSearchLogRepository } from '@/index-search/repositories/index-search-log.repository';
 
 @Module({
   imports: [
@@ -50,7 +51,8 @@ import { IndexSearchRepository } from '@/index-search/repositories/index-search.
       TagRepository,
       BlogConfigRepository,
       NotificationRepository,
-      IndexSearchRepository
+      IndexSearchRepository,
+      IndexSearchLogRepository
     ]),
   ],
   controllers: [

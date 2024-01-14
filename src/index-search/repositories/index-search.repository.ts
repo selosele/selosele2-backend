@@ -1,8 +1,9 @@
-import { CustomRepository } from "@/database/repository/custom-repository.decorator";
-import { IndexSearchEntity, SaveIndexSearchDto } from "../models";
-import { Brackets, DeleteResult, InsertResult, Repository } from "typeorm";
-import { SearchPostDto } from "@/post/models";
-import { PaginationDto } from "@/shared/models";
+import { CustomRepository } from '@/database/repository/custom-repository.decorator';
+import { IndexSearchEntity, SaveIndexSearchDto } from '../models';
+import { Brackets, DeleteResult, InsertResult, Repository } from 'typeorm';
+import { SearchPostDto } from '@/post/models';
+import { PaginationDto } from '@/shared/models';
+import { isNotBlank } from '@/shared/utils';
 
 @CustomRepository(IndexSearchEntity)
 export class IndexSearchRepository extends Repository<IndexSearchEntity> {
@@ -73,6 +74,18 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
       query.getRawMany(),
       query.getCount(),
     ]);
+  }
+
+  /** 검색 데이터 목록을 조회한다. */
+  async listIndexSearch(typeCd: string) {
+    return await this.findAndCount({
+      ...(isNotBlank(typeCd) && {
+        where: { typeCd },
+      }),
+      order: {
+        id: 'ASC',
+      },
+    });
   }
 
   /** 검색 데이터를 등록한다. */

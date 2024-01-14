@@ -9,6 +9,8 @@ import { PostRepository } from '@/post/repositories/post.repository';
 import { PaginationDto } from '@/shared/models';
 import { ListIndexSearchDto } from '../models';
 import { serialize } from '@/shared/utils';
+import { IndexSearchLogRepository } from '../repositories/index-search-log.repository';
+import { AddIndexSearchLogDto } from '../models/dto/add-index-search-log.dto';
 
 @Injectable()
 export class IndexSearchService {
@@ -18,6 +20,8 @@ export class IndexSearchService {
   constructor(
     @InjectRepository(IndexSearchRepository)
     private readonly indexSearchRepository: IndexSearchRepository,
+    @InjectRepository(IndexSearchLogRepository)
+    private readonly indexSearchLogRepository: IndexSearchLogRepository,
     @InjectRepository(PostRepository)
     private readonly postRepository: PostRepository,
     private readonly dataSource: DataSource,
@@ -36,9 +40,12 @@ export class IndexSearchService {
     ];
   }
 
-  /** 검색 데이터를 색인하여 저장한다. */
+  /** 검색 데이터를 저장한다. */
   async saveIndexSearch(): Promise<void> {
     const startTime = Date.now();
+
+    let insertPostLogRes: InsertResult;
+    let insertPostTotal = 0;
 
     // 트랜잭션을 시작한다.
     await this.dataSource.transaction<void>(async (em: EntityManager) => {
@@ -54,8 +61,6 @@ export class IndexSearchService {
       // 2. 모든 포스트 목록을 조회한다.
       const posts: [PostEntity[], number] = await em.withRepository(this.postRepository).listPost(listPostDto);
       this.logger.warn(`2. 포스트 총 ${posts[1]}건 조회됨`);
-
-      let insertResTotal = 0;
       
       for (let i = 0; i < posts[0].length; i++) {
         const post = posts[0][i];
@@ -90,17 +95,35 @@ export class IndexSearchService {
                                    .typeCd(searchCodes.INDEX_SEARCH_POST.id)
                                    .build();
 
-        // 3. 검색 색인 테이블에 저장한다.
-        const insertRes: InsertResult = await em.withRepository(this.indexSearchRepository).addIndexSearch(saveIndexSearchDto);
-        insertResTotal += insertRes.raw.length;
+        // 3. 색인 데이터를 저장한다.
+        const insertRes = await em.withRepository(this.indexSearchRepository).addIndexSearch(saveIndexSearchDto);
+        insertPostTotal += insertRes.raw.length;
       }
-      this.logger.warn(`3. 검색 데이터 저장: 총 ${insertResTotal}건 색인됨`);
+      
+      const endTime = Date.now();
+      const resTime = (endTime - startTime) / 1000;
+      
+      this.logger.warn(`3. 포스트 검색 데이터 저장: 총 ${insertPostTotal}건 색인됨`);
+      this.logger.warn(`4. 포스트 색인 소요 시간: ${resTime}초`);
+
+      // 4. 포스트 색인 데이터를 조회한다.
+      const indexPostsData: [IndexSearchEntity[], number] = await em.withRepository(this.indexSearchRepository).listIndexSearch(searchCodes.INDEX_SEARCH_POST.id);
+      const indexPosts = indexPostsData[0];
+
+      const addIndexSearchLogDto = Builder(AddIndexSearchLogDto)
+                                   .typeCd(searchCodes.INDEX_SEARCH_POST.id)
+                                   .cnt(indexPostsData[1])
+                                   .startDate(indexPosts[0].regDate)
+                                   .endDate(indexPosts[indexPosts.length - 1].regDate)
+                                   .build();
+
+      // 5. 포스트 색인 데이터 로그를 저장한다.
+      insertPostLogRes = await em.withRepository(this.indexSearchLogRepository).addIndexSearchLog(addIndexSearchLogDto);
     });
 
-    const endTime = Date.now();
-    const resTime = (endTime - startTime) / 1000;
-    
-    this.logger.warn(`4. 색인 소요 시간: ${resTime}초`);
+    if (0 < insertPostLogRes?.raw.length) {
+      this.logger.warn(`5. 포스트 색인 로그 저장 완료`);
+    }
   }
 
 }
