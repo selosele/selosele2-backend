@@ -19,6 +19,7 @@ import { FileUploaderModule } from './file-uploader/file-uploader.module';
 import { NotificationModule } from './notification/notification.module';
 import { CacheDBModule } from './cache-db/cache-db.module';
 import { IndexSearchModule } from './index-search/index-search.module';
+import { CronModule } from './cron/cron.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { IndexSearchModule } from './index-search/index-search.module';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
     }),
+    CronModule,
     CacheDBModule,
     FileUploaderModule,
     AuthModule,

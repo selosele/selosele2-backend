@@ -19,7 +19,7 @@ import { PostEntity } from "@/post/models";
     CustomRepositoryModule.forCustomRepository([
       IndexSearchRepository,
       PostRepository
-    ]),
+    ])
   ],
   controllers: [
     IndexSearchController
