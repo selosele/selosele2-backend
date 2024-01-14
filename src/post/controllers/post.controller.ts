@@ -84,7 +84,7 @@ export class PostController {
     @IsAuthenticated() isAuthenticated: boolean
   ): Promise<[PostDto[], number]> {
 
-    this.logger.warn(`q : ${searchPostDto.q}, ip: ${ip}`);
+    this.logger.warn(`Try to search... q : ${searchPostDto.q}, ip: ${ip}`);
 
     // 비밀 포스트 조회를 위한 세팅
     searchPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
