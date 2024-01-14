@@ -59,6 +59,14 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
         }));
     }
 
+    // 태그로 검색
+    if ('005' === searchPostDto.t) {
+      query = query
+        .andWhere(new Brackets(qb => {
+          qb.where(caseSensitive + "indexSearch.tag LIKE :nm", { nm: `%${searchPostDto.q}%` });
+        }));
+    }
+
     if ('N' === searchPostDto?.isLogin) {
       query = query
         .andWhere("indexSearch.secret_yn = 'N'");
