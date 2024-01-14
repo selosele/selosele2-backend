@@ -23,8 +23,8 @@ export class PostRepository extends Repository<PostEntity> {
         .addSelect("post.pin_yn", "pinYn")
         .addSelect("post.tmp_yn", "tmpYn")
         .addSelect("postCategory.category_id", "categoryId")
-      .leftJoin("post.postCategory", "postCategory", "postCategory.post_id = post.id")
-      .leftJoin("post.postLike", "postLike", "postLike.post_id = post.id")
+      .leftJoin("post.postCategory", "postCategory")
+      .leftJoin("post.postLike", "postLike")
       .where("1=1")
 
     if ('N' === listPostDto?.isLogin) {

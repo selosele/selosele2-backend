@@ -20,7 +20,7 @@ export class MenuRepository extends Repository<MenuEntity> {
 
     let query = this.createQueryBuilder('menu')
       .leftJoinAndSelect("menu.children", "parent", getConditionAndParameters()[0], getConditionAndParameters()[1])
-      .innerJoin("menu.menuRole", "menuRole", "menuRole.menu_id = menu.id")
+      .innerJoin("menu.menuRole", "menuRole")
       .where("1=1");
 
       if (isNotEmpty(listMenuDto.useYn)) {

@@ -7,8 +7,8 @@ import { PaginationDto } from "@/shared/models";
 @CustomRepository(IndexSearchEntity)
 export class IndexSearchRepository extends Repository<IndexSearchEntity> {
 
-  /** 검색 데이터 목록을 조회한다. */
-  async listIndexSearch(
+  /** 검색 데이터 포스트 목록을 조회한다. */
+  async listIndexSearchPost(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto,
   ): Promise<[IndexSearchEntity[], number]> {
@@ -19,14 +19,15 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
         .addSelect("indexSearch.cont", "cont")
         .addSelect("indexSearch.og_img_url", "ogImgUrl")
         .addSelect("indexSearch.secret_yn", "secretYn")
-        .addSelect("indexSearch.pin_yn", "pinYn");
+        .addSelect("indexSearch.pin_yn", "pinYn")
+      .where("indexSearch.type_cd = 'D03001'")
 
     const caseSensitive = ('Y' === searchPostDto.c ? 'BINARY ' : '');
 
     // 전체 검색
     if ('001' === searchPostDto.t) {
       query = query
-        .where(new Brackets(qb => {
+        .andWhere(new Brackets(qb => {
           qb.where(caseSensitive + "indexSearch.title LIKE :title", { title: `%${searchPostDto.q}%` })
             .orWhere(caseSensitive + "indexSearch.cont LIKE :cont", { cont: `%${searchPostDto.q}%` })
             .orWhere(caseSensitive + "indexSearch.category LIKE :nm", { nm: `%${searchPostDto.q}%` })
@@ -36,7 +37,7 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
     // 제목으로 검색
     if ('002' === searchPostDto.t) {
       query = query
-        .where(new Brackets(qb => {
+        .andWhere(new Brackets(qb => {
           qb.where(caseSensitive + "indexSearch.title LIKE :title", { title: `%${searchPostDto.q}%` });
         }));
     }
@@ -44,7 +45,7 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
     // 내용으로 검색
     if ('003' === searchPostDto.t) {
       query = query
-        .where(new Brackets(qb => {
+        .andWhere(new Brackets(qb => {
           qb.where(caseSensitive + "indexSearch.cont LIKE :cont", { cont: `%${searchPostDto.q}%` });
         }));
     }
@@ -52,7 +53,7 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
     // 카테고리로 검색
     if ('004' === searchPostDto.t) {
       query = query
-        .where(new Brackets(qb => {
+        .andWhere(new Brackets(qb => {
           qb.where(caseSensitive + "indexSearch.category LIKE :nm", { nm: `%${searchPostDto.q}%` });
         }));
     }

@@ -9,7 +9,6 @@ import { Request } from 'express';
  */
 export const Ip = createParamDecorator((data: unknown, context: ExecutionContext): string => {
   const req = context.switchToHttp().getRequest<Request>();
-
   const ip = req.headers['x-forwarded-for'] as string || req.connection.remoteAddress;
 
   return ip;

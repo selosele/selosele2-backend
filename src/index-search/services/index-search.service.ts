@@ -3,8 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IndexSearchRepository } from '../repositories/index-search.repository';
 import { Builder } from 'builder-pattern';
 import { ListPostDto, PostEntity, SearchPostDto } from '@/post/models';
-import { IndexSearchEntity, SaveIndexSearchDto } from '../models';
-import { globalCodes } from '@/shared/codes/code';
+import { IndexSearchEntity, SaveIndexSearchDto, searchCodes } from '../models';
 import { DataSource, DeleteResult, EntityManager, InsertResult } from 'typeorm';
 import { PostRepository } from '@/post/repositories/post.repository';
 import { PaginationDto } from '@/shared/models';
@@ -24,12 +23,12 @@ export class IndexSearchService {
     private readonly dataSource: DataSource,
   ) {}
 
-  /** 검색 데이터 목록을 조회한다. */
-  async listIndexSearch(
+  /** 검색 데이터 포스트 목록을 조회한다. */
+  async listIndexSearchPost(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto,
   ): Promise<[ListIndexSearchDto[], number]> {
-    const indexSearchs: [IndexSearchEntity[], number] = await this.indexSearchRepository.listIndexSearch(searchPostDto, paginationDto);
+    const indexSearchs: [IndexSearchEntity[], number] = await this.indexSearchRepository.listIndexSearchPost(searchPostDto, paginationDto);
     
     return [
       serialize<ListIndexSearchDto[]>(indexSearchs[0]),
@@ -39,7 +38,7 @@ export class IndexSearchService {
 
   /** 검색 데이터를 색인하여 저장한다. */
   async saveIndexSearch(): Promise<void> {
-    const startTime = new Date().getTime();
+    const startTime = Date.now();
 
     // 트랜잭션을 시작한다.
     await this.dataSource.transaction<void>(async (em: EntityManager) => {
@@ -52,13 +51,16 @@ export class IndexSearchService {
                           .tmpYn('N')
                           .build();
 
-      // 2. 모든 포스트 목록을 조회해서
+      // 2. 모든 포스트 목록을 조회한다.
       const posts: [PostEntity[], number] = await em.withRepository(this.postRepository).listPost(listPostDto);
       this.logger.warn(`2. 포스트 총 ${posts[1]}건 조회됨`);
 
       let insertResTotal = 0;
       
-      for (const post of posts[0]) {
+      for (let i = 0; i < posts[0].length; i++) {
+        const post = posts[0][i];
+        const no = (i + 1);
+
         let categoryInfo = ``;
         let tagInfo = ``;
 
@@ -73,6 +75,7 @@ export class IndexSearchService {
         }
 
         const saveIndexSearchDto = Builder(SaveIndexSearchDto)
+                                   .id(no)
                                    .cnncId(post.id)
                                    .cnncRegDate(post.regDate)
                                    .title(post.title)
@@ -84,7 +87,7 @@ export class IndexSearchService {
                                    .replyCnt(post.postReply.filter(d => d.delYn === 'N').length)
                                    .category(categoryInfo)
                                    .tag(tagInfo)
-                                   .typeCd(globalCodes.SEARCH_POST.id)
+                                   .typeCd(searchCodes.INDEX_SEARCH_POST.id)
                                    .build();
 
         // 3. 검색 색인 테이블에 저장한다.
@@ -94,7 +97,7 @@ export class IndexSearchService {
       this.logger.warn(`3. 검색 데이터 저장: 총 ${insertResTotal}건 색인됨`);
     });
 
-    const endTime = new Date().getTime();
+    const endTime = Date.now();
     const resTime = (endTime - startTime) / 1000;
     
     this.logger.warn(`4. 색인 소요 시간: ${resTime}초`);

@@ -3,6 +3,10 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 /** 검색 데이터 색인 저장 DTO */
 export class SaveIndexSearchDto {
 
+  /** 검색 데이터 ID */
+  @IsNotEmpty()
+  id?: number;
+
   /** 검색 연결 데이터 ID */
   @IsNotEmpty()
   cnncId?: number;

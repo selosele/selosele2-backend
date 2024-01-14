@@ -97,7 +97,7 @@ export class PostService {
     const [post, postCategory] = await Promise.all([
       
       // 포스트 목록 조회
-      this.indexSerchService.listIndexSearch(searchPostDto, paginationDto),
+      this.indexSerchService.listIndexSearchPost(searchPostDto, paginationDto),
       // 카테고리 조회
       this.postCategoryRepository.listPostCategorySearch(searchPostDto, paginationDto),
     ]);

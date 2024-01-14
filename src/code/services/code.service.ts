@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Code } from '../models';
 import { notificationCodes } from '@/notification/models';
-import { postCodes } from '@/post/models/codes/code';
 import { satisfactionCodes } from '@/satisfaction/models';
 import { globalCodes } from '@/shared/codes/code';
+import { searchCodes } from '@/index-search/models';
 
 @Injectable()
 export class CodeService {
@@ -13,7 +13,7 @@ export class CodeService {
     return [
       ...Object.values(globalCodes),
       ...Object.values(notificationCodes),
-      ...Object.values(postCodes),
+      ...Object.values(searchCodes),
       ...Object.values(satisfactionCodes),
     ].sort((a,b) => a.id.localeCompare(b.id)) as Code[];
   }

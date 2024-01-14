@@ -10,8 +10,8 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
   /** 포스트 목록 조회 시 카테고리를 조회한다. */
   async listPostCategory(listPostDto: ListPostDto): Promise<PostCategoryEntity[]> {
     let query = this.createQueryBuilder('postCategory')
-      .leftJoin("postCategory.post", "post", "post.id = postCategory.post_id")
-      .leftJoinAndSelect("postCategory.category", "category", "category.id = postCategory.category_id")
+      .leftJoin("postCategory.post", "post")
+      .leftJoinAndSelect("postCategory.category", "category")
       .where("post.tmp_yn = 'N'");
 
     if ('N' === listPostDto?.isLogin) {
@@ -34,8 +34,8 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
     paginationDto: PaginationDto
   ): Promise<PostCategoryEntity[]> {
     let query = this.createQueryBuilder('postCategory')
-      .leftJoin("postCategory.post", "post", "post.id = postCategory.post_id")
-      .leftJoinAndSelect("postCategory.category", "category", "category.id = postCategory.category_id")
+      .leftJoin("postCategory.post", "post")
+      .leftJoinAndSelect("postCategory.category", "category")
 
     const caseSensitive = 'Y' === searchPostDto.c ? 'BINARY ' : '';
 

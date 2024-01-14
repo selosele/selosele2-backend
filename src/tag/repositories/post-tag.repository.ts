@@ -14,10 +14,10 @@ export class PostTagRepository extends Repository<PostTagEntity> {
     paginationDto: PaginationDto
   ): Promise<PostTagEntity[]> {
     let query = this.createQueryBuilder('postTag')
-      .leftJoin("postTag.post", "post", "post.id = postTag.post_id")
+      .leftJoin("postTag.post", "post")
       .leftJoin(PostCategoryEntity, "postCategory", "postCategory.post_id = post.id")
-      .leftJoinAndSelect("postCategory.category", "category", "category.id = postCategory.category_id")
-      .leftJoinAndSelect("postTag.tag", "tag", "tag.id = postTag.tag_id")
+      .leftJoinAndSelect("postCategory.category", "category")
+      .leftJoinAndSelect("postTag.tag", "tag")
 
     const caseSensitive = 'Y' === searchPostDto.c ? 'BINARY ' : '';
 
