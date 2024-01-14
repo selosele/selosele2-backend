@@ -2,7 +2,6 @@
 /dist
 /node_modules
 /secrets
-/schedulers
 
 # env files
 .env
