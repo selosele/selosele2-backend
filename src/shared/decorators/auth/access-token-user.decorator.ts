@@ -1,7 +1,7 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { isEmpty } from "@/shared/utils";
-import { UserDto } from "../../../auth/models";
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { getAuthenticatedUser, isEmpty } from '@/shared/utils';
+import { UserDto } from '../../../auth/models';
 
 /**
  * JWT 액세스 토큰으로부터 인증된 사용자 정보를 반환하는 데코레이터
@@ -12,7 +12,7 @@ import { UserDto } from "../../../auth/models";
  */
 export const AccessTokenUser = createParamDecorator((data: string, context: ExecutionContext): UserDto => {
   const req = context.switchToHttp().getRequest();
-  const authorization: string = req.headers?.authorization;
+  const authorization: string = req.headers?.['authorization'];
 
   if (isEmpty(authorization)) {
     return null;
@@ -20,7 +20,7 @@ export const AccessTokenUser = createParamDecorator((data: string, context: Exec
 
   const jwtService: JwtService = new JwtService();
   const accessToken: string = authorization?.split(' ')[1];
-  const user = jwtService.decode(accessToken) as UserDto;
+  const user = getAuthenticatedUser(accessToken);
 
   try {
     const decodedToken = jwtService.verify(accessToken, {

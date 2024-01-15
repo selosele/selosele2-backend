@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { isEmpty } from "@/shared/utils";
+import { getAuthenticatedUser, isEmpty } from "@/shared/utils";
 import { UserDto } from "../../../auth/models";
 
 /**
@@ -19,7 +19,7 @@ export const RefreshTokenUser = createParamDecorator((data: string, context: Exe
   }
 
   const jwtService: JwtService = new JwtService();
-  const user = jwtService.decode(refreshToken) as UserDto;
+  const user = getAuthenticatedUser(refreshToken);
 
   try {
     const decodedToken = jwtService.verify(refreshToken, {

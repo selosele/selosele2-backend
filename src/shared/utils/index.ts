@@ -1,3 +1,4 @@
+export * from './auth/auth.util';
 export * from './common/common.util';
 export * from './cors/cors.util';
 export * from './encrypt/encrypt.util';
