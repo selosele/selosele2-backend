@@ -20,9 +20,6 @@ import { NotificationModule } from './notification/notification.module';
 import { CacheDBModule } from './cache-db/cache-db.module';
 import { IndexSearchModule } from './index-search/index-search.module';
 import { CronModule } from './cron/cron.module';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
 
 @Module({
   imports: [
