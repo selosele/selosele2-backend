@@ -108,7 +108,7 @@ export class ContentService {
     return await this.contentRepository.removeContent(id);
   }
 
-  /** 콘텐츠를 다건을 삭제한다. */
+  /** 콘텐츠 다건을 삭제한다. */
   async removeContents(removeContentDto: RemoveContentDto[]): Promise<DeleteResult> {
     let idList: number[] = [];
 
