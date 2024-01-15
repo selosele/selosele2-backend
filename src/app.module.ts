@@ -13,13 +13,15 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { GuestbookModule } from './guestbook/guestbook.module';
 import { ContentModule } from './content/content.module';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { BizExceptionFilter } from './shared/exceptions/biz/biz-exception-filter';
 import { FileUploaderModule } from './file-uploader/file-uploader.module';
 import { NotificationModule } from './notification/notification.module';
 import { CacheDBModule } from './cache-db/cache-db.module';
 import { IndexSearchModule } from './index-search/index-search.module';
 import { CronModule } from './cron/cron.module';
+import { ProgramLogInterceptor } from './shared/interceptors/program-log.interceptor';
+import { ProgramModule } from './program/program.module';
 
 @Module({
   imports: [
@@ -48,11 +50,16 @@ import { CronModule } from './cron/cron.module';
     ContentModule,
     NotificationModule,
     IndexSearchModule,
+    ProgramModule,
   ],
   providers: [
     {
       provide: APP_FILTER,
       useClass: BizExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ProgramLogInterceptor,
     },
   ],
 })
