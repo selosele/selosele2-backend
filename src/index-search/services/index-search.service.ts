@@ -41,7 +41,7 @@ export class IndexSearchService {
   }
 
   /** 검색 데이터를 저장한다. */
-  async saveIndexSearch(): Promise<void> {
+  async saveIndexSearch(autoYn: string = 'Y'): Promise<void> {
     const startTime = Date.now();
 
     let insertPostLogRes: InsertResult;
@@ -112,6 +112,7 @@ export class IndexSearchService {
 
       const addIndexSearchLogDto = Builder(AddIndexSearchLogDto)
                                    .typeCd(searchCodes.INDEX_SEARCH_POST.id)
+                                   .autoYn(autoYn)
                                    .cnt(indexPostsData[1])
                                    .startDate(indexPosts[0].regDate)
                                    .endDate(indexPosts[indexPosts.length - 1].regDate)

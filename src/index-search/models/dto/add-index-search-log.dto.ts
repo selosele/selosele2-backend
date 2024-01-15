@@ -7,6 +7,10 @@ export class AddIndexSearchLogDto {
   @IsOptional()
   typeCd?: string;
 
+  /** 자동 색인 여부 */
+  @IsOptional()
+  autoYn?: string;
+
   /** 색인 건수 */
   @IsOptional()
   cnt?: number;

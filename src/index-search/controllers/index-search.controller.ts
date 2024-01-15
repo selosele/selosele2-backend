@@ -27,7 +27,7 @@ export class IndexSearchController {
   ): Promise<void> {
     this.logger.warn(`Try to saveIndexSearch... ip : ${ip}`);
 
-    await this.indexSearchService.saveIndexSearch();
+    await this.indexSearchService.saveIndexSearch('N');
   }
 
 }

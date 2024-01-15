@@ -19,6 +19,14 @@ export class IndexSearchLogEntity extends BaseEntity {
   typeCd?: string;
 
   @Column({
+    comment: '자동 색인 여부'
+  })
+  @ApiProperty({
+    description: '자동 색인 여부'
+  })
+  autoYn?: string;
+
+  @Column({
     comment: '검색 데이터 댓글 수'
   })
   @ApiProperty({
