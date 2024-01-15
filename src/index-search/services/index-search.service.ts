@@ -32,11 +32,11 @@ export class IndexSearchService {
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto,
   ): Promise<[ListIndexSearchDto[], number]> {
-    const indexSearchs: [IndexSearchEntity[], number] = await this.indexSearchRepository.listIndexSearchPost(searchPostDto, paginationDto);
+    const indexSearches: [IndexSearchEntity[], number] = await this.indexSearchRepository.listIndexSearchPost(searchPostDto, paginationDto);
     
     return [
-      serialize<ListIndexSearchDto[]>(indexSearchs[0]),
-      indexSearchs[1]
+      serialize<ListIndexSearchDto[]>(indexSearches[0]),
+      indexSearches[1]
     ];
   }
 
