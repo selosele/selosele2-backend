@@ -6,6 +6,9 @@ import { ProgramDetailEntity, ProgramEntity } from "./models";
 import { ProgramRepository } from "./repositories/program.repository";
 import { ProgramService } from "./services/program.service";
 import { ProgramController } from "./controllers/program.controller";
+import { ProgramDetailRepository } from "./repositories/program-detail.repository";
+import { ProgramDetailService } from "./services/program-detail.service";
+import { ProgramDetailController } from "./controllers/program-detail.controller";
 
 @Module({
   imports: [
@@ -15,14 +18,17 @@ import { ProgramController } from "./controllers/program.controller";
       ProgramDetailEntity
     ]),
     CustomRepositoryModule.forCustomRepository([
-      ProgramRepository
+      ProgramRepository,
+      ProgramDetailRepository
     ]),
   ],
   controllers: [
-    ProgramController
+    ProgramController,
+    ProgramDetailController
   ],
   providers: [
-    ProgramService
+    ProgramService,
+    ProgramDetailService
   ]
 })
 export class ProgramModule {}

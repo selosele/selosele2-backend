@@ -1,6 +1,9 @@
 // DTO
+export * from './dto/program-detail.dto';
 export * from './dto/program.dto';
+export * from './dto/remove-program-detail.dto';
 export * from './dto/remove-program.dto';
+export * from './dto/save-program-detail.dto';
 export * from './dto/save-program.dto';
 
 // Entities

@@ -8,7 +8,7 @@ import { ProgramDto, ProgramEntity, RemoveProgramDto, SaveProgramDto } from '../
 import { DeleteResult } from 'typeorm';
 
 @Controller('program')
-@ApiTags('프로그램 API')
+@ApiTags('프로그램 그룹 API')
 export class ProgramController {
 
   constructor(
@@ -91,7 +91,7 @@ export class ProgramController {
     name: 'id',
     description: '프로그램 그룹 ID',
   })
-  async removePost(
+  async removeProgram(
     @Param('id', ParseIntPipe) id: number
   ): Promise<DeleteResult> {
     return await this.ProgramService.removeProgram(id);
@@ -111,7 +111,7 @@ export class ProgramController {
     type: RemoveProgramDto,
     description: '프로그램 그룹 삭제 DTO',
   })
-  async removeContents(
+  async removePrograms(
     @Body(ValidationPipe) removeProgramDto: RemoveProgramDto[]
   ): Promise<DeleteResult> {
     return await this.ProgramService.removePrograms(removeProgramDto);
