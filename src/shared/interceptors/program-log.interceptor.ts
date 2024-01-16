@@ -27,16 +27,11 @@ export class ProgramLogInterceptor implements NestInterceptor {
     const accessToken: string = req.headers?.['authorization']?.split(' ')[1];
     const user: UserDto = getAuthenticatedUser(accessToken);
 
-    // console.log('req.orginalUrl >>>', req.orginalUrl);
-    // console.log('req.path >>>', req.path);
-    // console.log('req.href >>>', req.href);
-    // console.log('req._raw >>>', req._raw);
-    // console.log('req.route.path >>>', req.route.path);
-
-    //this.logger.warn({ method, url, path, routePath, ip, statusCode, userSn: user?.userSn });
-
     // 운영 환경에서만 프로그램 사용 로그를 저장한다.
     if ('production' === this.config.get<string>('NODE_ENV')) {
+      this.logger.warn({ method, url, path, routePath, ip, statusCode, userSn: user?.userSn });
+
+      // TODO: 프로그램 사용 로그 저장 로직 구현
 
     }
     return next.handle();
