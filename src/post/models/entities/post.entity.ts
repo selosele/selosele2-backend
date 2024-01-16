@@ -115,28 +115,28 @@ export class PostEntity extends BaseEntity {
   })
   tmpYn?: string;
 
-  @OneToMany(() => PostCategoryEntity, postCategory => postCategory.post)
+  @OneToMany(() => PostCategoryEntity, (postCategory) => postCategory.post)
   @JoinColumn({ referencedColumnName: 'post_id' })
   @ApiProperty({
     description: '포스트 카테고리'
   })
   postCategory?: PostCategoryEntity[];
 
-  @OneToMany(() => PostTagEntity, postTag => postTag.post)
+  @OneToMany(() => PostTagEntity, (postTag) => postTag.post)
   @JoinColumn({ referencedColumnName: 'post_id' })
   @ApiProperty({
     description: '포스트 태그'
   })
   postTag?: PostTagEntity[];
 
-  @OneToMany(() => PostLikeEntity, postLike => postLike.post)
+  @OneToMany(() => PostLikeEntity, (postLike) => postLike.post)
   @JoinColumn({ referencedColumnName: 'post_id' })
   @ApiProperty({
     description: '포스트 추천'
   })
   postLike?: PostLikeEntity[];
 
-  @OneToMany(() => PostReplyEntity, postReply => postReply.post)
+  @OneToMany(() => PostReplyEntity, (postReply) => postReply.post)
   @JoinColumn({ referencedColumnName: 'id' })
   @ApiProperty({
     description: '포스트 댓글'

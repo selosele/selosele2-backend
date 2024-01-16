@@ -18,14 +18,14 @@ export class PostCategoryEntity extends BaseEntity {
   })
   categoryId?: number;
 
-  @ManyToOne(() => PostEntity, post => post.postCategory)
+  @ManyToOne(() => PostEntity, (post) => post.postCategory)
   @JoinColumn({ name: 'post_id' })
   @ApiProperty({
     description: '포스트'
   })
   post?: PostEntity;
 
-  @ManyToOne(() => CategoryEntity, category => category.postCategory)
+  @ManyToOne(() => CategoryEntity, (category) => category.postCategory)
   @JoinColumn({ name: 'category_id' })
   @ApiProperty({
     description: '카테고리'

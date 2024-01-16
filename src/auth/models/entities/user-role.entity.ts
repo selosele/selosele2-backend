@@ -24,14 +24,14 @@ export class UserRoleEntity extends BaseEntity {
   })
   roleId?: string;
 
-  @ManyToOne(() => UserEntity, user => user.userRole)
+  @ManyToOne(() => UserEntity, (user) => user.userRole)
   @JoinColumn({ name: 'user_id' })
   @ApiProperty({
     description: '사용자'
   })
   user?: UserEntity;
 
-  @ManyToOne(() => RoleEntity, role => role.userRole)
+  @ManyToOne(() => RoleEntity, (role) => role.userRole)
   @JoinColumn({ name: 'role_id' })
   @ApiProperty({
     description: '권한'

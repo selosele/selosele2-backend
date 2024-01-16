@@ -17,7 +17,7 @@ export class MenuRoleEntity extends BaseEntity {
   })
   roleId?: string;
 
-  @ManyToOne(() => MenuEntity, menu => menu.menuRole)
+  @ManyToOne(() => MenuEntity, (menu) => menu.menuRole)
   @JoinColumn({ name: 'menu_id' })
   @ApiProperty({
     description: '메뉴'

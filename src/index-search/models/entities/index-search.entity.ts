@@ -1,10 +1,10 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('index_search')
 export class IndexSearchEntity extends BaseEntity {
 
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   @ApiProperty({
     description: '검색 데이터 ID'
   })

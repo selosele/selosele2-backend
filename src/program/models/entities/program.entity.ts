@@ -35,7 +35,7 @@ export class ProgramEntity extends BaseEntity {
   })
   modDate?: Date;
 
-  @OneToMany(() => ProgramDetailEntity, programDetail => programDetail.program)
+  @OneToMany(() => ProgramDetailEntity, (programDetail) => programDetail.program)
   @JoinColumn({ referencedColumnName: 'id' })
   @ApiProperty({
     description: '프로그램 상세'

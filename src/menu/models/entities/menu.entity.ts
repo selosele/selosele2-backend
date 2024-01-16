@@ -87,7 +87,7 @@ export class MenuEntity extends BaseEntity {
   })
   children?: MenuEntity[];
 
-  @OneToMany(() => MenuRoleEntity, menuRole => menuRole.menu)
+  @OneToMany(() => MenuRoleEntity, (menuRole) => menuRole.menu)
   @JoinColumn({ referencedColumnName: 'id' })
   @ApiProperty({
     description: '메뉴 권한'

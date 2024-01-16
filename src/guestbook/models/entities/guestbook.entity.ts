@@ -68,7 +68,7 @@ export class GuestbookEntity extends BaseEntity {
   })
   modDate?: Date;
 
-  @OneToMany(() => GuestbookReplyEntity, guestbookReply => guestbookReply.guestbook)
+  @OneToMany(() => GuestbookReplyEntity, (guestbookReply) => guestbookReply.guestbook)
   @JoinColumn({ referencedColumnName: 'id' })
   @ApiProperty({
     description: '방명록 댓글',

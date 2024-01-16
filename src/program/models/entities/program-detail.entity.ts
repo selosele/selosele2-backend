@@ -67,7 +67,7 @@ export class ProgramDetailEntity extends BaseEntity {
   })
   modDate?: Date;
 
-  @ManyToOne(() => ProgramEntity, program => program.programDetail)
+  @ManyToOne(() => ProgramEntity, (program) => program.programDetail)
   @JoinColumn({ name: 'parent_id' })
   @ApiProperty({
     type: () => ProgramEntity,

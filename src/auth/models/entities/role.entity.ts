@@ -29,7 +29,7 @@ export class RoleEntity extends BaseEntity {
   })
   modDate?: Date;
 
-  @OneToMany(() => UserRoleEntity, userRole => userRole.role)
+  @OneToMany(() => UserRoleEntity, (userRole) => userRole.role)
   @JoinColumn({ referencedColumnName: 'role_id' })
   @ApiProperty({
     description: '사용자 권한'

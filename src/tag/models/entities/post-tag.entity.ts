@@ -18,14 +18,14 @@ export class PostTagEntity extends BaseEntity {
   })
   tagId?: number;
 
-  @ManyToOne(() => PostEntity, post => post.postTag)
+  @ManyToOne(() => PostEntity, (post) => post.postTag)
   @JoinColumn({ name: 'post_id' })
   @ApiProperty({
     description: '포스트'
   })
   post?: PostEntity;
 
-  @ManyToOne(() => TagEntity, tag => tag.postTag)
+  @ManyToOne(() => TagEntity, (tag) => tag.postTag)
   @JoinColumn({ name: 'tag_id' })
   @ApiProperty({
     description: '태그'

@@ -116,7 +116,7 @@ export class PostReplyEntity extends BaseEntity {
   })
   adminYn?: string;
 
-  @ManyToOne(() => PostEntity, post => post.postReply)
+  @ManyToOne(() => PostEntity, (post) => post.postReply)
   @JoinColumn({ name: 'parent_id' })
   @ApiProperty({
     type: () => PostEntity,

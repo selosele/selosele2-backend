@@ -35,7 +35,7 @@ export class PostLikeEntity extends BaseEntity {
   })
   regDate?: Date;
 
-  @ManyToOne(() => PostEntity, post => post.postLike)
+  @ManyToOne(() => PostEntity, (post) => post.postLike)
   @JoinColumn({ name: 'post_id' })
   @ApiProperty({
     type: () => PostEntity,

@@ -43,7 +43,7 @@ export class TagEntity extends BaseEntity {
   })
   modDate?: Date;
 
-  @OneToMany(() => PostTagEntity, postTag => postTag.tag)
+  @OneToMany(() => PostTagEntity, (postTag) => postTag.tag)
   @JoinColumn({ referencedColumnName: 'tag_id' })
   @ApiProperty({
     description: '포스트 태그'

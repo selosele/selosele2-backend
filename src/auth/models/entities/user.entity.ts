@@ -35,7 +35,7 @@ export class UserEntity extends BaseEntity {
   })
   enableYn?: string;
 
-  @OneToMany(() => UserRoleEntity, userRole => userRole.user)
+  @OneToMany(() => UserRoleEntity, (userRole) => userRole.user)
   @JoinColumn({ referencedColumnName: 'user_id' })
   @ApiProperty({
     description: '사용자 권한'

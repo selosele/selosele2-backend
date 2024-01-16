@@ -84,7 +84,7 @@ export class GuestbookReplyEntity extends BaseEntity {
   })
   modDate?: Date;
 
-  @ManyToOne(() => GuestbookEntity, guestbook => guestbook.guestbookReply)
+  @ManyToOne(() => GuestbookEntity, (guestbook) => guestbook.guestbookReply)
   @JoinColumn({ name: 'parent_id' })
   @ApiProperty({
     type: () => GuestbookEntity,
