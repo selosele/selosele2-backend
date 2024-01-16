@@ -1,6 +1,6 @@
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { DeleteResult, Repository } from 'typeorm';
-import { ProgramEntity } from '../models';
+import { ProgramEntity, SaveProgramDto } from '../models';
 
 @CustomRepository(ProgramEntity)
 export class ProgramRepository extends Repository<ProgramEntity> {
@@ -22,6 +22,16 @@ export class ProgramRepository extends Repository<ProgramEntity> {
       },
       where: { id },
     });
+  }
+
+  /** 프로그램 그룹을 등록/수정한다. */
+  async saveProgram(saveProgramDto: SaveProgramDto): Promise<ProgramEntity> {
+    return await this.save(saveProgramDto);
+  }
+
+  /** 프로그램 그룹을 삭제한다. */
+  async removeProgram(id: number): Promise<DeleteResult> {
+    return await this.delete(id);
   }
 
   /** 프로그램 그룹 다건을 삭제한다. */

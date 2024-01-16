@@ -349,7 +349,7 @@ export class PostController {
   })
   @ApiCreatedResponse({
     type: DeleteResult,
-    description: '포스트를 삭제 정보',
+    description: '포스트 삭제 정보',
   })
   @ApiParam({
     type: Number,
