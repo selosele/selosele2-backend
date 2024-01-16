@@ -9,7 +9,7 @@ import { isNotBlank } from '@/shared/utils';
 export class IndexSearchRepository extends Repository<IndexSearchEntity> {
 
   /** 검색 데이터 포스트 목록을 조회한다. */
-  async listIndexSearchPost(
+  async listPost(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto,
   ): Promise<[IndexSearchEntity[], number]> {
@@ -97,7 +97,7 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
   }
 
   /** 검색 데이터 포스트의 연도 및 개수를 조회한다. */
-  async listIndexSearchYearAndCount(listPostDto: ListPostDto): Promise<IndexSearchEntity[]> {
+  async listYearAndCount(listPostDto: ListPostDto): Promise<IndexSearchEntity[]> {
     let query = this.createQueryBuilder('indexSearch')
       .select("cnnc_reg_year", "year")
         .addSelect("COUNT('cnnc_reg_year')", "count")
@@ -115,7 +115,7 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
   }
 
   /** 연도별 검색 데이터 포스트 목록을 조회한다. */
-  async listIndexSearchPostByYear(
+  async listPostByYear(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
   ): Promise<[IndexSearchEntity[], number]> {

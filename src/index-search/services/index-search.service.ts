@@ -28,11 +28,11 @@ export class IndexSearchService {
   ) {}
 
   /** 검색 데이터 포스트 목록을 조회한다. */
-  async listIndexSearchPost(
+  async listPost(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto,
   ): Promise<[ListIndexSearchDto[], number]> {
-    const indexSearches: [IndexSearchEntity[], number] = await this.indexSearchRepository.listIndexSearchPost(searchPostDto, paginationDto);
+    const indexSearches: [IndexSearchEntity[], number] = await this.indexSearchRepository.listPost(searchPostDto, paginationDto);
     
     return [
       serialize<ListIndexSearchDto[]>(indexSearches[0]),

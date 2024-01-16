@@ -97,7 +97,7 @@ export class PostService {
     const [post, postCategory] = await Promise.all([
       
       // 포스트 목록 조회
-      this.indexSerchService.listIndexSearchPost(searchPostDto, paginationDto),
+      this.indexSerchService.listPost(searchPostDto, paginationDto),
       // 카테고리 조회
       this.postCategoryRepository.listPostCategorySearch(searchPostDto, paginationDto),
     ]);
@@ -115,7 +115,7 @@ export class PostService {
 
   /** 포스트의 연도 및 개수를 조회한다. */
   async listYearAndCount(listPostDto: ListPostDto): Promise<IndexSearchEntity[]> {
-    return await this.indexSearchRepository.listIndexSearchYearAndCount(listPostDto);
+    return await this.indexSearchRepository.listYearAndCount(listPostDto);
   }
 
   /** 연도별 포스트 목록을 조회한다. */
@@ -123,7 +123,7 @@ export class PostService {
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
   ): Promise<[IndexSearchEntity[], number]> {
-    return await this.indexSearchRepository.listIndexSearchPostByYear(listPostDto, paginationDto);
+    return await this.indexSearchRepository.listPostByYear(listPostDto, paginationDto);
   }
 
   /** 카테고리별 포스트 목록을 조회한다. */
