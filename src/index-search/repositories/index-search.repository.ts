@@ -120,7 +120,7 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
     paginationDto: PaginationDto
   ): Promise<[IndexSearchEntity[], number]> {
     let query = this.createQueryBuilder('indexSearch')
-      .select("id")
+      .select("cnnc_id", "id")
         .addSelect("title")
         .addSelect("cnnc_reg_date", "regDate")
       .where("cnnc_reg_year = :year", { year: listPostDto?.year })
