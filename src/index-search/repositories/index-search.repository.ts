@@ -1,7 +1,7 @@
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { IndexSearchEntity, SaveIndexSearchDto } from '../models';
 import { Brackets, DeleteResult, InsertResult, Repository } from 'typeorm';
-import { SearchPostDto } from '@/post/models';
+import { ListPostDto, SearchPostDto } from '@/post/models';
 import { PaginationDto } from '@/shared/models';
 import { isNotBlank } from '@/shared/utils';
 
@@ -94,6 +94,51 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
         id: 'ASC',
       },
     });
+  }
+
+  /** 검색 데이터 포스트의 연도 및 개수를 조회한다. */
+  async listIndexSearchYearAndCount(listPostDto: ListPostDto): Promise<IndexSearchEntity[]> {
+    let query = this.createQueryBuilder('indexSearch')
+      .select("cnnc_reg_year", "year").distinct(true)
+        .addSelect("COUNT('cnnc_reg_year')", "count")
+
+    if ('N' === listPostDto?.isLogin) {
+      query = query
+        .where("secret_yn = 'N'");
+    }
+
+    query = query
+      .groupBy("cnnc_reg_year")
+      .orderBy("cnnc_reg_year", "DESC");
+
+    return await query.getRawMany();
+  }
+
+  /** 연도별 검색 데이터 포스트 목록을 조회한다. */
+  async listIndexSearchPostByYear(
+    listPostDto: ListPostDto,
+    paginationDto: PaginationDto
+  ): Promise<[IndexSearchEntity[], number]> {
+    let query = this.createQueryBuilder('indexSearch')
+      .select("id")
+        .addSelect("title")
+        .addSelect("cnnc_reg_date", "regDate")
+      .where("cnnc_reg_year = :year", { year: listPostDto?.year })
+
+      if ('N' === listPostDto?.isLogin) {
+        query = query
+          .andWhere("secret_yn = 'N'");
+      }
+
+      query = query
+        .orderBy("cnnc_reg_date", "DESC")
+        .limit(paginationDto.pageSize)
+        .offset(paginationDto.getSkipSize());
+
+    return await Promise.all([
+      query.getRawMany(),
+      query.getCount(),
+    ]);
   }
 
   /** 검색 데이터를 등록한다. */

@@ -82,6 +82,7 @@ export class IndexSearchService {
         const saveIndexSearchDto = Builder(SaveIndexSearchDto)
                                    .id(no)
                                    .cnncId(post.id)
+                                   .cnncRegYear(new Date(post.regDate).getFullYear() as unknown as string)
                                    .cnncRegDate(post.regDate)
                                    .title(post.title)
                                    .cont(post.cont.substring(0, 180))

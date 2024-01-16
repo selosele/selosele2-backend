@@ -10,7 +10,7 @@ import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } fr
 import { DeleteResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, PostDto, SavePostDto } from '../models';
 import { PostService } from '../services/post.service';
-import { ListIndexSearchDto } from '@/index-search/models';
+import { IndexSearchEntity, ListIndexSearchDto } from '@/index-search/models';
 
 @Controller('post')
 @ApiTags('포스트 API')
@@ -113,7 +113,7 @@ export class PostController {
                         .isLogin(isAuthenticated ? 'Y' : 'N')
                         .build();
 
-    const posts: PostEntity[] = await this.postService.listYearAndCount(listPostDto);
+    const posts: IndexSearchEntity[] = await this.postService.listYearAndCount(listPostDto);
 
     return serialize<PostDto[]>(posts);
   }
@@ -146,7 +146,7 @@ export class PostController {
                         .isLogin(isAuthenticated ? 'Y' : 'N')
                         .build();
 
-    const posts: [PostEntity[], number] = await this.postService.listPostByYear(listPostDto, paginationDto);
+    const posts: [IndexSearchEntity[], number] = await this.postService.listPostByYear(listPostDto, paginationDto);
 
     return [
       serialize<PostDto[]>(posts[0]),

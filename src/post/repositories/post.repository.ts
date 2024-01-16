@@ -1,7 +1,7 @@
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { PaginationDto } from '@/shared/models';
 import { isNotEmpty } from '@/shared/utils';
-import { Between, DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { GetPostDto, ListPostDto, PostEntity } from '../models';
 import { CountPostDto } from '../models/dto/count-post.dto';
 import { SavePostDto } from '../models/dto/save-post.dto';
@@ -72,53 +72,6 @@ export class PostRepository extends Repository<PostEntity> {
       order: {
         id: 'DESC',
       },
-    });
-  }
-
-  /** 포스트의 연도 및 개수를 조회한다. */
-  async listYearAndCount(listPostDto: ListPostDto): Promise<PostEntity[]> {
-    let query = this.createQueryBuilder('post')
-      .select("EXTRACT(YEAR FROM reg_date)", "year").distinct(true)
-        .addSelect("COUNT('year')", "count")
-      .where("tmp_yn = 'N'");
-
-    if ('N' === listPostDto?.isLogin) {
-      query = query
-        .andWhere("secret_yn = 'N'");
-    }
-
-    query = query
-      .groupBy("year")
-      .orderBy("year", "DESC");
-
-    return await query.getRawMany();
-  }
-
-  /** 연도별 포스트 목록을 조회한다. */
-  async listPostByYear(
-    listPostDto: ListPostDto,
-    paginationDto: PaginationDto
-  ): Promise<[PostEntity[], number]> {
-    return await this.findAndCount({
-      select: ['id', 'title', 'regDate'],
-      where: {
-        // 연도 비교
-        // where("YEAR(reg_date) = :year", { year: listPostDto?.year })
-        // 위 로직과 동일
-        regDate: Between(
-          new Date(+listPostDto.year, 0, 1),
-          new Date(+listPostDto.year, 11, 31)
-        ),
-        tmpYn: 'N',
-        ...('N' === listPostDto?.isLogin && {
-          secretYn: 'N',
-        }),
-      },
-      order: {
-        regDate: 'DESC',
-      },
-      take: paginationDto.pageSize,
-      skip: paginationDto.getSkipSize(),
     });
   }
 

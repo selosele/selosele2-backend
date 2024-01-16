@@ -22,7 +22,7 @@ import { PostLikeService } from './post-like.service';
 import { PostReplyService } from './post-reply.service';
 import { IndexSearchRepository } from '@/index-search/repositories/index-search.repository';
 import { IndexSearchService } from '@/index-search/services/index-search.service';
-import { ListIndexSearchDto } from '@/index-search/models';
+import { IndexSearchEntity, ListIndexSearchDto } from '@/index-search/models';
 
 @Injectable()
 export class PostService {
@@ -114,23 +114,23 @@ export class PostService {
   }
 
   /** 포스트의 연도 및 개수를 조회한다. */
-  async listYearAndCount(listPostDto: ListPostDto): Promise<PostEntity[]> {
-    return await this.postRepository.listYearAndCount(listPostDto);
+  async listYearAndCount(listPostDto: ListPostDto): Promise<IndexSearchEntity[]> {
+    return await this.indexSearchRepository.listIndexSearchYearAndCount(listPostDto);
   }
 
   /** 연도별 포스트 목록을 조회한다. */
   async listPostByYear(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
-  ): Promise<[PostEntity[], number]> {
-    return await this.postRepository.listPostByYear(listPostDto, paginationDto);
+  ): Promise<[IndexSearchEntity[], number]> {
+    return await this.indexSearchRepository.listIndexSearchPostByYear(listPostDto, paginationDto);
   }
 
   /** 카테고리별 포스트 목록을 조회한다. */
   async listPostByCategory(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<[IndexSearchEntity[], number]> {
     return await this.postRepository.listPostByCategory(listPostDto, paginationDto);
   }
 

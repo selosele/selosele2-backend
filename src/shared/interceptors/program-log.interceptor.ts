@@ -33,7 +33,7 @@ export class ProgramLogInterceptor implements NestInterceptor {
     // console.log('req._raw >>>', req._raw);
     // console.log('req.route.path >>>', req.route.path);
 
-    this.logger.warn({ method, url, path, routePath, ip, statusCode, userSn: user?.userSn });
+    //this.logger.warn({ method, url, path, routePath, ip, statusCode, userSn: user?.userSn });
 
     // 운영 환경에서만 프로그램 사용 로그를 저장한다.
     if ('production' === this.config.get<string>('NODE_ENV')) {

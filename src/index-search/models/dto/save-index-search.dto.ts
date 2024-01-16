@@ -11,6 +11,10 @@ export class SaveIndexSearchDto {
   @IsNotEmpty()
   cnncId?: number;
 
+  /** 검색 연결 데이터 등록연도 */
+  @IsOptional()
+  cnncRegYear?: string;
+
   /** 검색 연결 데이터 등록일시 */
   @IsOptional()
   cnncRegDate?: Date;

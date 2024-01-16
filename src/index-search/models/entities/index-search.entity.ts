@@ -19,6 +19,14 @@ export class IndexSearchEntity extends BaseEntity {
   cnncId?: number;
 
   @Column({
+    comment: '검색 연결 데이터 등록연도'
+  })
+  @ApiProperty({
+    description: '검색 연결 데이터 등록연도'
+  })
+  cnncRegYear?: string;
+
+  @Column({
     comment: '검색 연결 데이터 등록일시'
   })
   @ApiProperty({
