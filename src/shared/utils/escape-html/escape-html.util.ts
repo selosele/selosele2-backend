@@ -9,7 +9,8 @@ export function escapeHtml(plain: string, option?: sanitizeHtml.IOptions): strin
 export const santinizeHtmlOption: sanitizeHtml.IOptions = {
 
   // 디폴트 allowTags에 추가로 태그 허용
-  //allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'input', 'select' ]),
+  // 2024.01.17. 운영 환경 11번 아이디 포스트의 내용 중, code 블럭 내부의 listener, listener-class 태그 허용
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'listener', 'listener-class' ]),
   // 모든 속성 허용
   allowedAttributes: false,
   // iframe 태그를 허용하되, codepen만 허용
