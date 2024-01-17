@@ -1,3 +1,5 @@
+import { isNotBlank } from '@/shared/utils';
+import { Transform, TransformFnParams } from 'class-transformer';
 import { IsEmpty, IsOptional } from 'class-validator';
 
 /** 포스트 목록 조회 DTO */
@@ -28,8 +30,9 @@ export class ListPostDto {
   year?: string;
 
   /** 페이지 유형 */
+  @Transform(({ value }: TransformFnParams) => isNotBlank(value) ? value : 'D01001')
   @IsOptional()
-  pageType?: string = 'D01001';
+  pageType?: string;
 
   /** 로그인 여부 */
   @IsEmpty()
