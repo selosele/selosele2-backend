@@ -29,6 +29,8 @@ export class ProgramLogInterceptor implements NestInterceptor {
 
     // 운영 환경에서만 프로그램 사용 로그를 저장한다.
     if ('production' === this.config.get<string>('NODE_ENV')) {
+      
+      // TODO: 프로그램 상세를 조회해서 로그 출력 시, 프로그램명도 출력해야 함
       this.logger.warn({ method, url, path, routePath, ip, statusCode, userSn: user?.userSn });
 
       // TODO: 프로그램 사용 로그 저장 로직 구현
