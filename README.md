@@ -7,6 +7,7 @@
 ## 기술스택 및 개발환경
 
 - `NestJS` - v9.0.0
+- `Node.js` - v16.14.2
 - `TypeORM` - v0.3.10
 - `Vue.js` - v3.2.13
 - `MariaDB` - v10.6.12
