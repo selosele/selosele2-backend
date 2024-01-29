@@ -73,7 +73,7 @@ export class ProgramController {
   ): Promise<ProgramDto> {
     const program: ProgramEntity = await this.ProgramService.saveProgram(saveProgramDto);
 
-    return serialize<ProgramEntity>(program);
+    return serialize<ProgramDto>(program);
   }
 
   @Delete(':id')
