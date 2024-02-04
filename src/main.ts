@@ -10,12 +10,12 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     
     // 운영 환경에서 SSL 인증서 적용
-    // ...('production' === process.env.NODE_ENV && {
-    //   httpsOptions: {
-    //     key: fs.readFileSync(process.env.PRIVATE_KEY_PATH),
-    //     cert: fs.readFileSync(process.env.CERT_PATH),
-    //   }
-    // })
+    ...('production' === process.env.NODE_ENV && {
+      httpsOptions: {
+        key: fs.readFileSync(process.env.PRIVATE_KEY_PATH),
+        cert: fs.readFileSync(process.env.CERT_PATH),
+      }
+    })
   });
 
   /** 환경변수 service */
