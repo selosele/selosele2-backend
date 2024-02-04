@@ -34,7 +34,8 @@ import { ProgramModule } from './program/program.module';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
     }),
-    CronModule,
+    // 2024.02.04. cron 비활성화
+    //CronModule,
     CacheDBModule,
     FileUploaderModule,
     AuthModule,
