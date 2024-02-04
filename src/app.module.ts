@@ -19,7 +19,6 @@ import { FileUploaderModule } from './file-uploader/file-uploader.module';
 import { NotificationModule } from './notification/notification.module';
 import { CacheDBModule } from './cache-db/cache-db.module';
 import { IndexSearchModule } from './index-search/index-search.module';
-import { CronModule } from './cron/cron.module';
 import { ProgramLogInterceptor } from './shared/interceptors/program-log.interceptor';
 import { ProgramModule } from './program/program.module';
 
