@@ -28,8 +28,8 @@ import { ProgramModule } from './program/program.module';
       isGlobal: true,
       ignoreEnvFile: ('production' === process.env.NODE_ENV),
     }),
-    // 2024.01.10. 운영 환경에서 WAS, WEB 분리로 인한 주석처리
-    // 2024.01.11. 임시방편으로 WAS에 프론트엔드 빌드 디렉터리를 올리고, 추후 WEB 분리 시 주석처리하기
+    // 2024.01.10. 운영 환경에서 WAS, WEB 분리로 인한 주석 처리
+    // 2024.01.11. 임시방편으로 WAS에 프론트엔드 빌드 디렉터리를 올리고, 추후 WEB 분리 시 주석 처리하기
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
     }),
