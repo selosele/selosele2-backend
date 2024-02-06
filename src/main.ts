@@ -34,7 +34,7 @@ async function bootstrap() {
   app.disable('x-powered-by');
 
   if ('production' === config.get<string>('NODE_ENV')) {
-    setupCors(app, config.get<string>('LOC_ORIGIN')); // CORS 설정
+    setupCors(app, [config.get<string>('LOC_ORIGIN'), 'https://selosele.vercel.app/']); // CORS 설정
   }
 
   if ('development' === config.get<string>('NODE_ENV')) {
