@@ -1,10 +1,10 @@
 import { INestApplication, NotFoundException } from '@nestjs/common';
 
 /** CORS를 설정한다. */
-export function setupCors(app: INestApplication, locOrigin: string[]): void {
+export function setupCors(app: INestApplication, locOrigins: string[]): void {
   app.enableCors({
     origin: (origin, callback) => {
-      if (!origin || -1 !== locOrigin.indexOf(origin)) {
+      if (!origin || -1 !== locOrigins.indexOf(origin)) {
         callback(null, true);
       } else {
         callback(new NotFoundException());
