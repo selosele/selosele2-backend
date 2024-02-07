@@ -31,6 +31,16 @@ export function isNotFileEmpty(value: FileUploaderRequest): boolean {
   return !isFileEmpty(value);
 }
 
+/** 개발 환경인지 확인한다. */
+export function isDev(nodeEnv: string): boolean {
+  return 'development' === nodeEnv;
+}
+
+/** 운영 환경인지 확인한다. */
+export function isProd(nodeEnv: string): boolean {
+  return 'production' === nodeEnv;
+}
+
 /** 직렬화를 한다. */
 export function serialize<T>(instance: unknown): T {
   return classToPlain(instance) as T;

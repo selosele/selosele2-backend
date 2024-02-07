@@ -2,7 +2,7 @@ import { UserDto } from '@/auth/models';
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
-import { getAuthenticatedUser } from '../utils';
+import { getAuthenticatedUser, isProd } from '../utils';
 
 @Injectable()
 export class ProgramLogInterceptor implements NestInterceptor {
@@ -28,7 +28,7 @@ export class ProgramLogInterceptor implements NestInterceptor {
     const user: UserDto = getAuthenticatedUser(accessToken);
 
     // 운영 환경에서만 프로그램 사용 로그를 저장한다.
-    if ('production' === this.config.get<string>('NODE_ENV')) {
+    if (isProd(this.config.get<string>('NODE_ENV'))) {
       
       // TODO: 프로그램 상세를 조회해서 로그 출력 시, 프로그램명도 출력해야 함
       this.logger.warn({ method, url, path, routePath, ip, statusCode, userSn: user?.userSn });

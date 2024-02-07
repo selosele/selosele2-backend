@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express/interfaces/nest-express-application.interface';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
-import { setupCors, getLogLevels, setupSwagger, setupValidation } from './shared/utils';
+import { setupCors, getLogLevels, setupSwagger, setupValidation, isProd, isDev } from './shared/utils';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 
@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     
     // 운영 환경에서 SSL 인증서 적용
-    ...('production' === process.env.NODE_ENV && {
+    ...(isProd(process.env.NODE_ENV) && {
       httpsOptions: {
         key: fs.readFileSync(process.env.PRIVATE_KEY_PATH),
         cert: fs.readFileSync(process.env.CERT_PATH),
@@ -33,12 +33,12 @@ async function bootstrap() {
   // x-powered-by 헤더 삭제
   app.disable('x-powered-by');
 
-  if ('production' === config.get<string>('NODE_ENV')) {
+  if (isProd(config.get<string>('NODE_ENV'))) {
     const locOrigins = [config.get<string>('LOC_ORIGIN')];
     setupCors(app, locOrigins); // CORS 설정
   }
 
-  if ('development' === config.get<string>('NODE_ENV')) {
+  if (isDev(config.get<string>('NODE_ENV'))) {
     setupSwagger(app); // Swagger 설정
   }
 
@@ -59,7 +59,7 @@ async function bootstrap() {
   //console.log('address >>>', server.address());
   //console.log('request >>>', server._events.request);
 
-  if ('development' === config.get<string>('NODE_ENV')) {
+  if (isDev(config.get<string>('NODE_ENV'))) {
     console.log(`Server running at http://localhost:${port}..`);
   }
 }

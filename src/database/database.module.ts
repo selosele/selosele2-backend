@@ -1,3 +1,4 @@
+import { isDev } from '@/shared/utils';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -17,7 +18,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
         synchronize: false,
         namingStrategy: new SnakeNamingStrategy(),
         timezone: '+09:00', //'Asia/Seoul'
-        //logging: ('development' === config.get<string>('NODE_ENV')),
+        //logging: isDev(config.get<string>('NODE_ENV')),
       }),
       inject: [ConfigService],
     })

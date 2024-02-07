@@ -6,7 +6,7 @@ import { Response } from 'express';
 import { AuthService } from '../services/auth.service';
 import { CacheDBService } from '@/cache-db/services/cache-db.service';
 import { AuthCredentialsDto, RoleDto, RoleEntity, Roles, Tokens, UserDto, UserEntity } from '../models';
-import { createJwtRefreshTokenKey, getIpInfo, isBlackIp, isBlank, serialize } from '@/shared/utils';
+import { createJwtRefreshTokenKey, getIpInfo, isBlackIp, isBlank, isProd, serialize } from '@/shared/utils';
 import { JwtRefreshGuard } from '@/shared/guards';
 
 @Controller('auth')
@@ -56,7 +56,7 @@ export class AuthController {
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto
   ): Promise<void> {
     // 운영 환경이거나 국가별 아이피 차단 로직에 걸리면 404 예외를 던진다.
-    if ('production' === this.config.get<string>('NODE_ENV') || isBlackIp(getIpInfo['country'])) {
+    if (isProd(this.config.get<string>('NODE_ENV')) || isBlackIp(getIpInfo['country'])) {
       throw new NotFoundException();
     }
     await this.authService.addUser(authCredentialsDto);

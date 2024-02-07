@@ -9,8 +9,6 @@ import { WidgetModule } from './widget/widget.module';
 import { CategoryModule } from './category/category.module';
 import { TagModule } from './tag/tag.module';
 import { SatisfactionModule } from './satisfaction/satisfaction.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { GuestbookModule } from './guestbook/guestbook.module';
 import { ContentModule } from './content/content.module';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
@@ -21,12 +19,13 @@ import { CacheDBModule } from './cache-db/cache-db.module';
 import { IndexSearchModule } from './index-search/index-search.module';
 import { ProgramLogInterceptor } from './shared/interceptors/program-log.interceptor';
 import { ProgramModule } from './program/program.module';
+import { isProd } from './shared/utils';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      ignoreEnvFile: ('production' === process.env.NODE_ENV),
+      ignoreEnvFile: isProd(process.env.NODE_ENV),
     }),
     // 2024.01.10. 운영 환경에서 WAS, WEB 분리로 인한 주석 처리
     // 2024.01.11. 임시방편으로 WAS에 프론트엔드 빌드 디렉터리를 올리고, 추후 WEB 분리 시 주석 처리하기
