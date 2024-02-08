@@ -10,7 +10,7 @@ export class ProgramLogInterceptor implements NestInterceptor {
   private readonly logger = new Logger(ProgramLogInterceptor.name);
 
   constructor(
-    private readonly config: ConfigService,
+    private readonly env: ConfigService,
   ) {}
 
   async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
@@ -28,7 +28,7 @@ export class ProgramLogInterceptor implements NestInterceptor {
     const user: UserDto = getAuthenticatedUser(accessToken);
 
     // 운영 환경에서만 프로그램 사용 로그를 저장한다.
-    if (isProd(this.config.get<string>('NODE_ENV'))) {
+    if (isProd(this.env.get<string>('NODE_ENV'))) {
       
       // TODO: 프로그램 상세를 조회해서 로그 출력 시, 프로그램명도 출력해야 함
       this.logger.warn({ method, url, path, routePath, ip, statusCode, userSn: user?.userSn });

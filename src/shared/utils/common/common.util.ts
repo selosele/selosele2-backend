@@ -1,5 +1,5 @@
-import { plainToClass, ClassConstructor, classToPlain } from "class-transformer";
-import { FileUploaderRequest } from "@/file-uploader/models/file-uploader.model";
+import { plainToClass, ClassConstructor, classToPlain } from 'class-transformer';
+import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
 
 /** 값이 비었는지 확인한다. */
 export function isEmpty(value: any): boolean {

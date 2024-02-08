@@ -16,7 +16,7 @@ export class AuthController {
   private readonly logger = new Logger(AuthController.name);
   
   constructor(
-    private readonly config: ConfigService,
+    private readonly env: ConfigService,
     private readonly authService: AuthService,
     private readonly cacheDBService: CacheDBService,
   ) {}
@@ -56,7 +56,7 @@ export class AuthController {
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto
   ): Promise<void> {
     // 운영 환경이거나 국가별 아이피 차단 로직에 걸리면 404 예외를 던진다.
-    if (isProd(this.config.get<string>('NODE_ENV')) || isBlackIp(getIpInfo['country'])) {
+    if (isProd(this.env.get<string>('NODE_ENV')) || isBlackIp(getIpInfo['country'])) {
       throw new NotFoundException();
     }
     await this.authService.addUser(authCredentialsDto);
@@ -93,7 +93,7 @@ export class AuthController {
     // 리프레시 토큰은 HttpOnly Cookie에 저장한다.
     resp.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
-      maxAge: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
+      maxAge: +this.env.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
     });
     
     return tokens;
@@ -132,7 +132,7 @@ export class AuthController {
     // 리프레시 토큰은 HttpOnly Cookie에 저장한다.
     resp.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
-      maxAge: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
+      maxAge: +this.env.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
     });
     
     return tokens;
@@ -148,7 +148,7 @@ export class AuthController {
     @AccessTokenUser() user: UserDto,
     @Res({ passthrough: true }) resp: Response
   ): Promise<void> {
-    const refreshTokenKey: string = createJwtRefreshTokenKey(user, this.config.get<string>('JWT_REFRESH_SECRET_REDIS_KEY'));
+    const refreshTokenKey: string = createJwtRefreshTokenKey(user, this.env.get<string>('JWT_REFRESH_SECRET_REDIS_KEY'));
 
     // Redis에 저장된 리프레시 토큰을 조회해서
     const cachedRefreshToken: string = await this.cacheDBService.get<string>(refreshTokenKey);

@@ -19,10 +19,10 @@ import { DatabaseModule } from '@/database/database.module';
     DatabaseModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
-      useFactory: async (config: ConfigService) => ({
-        secret: config.get<string>('JWT_ACCESS_SECRET_KEY'),
+      useFactory: async (env: ConfigService) => ({
+        secret: env.get<string>('JWT_ACCESS_SECRET_KEY'),
         signOptions: {
-          expiresIn: +config.get<number>('JWT_ACCESS_EXPIRATION_TIME'),
+          expiresIn: +env.get<number>('JWT_ACCESS_EXPIRATION_TIME'),
         }
       }),
       inject: [ConfigService],

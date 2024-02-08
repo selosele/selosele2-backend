@@ -24,9 +24,9 @@ export class SatisfactionService {
     private readonly notificationRepository: NotificationRepository,
     @InjectRepository(BlogConfigRepository)
     private readonly blogConfigRepository: BlogConfigRepository,
-    private readonly httpService: HttpService,
-    private readonly config: ConfigService,
     private readonly dataSource: DataSource,
+    private readonly http: HttpService,
+    private readonly env: ConfigService,
   ) {}
 
   /** 만족도조사에 참여한다. */
@@ -63,15 +63,15 @@ export class SatisfactionService {
       // if ('Y' === kakaoMsgYn) {
 
       //   // 4. 카카오톡 액세스 토큰을 갱신한다.
-      //   this.httpService.post('https://kauth.kakao.com/oauth/token');
+      //   this.http.post('https://kauth.kakao.com/oauth/token');
 
       //   // 5. 카카오톡 메시지를 전송한다.
       //   const text = `${addSatisfactiontDto.pageTitle} 페이지에 만족도 평가가 등록되었습니다.`;
-      //   const url = `${this.config.get<string>('PAGE_ORIGIN')}${addSatisfactiontDto.pagePath}`;
+      //   const url = `${this.env.get<string>('PAGE_ORIGIN')}${addSatisfactiontDto.pagePath}`;
       //   const headers = kakaoUtil.getSendMessageHeaders('token');
       //   const body = kakaoUtil.getSendMessageBody(text, url);
 
-      //   this.httpService.post('https://kapi.kakao.com/v2/api/talk/memo/default/send', body, { headers })
+      //   this.http.post('https://kapi.kakao.com/v2/api/talk/memo/default/send', body, { headers })
       //   .subscribe({
       //     next: (resp) => {
       //       this.logger.log(`Success for send Kakao message : ${JSON.stringify(resp.data)}`);

@@ -7,18 +7,18 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      useFactory: async (config: ConfigService) => ({
+      useFactory: async (env: ConfigService) => ({
         type: 'mariadb',
-        host: config.get<string>('DB_HOST'),
-        port: +config.get<number>('DB_PORT'),
-        username: config.get<string>('DB_USERNAME'),
-        password: config.get<string>('DB_PASSWORD'),
-        database: config.get<string>('DB_DATABASE'),
+        host: env.get<string>('DB_HOST'),
+        port: +env.get<number>('DB_PORT'),
+        username: env.get<string>('DB_USERNAME'),
+        password: env.get<string>('DB_PASSWORD'),
+        database: env.get<string>('DB_DATABASE'),
         entities: ['dist/**/**/**/*.entity.{js,ts}'],
         synchronize: false,
         namingStrategy: new SnakeNamingStrategy(),
         timezone: '+09:00', //'Asia/Seoul'
-        //logging: isDev(config.get<string>('NODE_ENV')),
+        //logging: isDev(env.get<string>('NODE_ENV')),
       }),
       inject: [ConfigService],
     })

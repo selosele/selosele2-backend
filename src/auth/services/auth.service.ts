@@ -24,8 +24,8 @@ export class AuthService {
     private readonly roleRepository: RoleRepository,
     private readonly jwtService: JwtService,
     private readonly cacheDBService: CacheDBService,
-    private readonly config: ConfigService,
     private readonly dataSource: DataSource,
+    private readonly env: ConfigService,
   ) {}
 
   /** 사용자를 조회한다. */
@@ -106,15 +106,15 @@ export class AuthService {
 
     // 리프레시 토큰 생성
     const refreshToken: string = this.jwtService.sign(payload, {
-      secret: this.config.get<string>('JWT_REFRESH_SECRET_KEY'),
-      expiresIn: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
+      secret: this.env.get<string>('JWT_REFRESH_SECRET_KEY'),
+      expiresIn: +this.env.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
     });
 
-    const jwtRedisKey = this.config.get<string>('JWT_REFRESH_SECRET_REDIS_KEY');
+    const jwtRedisKey = this.env.get<string>('JWT_REFRESH_SECRET_REDIS_KEY');
 
     // Redis에 리프레시 토큰을 저장
     await this.cacheDBService.set(createJwtRefreshTokenKey(user, jwtRedisKey), refreshToken, {
-      ttl: +this.config.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
+      ttl: +this.env.get<number>('JWT_REFRESH_EXPIRATION_TIME'),
     });
 
     return { accessToken, refreshToken };

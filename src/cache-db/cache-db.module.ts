@@ -4,11 +4,11 @@ import * as redisStore from 'cache-manager-redis-store';
 import { CacheDBService } from './services/cache-db.service';
  
 export const cacheModule = CacheModule.registerAsync({
-  useFactory: async (config: ConfigService) => ({
+  useFactory: async (env: ConfigService) => ({
     store: redisStore as unknown as CacheStore,
-    host: config.get<string>('REDIS_HOST'),
-    port: config.get<string>('REDIS_PORT'),
-    password: config.get<string>('REDIS_PASSWORD'),
+    host: env.get<string>('REDIS_HOST'),
+    port: env.get<string>('REDIS_PORT'),
+    password: env.get<string>('REDIS_PASSWORD'),
   }),
   inject: [ConfigService],
 });
