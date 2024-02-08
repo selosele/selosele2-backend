@@ -19,10 +19,10 @@ async function bootstrap() {
   });
 
   /** 환경변수 service */
-  const config = app.get(ConfigService);
+  const env = app.get(ConfigService);
 
   // 로그 레벨 설정
-  app.useLogger(getLogLevels(config.get<string>('NODE_ENV')));
+  app.useLogger(getLogLevels(env.get<string>('NODE_ENV')));
 
   // API 호출 전역 접두사 설정
   app.setGlobalPrefix('api');
@@ -33,12 +33,12 @@ async function bootstrap() {
   // x-powered-by 헤더 삭제
   app.disable('x-powered-by');
 
-  if (isProd(config.get<string>('NODE_ENV'))) {
-    const locOrigins = [config.get<string>('LOC_ORIGIN')];
+  if (isProd(env.get<string>('NODE_ENV'))) {
+    const locOrigins = [env.get<string>('LOC_ORIGIN')];
     setupCors(app, locOrigins); // CORS 설정
   }
 
-  if (isDev(config.get<string>('NODE_ENV'))) {
+  if (isDev(env.get<string>('NODE_ENV'))) {
     setupSwagger(app); // Swagger 설정
   }
 
@@ -49,7 +49,7 @@ async function bootstrap() {
   const host = '0.0.0.0';
 
   /** port */
-  const port = (config.get<number>('PORT') || 3000);
+  const port = (env.get<number>('PORT') || 3000);
 
   await app.listen(port, host);
 
@@ -59,7 +59,7 @@ async function bootstrap() {
   //console.log('address >>>', server.address());
   //console.log('request >>>', server._events.request);
 
-  if (isDev(config.get<string>('NODE_ENV'))) {
+  if (isDev(env.get<string>('NODE_ENV'))) {
     console.log(`Server running at http://localhost:${port}..`);
   }
 }
