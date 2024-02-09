@@ -34,7 +34,10 @@ async function bootstrap() {
   app.disable('x-powered-by');
 
   if (isProd(env.get<string>('NODE_ENV'))) {
-    const locOrigins = [env.get<string>('LOC_ORIGIN')];
+    const locOrigins = [
+      'https://blog.selosele.com',
+      'https://selosele.vercel.app'
+    ];
     setupCors(app, locOrigins); // CORS 설정
   }
 
