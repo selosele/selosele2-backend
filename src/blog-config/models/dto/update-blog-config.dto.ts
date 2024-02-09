@@ -11,6 +11,12 @@ export class UpdateBlogConfigDto {
   @IsNotEmpty()
   id?: number;
 
+  /** 수정 환경설정 ID */
+  @Type(() => Number)
+  @IsInt()
+  @IsOptional()
+  updateId?: number;
+
   /** 환경설정 명 */
   @IsOptional()
   @MaxLength(30)

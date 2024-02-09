@@ -1,14 +1,15 @@
 import { Controller, Get } from '@nestjs/common';
 import { BlogConfigService } from '../services/blog-config.service';
-import { ApiTags, ApiOperation, ApiCreatedResponse, ApiBody, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiCreatedResponse, ApiBody, ApiQuery, ApiParam } from '@nestjs/swagger';
 import { BlogConfigEntity, BlogConfigDto, UpdateBlogConfigDto, GetBlogConfigDto } from '../models';
-import { Body, Put, Query, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
+import { Body, Delete, Param, Put, Query, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
 import { Auth } from '@/shared/decorators';
 import { Roles } from '@/auth/models';
-import { ParseFilePipe, ValidationPipe } from '@nestjs/common/pipes';
+import { ParseFilePipe, ParseIntPipe, ValidationPipe } from '@nestjs/common/pipes';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
 import { FileTypeValidator, MaxFileSizeValidator, serialize } from '@/shared/utils';
+import { DeleteResult } from 'typeorm';
 
 @Controller('blogconfig')
 @ApiTags('블로그 환경설정 API')
@@ -34,23 +35,16 @@ export class BlogConfigController {
   })
   async getBlogConfig(
     @Query(ValidationPipe) getBlogConfigDto: GetBlogConfigDto
-  ): Promise<BlogConfigDto> {
-    const blogConfig: BlogConfigEntity = await this.blogConfigService.getBlogConfig(getBlogConfigDto);
-    
-    return serialize<BlogConfigDto>(blogConfig);
-  }
+  ): Promise<BlogConfigDto | [BlogConfigDto[], number]> {
 
-  @Get()
-  @Auth(Roles.ROLE_ADMIN)
-  @ApiOperation({
-    summary: '블로그 환경설정 목록 조회 API',
-    description: '블로그 환경설정 목록을 조회한다.'
-  })
-  @ApiCreatedResponse({
-    type: Array<BlogConfigDto>,
-    description: '블로그 환경설정 DTO 목록',
-  })
-  async listBlogConfig(): Promise<[BlogConfigDto[], number]> {
+    // useYn 값 존재 시, 1건을 조회하고
+    if (getBlogConfigDto.useYn) {
+      const blogConfig: BlogConfigEntity = await this.blogConfigService.getBlogConfig(getBlogConfigDto);
+      
+      return serialize<BlogConfigDto>(blogConfig);
+    }
+
+    // 없으면 전체 목록을 조회한다.
     const blogConfigs: [BlogConfigEntity[], number] = await this.blogConfigService.listBlogConfig();
     
     return [
@@ -88,6 +82,27 @@ export class BlogConfigController {
     const blogConfig: BlogConfigEntity = await this.blogConfigService.updateBlogConfig(updateBlogConfigDto);
     
     return serialize<BlogConfigDto>(blogConfig);
+  }
+
+  @Delete(':id')
+  @Auth(Roles.ROLE_ADMIN)
+  @ApiOperation({
+    summary: '블로그 환경설정 삭제 API',
+    description: '블로그 환경설정을 삭제한다.'
+  })
+  @ApiCreatedResponse({
+    type: DeleteResult,
+    description: '블로그 환경설정 삭제 정보',
+  })
+  @ApiParam({
+    type: Number,
+    name: 'id',
+    description: '블로그 환경설정 ID',
+  })
+  async removeContent(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<DeleteResult> {
+    return await this.blogConfigService.removeBlogConfig(id);
   }
   
 }

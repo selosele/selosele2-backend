@@ -5,6 +5,7 @@ import { BlogConfigRepository } from '../repositories/blog-config.repository';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
 import { FileUploaderRequest, FileUploaderResponse } from '@/file-uploader/models/file-uploader.model';
 import { isNotBlank, isNotEmpty } from '@/shared/utils';
+import { DeleteResult } from 'typeorm';
 
 @Injectable()
 export class BlogConfigService {
@@ -74,6 +75,11 @@ export class BlogConfigService {
     }
 
     return await this.blogConfigRepository.updateBlogConfig(updateBlogConfigDto);
+  }
+
+  /** 블로그 환경설정을 삭제한다. */
+  async removeBlogConfig(id: number): Promise<DeleteResult> {
+    return await this.blogConfigRepository.removeBlogConfig(id);
   }
 
   /** 블로그 환경설정 이미지 파일을 업로드한다. */
