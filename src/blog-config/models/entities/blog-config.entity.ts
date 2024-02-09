@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('blog_config')
@@ -9,6 +9,14 @@ export class BlogConfigEntity extends BaseEntity {
     description: '환경설정 ID'
   })
   id?: number;
+
+  @Column({
+    comment: '환경설정 명'
+  })
+  @ApiProperty({
+    description: '환경설정 명'
+  })
+  nm?: string;
 
   @Column({
     comment: '블로그 제목'
@@ -145,6 +153,20 @@ export class BlogConfigEntity extends BaseEntity {
     description: '카카오톡 메시지 수신 여부'
   })
   kakaoMsgYn?: string;
+
+  @Column({
+    comment: '환경설정 사용 여부'
+  })
+  @ApiProperty({
+    description: '환경설정 사용 여부'
+  })
+  useYn?: string;
+
+  @CreateDateColumn()
+  @ApiProperty({
+    description: '환경설정 등록일시'
+  })
+  regDate?: Date;
 
   @UpdateDateColumn({
     comment: '환경설정 수정일시'

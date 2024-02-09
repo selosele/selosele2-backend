@@ -11,6 +11,11 @@ export class UpdateBlogConfigDto {
   @IsNotEmpty()
   id?: number;
 
+  /** 환경설정 명 */
+  @IsOptional()
+  @MaxLength(30)
+  nm?: string;
+
   /** 블로그 제목 */
   @IsNotEmpty()
   @MaxLength(100)
@@ -113,5 +118,9 @@ export class UpdateBlogConfigDto {
   /** 카카오톡 메시지 수신 여부 */
   @IsNotEmpty()
   kakaoMsgYn?: string;
+
+  /** 카카오톡 메시지 수신 여부 */
+  @IsOptional()
+  useYn?: string;
 
 }

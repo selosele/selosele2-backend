@@ -4,6 +4,9 @@ export class BlogConfigDto {
   /** 환경설정 ID */
   id?: number;
 
+  /** 환경설정 명 */
+  nm?: string;
+
   /** 블로그 제목 */
   title?: string;
 
@@ -52,8 +55,14 @@ export class BlogConfigDto {
   /** 만족도조사 표출 여부 */
   showSatisYn?: string;
 
+  /** 환경설정 사용 여부 */
+  useYn?: string;
+
   /** 카카오톡 메시지 수신 여부 */
   kakaoMsgYn?: string;
+
+  /** 환경설정 등록일시 */
+  regDate?: Date;
 
   /** 환경설정 수정일시 */
   modDate?: Date;

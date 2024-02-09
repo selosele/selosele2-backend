@@ -1,8 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { BlogConfigService } from '../services/blog-config.service';
-import { ApiTags, ApiOperation, ApiCreatedResponse, ApiBody } from '@nestjs/swagger';
-import { BlogConfigEntity, BlogConfigDto, UpdateBlogConfigDto } from '../models';
-import { Body, Put, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
+import { ApiTags, ApiOperation, ApiCreatedResponse, ApiBody, ApiQuery } from '@nestjs/swagger';
+import { BlogConfigEntity, BlogConfigDto, UpdateBlogConfigDto, GetBlogConfigDto } from '../models';
+import { Body, Put, Query, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
 import { Auth } from '@/shared/decorators';
 import { Roles } from '@/auth/models';
 import { ParseFilePipe, ValidationPipe } from '@nestjs/common/pipes';
@@ -27,8 +27,15 @@ export class BlogConfigController {
     type: BlogConfigDto,
     description: '블로그 환경설정 DTO',
   })
-  async getBlogConfig(): Promise<BlogConfigDto> {
-    const blogConfig: BlogConfigEntity = await this.blogConfigService.getBlogConfig();
+  @ApiQuery({
+    type: GetBlogConfigDto,
+    name: 'getBlogConfigDto',
+    description: '블로그 환경설정 조회 DTO',
+  })
+  async getBlogConfig(
+    @Query(ValidationPipe) getBlogConfigDto: GetBlogConfigDto
+  ): Promise<BlogConfigDto> {
+    const blogConfig: BlogConfigEntity = await this.blogConfigService.getBlogConfig(getBlogConfigDto);
     
     return serialize<BlogConfigDto>(blogConfig);
   }

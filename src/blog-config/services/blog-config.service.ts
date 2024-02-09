@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BlogConfigEntity, UpdateBlogConfigDto } from '../models';
+import { BlogConfigEntity, GetBlogConfigDto, UpdateBlogConfigDto } from '../models';
 import { BlogConfigRepository } from '../repositories/blog-config.repository';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
 import { FileUploaderRequest, FileUploaderResponse } from '@/file-uploader/models/file-uploader.model';
@@ -16,8 +16,8 @@ export class BlogConfigService {
   ) {}
 
   /** 블로그 환경설정을 조회한다. */
-  async getBlogConfig(): Promise<BlogConfigEntity> {
-    return await this.blogConfigRepository.getBlogConfig();
+  async getBlogConfig(getBlogConfigDto: GetBlogConfigDto): Promise<BlogConfigEntity> {
+    return await this.blogConfigRepository.getBlogConfig(getBlogConfigDto);
   }
 
   /** 메인 포스트 목록 출력 개수를 조회한다. */
@@ -43,13 +43,13 @@ export class BlogConfigService {
 
       if (isNotEmpty(avatarImgFile)) {
         updateBlogConfigDto.avatarImg = fileUploaderResponse['avatarImgFileResponse'].public_id + '.' + fileUploaderResponse['avatarImgFileResponse'].format;
-        updateBlogConfigDto.avatarImgUrl = fileUploaderResponse['avatarImgFileResponse'].url;
+        updateBlogConfigDto.avatarImgUrl = fileUploaderResponse['avatarImgFileResponse'].secure_url;
         updateBlogConfigDto.avatarImgSize = avatarImgFile.size;
       }
 
       if (isNotEmpty(ogImgFile)) {
         updateBlogConfigDto.ogImg = fileUploaderResponse['ogImgFileResponse'].public_id + '.' + fileUploaderResponse['ogImgFileResponse'].format;
-        updateBlogConfigDto.ogImgUrl = fileUploaderResponse['ogImgFileResponse'].url;
+        updateBlogConfigDto.ogImgUrl = fileUploaderResponse['ogImgFileResponse'].secure_url;
         updateBlogConfigDto.ogImgSize = ogImgFile.size;
       }
     }
@@ -97,7 +97,7 @@ export class BlogConfigService {
 
   /** 블로그 환경설정 이미지 파일 삭제 여부 값 존재를 확인한다. */
   private hasDelImg(delImg: string): boolean {
-    return isNotBlank(delImg) && 'Y' === delImg;
+    return isNotBlank(delImg) && delImg === 'Y';
   }
   
 }
