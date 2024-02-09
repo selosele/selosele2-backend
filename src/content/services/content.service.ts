@@ -28,7 +28,7 @@ export class ContentService {
 
     contentList[0].forEach(c => {
 
-      // 콘텐츠 데이타에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
+      // 콘텐츠 데이터에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       c.rawText = getRawText(c.cont);
 
       // 콘텐츠의 내용을 Markdown으로 렌더링한다.
@@ -119,7 +119,7 @@ export class ContentService {
     return await this.contentRepository.removeContents(idList);
   }
 
-  /** 미리보기 콘텐츠 데이타를 가공한다.  */
+  /** 미리보기 콘텐츠 데이터를 가공한다.  */
   async getPreviewContent(saveContentDto: SaveContentDto): Promise<ContentEntity> {
 
     // 콘텐츠의 내용을 Markdown으로 렌더링한다.

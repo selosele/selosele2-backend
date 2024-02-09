@@ -59,10 +59,10 @@ export class PostService {
 
     postList[0].forEach(p => {
 
-      // 포스트 데이타에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
+      // 포스트 데이터에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       p.rawText = getRawText(p.cont).substring(0, 180);
 
-      // 포스트 데이타에 카테고리 데이타를 넣어준다.
+      // 포스트 데이터에 카테고리 데이터를 넣어준다.
       p.postCategory = postCategory.filter(d => d.postId === p.id);
     });
 
@@ -75,7 +75,7 @@ export class PostService {
 
     postList[0].forEach(p => {
 
-      // 포스트 데이타에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
+      // 포스트 데이터에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       p.rawText = getRawText(p.cont);
 
       // 포스트의 콘텐츠를 Markdown으로 렌더링한다.
@@ -103,10 +103,10 @@ export class PostService {
     ]);
 
     post[0].forEach(p => {
-      // 포스트 데이타에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
+      // 포스트 데이터에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       p.rawText = getRawText(p.cont);
 
-      // 포스트 데이타에 카테고리 데이타를 넣어준다.
+      // 포스트 데이터에 카테고리 데이터를 넣어준다.
       p.postCategory = postCategory.filter(d => d.postId === p.id);
     });
 
@@ -291,7 +291,7 @@ export class PostService {
     return await this.postRepository.updatePostReplyCnt(savePostDto);
   }
 
-  /** 미리보기 포스트 데이타를 가공한다.  */
+  /** 미리보기 포스트 데이터를 가공한다.  */
   async getPreviewPost(savePostDto: SavePostDto): Promise<PostEntity> {
 
     // 포스트의 내용을 Markdown으로 렌더링한다.
