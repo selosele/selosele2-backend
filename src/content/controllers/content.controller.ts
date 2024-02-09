@@ -1,6 +1,6 @@
 import { Controller, Get, Body, ValidationPipe, Post, Param, Delete, ParseIntPipe, Query, UseInterceptors, UploadedFile, ParseFilePipe, Put } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 import { Roles } from '@/auth/models';
 import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
@@ -26,6 +26,11 @@ export class ContentController {
   @ApiCreatedResponse({
     type: Array<ContentDto>,
     description: '콘텐츠 DTO 목록',
+  })
+  @ApiQuery({
+    type: ListContentDto,
+    name: 'listContentDto',
+    description: '콘텐츠 목록 조회 DTO',
   })
   async listContent(
     @Query(ValidationPipe) listContentDto: ListContentDto

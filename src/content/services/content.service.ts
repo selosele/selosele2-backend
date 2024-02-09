@@ -71,7 +71,7 @@ export class ContentService {
       const uploadFile: FileUploaderResponse = await this.fileUploaderService.uploadImage(ogImgFile);
 
       saveContentDto.ogImg = uploadFile.public_id + '.' + uploadFile.format;
-      saveContentDto.ogImgUrl = uploadFile.url;
+      saveContentDto.ogImgUrl = uploadFile.secure_url;
       saveContentDto.ogImgSize = ogImgFile.size;
     }
 

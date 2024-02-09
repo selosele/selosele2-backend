@@ -212,7 +212,7 @@ export class PostService {
       const uploadFile: FileUploaderResponse = await this.fileUploaderService.uploadImage(ogImgFile);
 
       savePostDto.ogImg = uploadFile.public_id + '.' + uploadFile.format;
-      savePostDto.ogImgUrl = uploadFile.url;
+      savePostDto.ogImgUrl = uploadFile.secure_url;
       savePostDto.ogImgSize = ogImgFile.size;
     }
 
