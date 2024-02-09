@@ -20,6 +20,11 @@ export class BlogConfigService {
     return await this.blogConfigRepository.getBlogConfig(getBlogConfigDto);
   }
 
+  /** 블로그 환경설정 목록을 조회한다. */
+  async listBlogConfig(): Promise<[BlogConfigEntity[], number]> {
+    return await this.blogConfigRepository.listBlogConfig();
+  }
+
   /** 메인 포스트 목록 출력 개수를 조회한다. */
   async getPageSize(): Promise<number> {
     return await this.blogConfigRepository.getPageSize();

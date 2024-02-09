@@ -15,6 +15,13 @@ export class BlogConfigRepository extends Repository<BlogConfigEntity> {
     });
   }
 
+  /** 블로그 환경설정 목록을 조회한다. */
+  async listBlogConfig(): Promise<[BlogConfigEntity[], number]> {
+    return await this.findAndCount({
+      where: { useYn: 'Y' }
+    });
+  }
+
   /** 메인 포스트 목록 출력 개수를 조회한다. */
   async getPageSize(): Promise<number> {
     return await this.findOne({

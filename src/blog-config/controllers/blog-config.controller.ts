@@ -40,6 +40,25 @@ export class BlogConfigController {
     return serialize<BlogConfigDto>(blogConfig);
   }
 
+  @Get()
+  @Auth(Roles.ROLE_ADMIN)
+  @ApiOperation({
+    summary: '블로그 환경설정 목록 조회 API',
+    description: '블로그 환경설정 목록을 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: Array<BlogConfigDto>,
+    description: '블로그 환경설정 DTO 목록',
+  })
+  async listBlogConfig(): Promise<[BlogConfigDto[], number]> {
+    const blogConfigs: [BlogConfigEntity[], number] = await this.blogConfigService.listBlogConfig();
+    
+    return [
+      serialize<BlogConfigDto[]>(blogConfigs[0]),
+      blogConfigs[1],
+    ];
+  }
+
   @Put()
   @Auth(Roles.ROLE_ADMIN)
   @UseInterceptors(AnyFilesInterceptor())
