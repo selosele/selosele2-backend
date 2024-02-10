@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BlogConfigEntity, GetBlogConfigDto, UpdateBlogConfigDto } from '../models';
+import { BlogConfigEntity, GetBlogConfigDto, SaveBlogConfigDto } from '../models';
 import { BlogConfigRepository } from '../repositories/blog-config.repository';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
 import { FileUploaderRequest, FileUploaderResponse } from '@/file-uploader/models/file-uploader.model';
@@ -36,45 +36,47 @@ export class BlogConfigService {
     return await this.blogConfigRepository.getKakaoMsgYn();
   }
 
-  /** 블로그 환경설정을 수정한다. */
-  async updateBlogConfig(updateBlogConfigDto: UpdateBlogConfigDto): Promise<BlogConfigEntity> {
+  /** 블로그 환경설정을 추가/수정한다. */
+  async saveBlogConfig(saveBlogConfigDto: SaveBlogConfigDto, files: FileUploaderRequest[]): Promise<BlogConfigEntity> {
+    saveBlogConfigDto.files = files;
+    
     let fileUploaderResponse = null;
 
     // 업로드 파일 존재 시
-    if (0 < updateBlogConfigDto.files.length) {
-      fileUploaderResponse = await this.uploadBlogConfigImg(updateBlogConfigDto);
+    if (isNotEmpty(saveBlogConfigDto.files) && 0 < saveBlogConfigDto.files.length) {
+      fileUploaderResponse = await this.uploadBlogConfigImg(saveBlogConfigDto);
       
-      const avatarImgFile: FileUploaderRequest = updateBlogConfigDto.files.find(d => d.fieldname === 'avatarImgFile');
-      const ogImgFile: FileUploaderRequest = updateBlogConfigDto.files.find(d => d.fieldname === 'ogImgFile');
+      const avatarImgFile: FileUploaderRequest = saveBlogConfigDto.files.find(d => d.fieldname === 'avatarImgFile');
+      const ogImgFile: FileUploaderRequest = saveBlogConfigDto.files.find(d => d.fieldname === 'ogImgFile');
 
       if (isNotEmpty(avatarImgFile)) {
-        updateBlogConfigDto.avatarImg = fileUploaderResponse['avatarImgFileResponse'].public_id + '.' + fileUploaderResponse['avatarImgFileResponse'].format;
-        updateBlogConfigDto.avatarImgUrl = fileUploaderResponse['avatarImgFileResponse'].secure_url;
-        updateBlogConfigDto.avatarImgSize = avatarImgFile.size;
+        saveBlogConfigDto.avatarImg = fileUploaderResponse['avatarImgFileResponse'].public_id + '.' + fileUploaderResponse['avatarImgFileResponse'].format;
+        saveBlogConfigDto.avatarImgUrl = fileUploaderResponse['avatarImgFileResponse'].secure_url;
+        saveBlogConfigDto.avatarImgSize = avatarImgFile.size;
       }
 
       if (isNotEmpty(ogImgFile)) {
-        updateBlogConfigDto.ogImg = fileUploaderResponse['ogImgFileResponse'].public_id + '.' + fileUploaderResponse['ogImgFileResponse'].format;
-        updateBlogConfigDto.ogImgUrl = fileUploaderResponse['ogImgFileResponse'].secure_url;
-        updateBlogConfigDto.ogImgSize = ogImgFile.size;
+        saveBlogConfigDto.ogImg = fileUploaderResponse['ogImgFileResponse'].public_id + '.' + fileUploaderResponse['ogImgFileResponse'].format;
+        saveBlogConfigDto.ogImgUrl = fileUploaderResponse['ogImgFileResponse'].secure_url;
+        saveBlogConfigDto.ogImgSize = ogImgFile.size;
       }
     }
 
     // 아바타 이미지 파일 삭제 여부 값 존재 시
-    if (this.hasDelImg(updateBlogConfigDto.delAvatarImg)) {
-      updateBlogConfigDto.avatarImg = '';
-      updateBlogConfigDto.avatarImgUrl = null;
-      updateBlogConfigDto.avatarImgSize = null;
+    if (this.hasDelImg(saveBlogConfigDto.delAvatarImg)) {
+      saveBlogConfigDto.avatarImg = '';
+      saveBlogConfigDto.avatarImgUrl = null;
+      saveBlogConfigDto.avatarImgSize = null;
     }
 
     // 대표 이미지 파일 삭제 여부 값 존재 시
-    if (this.hasDelImg(updateBlogConfigDto.delOgImg)) {
-      updateBlogConfigDto.ogImg = '';
-      updateBlogConfigDto.ogImgUrl = null;
-      updateBlogConfigDto.ogImgSize = null;
+    if (this.hasDelImg(saveBlogConfigDto.delOgImg)) {
+      saveBlogConfigDto.ogImg = '';
+      saveBlogConfigDto.ogImgUrl = null;
+      saveBlogConfigDto.ogImgSize = null;
     }
 
-    return await this.blogConfigRepository.updateBlogConfig(updateBlogConfigDto);
+    return await this.blogConfigRepository.saveBlogConfig(saveBlogConfigDto);
   }
 
   /** 블로그 환경설정을 삭제한다. */
@@ -83,20 +85,20 @@ export class BlogConfigService {
   }
 
   /** 블로그 환경설정 이미지 파일을 업로드한다. */
-  private async uploadBlogConfigImg(updateBlogConfigDto: UpdateBlogConfigDto): Promise<{ [key: string]: FileUploaderResponse}> {
-    const avatarImgFile: FileUploaderRequest = updateBlogConfigDto.files.find(d => d.fieldname === 'avatarImgFile');
-    const ogImgFile: FileUploaderRequest = updateBlogConfigDto.files.find(d => d.fieldname === 'ogImgFile');
+  private async uploadBlogConfigImg(saveBlogConfigDto: SaveBlogConfigDto): Promise<{ [key: string]: FileUploaderResponse}> {
+    const avatarImgFile: FileUploaderRequest = saveBlogConfigDto.files.find(d => d.fieldname === 'avatarImgFile');
+    const ogImgFile: FileUploaderRequest = saveBlogConfigDto.files.find(d => d.fieldname === 'ogImgFile');
 
     let avatarImgFileResponse: FileUploaderResponse = null;
     let ogImgFileResponse: FileUploaderResponse = null;
 
     // 블로그 아바타 이미지 파일 업로드
-    if (isNotEmpty(avatarImgFile) && !this.hasDelImg(updateBlogConfigDto.delAvatarImg)) {
+    if (isNotEmpty(avatarImgFile) && !this.hasDelImg(saveBlogConfigDto.delAvatarImg)) {
       avatarImgFileResponse = await this.fileUploaderService.uploadImage(avatarImgFile);
     }
 
     // 블로그 대표 이미지 파일 업로드
-    if (isNotEmpty(ogImgFile) && !this.hasDelImg(updateBlogConfigDto.delOgImg)) {
+    if (isNotEmpty(ogImgFile) && !this.hasDelImg(saveBlogConfigDto.delOgImg)) {
       ogImgFileResponse = await this.fileUploaderService.uploadImage(ogImgFile);
     }
 

@@ -2,20 +2,14 @@ import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsNumber, IsOptional, Max, MaxLength, Min } from 'class-validator';
 import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
 
-/** 블로그 환경설정 수정 DTO */
-export class UpdateBlogConfigDto {
+/** 블로그 환경설정 추가/수정 DTO */
+export class SaveBlogConfigDto {
 
   /** 환경설정 ID */
   @Type(() => Number)
   @IsInt()
-  @IsNotEmpty()
-  id?: number;
-
-  /** 수정 환경설정 ID */
-  @Type(() => Number)
-  @IsInt()
   @IsOptional()
-  updateId?: number;
+  id?: number;
 
   /** 환경설정 명 */
   @IsOptional()

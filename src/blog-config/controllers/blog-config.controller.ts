@@ -1,8 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { BlogConfigService } from '../services/blog-config.service';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiBody, ApiQuery, ApiParam } from '@nestjs/swagger';
-import { BlogConfigEntity, BlogConfigDto, UpdateBlogConfigDto, GetBlogConfigDto } from '../models';
-import { Body, Delete, Param, Put, Query, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
+import { BlogConfigEntity, BlogConfigDto, SaveBlogConfigDto, GetBlogConfigDto } from '../models';
+import { Body, Delete, Param, Post, Put, Query, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
 import { Auth } from '@/shared/decorators';
 import { Roles } from '@/auth/models';
 import { ParseFilePipe, ParseIntPipe, ValidationPipe } from '@nestjs/common/pipes';
@@ -10,6 +10,7 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
 import { FileTypeValidator, MaxFileSizeValidator, serialize } from '@/shared/utils';
 import { DeleteResult } from 'typeorm';
+import { BizException } from '@/shared/exceptions';
 
 @Controller('blogconfig')
 @ApiTags('블로그 환경설정 API')
@@ -53,6 +54,36 @@ export class BlogConfigController {
     ];
   }
 
+  @Post()
+  @Auth(Roles.ROLE_ADMIN)
+  @UseInterceptors(AnyFilesInterceptor())
+  @ApiOperation({
+    summary: '블로그 환경설정 추가 API',
+    description: '블로그 환경설정을 추가한다.'
+  })
+  @ApiCreatedResponse({
+    type: BlogConfigDto,
+    description: '블로그 환경설정 DTO',
+  })
+  @ApiBody({
+    type: SaveBlogConfigDto,
+    description: '블로그 환경설정 추가/수정 DTO',
+  })
+  async addBlogConfig(
+    @Body(ValidationPipe) saveBlogConfigDto: SaveBlogConfigDto,
+    @UploadedFiles(new ParseFilePipe({
+      fileIsRequired: false,
+      validators: [
+        new MaxFileSizeValidator({ maxSize: 1000000 }),
+        new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
+      ],
+    })) files: FileUploaderRequest[],
+  ): Promise<BlogConfigDto> {
+    const blogConfig: BlogConfigEntity = await this.blogConfigService.saveBlogConfig(saveBlogConfigDto, files);
+    
+    return serialize<BlogConfigDto>(blogConfig);
+  }
+
   @Put()
   @Auth(Roles.ROLE_ADMIN)
   @UseInterceptors(AnyFilesInterceptor())
@@ -65,11 +96,11 @@ export class BlogConfigController {
     description: '블로그 환경설정 DTO',
   })
   @ApiBody({
-    type: UpdateBlogConfigDto,
-    description: '블로그 환경설정 수정 DTO',
+    type: SaveBlogConfigDto,
+    description: '블로그 환경설정 추가/수정 DTO',
   })
   async updateBlogConfig(
-    @Body(ValidationPipe) updateBlogConfigDto: UpdateBlogConfigDto,
+    @Body(ValidationPipe) saveBlogConfigDto: SaveBlogConfigDto,
     @UploadedFiles(new ParseFilePipe({
       validators: [
         new MaxFileSizeValidator({ maxSize: 1000000 }),
@@ -77,9 +108,11 @@ export class BlogConfigController {
       ],
     })) files: FileUploaderRequest[],
   ): Promise<BlogConfigDto> {
-    updateBlogConfigDto.files = files;
+    if ('N' === saveBlogConfigDto.useYn) {
+      throw new BizException('미사용 환경설정은 수정할 수 없습니다.');
+    }
 
-    const blogConfig: BlogConfigEntity = await this.blogConfigService.updateBlogConfig(updateBlogConfigDto);
+    const blogConfig: BlogConfigEntity = await this.blogConfigService.saveBlogConfig(saveBlogConfigDto, files);
     
     return serialize<BlogConfigDto>(blogConfig);
   }
