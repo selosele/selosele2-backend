@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { BlogConfigService } from '../services/blog-config.service';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiBody, ApiQuery, ApiParam } from '@nestjs/swagger';
-import { BlogConfigEntity, BlogConfigDto, SaveBlogConfigDto, GetBlogConfigDto } from '../models';
+import { BlogConfigEntity, BlogConfigDto, SaveBlogConfigDto, GetBlogConfigDto, UpdateBlogConfigUseYnDto } from '../models';
 import { Body, Delete, Param, Post, Put, Query, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
 import { Auth } from '@/shared/decorators';
 import { Roles } from '@/auth/models';
@@ -108,12 +108,30 @@ export class BlogConfigController {
       ],
     })) files: FileUploaderRequest[],
   ): Promise<BlogConfigDto> {
-    if ('N' === saveBlogConfigDto.useYn) {
-      throw new BizException('미사용 환경설정은 수정할 수 없습니다.');
-    }
-
     const blogConfig: BlogConfigEntity = await this.blogConfigService.saveBlogConfig(saveBlogConfigDto, files);
     
+    return serialize<BlogConfigDto>(blogConfig);
+  }
+
+  @Put('use')
+  @Auth(Roles.ROLE_ADMIN)
+  @ApiOperation({
+    summary: '블로그 환경설정 사용 여부 수정 API',
+    description: '블로그 환경설정 사용 여부를 수정한다.'
+  })
+  @ApiCreatedResponse({
+    type: BlogConfigDto,
+    description: '블로그 환경설정 DTO',
+  })
+  @ApiBody({
+    type: UpdateBlogConfigUseYnDto,
+    description: '블로그 환경설정 사용 여부 수정 DTO',
+  })
+  async updateBlogConfigUseYn(
+    @Body(ValidationPipe) updateBlogConfigUseYnDto: UpdateBlogConfigUseYnDto
+  ): Promise<BlogConfigDto> {
+    const blogConfig: BlogConfigEntity = await this.blogConfigService.updateBlogConfigUseYn(updateBlogConfigUseYnDto);
+
     return serialize<BlogConfigDto>(blogConfig);
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BlogConfigEntity, GetBlogConfigDto, SaveBlogConfigDto } from '../models';
+import { BlogConfigEntity, GetBlogConfigDto, SaveBlogConfigDto, UpdateBlogConfigUseYnDto } from '../models';
 import { BlogConfigRepository } from '../repositories/blog-config.repository';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
 import { FileUploaderRequest, FileUploaderResponse } from '@/file-uploader/models/file-uploader.model';
@@ -77,6 +77,11 @@ export class BlogConfigService {
     }
 
     return await this.blogConfigRepository.saveBlogConfig(saveBlogConfigDto);
+  }
+
+  /** 블로그 환경설정 사용 여부를 수정한다. */
+  async updateBlogConfigUseYn(updateBlogConfigUseYnDto: UpdateBlogConfigUseYnDto): Promise<BlogConfigEntity> {
+    return await this.blogConfigRepository.updateBlogConfigUseYn(updateBlogConfigUseYnDto);
   }
 
   /** 블로그 환경설정을 삭제한다. */
