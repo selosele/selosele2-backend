@@ -1,13 +1,13 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { isEmpty } from "@/shared/utils";
+import { isBlank } from "@/shared/utils";
 
 /** 유효한 요청인지 확인하는 데코레이터 */
 export const IsAuthenticated = createParamDecorator((data: unknown, context: ExecutionContext): boolean => {
   const req = context.switchToHttp().getRequest();
   const accessToken: string = req.headers?.['authorization']?.split(' ')[1];
   
-  if (isEmpty(accessToken)) {
+  if (isBlank(accessToken)) {
     return false;
   }
   

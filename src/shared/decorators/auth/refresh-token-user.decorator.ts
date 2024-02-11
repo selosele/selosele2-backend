@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { getAuthenticatedUser, isEmpty } from "@/shared/utils";
+import { getAuthenticatedUser, isBlank } from "@/shared/utils";
 import { UserDto } from "../../../auth/models";
 
 /**
@@ -14,7 +14,7 @@ export const RefreshTokenUser = createParamDecorator((data: string, context: Exe
   const req = context.switchToHttp().getRequest();
   const refreshToken: string = req?.cookies?.refreshToken;
 
-  if (isEmpty(refreshToken)) {
+  if (isBlank(refreshToken)) {
     return null;
   }
 
