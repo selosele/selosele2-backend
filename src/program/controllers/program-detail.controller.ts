@@ -3,9 +3,10 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags 
 import { Roles } from '@/auth/models';
 import { Auth } from '@/shared/decorators';
 import { serialize } from '@/shared/utils';
-import { ProgramDetailDto, ProgramDetailEntity, RemoveProgramDetailDto, SaveProgramDetailDto } from '../models';
+import { GetProgramDetailDto, ProgramDetailDto, ProgramDetailEntity, RemoveProgramDetailDto, SaveProgramDetailDto } from '../models';
 import { ProgramDetailService } from '../services/program-detail.service';
 import { DeleteResult } from 'typeorm';
+import { Builder } from 'builder-pattern';
 
 @Controller('programdetail')
 @ApiTags('프로그램 상세 API')
@@ -56,7 +57,10 @@ export class ProgramDetailController {
   async getProgramDetail(
     @Param('id', ParseIntPipe) id: number
   ): Promise<ProgramDetailDto> {
-    const detail: ProgramDetailEntity = await this.programDetailService.getProgramDetail(id);
+    const getProgramDetailDto = Builder(GetProgramDetailDto)
+                                .id(id)
+                                .build();
+    const detail: ProgramDetailEntity = await this.programDetailService.getProgramDetail(getProgramDetailDto);
 
     return serialize<ProgramDetailDto>(detail);
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProgramDetailEntity, RemoveProgramDetailDto } from '../models';
+import { GetProgramDetailDto, ProgramDetailEntity, RemoveProgramDetailDto } from '../models';
 import { ProgramDetailRepository } from '../repositories/program-detail.repository';
 import { SaveProgramDetailDto } from '../models/dto/save-program-detail.dto';
 import { DeleteResult } from 'typeorm';
@@ -19,8 +19,8 @@ export class ProgramDetailService {
   }
 
   /** 프로그램 상세를 조회한다. */
-  async getProgramDetail(id: number): Promise<ProgramDetailEntity> {
-    return await this.programDetailRepository.getProgramDetail(id);
+  async getProgramDetail(getProgramDetailDto: GetProgramDetailDto): Promise<ProgramDetailEntity> {
+    return await this.programDetailRepository.getProgramDetail(getProgramDetailDto);
   }
 
   /** 프로그램 상세를 등록/수정한다. */
