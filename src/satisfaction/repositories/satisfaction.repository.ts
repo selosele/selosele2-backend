@@ -1,6 +1,7 @@
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
-import { Repository } from "typeorm";
-import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from "../models";
+import { Repository } from 'typeorm';
+import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
+import { getCurrentTimeStamp } from '@/shared/utils';
 
 @CustomRepository(SatisfactionEntity)
 export class SatisfactionRepository extends Repository<SatisfactionEntity> {
@@ -13,7 +14,7 @@ export class SatisfactionRepository extends Repository<SatisfactionEntity> {
   /** 만족도조사 참여 여부를 조회한다. */
   async countSatisfaction(addSatisfactiontDto: AddSatisfactiontDto): Promise<number> {
     return await this.createQueryBuilder('satisfaction')
-      .where("DATE_FORMAT(reg_date, '%Y-%m-%d') = DATE_FORMAT(CURRENT_TIMESTAMP(), '%Y-%m-%d')")
+      .where("reg_date >= :startOfDay", { startOfDay: getCurrentTimeStamp(new Date()) })
         .andWhere("page_path = :page_path", { page_path: addSatisfactiontDto.pagePath })
         .andWhere("ip = :ip", { ip: addSatisfactiontDto.ip })
       .getCount();
@@ -21,15 +22,15 @@ export class SatisfactionRepository extends Repository<SatisfactionEntity> {
 
   /** 만족도조사 목록을 조회한다. */
   async listSatisfaction(searchSatisfactiontDto: SearchSatisfactiontDto): Promise<SatisfactionEntity[]> {
-    let query = this.createQueryBuilder('satisfaction')
+    let query = this.createQueryBuilder('satisfaction');
 
     if ('Y' === searchSatisfactiontDto.isToday) {
       query = query
-        .where("DATE_FORMAT(reg_date, '%Y-%m-%d') = DATE_FORMAT(CURRENT_TIMESTAMP(), '%Y-%m-%d')");
+        .where("reg_date >= :startOfDay", { startOfDay: getCurrentTimeStamp(new Date()) });
     }
     if (searchSatisfactiontDto.regDate) {
       query = query
-        .where("DATE_FORMAT(reg_date, '%Y-%m-%d') =:reg_date", { reg_date: searchSatisfactiontDto.regDate });
+        .where("reg_date >= :startOfDay", { startOfDay: getCurrentTimeStamp(new Date(searchSatisfactiontDto.regDate.toString())) });
     }
 
     query = query
