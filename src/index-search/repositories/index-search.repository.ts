@@ -148,7 +148,7 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
 
   /** 모든 검색 데이터를 삭제한다. */
   async removeIndexSearchAll(): Promise<DeleteResult> {
-    return await this.createQueryBuilder('indexSeach')
+    return await this.createQueryBuilder('indexSearch')
       .delete()
       .where("1=1")
       .execute();
