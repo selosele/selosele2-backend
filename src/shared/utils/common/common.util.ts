@@ -50,9 +50,3 @@ export function serialize<T>(instance: unknown): T {
 export function deserialize<T>(instance: ClassConstructor<T>, plain: any): T {
   return plainToClass(instance, JSON.parse(plain));
 }
-
-/** 타임스탬프를 반환한다. */
-export function getCurrentTimeStamp(date: Date): Date {
-  date.setUTCHours(0, 0, 0, 0);
-  return date;
-}
