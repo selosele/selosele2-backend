@@ -1,11 +1,10 @@
-import { UserDto } from '@/auth/models';
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
 import { getAuthenticatedUser, isEmpty, isProd } from '../utils';
-import { ProgramDetailEntity } from '@/program/models';
+import { ProgramDetailEntity, ProgramLogData } from '@/program/models';
+import { UserDto } from '@/auth/models';
 import { DataSource } from 'typeorm';
-import { ProgramLogData } from '../../program/models';
 
 @Injectable()
 export class ProgramLogInterceptor implements NestInterceptor {
