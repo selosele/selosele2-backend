@@ -62,7 +62,7 @@ export class ProgramLogInterceptor implements NestInterceptor {
         throw new NotFoundException();
       }
 
-      logData.detail = programDetail;
+      logData.programDetail = programDetail;
 
       this.logger.warn(logData);
 

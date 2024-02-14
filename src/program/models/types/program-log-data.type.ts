@@ -27,6 +27,6 @@ export type ProgramLogData = {
   userSn?: number;
 
   /** 프로그램 상세 */
-  detail?: ProgramDetailDto;
+  programDetail?: ProgramDetailDto;
 
 }
