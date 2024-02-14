@@ -16,7 +16,7 @@ export const globalCodes = {
   CRUD_DELETE:    { id: 'E01004', prefix: 'E01', val: '004', nm: '삭제', desc: 'CRUD 유형', useYn: 'Y' },
 
   NICKNAME:       { id: 'F01001', prefix: 'F01', val: '001', nm: '관리자', desc: '닉네임', useYn: 'Y' },
-
+  
   RESPONSE_OK:    { id: 'G01001', prefix: 'G01', val: '001', nm: 'OK', desc: '응답 상태 코드', useYn: 'Y' },
   RESPONSE_NO:    { id: 'G01002', prefix: 'G01', val: '002', nm: 'NO', desc: '응답 상태 코드', useYn: 'Y' },
 
@@ -24,6 +24,8 @@ export const globalCodes = {
   COUNTRY_CHINA:  { id: 'H01002', prefix: 'H01', val: '002', nm: 'CN', desc: 'ISO 3166-2 코드(중국)', useYn: 'Y' },
   COUNTRY_INDO:   { id: 'H01003', prefix: 'H01', val: '003', nm: 'IN', desc: 'ISO 3166-2 코드(인도)', useYn: 'Y' },
   COUNTRY_RUSSIA: { id: 'H01004', prefix: 'H01', val: '004', nm: 'RU', desc: 'ISO 3166-2 코드(러시아)', useYn: 'Y' },
+
+  PASSWORD:       { id: 'I01001', prefix: 'I01', val: '001', nm: '********', desc: '비밀번호', useYn: 'Y' },
 };
 
 /** IP 차단 대상의 국가 코드 목록 */
