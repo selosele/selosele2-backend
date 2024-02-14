@@ -10,3 +10,6 @@ export * from './dto/save-program.dto';
 // Entities
 export * from './entities/program-detail.entity';
 export * from './entities/program.entity';
+
+// Types
+export * from './types/program-log-data.type';
