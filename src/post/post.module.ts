@@ -27,6 +27,11 @@ import { IndexSearchService } from '@/index-search/services/index-search.service
 import { IndexSearchEntity } from '@/index-search/models';
 import { IndexSearchRepository } from '@/index-search/repositories/index-search.repository';
 import { IndexSearchLogRepository } from '@/index-search/repositories/index-search-log.repository';
+import { AuthService } from '@/auth/services/auth.service';
+import { UserRepository } from '@/auth/repositories/user.repository';
+import { UserRoleRepository } from '@/auth/repositories/user-role.repository';
+import { RoleRepository } from '@/auth/repositories/role.repository';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -52,7 +57,10 @@ import { IndexSearchLogRepository } from '@/index-search/repositories/index-sear
       BlogConfigRepository,
       NotificationRepository,
       IndexSearchRepository,
-      IndexSearchLogRepository
+      IndexSearchLogRepository,
+      UserRepository,
+      UserRoleRepository,
+      RoleRepository
     ]),
   ],
   controllers: [
@@ -66,7 +74,9 @@ import { IndexSearchLogRepository } from '@/index-search/repositories/index-sear
     PostReplyService,
     FileUploaderService,
     NotificationService,
-    IndexSearchService
+    IndexSearchService,
+    AuthService,
+    JwtService
   ]
 })
 export class PostModule {}

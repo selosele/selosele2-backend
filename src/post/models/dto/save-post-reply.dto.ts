@@ -52,7 +52,7 @@ export class SavePostReplyDto {
 
   /** 관리자 계정 여부 */
   @IsEmpty()
-  isAdmin?: string;
+  adminYn?: string;
 
   /** 로그인 여부 */
   @IsEmpty()

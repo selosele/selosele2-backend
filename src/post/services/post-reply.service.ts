@@ -1,15 +1,17 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Builder } from "builder-pattern";
-import { BizException } from "@/shared/exceptions";
-import { compareEncrypt, encrypt, escapeHtml, isEmpty, isNotEmpty } from "@/shared/utils";
-import { DataSource, EntityManager, UpdateResult } from "typeorm";
-import { PostEntity, PostReplyEntity, GetPostDto, ListPostReplyDto, SavePostReplyDto, GetPostReplyDto, UpdatePostReplySortDto, SavePostDto } from "../models";
-import { PostReplyRepository } from "../repositories/post-reply.repository";
-import { PostRepository } from "../repositories/post.repository";
-import { NotificationRepository } from "@/notification/repositories/notification.repository";
-import { AddNotificationDto, notificationCodes } from "@/notification/models";
-import { globalCodes } from "@/shared/codes/code";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Builder } from 'builder-pattern';
+import { BizException } from '@/shared/exceptions';
+import { compareEncrypt, encrypt, escapeHtml, isEmpty, isNotEmpty } from '@/shared/utils';
+import { DataSource, EntityManager, UpdateResult } from 'typeorm';
+import { PostEntity, PostReplyEntity, GetPostDto, ListPostReplyDto, SavePostReplyDto, GetPostReplyDto, UpdatePostReplySortDto, SavePostDto } from '../models';
+import { PostReplyRepository } from '../repositories/post-reply.repository';
+import { PostRepository } from '../repositories/post.repository';
+import { NotificationRepository } from '@/notification/repositories/notification.repository';
+import { AddNotificationDto, notificationCodes } from '@/notification/models';
+import { globalCodes } from '@/shared/codes/code';
+import { AuthService } from '@/auth/services/auth.service';
+import { UserEntity } from '@/auth/models';
 
 @Injectable()
 export class PostReplyService {
@@ -21,6 +23,7 @@ export class PostReplyService {
     private readonly postRepository: PostRepository,
     @InjectRepository(NotificationRepository)
     private readonly notificationRepository: NotificationRepository,
+    private readonly authService: AuthService,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -55,8 +58,8 @@ export class PostReplyService {
   }
 
   /** 포스트 댓글을 등록/수정한다. */
-  async savePostReply(savePostReplyDto: SavePostReplyDto): Promise<PostReplyEntity> {
-    const { authorPw, cont, group, parentReplyId } = savePostReplyDto;
+  async savePostReply(savePostReplyDto: SavePostReplyDto, userSn: number): Promise<PostReplyEntity> {
+    const { cont, group, parentReplyId, adminYn } = savePostReplyDto;
     
     // 상위 포스트를 조회한다.
     const getPostDto = Builder(GetPostDto)
@@ -69,13 +72,19 @@ export class PostReplyService {
       throw new NotFoundException();
     }
 
+    // 관리자의 경우 관리자 비밀번호로 설정해준다.
+    if ('Y' === adminYn) {
+      const user: UserEntity = await this.authService.getUser(userSn);
+      savePostReplyDto.authorPw = user.userPw;
+    }
+
     let res: PostReplyEntity = null;
 
     // 등록
     if (globalCodes.CRUD_CREATE.id === savePostReplyDto.crudType) {
 
       // 비밀번호 암호화
-      savePostReplyDto.authorPw = await encrypt(authorPw);
+      savePostReplyDto.authorPw = await encrypt(savePostReplyDto.authorPw);
 
       // HTML Escape
       savePostReplyDto.cont = escapeHtml(cont);
@@ -146,7 +155,7 @@ export class PostReplyService {
       }
 
       // 비밀번호 암호화
-      savePostReplyDto.authorPw = await encrypt(authorPw);
+      savePostReplyDto.authorPw = await encrypt(savePostReplyDto.authorPw);
 
       // HTML Escape
       savePostReplyDto.cont = escapeHtml(savePostReplyDto.cont);
@@ -269,7 +278,7 @@ export class PostReplyService {
 
   /** 임시저장 및 비밀 포스트에 인증되지 않은 사용자의 댓글 저장을 방지한다. */
   private isNotAllowedPost(savePostReplyDto: SavePostReplyDto, parentPost: PostEntity): boolean {
-    return 'N' === savePostReplyDto.isAdmin && ('Y' === parentPost.secretYn || 'Y' === parentPost.tmpYn);
+    return 'N' === savePostReplyDto.adminYn && ('Y' === parentPost.secretYn || 'Y' === parentPost.tmpYn);
   }
 
 }

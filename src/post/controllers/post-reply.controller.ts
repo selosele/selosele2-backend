@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from "@nestjs/common";
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { Roles } from "@/auth/models";
-import { Auth, Ip, IsAuthenticated } from "@/shared/decorators";
-import { UpdateResult } from "typeorm";
-import { ListPostReplyDto, PostReplyDto, PostReplyEntity, SavePostReplyDto } from "../models";
-import { PostReplyService } from "../services/post-reply.service";
-import { serialize } from "@/shared/utils";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Roles } from '@/auth/models';
+import { AccessTokenUser, Auth, Ip, IsAuthenticated } from '@/shared/decorators';
+import { UpdateResult } from 'typeorm';
+import { ListPostReplyDto, PostReplyDto, PostReplyEntity, SavePostReplyDto } from '../models';
+import { PostReplyService } from '../services/post-reply.service';
+import { serialize } from '@/shared/utils';
 
 @Controller('postreply')
 @ApiTags('포스트 댓글 API')
@@ -76,13 +76,14 @@ export class PostReplyController {
   async addPostReply(
     @Ip() ip: string,
     @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto,
-    @IsAuthenticated() isAuthenticated: boolean
+    @IsAuthenticated() isAuthenticated: boolean,
+    @AccessTokenUser('userSn') userSn: number,
   ): Promise<PostReplyDto> {
     savePostReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
-    savePostReplyDto.isAdmin = isAuthenticated ? 'Y' : 'N';
+    savePostReplyDto.adminYn = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.ip = ip;
 
-    const postReply: PostReplyEntity = await this.postReplyService.savePostReply(savePostReplyDto);
+    const postReply: PostReplyEntity = await this.postReplyService.savePostReply(savePostReplyDto, userSn);
 
     return serialize<PostReplyDto>(postReply);
   }
@@ -103,13 +104,14 @@ export class PostReplyController {
   async updatePostReply(
     @Ip() ip: string,
     @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto,
-    @IsAuthenticated() isAuthenticated: boolean
+    @IsAuthenticated() isAuthenticated: boolean,
+    @AccessTokenUser('userSn') userSn: number,
   ): Promise<PostReplyDto> {
     savePostReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
-    savePostReplyDto.isAdmin = isAuthenticated ? 'Y' : 'N';
+    savePostReplyDto.adminYn = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.ip = ip;
 
-    const postReply: PostReplyEntity = await this.postReplyService.savePostReply(savePostReplyDto);
+    const postReply: PostReplyEntity = await this.postReplyService.savePostReply(savePostReplyDto, userSn);
 
     return serialize<PostReplyDto>(postReply);
   }
@@ -161,13 +163,14 @@ export class PostReplyController {
   async removePostReply(
     @Ip() ip: string,
     @Body(ValidationPipe) savePostReplyDto: SavePostReplyDto,
-    @IsAuthenticated() isAuthenticated: boolean
+    @IsAuthenticated() isAuthenticated: boolean,
+    @AccessTokenUser('userSn') userSn: number,
   ): Promise<PostReplyDto> {
     savePostReplyDto.isLogin = isAuthenticated ? 'Y' : 'N';
-    savePostReplyDto.isAdmin = isAuthenticated ? 'Y' : 'N';
+    savePostReplyDto.adminYn = isAuthenticated ? 'Y' : 'N';
     savePostReplyDto.ip = ip;
 
-    const postReply: PostReplyEntity = await this.postReplyService.savePostReply(savePostReplyDto);
+    const postReply: PostReplyEntity = await this.postReplyService.savePostReply(savePostReplyDto, userSn);
 
     return serialize<PostReplyDto>(postReply);
   }
