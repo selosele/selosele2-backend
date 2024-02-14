@@ -1,6 +1,6 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { isBlank } from "@/shared/utils";
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { isBlank } from '@/shared/utils';
 
 /** 유효한 요청인지 확인하는 데코레이터 */
 export const IsAuthenticated = createParamDecorator((data: unknown, context: ExecutionContext): boolean => {

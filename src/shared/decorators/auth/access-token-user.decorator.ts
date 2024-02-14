@@ -8,7 +8,7 @@ import { UserDto } from '../../../auth/models';
  * 
  * 사용 예시
  *   - @AccessTokenUser() user: UserDto
- *   - @AccessTokenUser('userSn') userSn: string
+ *   - @AccessTokenUser('userSn') userSn: number
  */
 export const AccessTokenUser = createParamDecorator((data: string, context: ExecutionContext): UserDto => {
   const req = context.switchToHttp().getRequest();
