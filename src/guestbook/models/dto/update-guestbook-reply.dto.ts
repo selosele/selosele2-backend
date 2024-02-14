@@ -29,4 +29,8 @@ export class UpdateGuestbookReplyDto {
   @IsEmpty()
   ip?: string;
 
+  /** 관리자 계정 여부 */
+  @IsEmpty()
+  adminYn?: string;
+
 }

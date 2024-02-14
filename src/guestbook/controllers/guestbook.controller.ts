@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Ip, IsAuthenticated } from '@/shared/decorators';
+import { AccessTokenUser, Ip, IsAuthenticated } from '@/shared/decorators';
 import { PaginationDto } from '@/shared/models';
 import { AddGuestbookDto, RemoveGuestbookDto, UpdateGuestbookDto, GuestbookEntity, GuestbookDto } from '../models';
 import { GuestbookService } from '../services/guestbook.service';
@@ -56,11 +56,12 @@ export class GuestbookController {
     @Ip() ip: string,
     @Body(ValidationPipe) addGuestbookDto: AddGuestbookDto,
     @IsAuthenticated() isAuthenticated: boolean,
+    @AccessTokenUser('userSn') userSn: number,
   ): Promise<GuestbookDto> {
     addGuestbookDto.ip = ip;
     addGuestbookDto.adminYn = isAuthenticated ? 'Y' : 'N';
 
-    const guestbook: GuestbookEntity = await this.guestbookService.addGuestbook(addGuestbookDto);
+    const guestbook: GuestbookEntity = await this.guestbookService.addGuestbook(addGuestbookDto, userSn);
 
     return serialize<GuestbookDto>(guestbook);
   }
@@ -80,11 +81,14 @@ export class GuestbookController {
   })
   async updateGuestbook(
     @Ip() ip: string,
-    @Body(ValidationPipe) updateGuestbookDto: UpdateGuestbookDto
+    @Body(ValidationPipe) updateGuestbookDto: UpdateGuestbookDto,
+    @IsAuthenticated() isAuthenticated: boolean,
+    @AccessTokenUser('userSn') userSn: number,
   ): Promise<GuestbookDto> {
     updateGuestbookDto.ip = ip;
+    updateGuestbookDto.adminYn = isAuthenticated ? 'Y' : 'N';
 
-    const guestbook: GuestbookEntity = await this.guestbookService.updateGuestbook(updateGuestbookDto);
+    const guestbook: GuestbookEntity = await this.guestbookService.updateGuestbook(updateGuestbookDto, userSn);
 
     return serialize<GuestbookDto>(guestbook);
   }

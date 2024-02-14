@@ -1,6 +1,6 @@
 import { Controller, Post, Body, ValidationPipe, Get, Query, Put } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Ip, IsAuthenticated } from '@/shared/decorators';
+import { AccessTokenUser, Ip, IsAuthenticated } from '@/shared/decorators';
 import { PaginationDto } from '@/shared/models';
 import { ListGuestbookReplyDto, AddGuestbookReplyDto, RemoveGuestbookReplyDto, UpdateGuestbookReplyDto, GuestbookReplyEntity, GuestbookReplyDto } from '../models';
 import { GuestbookReplyService } from "../services/guestbook-reply.service";
@@ -62,11 +62,12 @@ export class GuestbookReplyController {
     @Ip() ip: string,
     @Body(ValidationPipe) addGuestbookReplyDto: AddGuestbookReplyDto,
     @IsAuthenticated() isAuthenticated: boolean,
+    @AccessTokenUser('userSn') userSn: number,
   ): Promise<GuestbookReplyDto> {
     addGuestbookReplyDto.ip = ip;
     addGuestbookReplyDto.adminYn = isAuthenticated ? 'Y' : 'N';
 
-    const guestbookReply: GuestbookReplyEntity = await this.guestbookReplyService.addGuestbookReply(addGuestbookReplyDto);
+    const guestbookReply: GuestbookReplyEntity = await this.guestbookReplyService.addGuestbookReply(addGuestbookReplyDto, userSn);
 
     return serialize<GuestbookReplyDto>(guestbookReply);
   }
@@ -86,11 +87,14 @@ export class GuestbookReplyController {
   })
   async updateGuestbook(
     @Ip() ip: string,
-    @Body(ValidationPipe) updateGuestbookReplyDto: UpdateGuestbookReplyDto
+    @Body(ValidationPipe) updateGuestbookReplyDto: UpdateGuestbookReplyDto,
+    @IsAuthenticated() isAuthenticated: boolean,
+    @AccessTokenUser('userSn') userSn: number,
   ): Promise<GuestbookReplyDto> {
     updateGuestbookReplyDto.ip = ip;
+    updateGuestbookReplyDto.adminYn = isAuthenticated ? 'Y' : 'N';
 
-    const guestbookReply: GuestbookReplyEntity = await this.guestbookReplyService.updateGuestbookReply(updateGuestbookReplyDto);
+    const guestbookReply: GuestbookReplyEntity = await this.guestbookReplyService.updateGuestbookReply(updateGuestbookReplyDto, userSn);
 
     return serialize<GuestbookReplyDto>(guestbookReply);
   }

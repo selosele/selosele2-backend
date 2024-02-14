@@ -12,6 +12,11 @@ import { NotificationService } from '@/notification/services/notification.servic
 import { NotificationRepository } from '@/notification/repositories/notification.repository';
 import { NotificationEntity } from '@/notification/models';
 import { DatabaseModule } from '@/database/database.module';
+import { AuthService } from '@/auth/services/auth.service';
+import { UserRepository } from '@/auth/repositories/user.repository';
+import { UserRoleRepository } from '@/auth/repositories/user-role.repository';
+import { RoleRepository } from '@/auth/repositories/role.repository';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -24,7 +29,10 @@ import { DatabaseModule } from '@/database/database.module';
     CustomRepositoryModule.forCustomRepository([
       GuestbookRepository,
       GuestbookReplyRepository,
-      NotificationRepository
+      NotificationRepository,
+      UserRepository,
+      UserRoleRepository,
+      RoleRepository
     ]),
   ],
   controllers: [
@@ -34,7 +42,9 @@ import { DatabaseModule } from '@/database/database.module';
   providers: [
     GuestbookService,
     GuestbookReplyService,
-    NotificationService
+    NotificationService,
+    AuthService,
+    JwtService
   ]
 })
 export class GuestbookModule {}

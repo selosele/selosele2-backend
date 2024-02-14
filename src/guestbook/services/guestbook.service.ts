@@ -9,6 +9,8 @@ import { DataSource, EntityManager } from 'typeorm';
 import { AddNotificationDto, notificationCodes } from '@/notification/models';
 import { Builder } from 'builder-pattern';
 import { NotificationRepository } from '@/notification/repositories/notification.repository';
+import { UserEntity } from '@/auth/models';
+import { AuthService } from '@/auth/services/auth.service';
 
 @Injectable()
 export class GuestbookService {
@@ -18,6 +20,7 @@ export class GuestbookService {
     private readonly guestbookRepository: GuestbookRepository,
     @InjectRepository(NotificationRepository)
     private readonly notificationRepository: NotificationRepository,
+    private readonly authService: AuthService,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -32,11 +35,17 @@ export class GuestbookService {
   }
 
   /** 방명록을 등록한다. */
-  async addGuestbook(addGuestbookDto: AddGuestbookDto): Promise<GuestbookEntity> {
-    const { authorPw, cont } = addGuestbookDto;
+  async addGuestbook(addGuestbookDto: AddGuestbookDto, userSn: number): Promise<GuestbookEntity> {
+    const { cont, adminYn } = addGuestbookDto;
+
+    // 관리자의 경우 관리자 비밀번호로 설정해준다.
+    if ('Y' === adminYn) {
+      const user: UserEntity = await this.authService.getUser(userSn);
+      addGuestbookDto.authorPw = user.userPw;
+    }
 
     // 비밀번호 암호화
-    addGuestbookDto.authorPw = await encrypt(authorPw);
+    addGuestbookDto.authorPw = await encrypt(addGuestbookDto.authorPw);
 
     // HTML Escape
     addGuestbookDto.cont = escapeHtml(cont);
@@ -68,15 +77,21 @@ export class GuestbookService {
   }
 
   /** 방명록을 수정한다. */
-  async updateGuestbook(updateGuestbookDto: UpdateGuestbookDto): Promise<GuestbookEntity> {
-    const { authorPw, cont } = updateGuestbookDto;
+  async updateGuestbook(updateGuestbookDto: UpdateGuestbookDto, userSn: number): Promise<GuestbookEntity> {
+    const { cont, adminYn } = updateGuestbookDto;
+
+    // 관리자의 경우 관리자 비밀번호로 설정해준다.
+    if ('Y' === adminYn) {
+      const user: UserEntity = await this.authService.getUser(userSn);
+      updateGuestbookDto.authorPw = user.userPw;
+    }
 
     // 비밀번호 비교
     const isValid: boolean = await this.compareAuthorPassword(updateGuestbookDto);
     if (!isValid) throw new BizException('비밀번호를 확인하세요.');
 
     // 비밀번호 암호화
-    updateGuestbookDto.authorPw = await encrypt(authorPw);
+    updateGuestbookDto.authorPw = await encrypt(updateGuestbookDto.authorPw);
 
     // HTML Escape
     updateGuestbookDto.cont = escapeHtml(cont);
