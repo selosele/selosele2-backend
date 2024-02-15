@@ -23,51 +23,53 @@ export class ProgramLogInterceptor implements NestInterceptor {
     //const body = req.body;
     const accessToken: string = req.headers?.['authorization']?.split(' ')[1];
     const user: UserDto = getAuthenticatedUser(accessToken);
+    const logData: ProgramLogData = {
+      method: req.method,
+      url: req.url,
+      path: req.path,
+      routePath: req.route.path,
+      ip: req.ip,
+      statusCode: req.res.statusCode,
+      message: '',
+      userSn: user?.userSn
+    };
 
+    // service, repository 의존성 주입해서 ProgramDetailRepository.findOne() 호출 시
+    // ProgramDetailRepository가 undefined로서, 의존성 주입되지 않는 이슈가 있어 아래처럼 처리
+    // 의존성 주입 로직으로 해결하려면 app.module.ts의 providers에 ProgramDetailService, ProgramDetailRepository 추가 필요
+    const programDetail = await this.dataSource.getRepository(ProgramDetailEntity).findOne({
+      where: {
+        method: logData.method,
+        routePath: logData.routePath
+      },
+    });
+
+    // 존재하지 않는 프로그램일 경우
+    if (isEmpty(programDetail)) {
+      logData.statusCode = 404;
+      logData.message = '존재하지 않는 프로그램 호출 시도';
+      this.logger.warn(logData);
+      throw new NotFoundException();
+    }
+
+    // 미사용 프로그램일 경우
+    if ('N' === programDetail.useYn) {
+      logData.statusCode = 404;
+      logData.message = '미사용 프로그램 호출 시도';
+      this.logger.warn(logData);
+      throw new NotFoundException();
+    }
+
+    logData.programDetail = programDetail;
+
+    this.logger.warn(logData);
+
+    // TODO: 프로그램 사용 로그 저장 로직 구현
     // 운영 환경에서만 프로그램 사용 로그를 저장한다.
     if (isProd(this.env.get<string>('NODE_ENV'))) {
-      const logData: ProgramLogData = {
-        method: req.method,
-        url: req.url,
-        path: req.path,
-        routePath: req.route.path,
-        ip: req.ip,
-        statusCode: req.res.statusCode,
-        message: '',
-        userSn: user?.userSn
-      };
-
-      // service, repository 의존성 주입해서 ProgramDetailRepository.findOne() 호출 시
-      // ProgramDetailRepository가 undefined로서, 의존성 주입되지 않는 이슈가 있어 아래처럼 처리
-      // 의존성 주입 로직으로 해결하려면 app.module.ts의 providers에 ProgramDetailService, ProgramDetailRepository 추가 필요
-      const programDetail = await this.dataSource.getRepository(ProgramDetailEntity).findOne({
-        where: {
-          method: logData.method,
-          routePath: logData.routePath
-        },
-      });
-
-      // 존재하지 않는 프로그램일 경우
-      if (isEmpty(programDetail)) {
-        logData.message = '존재하지 않는 프로그램 호출 시도';
-        this.logger.warn(logData);
-        throw new NotFoundException();
-      }
-
-      // 미사용 프로그램일 경우
-      if ('N' === programDetail.useYn) {
-        logData.message = '미사용 프로그램 호출 시도';
-        this.logger.warn(logData);
-        throw new NotFoundException();
-      }
-
-      logData.programDetail = programDetail;
-
-      this.logger.warn(logData);
-
-      // TODO: 프로그램 사용 로그 저장 로직 구현
-
+      
     }
+
     return next.handle();
   }
 }
