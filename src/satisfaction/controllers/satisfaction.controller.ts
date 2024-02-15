@@ -33,9 +33,9 @@ export class SatisfactionController {
   async listSatisfaction(
     @Query(ValidationPipe) searchSatisfactiontDto: SearchSatisfactiontDto
   ): Promise<SatisfactionDto[]> {
-    const Satisfactions: SatisfactionEntity[] = await this.satisfactionService.listSatisfaction(searchSatisfactiontDto);
+    const satisfactions: SatisfactionEntity[] = await this.satisfactionService.listSatisfaction(searchSatisfactiontDto);
 
-    return serialize<SatisfactionDto[]>(Satisfactions);
+    return serialize<SatisfactionDto[]>(satisfactions);
   }
 
   @Post()
@@ -62,9 +62,9 @@ export class SatisfactionController {
 
     addSatisfactiontDto.ip = ip;
 
-    const Satisfaction: SatisfactionEntity = await this.satisfactionService.addSatisfaction(addSatisfactiontDto);
+    const satisfaction: SatisfactionEntity = await this.satisfactionService.addSatisfaction(addSatisfactiontDto);
     
-    return serialize<SatisfactionDto>(Satisfaction);
+    return serialize<SatisfactionDto>(satisfaction);
   }
 
 }
