@@ -19,6 +19,7 @@ import { CacheDBModule } from './cache-db/cache-db.module';
 import { IndexSearchModule } from './index-search/index-search.module';
 import { ProgramLogInterceptor } from './shared/interceptors/program-log.interceptor';
 import { ProgramModule } from './program/program.module';
+import { CronModule } from './cron/cron.module';
 import { isProd } from './shared/utils';
 
 @Module({
@@ -32,8 +33,7 @@ import { isProd } from './shared/utils';
     // ServeStaticModule.forRoot({
     //   rootPath: join(__dirname, '..', 'client'),
     // }),
-    // 2024.02.04. cron 비활성화
-    //CronModule,
+    CronModule,
     CacheDBModule,
     FileUploaderModule,
     AuthModule,
