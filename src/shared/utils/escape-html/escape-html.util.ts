@@ -8,7 +8,7 @@ const allowTags = [
   'resultMap',      // 운영 환경 9번 포스트
   'result',         // 운영 환경 9번 포스트
   'select',         // 운영 환경 9번 포스트
-  'FOO',            // 운영 환경 7번 포스트
+  'Foo',            // 운영 환경 7번 포스트
 ];
 
 /** HTML을 escape한다. */
