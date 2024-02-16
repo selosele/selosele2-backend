@@ -8,6 +8,7 @@ const allowTags = [
   'resultMap',      // 운영 환경 9번 포스트
   'result',         // 운영 환경 9번 포스트
   'select',         // 운영 환경 9번 포스트
+  'FOO',            // 운영 환경 7번 포스트
 ];
 
 /** HTML을 escape한다. */
@@ -20,6 +21,7 @@ export const santinizeHtmlOption: sanitizeHtml.IOptions = {
 
   // 디폴트 allowTags에 추가로 태그 허용
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(allowTags),
+  selfClosing: ['result'],
   // 모든 속성 허용
   allowedAttributes: false,
   // iframe 태그를 허용하되, codepen만 허용
