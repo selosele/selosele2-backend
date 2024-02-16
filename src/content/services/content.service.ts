@@ -66,6 +66,7 @@ export class ContentService {
     // HTML Escape
     saveContentDto.cont = escapeHtml(cont, Object.assign(santinizeHtmlOption, {
       allowedTags: false,
+      allowedAttributes: false,
     }));
 
     // 대표 이미지 파일을 업로드한다.

@@ -15,8 +15,6 @@ export const santinizeHtmlOption: sanitizeHtml.IOptions = {
 
   /** self closing할 태그 목록 */
   selfClosing: selfClosingTags,
-  // 모든 속성 허용
-  allowedAttributes: false,
   // iframe 태그를 허용하되, codepen만 허용
   allowedIframeHostnames: ['https://codepen.io/'],
   // code highlight 안에 들어가는 화살표함수 기호나 꺾쇠(ex: i < 0)에 대한 escape 방지
