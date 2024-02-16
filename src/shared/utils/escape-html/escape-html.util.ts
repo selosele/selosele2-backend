@@ -1,5 +1,15 @@
 import * as sanitizeHtml from 'sanitize-html';
 
+/** 허용할 태그 목록 */
+const allowTags = [
+  'listener',       // 운영 환경 11번 포스트
+  'listener-class', // 운영 환경 11번 포스트
+  'sqlMap',         // 운영 환경 9번 포스트
+  'resultMap',      // 운영 환경 9번 포스트
+  'result',         // 운영 환경 9번 포스트
+  'select',         // 운영 환경 9번 포스트
+];
+
 /** HTML을 escape한다. */
 export function escapeHtml(plain: string, option?: sanitizeHtml.IOptions): string {
   return sanitizeHtml(plain, option);
@@ -9,8 +19,7 @@ export function escapeHtml(plain: string, option?: sanitizeHtml.IOptions): strin
 export const santinizeHtmlOption: sanitizeHtml.IOptions = {
 
   // 디폴트 allowTags에 추가로 태그 허용
-  // 2024.01.17. 운영 환경 11번 아이디 포스트의 내용 중, code 블럭 내부의 listener, listener-class 태그 허용
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'listener', 'listener-class' ]),
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat(allowTags),
   // 모든 속성 허용
   allowedAttributes: false,
   // iframe 태그를 허용하되, codepen만 허용
@@ -19,7 +28,8 @@ export const santinizeHtmlOption: sanitizeHtml.IOptions = {
   textFilter: function(text) {
     return text.replace(/=&gt;/g, '=>')
                .replace(/&lt;/g, '<')
-               .replace(/&gt;/g, '>');
+               .replace(/&gt;/g, '>')
+               .replace(/&amp;/g, '&');
   },
   
 };
