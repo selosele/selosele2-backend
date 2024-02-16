@@ -1,27 +1,20 @@
 import * as sanitizeHtml from 'sanitize-html';
 
-/** 허용할 태그 목록 */
-const allowTags = [
-  'listener',       // 운영 환경 11번 포스트
-  'listener-class', // 운영 환경 11번 포스트
-  'sqlMap',         // 운영 환경 9번 포스트
-  'resultMap',      // 운영 환경 9번 포스트
-  'result',         // 운영 환경 9번 포스트
-  'select',         // 운영 환경 9번 포스트
-  'Foo',            // 운영 환경 7번 포스트
+/** self closing 태그 목록 */
+const selfClosingTags = [
+  'result',
 ];
 
 /** HTML을 escape한다. */
-export function escapeHtml(plain: string, option?: sanitizeHtml.IOptions): string {
-  return sanitizeHtml(plain, option);
+export function escapeHtml(dirty: string, options?: sanitizeHtml.IOptions): string {
+  return sanitizeHtml(dirty, options);
 }
 
 /** santinize-html 공통 옵션 */
 export const santinizeHtmlOption: sanitizeHtml.IOptions = {
 
-  // 디폴트 allowTags에 추가로 태그 허용
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat(allowTags),
-  selfClosing: ['result'],
+  /** self closing할 태그 목록 */
+  selfClosing: selfClosingTags,
   // 모든 속성 허용
   allowedAttributes: false,
   // iframe 태그를 허용하되, codepen만 허용

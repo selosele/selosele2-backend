@@ -64,7 +64,9 @@ export class ContentService {
     }
 
     // HTML Escape
-    saveContentDto.cont = escapeHtml(cont, santinizeHtmlOption);
+    saveContentDto.cont = escapeHtml(cont, Object.assign(santinizeHtmlOption, {
+      allowedTags: false,
+    }));
 
     // 대표 이미지 파일을 업로드한다.
     if (isNotFileEmpty(ogImgFile) && !this.hasDelOgImg(delOgImg)) {
