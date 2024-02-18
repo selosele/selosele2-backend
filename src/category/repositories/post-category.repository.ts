@@ -37,23 +37,34 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
       .leftJoin("postCategory.post", "post")
       .leftJoinAndSelect("postCategory.category", "category")
 
-    const caseSensitive = 'Y' === searchPostDto.c ? 'BINARY ' : '';
+    /**
+     * 검색어 목록
+     *   - 검색어를 한칸 띄어쓰기 기준으로 배열을 만들어서 다중 검색이 되도록 한다.
+     */
+    const searchQueries = searchPostDto.q.split(' ');
+
+    /** 대소문자 구분 여부 */
+    const caseSensitive = ('Y' === searchPostDto.c) ? 'BINARY ' : '';
 
     // 전체 검색
     if ('001' === searchPostDto.t) {
       query = query
         .where(new Brackets(qb => {
-          qb.where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` })
-            .orWhere(caseSensitive + "post.cont LIKE :cont", { cont: `%${searchPostDto.q}%` })
-            .orWhere(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` })
+          searchQueries.forEach(q => {
+            qb.orWhere(caseSensitive + `post.title LIKE '%${q}%'`)
+              .orWhere(caseSensitive + `post.cont LIKE '%${q}%'`)
+              .orWhere(caseSensitive + `category.nm LIKE '%${q}%'`);
+          });
         }));
     }
     
     // 제목으로 검색
     if ('002' === searchPostDto.t) {
       query = query
-        .where(new Brackets(qb => {
-          qb.where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` });
+        .andWhere(new Brackets(qb => {
+          searchQueries.forEach(q => {
+            qb.orWhere(caseSensitive + `post.title LIKE '%${q}%'`);
+          });
         }));
     }
 
@@ -61,7 +72,9 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
     if ('003' === searchPostDto.t) {
       query = query
         .where(new Brackets(qb => {
-          qb.where(caseSensitive + "post.cont LIKE :cont", { cont: `%${searchPostDto.q}%` });
+          searchQueries.forEach(q => {
+            qb.orWhere(caseSensitive + `post.cont LIKE '%${q}%'`);
+          });
         }));
     }
 
@@ -69,7 +82,9 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
     if ('004' === searchPostDto.t) {
       query = query
         .where(new Brackets(qb => {
-          qb.where(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` });
+          searchQueries.forEach(q => {
+            qb.orWhere(caseSensitive + `category.nm LIKE '%${q}%'`);
+          });
         }));
     }
 
@@ -79,9 +94,7 @@ export class PostCategoryRepository extends Repository<PostCategoryEntity> {
     }
 
     query = query
-      .andWhere("post.tmp_yn = 'N'");
-
-    query = query
+      .andWhere("post.tmp_yn = 'N'")
       .groupBy("post.id")
         .addGroupBy("postCategory.post_id")
         .addGroupBy("postCategory.category_id")

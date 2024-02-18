@@ -21,17 +21,31 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
         .addSelect("indexSearch.og_img_url", "ogImgUrl")
         .addSelect("indexSearch.secret_yn", "secretYn")
         .addSelect("indexSearch.pin_yn", "pinYn")
-      .where("indexSearch.type_cd = 'D03001'")
+      .where("indexSearch.type_cd = 'D03001'");
 
-    const caseSensitive = ('Y' === searchPostDto.c ? 'BINARY ' : '');
+    if ('N' === searchPostDto?.isLogin) {
+      query = query
+        .andWhere("indexSearch.secret_yn = 'N'");
+    }
+
+    /**
+     * 검색어 목록
+     *   - 검색어를 한칸 띄어쓰기 기준으로 배열을 만들어서 다중 검색이 되도록 한다.
+     */
+    const searchQueries = searchPostDto.q.split(' ');
+
+    /** 대소문자 구분 여부 */
+    const caseSensitive = ('Y' === searchPostDto.c) ? 'BINARY ' : '';
 
     // 전체 검색
     if ('001' === searchPostDto.t) {
       query = query
         .andWhere(new Brackets(qb => {
-          qb.where(caseSensitive + "indexSearch.title LIKE :title", { title: `%${searchPostDto.q}%` })
-            .orWhere(caseSensitive + "indexSearch.cont LIKE :cont", { cont: `%${searchPostDto.q}%` })
-            .orWhere(caseSensitive + "indexSearch.category LIKE :nm", { nm: `%${searchPostDto.q}%` })
+          searchQueries.forEach(q => {
+            qb.orWhere(caseSensitive + `indexSearch.title LIKE '%${q}%'`)
+              .orWhere(caseSensitive + `indexSearch.cont LIKE '%${q}%'`)
+              .orWhere(caseSensitive + `indexSearch.category LIKE '%${q}%'`);
+          });
         }));
     }
     
@@ -39,7 +53,9 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
     if ('002' === searchPostDto.t) {
       query = query
         .andWhere(new Brackets(qb => {
-          qb.where(caseSensitive + "indexSearch.title LIKE :title", { title: `%${searchPostDto.q}%` });
+          searchQueries.forEach(q => {
+            qb.orWhere(caseSensitive + `indexSearch.title LIKE '%${q}%'`);
+          });
         }));
     }
 
@@ -47,7 +63,9 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
     if ('003' === searchPostDto.t) {
       query = query
         .andWhere(new Brackets(qb => {
-          qb.where(caseSensitive + "indexSearch.cont LIKE :cont", { cont: `%${searchPostDto.q}%` });
+          searchQueries.forEach(q => {
+            qb.orWhere(caseSensitive + `indexSearch.cont LIKE '%${q}%'`);
+          });
         }));
     }
 
@@ -55,7 +73,9 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
     if ('004' === searchPostDto.t) {
       query = query
         .andWhere(new Brackets(qb => {
-          qb.where(caseSensitive + "indexSearch.category LIKE :nm", { nm: `%${searchPostDto.q}%` });
+          searchQueries.forEach(q => {
+            qb.orWhere(caseSensitive + `indexSearch.category LIKE '%${q}%'`);
+          });
         }));
     }
 
@@ -63,13 +83,10 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
     if ('005' === searchPostDto.t) {
       query = query
         .andWhere(new Brackets(qb => {
-          qb.where(caseSensitive + "indexSearch.tag LIKE :nm", { nm: `%${searchPostDto.q}%` });
+          searchQueries.forEach(q => {
+            qb.orWhere(caseSensitive + `indexSearch.tag LIKE '%${q}%'`);
+          });
         }));
-    }
-
-    if ('N' === searchPostDto?.isLogin) {
-      query = query
-        .andWhere("indexSearch.secret_yn = 'N'");
     }
 
     query = query
