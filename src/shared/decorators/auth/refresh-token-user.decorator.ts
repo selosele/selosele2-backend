@@ -1,7 +1,7 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { getAuthenticatedUser, isBlank } from '@/shared/utils';
-import { UserDto } from '../../../auth/models';
+import { JwtServiceFactory } from '@/shared/factories';
+import { UserDto } from '@/auth/models';
 
 /**
  * JWT 리프레시 토큰으로부터 인증된 사용자 정보를 반환하는 데코레이터
@@ -18,7 +18,7 @@ export const RefreshTokenUser = createParamDecorator((data: string, context: Exe
     return null;
   }
 
-  const jwtService: JwtService = new JwtService();
+  const jwtService = JwtServiceFactory.create();
   const user = getAuthenticatedUser(refreshToken);
 
   try {

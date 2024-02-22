@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtServiceFactory } from '@/shared/factories';
 import { isBlank } from '@/shared/utils';
 
 /** 유효한 요청인지 확인하는 데코레이터 */
@@ -12,7 +12,8 @@ export const IsAuthenticated = createParamDecorator((data: unknown, context: Exe
   }
   
   try {
-    const decodedToken = new JwtService().verify(accessToken, {
+    const jwtService = JwtServiceFactory.create();
+    const decodedToken = jwtService.verify(accessToken, {
       secret: process.env.JWT_ACCESS_SECRET_KEY
     });
     const isExpired = new Date().getTime() > decodedToken.exp * 1000;
