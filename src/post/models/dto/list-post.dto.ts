@@ -1,4 +1,5 @@
 import { isNotBlank } from '@/shared/utils';
+import { globalCodes } from '@/shared/codes/code';
 import { Transform, TransformFnParams } from 'class-transformer';
 import { IsEmpty, IsOptional } from 'class-validator';
 
@@ -30,7 +31,7 @@ export class ListPostDto {
   year?: string;
 
   /** 페이지 유형 */
-  @Transform(({ value }: TransformFnParams) => isNotBlank(value) ? value : 'D01001')
+  @Transform(({ value }: TransformFnParams) => isNotBlank(value) ? value : globalCodes.PAGE_MAIN.id)
   @IsOptional()
   pageType?: string;
 

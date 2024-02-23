@@ -1,8 +1,9 @@
-import { PostCategoryEntity } from "@/category/models";
+import { Brackets, DeleteResult, Repository } from "typeorm";
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
+import { PostCategoryEntity } from "@/category/models";
 import { SearchPostDto } from "@/post/models";
 import { PaginationDto } from "@/shared/models";
-import { Brackets, DeleteResult, Repository } from "typeorm";
+import { searchCodes } from "@/index-search/models";
 import { SavePostTagDto, PostTagEntity } from "../models";
 
 @CustomRepository(PostTagEntity)
@@ -22,7 +23,7 @@ export class PostTagRepository extends Repository<PostTagEntity> {
     const caseSensitive = 'Y' === searchPostDto.c ? 'BINARY ' : '';
 
     // 전체 검색
-    if ('001' === searchPostDto.t) {
+    if (searchCodes.SEARCH_ALL.val === searchPostDto.t) {
       query = query
         .where(new Brackets(qb => {
           qb.where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` })
@@ -33,7 +34,7 @@ export class PostTagRepository extends Repository<PostTagEntity> {
     }
     
     // 제목으로 검색
-    if ('002' === searchPostDto.t) {
+    if (searchCodes.SEARCH_TITLE.val === searchPostDto.t) {
       query = query
         .where(new Brackets(qb => {
           qb.where(caseSensitive + "post.title LIKE :title", { title: `%${searchPostDto.q}%` });
@@ -41,7 +42,7 @@ export class PostTagRepository extends Repository<PostTagEntity> {
     }
 
     // 내용으로 검색
-    if ('003' === searchPostDto.t) {
+    if (searchCodes.SEARCH_CONTENT.val === searchPostDto.t) {
       query = query
         .where(new Brackets(qb => {
           qb.where(caseSensitive + "post.cont LIKE :cont", { cont: `%${searchPostDto.q}%` });
@@ -49,7 +50,7 @@ export class PostTagRepository extends Repository<PostTagEntity> {
     }
 
     // 카테고리로 검색
-    if ('004' === searchPostDto.t) {
+    if (searchCodes.SEARCH_CATEGORY.val === searchPostDto.t) {
       query = query
         .where(new Brackets(qb => {
           qb.where(caseSensitive + "category.nm LIKE :nm", { nm: `%${searchPostDto.q}%` });
@@ -57,7 +58,7 @@ export class PostTagRepository extends Repository<PostTagEntity> {
     }
 
     // 태그로 검색
-    if ('005' === searchPostDto.t) {
+    if (searchCodes.SEARCH_TAG.val === searchPostDto.t) {
       query = query
         .where(new Brackets(qb => {
           qb.where(caseSensitive + "tag.nm LIKE :nm", { nm: `%${searchPostDto.q}%` });

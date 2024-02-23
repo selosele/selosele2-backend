@@ -2,15 +2,16 @@ import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Dele
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
+import { DeleteResult } from 'typeorm';
 import { Roles } from '@/auth/models';
 import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
 import { Auth, Ip, IsAuthenticated } from '@/shared/decorators';
 import { PaginationDto } from '@/shared/models';
 import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } from '@/shared/utils';
-import { DeleteResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, PostDto, SavePostDto } from '../models';
 import { PostService } from '../services/post.service';
 import { IndexSearchEntity, ListIndexSearchDto } from '@/index-search/models';
+import { globalCodes } from '@/shared/codes/code';
 
 @Controller('post')
 @ApiTags('포스트 API')
@@ -46,7 +47,7 @@ export class PostController {
     let posts: [PostEntity[], number];
 
     // 메인 포스트 목록 조회
-    if ('D01001' === listPostDto.pageType) {
+    if (globalCodes.PAGE_MAIN.id === listPostDto.pageType) {
       posts = await this.postService.listPostMain(listPostDto);
     } else {
       posts = await this.postService.listPost(listPostDto);
