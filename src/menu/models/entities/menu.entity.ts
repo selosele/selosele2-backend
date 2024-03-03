@@ -52,6 +52,14 @@ export class MenuEntity extends BaseEntity {
   depth?: number;
 
   @Column({
+    comment: '메뉴 외부 링크 여부'
+  })
+  @ApiProperty({
+    description: '메뉴 외부 링크 여부'
+  })
+  externalYn?: string;
+
+  @Column({
     comment: '메뉴 사용 여부'
   })
   @ApiProperty({

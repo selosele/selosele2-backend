@@ -21,6 +21,9 @@ export class MenuDto {
   /** 메뉴 계층 */
   depth?: number;
 
+  /** 메뉴 외부 링크 여부 */
+  externalYn?: string;
+
   /** 메뉴 사용 여부 */
   useYn?: string;
 
