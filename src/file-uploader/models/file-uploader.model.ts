@@ -1,4 +1,6 @@
 import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
+import { Express } from 'express';
+import { Multer } from 'multer';
 
 /** 파일 업로더 API */
 export interface FileUploaderApi {
