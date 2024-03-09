@@ -2,11 +2,10 @@
 .git
 .gitignore
 .dockerignore
+.eslintrc.js
 node_modules
 coverage
 dist
-.eslintrc.js
 *.md
-*.sh
 *.yml
 *.log
