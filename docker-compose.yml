@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
   api:
-    image: node:16.14.2
     container_name: api_server
     depends_on:
       - db
@@ -39,7 +38,7 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
-    command: ["sh", "-c", "npm install && ./node_modules/.bin/nest build && npm start"]
+    command: ["sh", "-c", "npm start"]
 
   db:
     image: mariadb:10.6.12
