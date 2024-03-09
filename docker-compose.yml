@@ -12,7 +12,7 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     volumes:
-      - ./dist:/app
+      - .:/app
     working_dir: /home/selo7742/selosele2
     environment:
       - NODE_ENV=${NODE_ENV}
@@ -39,7 +39,7 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
-    command: sh -c "npm install && npm start"
+    command: ["sh", "-c", "npm start"]
 
   db:
     image: mariadb:10.6.12
