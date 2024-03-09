@@ -3,7 +3,10 @@
 .gitignore
 .dockerignore
 Dockerfile
+scripts
+node_modules
+dist
 *.md
 *.sh
 *.yml
-scripts
+*.log
