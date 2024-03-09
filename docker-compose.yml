@@ -8,7 +8,7 @@ services:
       - db
     ports:
       - "443:3000"
-    working_dir: /home/selo7742/selosele2
+    working_dir: ./
     volumes:
       - ./dist:/app
     environment:
