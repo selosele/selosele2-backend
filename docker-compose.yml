@@ -8,9 +8,9 @@ services:
       - db
     ports:
       - "443:3000"
-    working_dir: /home/selo7742/selosele2
     build:
       context: .
+      dockerfile: ./app/Dockerfile
     volumes:
       - ./dist:/app
     environment:
