@@ -5,6 +5,8 @@ WORKDIR /app
 RUN npm install -g @nestjs/cli
 RUN npm install -g pm2
 
+COPY package*.json ./
+
 COPY . .
 
 CMD ["pm2-runtime", "start", "ecosystem.config.js", "--env", "production"]
