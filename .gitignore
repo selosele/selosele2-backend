@@ -3,6 +3,9 @@
 /node_modules
 /secrets
 
+# Docker
+/db
+
 # env files
 .env
 .env.*
