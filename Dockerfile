@@ -4,7 +4,6 @@ WORKDIR /app
 
 RUN npm install -g @nestjs/cli
 RUN npm install -g pm2
-RUN npm run build
 
 COPY . .
 
