@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
   api:
-    image: node:16.14.2
     container_name: api_server
     depends_on:
       - db
@@ -12,7 +11,7 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     volumes:
-      - .:/app
+      - ./:/app
     working_dir: /app
     environment:
       - NODE_ENV=${NODE_ENV}
@@ -39,7 +38,7 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
-    command: ["sh", "-c", "npm start"]
+    command: ["sh", "-c", "npm install && npm start"]
 
   db:
     image: mariadb:10.6.12
