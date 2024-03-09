@@ -8,8 +8,8 @@ services:
     ports:
       - "443:3000"
     build:
-      context: .
-      dockerfile: ./app/Dockerfile
+      context: ./app
+      dockerfile: Dockerfile
     volumes:
       - ./:/app
     working_dir: /app
