@@ -13,6 +13,7 @@ services:
       dockerfile: ./app/Dockerfile
     volumes:
       - ./dist:/app
+    working_dir: /home/selo7742/selosele2
     environment:
       - NODE_ENV=${NODE_ENV}
       - TS_NODE_TRANSPILE_ONLY=${TS_NODE_TRANSPILE_ONLY}
