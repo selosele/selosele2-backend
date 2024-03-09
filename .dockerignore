@@ -3,9 +3,11 @@
 .gitignore
 .dockerignore
 .eslintrc.js
-node_modules
-coverage
+coverage/
+.vscode/
+.github/
 dist
+node_modules
 *.md
 *.yml
 *.log
