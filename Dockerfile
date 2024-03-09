@@ -6,4 +6,4 @@ COPY package*.json ./
 
 COPY . .
 
-CMD ["node", "dist/main.js"]
+CMD ["npm", "run", "start:prod"]
