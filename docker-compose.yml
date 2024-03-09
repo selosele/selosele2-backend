@@ -3,6 +3,7 @@ version: '3'
 services:
   api:
     container_name: api_server
+    restart: always
     depends_on:
       - db
     ports:
@@ -10,7 +11,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: always
     environment:
       - NODE_ENV=${NODE_ENV}
       - TS_NODE_TRANSPILE_ONLY=${TS_NODE_TRANSPILE_ONLY}
@@ -40,6 +40,7 @@ services:
   db:
     image: mariadb:10.6.12
     container_name: db_server
+    restart: always
     ports:
       - "${DB_PORT}:${DB_PORT}"
     volumes:
