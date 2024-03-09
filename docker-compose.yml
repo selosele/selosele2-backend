@@ -10,7 +10,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    user: selo7742
     environment:
       - NODE_ENV=${NODE_ENV}
       - TS_NODE_TRANSPILE_ONLY=${TS_NODE_TRANSPILE_ONLY}
