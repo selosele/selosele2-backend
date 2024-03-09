@@ -6,4 +6,4 @@ COPY package*.json ./
 
 COPY . .
 
-CMD ["pm2-runtime", "start", "ecosystem.config.js", "--env", "production"]
+CMD ["node", "dist/main.js"]
