@@ -1,10 +1,11 @@
-.idea
+.cache
 .git
 .gitignore
 .dockerignore
-scripts
 node_modules
+coverage
 dist
+.eslintrc.js
 *.md
 *.sh
 *.yml
