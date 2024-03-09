@@ -2,8 +2,9 @@ FROM node:16.14.2
 
 WORKDIR /app
 
-RUN npm install --global @nestjs/cli
-RUN npm install --global pm2
+RUN npm install -g @nestjs/cli
+RUN npm install -g pm2
+RUN npm run build
 
 COPY . .
 
