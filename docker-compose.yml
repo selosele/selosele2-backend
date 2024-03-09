@@ -8,11 +8,10 @@ services:
     ports:
       - "443:3000"
     build:
-      context: ./app
+      context: .
       dockerfile: Dockerfile
     volumes:
-      - ./:/app
-    working_dir: /app
+      - ./src:/app/src 
     environment:
       - NODE_ENV=${NODE_ENV}
       - TS_NODE_TRANSPILE_ONLY=${TS_NODE_TRANSPILE_ONLY}
