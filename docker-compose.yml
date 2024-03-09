@@ -11,7 +11,8 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./src:/app/src 
+      - ./:/app
+    working_dir: /app
     environment:
       - NODE_ENV=${NODE_ENV}
       - TS_NODE_TRANSPILE_ONLY=${TS_NODE_TRANSPILE_ONLY}
