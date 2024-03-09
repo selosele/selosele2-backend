@@ -7,8 +7,7 @@ services:
       - db
     ports:
       - "443:${PORT}"
-    build:
-      context: .
+    build: .
     environment:
       - NODE_ENV=${NODE_ENV}
       - TS_NODE_TRANSPILE_ONLY=${TS_NODE_TRANSPILE_ONLY}
@@ -35,18 +34,18 @@ services:
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
 
-  db:
-    image: mariadb:10.6.12
-    container_name: db_server
-    ports:
-      - "3306:3306"
-    volumes:
-      - db_volume:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${DB_DATABASE}
-      - MYSQL_USER=${DB_USERNAME}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
+#   db:
+#     image: mariadb:10.6.12
+#     container_name: db_server
+#     ports:
+#       - "3306:3306"
+#     volumes:
+#       - db_volume:/var/lib/mysql
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+#       - MYSQL_DATABASE=${DB_DATABASE}
+#       - MYSQL_USER=${DB_USERNAME}
+#       - MYSQL_PASSWORD=${DB_PASSWORD}
 
-volumes:
-  db_volume:
+# volumes:
+#   db_volume:
