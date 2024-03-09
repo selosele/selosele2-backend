@@ -40,7 +40,7 @@ services:
     image: mariadb:10.6.12
     container_name: db_server
     ports:
-      - "3306:3306"
+      - "${DB_PORT}:${DB_PORT}"
     volumes:
       - db_volume:/var/lib/mysql
     environment:
