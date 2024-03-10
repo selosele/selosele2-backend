@@ -4,7 +4,7 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags 
 import { Builder } from 'builder-pattern';
 import { DeleteResult } from 'typeorm';
 import { Roles } from '@/auth/models';
-import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
+import { FileUploaderRequest } from '@/file-uploader/models';
 import { Auth, Ip, IsAuthenticated } from '@/shared/decorators';
 import { PaginationDto } from '@/shared/models';
 import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } from '@/shared/utils';

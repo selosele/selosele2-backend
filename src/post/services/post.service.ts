@@ -16,7 +16,7 @@ import { SavePostTagDto } from '@/tag/models/dto/save-post-tag.dto';
 import { TagRepository } from '@/tag/repositories/tag.repository';
 import { SaveTagDto, TagEntity } from '@/tag/models';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
-import { FileUploaderResponse } from '@/file-uploader/models/file-uploader.model';
+import { FileUploaderResponse } from '@/file-uploader/models';
 import { CountPostDto } from '../models/dto/count-post.dto';
 import { PostLikeService } from './post-like.service';
 import { PostReplyService } from './post-reply.service';

@@ -7,10 +7,9 @@ import { Auth } from '@/shared/decorators';
 import { Roles } from '@/auth/models';
 import { ParseFilePipe, ParseIntPipe, ValidationPipe } from '@nestjs/common/pipes';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
-import { FileUploaderRequest } from '@/file-uploader/models/file-uploader.model';
+import { FileUploaderRequest } from '@/file-uploader/models';
 import { FileTypeValidator, MaxFileSizeValidator, serialize } from '@/shared/utils';
 import { DeleteResult } from 'typeorm';
-import { BizException } from '@/shared/exceptions';
 
 @Controller('blogconfig')
 @ApiTags('블로그 환경설정 API')

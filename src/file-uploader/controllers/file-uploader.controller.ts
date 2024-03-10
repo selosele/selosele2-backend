@@ -1,11 +1,11 @@
-import { Controller, Get, ParseFilePipe, Post, UploadedFiles, UseInterceptors } from "@nestjs/common";
-import { ApiCreatedResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { FileUploaderService } from "../services/file-uploader.service";
-import { FileUploaderRequest, FileUploaderResponse } from '../models/file-uploader.model';
-import { Auth } from "@/shared/decorators";
-import { Roles } from "@/auth/models";
-import { AnyFilesInterceptor } from "@nestjs/platform-express";
-import { FileTypeValidator, MaxFileSizeValidator } from "@/shared/utils";
+import { Controller, Get, ParseFilePipe, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FileUploaderService } from '../services/file-uploader.service';
+import { FileUploaderRequest, FileUploaderResponse } from '../models';
+import { Auth } from '@/shared/decorators';
+import { Roles } from '@/auth/models';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { FileTypeValidator, MaxFileSizeValidator } from '@/shared/utils';
 
 @Controller('file')
 @ApiTags('파일 업로더 API')

@@ -1,7 +1,7 @@
-import { Transform, TransformFnParams, Type } from "class-transformer";
-import { IsEmpty, IsInt, IsNotEmpty, IsOptional, MaxLength } from "class-validator";
-import { FileUploaderRequest } from "@/file-uploader/models/file-uploader.model";
-import { isNotBlank } from "@/shared/utils";
+import { Transform, TransformFnParams, Type } from 'class-transformer';
+import { IsEmpty, IsInt, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
+import { FileUploaderRequest } from '@/file-uploader/models';
+import { isNotBlank } from '@/shared/utils';
 
 /** 콘텐츠 등록/수정 DTO */
 export class SaveContentDto {

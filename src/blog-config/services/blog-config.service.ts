@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BlogConfigEntity, GetBlogConfigDto, SaveBlogConfigDto, UpdateBlogConfigUseYnDto } from '../models';
 import { BlogConfigRepository } from '../repositories/blog-config.repository';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
-import { FileUploaderRequest, FileUploaderResponse } from '@/file-uploader/models/file-uploader.model';
+import { FileUploaderRequest, FileUploaderResponse } from '@/file-uploader/models';
 import { isNotBlank, isNotEmpty } from '@/shared/utils';
 import { DeleteResult } from 'typeorm';
 
