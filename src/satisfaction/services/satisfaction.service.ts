@@ -4,7 +4,7 @@ import { DataSource, EntityManager } from 'typeorm';
 import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
 import { SatisfactionRepository } from '../repositories/satisfaction.repository';
 import { BizException } from '@/shared/exceptions/biz/biz-exception';
-import { escapeHtml, kakaoUtil } from '@/shared/utils';
+import { escapeHtml } from '@/shared/utils';
 import { NotificationRepository } from '@/notification/repositories/notification.repository';
 import { Builder } from 'builder-pattern';
 import { AddNotificationDto, notificationCodes } from '@/notification/models';
@@ -63,7 +63,7 @@ export class SatisfactionService {
       // if ('Y' === kakaoMsgYn) {
 
       //   // 4. 카카오톡 액세스 토큰을 갱신한다.
-      //   this.http.post('https://kauth.kakao.com/oauth/token');
+      //   await lastValueFrom(this.http.post('https://kauth.kakao.com/oauth/token'));
 
       //   // 5. 카카오톡 메시지를 전송한다.
       //   const text = `${addSatisfactiontDto.pageTitle} 페이지에 만족도 평가가 등록되었습니다.`;
