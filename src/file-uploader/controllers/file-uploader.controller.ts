@@ -5,6 +5,7 @@ import { Auth } from '@/shared/decorators';
 import { Roles } from '@/auth/models';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { FileTypeValidator, MaxFileSizeValidator } from '@/shared/utils';
+import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 import { Express } from 'express';
 import { Multer } from 'multer';
 
@@ -26,7 +27,7 @@ export class FileUploaderController {
     type: Array,
     description: '파일 목록',
   })
-  async listFile(): Promise<any[]> {
+  async listFile(): Promise<UploadApiResponse[] | UploadApiErrorResponse[]> {
     return await this.fileUploaderService.listFile();
   }
 

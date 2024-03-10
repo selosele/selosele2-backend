@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UploadStream, v2 } from 'cloudinary';
+import { UploadApiErrorResponse, UploadApiResponse, UploadStream, v2 } from 'cloudinary';
 import toStream = require('buffer-to-stream');
 import { Express } from 'express';
 import { Multer } from 'multer';
@@ -8,10 +8,10 @@ import { Multer } from 'multer';
 export class FileUploaderService {
 
   /** 파일 목록 */
-  private fileList: any[] = [];
+  private fileList: UploadApiResponse[] | UploadApiErrorResponse[] = [];
 
   /** 파일 목록을 조회한다. */
-  listFile(nextCursor = null): Promise<any[]> {
+  listFile(nextCursor = null): Promise<UploadApiResponse[] | UploadApiErrorResponse[]> {
     if (nextCursor == null) {
       this.fileList = [];
     }
