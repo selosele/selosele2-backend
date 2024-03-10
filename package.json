@@ -82,7 +82,7 @@
     "@types/cache-manager-ioredis": "^2.0.3",
     "@types/cookie-parser": "^1.4.3",
     "@types/dotenv": "^8.2.0",
-    "@types/express": "^4.17.13",
+    "@types/express": "^4.17.21",
     "@types/geoip-lite": "^1.4.4",
     "@types/jest": "28.1.8",
     "@types/markdown-it": "^12.2.3",
