@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BlogConfigEntity, GetBlogConfigDto, SaveBlogConfigDto, UpdateBlogConfigUseYnDto } from '../models';
 import { BlogConfigRepository } from '../repositories/blog-config.repository';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
-import { FileUploaderRequest, FileUploaderResponse } from '@/file-uploader/models';
 import { isNotBlank, isNotEmpty } from '@/shared/utils';
 import { DeleteResult } from 'typeorm';
 
@@ -37,7 +36,7 @@ export class BlogConfigService {
   }
 
   /** 블로그 환경설정을 추가/수정한다. */
-  async saveBlogConfig(saveBlogConfigDto: SaveBlogConfigDto, files: FileUploaderRequest[]): Promise<BlogConfigEntity> {
+  async saveBlogConfig(saveBlogConfigDto: SaveBlogConfigDto, files: Express.Multer.File[]): Promise<BlogConfigEntity> {
     saveBlogConfigDto.files = files;
     
     let fileUploaderResponse = null;
@@ -46,8 +45,8 @@ export class BlogConfigService {
     if (isNotEmpty(saveBlogConfigDto.files) && 0 < saveBlogConfigDto.files.length) {
       fileUploaderResponse = await this.uploadBlogConfigImg(saveBlogConfigDto);
       
-      const avatarImgFile: FileUploaderRequest = saveBlogConfigDto.files.find(d => d.fieldname === 'avatarImgFile');
-      const ogImgFile: FileUploaderRequest = saveBlogConfigDto.files.find(d => d.fieldname === 'ogImgFile');
+      const avatarImgFile: Express.Multer.File = saveBlogConfigDto.files.find(d => d.fieldname === 'avatarImgFile');
+      const ogImgFile: Express.Multer.File = saveBlogConfigDto.files.find(d => d.fieldname === 'ogImgFile');
 
       if (isNotEmpty(avatarImgFile)) {
         saveBlogConfigDto.avatarImg = fileUploaderResponse['avatarImgFileResponse'].public_id + '.' + fileUploaderResponse['avatarImgFileResponse'].format;
@@ -90,12 +89,12 @@ export class BlogConfigService {
   }
 
   /** 블로그 환경설정 이미지 파일을 업로드한다. */
-  private async uploadBlogConfigImg(saveBlogConfigDto: SaveBlogConfigDto): Promise<{ [key: string]: FileUploaderResponse}> {
-    const avatarImgFile: FileUploaderRequest = saveBlogConfigDto.files.find(d => d.fieldname === 'avatarImgFile');
-    const ogImgFile: FileUploaderRequest = saveBlogConfigDto.files.find(d => d.fieldname === 'ogImgFile');
+  private async uploadBlogConfigImg(saveBlogConfigDto: SaveBlogConfigDto): Promise<{ [key: string]: any}> {
+    const avatarImgFile: Express.Multer.File = saveBlogConfigDto.files.find(d => d.fieldname === 'avatarImgFile');
+    const ogImgFile: Express.Multer.File = saveBlogConfigDto.files.find(d => d.fieldname === 'ogImgFile');
 
-    let avatarImgFileResponse: FileUploaderResponse = null;
-    let ogImgFileResponse: FileUploaderResponse = null;
+    let avatarImgFileResponse = null;
+    let ogImgFileResponse = null;
 
     // 블로그 아바타 이미지 파일 업로드
     if (isNotEmpty(avatarImgFile) && !this.hasDelImg(saveBlogConfigDto.delAvatarImg)) {

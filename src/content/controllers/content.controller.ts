@@ -3,7 +3,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 import { Roles } from '@/auth/models';
-import { FileUploaderRequest } from '@/file-uploader/models';
 import { Auth, IsAuthenticated } from '@/shared/decorators';
 import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } from '@/shared/utils';
 import { DeleteResult } from 'typeorm';
@@ -94,7 +93,7 @@ export class ContentController {
         new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
       ],
       fileIsRequired: false,
-    })) ogImgFile: FileUploaderRequest,
+    })) ogImgFile: Express.Multer.File,
   ): Promise<ContentDto> {
     if (isNotFileEmpty(ogImgFile)) {
       saveContentDto.ogImgFile = ogImgFile;
@@ -128,7 +127,7 @@ export class ContentController {
         new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
       ],
       fileIsRequired: false,
-    })) ogImgFile: FileUploaderRequest,
+    })) ogImgFile: Express.Multer.File,
   ): Promise<ContentDto> {
     if (isNotFileEmpty(ogImgFile)) {
       saveContentDto.ogImgFile = ogImgFile;

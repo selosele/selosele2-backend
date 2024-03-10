@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { UploadStream, v2 } from 'cloudinary';
-import { FileUploaderRequest, FileUploaderResponse } from '../models';
 import toStream = require('buffer-to-stream');
 
 @Injectable()
 export class FileUploaderService {
 
   /** 파일 목록 */
-  private fileList: FileUploaderResponse[] = [];
+  private fileList: any[] = [];
 
   /** 파일 목록을 조회한다. */
-  listFile(nextCursor = null): Promise<FileUploaderResponse[]> {
+  listFile(nextCursor = null): Promise<any[]> {
     if (nextCursor == null) {
       this.fileList = [];
     }
@@ -30,7 +29,7 @@ export class FileUploaderService {
   }
 
   /** 이미지 파일을 업로드한다. */
-  uploadImage(file: FileUploaderRequest): Promise<FileUploaderResponse> {
+  uploadImage(file: Express.Multer.File): Promise<any> {
     return new Promise((resolve, reject) => {
       const upload: UploadStream = v2.uploader.upload_stream((error, result) => {
         if (error) return reject(error);

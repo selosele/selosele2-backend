@@ -7,7 +7,6 @@ import { Auth } from '@/shared/decorators';
 import { Roles } from '@/auth/models';
 import { ParseFilePipe, ParseIntPipe, ValidationPipe } from '@nestjs/common/pipes';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
-import { FileUploaderRequest } from '@/file-uploader/models';
 import { FileTypeValidator, MaxFileSizeValidator, serialize } from '@/shared/utils';
 import { DeleteResult } from 'typeorm';
 
@@ -76,7 +75,7 @@ export class BlogConfigController {
         new MaxFileSizeValidator({ maxSize: 1000000 }),
         new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
       ],
-    })) files: FileUploaderRequest[],
+    })) files: Express.Multer.File[],
   ): Promise<BlogConfigDto> {
     const blogConfig: BlogConfigEntity = await this.blogConfigService.saveBlogConfig(saveBlogConfigDto, files);
     
@@ -105,7 +104,7 @@ export class BlogConfigController {
         new MaxFileSizeValidator({ maxSize: 1000000 }),
         new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
       ],
-    })) files: FileUploaderRequest[],
+    })) files: Express.Multer.File[],
   ): Promise<BlogConfigDto> {
     const blogConfig: BlogConfigEntity = await this.blogConfigService.saveBlogConfig(saveBlogConfigDto, files);
     

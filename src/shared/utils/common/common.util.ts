@@ -1,5 +1,4 @@
 import { plainToClass, ClassConstructor, classToPlain } from 'class-transformer';
-import { FileUploaderRequest } from '@/file-uploader/models';
 
 /** 값이 비었는지 확인한다. */
 export function isEmpty(value: any): boolean {
@@ -22,12 +21,12 @@ export function isNotBlank(value: any): boolean {
 }
 
 /** 업로드 파일이 없는지 확인한다. */
-export function isFileEmpty(value: FileUploaderRequest): boolean {
+export function isFileEmpty(value: Express.Multer.File): boolean {
   return isEmpty(value) || 0 === Object.values(value).length;
 }
 
 /** 업로드 파일이 있는지 확인한다. */
-export function isNotFileEmpty(value: FileUploaderRequest): boolean {
+export function isNotFileEmpty(value: Express.Multer.File): boolean {
   return !isFileEmpty(value);
 }
 

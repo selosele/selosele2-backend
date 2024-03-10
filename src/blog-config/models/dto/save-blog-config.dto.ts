@@ -1,6 +1,5 @@
 import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsNumber, IsOptional, Max, MaxLength, Min } from 'class-validator';
-import { FileUploaderRequest } from '@/file-uploader/models';
 
 /** 블로그 환경설정 추가/수정 DTO */
 export class SaveBlogConfigDto {
@@ -33,7 +32,7 @@ export class SaveBlogConfigDto {
 
   /** 블로그 아바타 이미지, 대표 이미지 File */
   @IsOptional()
-  files?: FileUploaderRequest[];
+  files?: Express.Multer.File[];
 
   /** 블로그 아바타 이미지 */
   @IsOptional()

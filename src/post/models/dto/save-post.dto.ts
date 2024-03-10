@@ -1,6 +1,5 @@
 import { Transform, TransformFnParams, Type } from 'class-transformer';
 import { IsEmpty, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
-import { FileUploaderRequest } from '@/file-uploader/models';
 import { isNotBlank } from '@/shared/utils';
 import { SaveTagDto } from '@/tag/models';
 
@@ -31,7 +30,7 @@ export class SavePostDto {
 
   /** 포스트 대표 이미지 File */
   @IsOptional()
-  ogImgFile?: FileUploaderRequest;
+  ogImgFile?: Express.Multer.File;
 
   /** 포스트 대표 이미지 */
   @IsOptional()

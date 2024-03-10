@@ -1,7 +1,6 @@
 import { Controller, Get, ParseFilePipe, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileUploaderService } from '../services/file-uploader.service';
-import { FileUploaderRequest, FileUploaderResponse } from '../models';
 import { Auth } from '@/shared/decorators';
 import { Roles } from '@/auth/models';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
@@ -22,10 +21,10 @@ export class FileUploaderController {
     description: '파일 목록을 조회한다.'
   })
   @ApiCreatedResponse({
-    type: Array<FileUploaderResponse>,
+    type: Array,
     description: '파일 목록',
   })
-  async listFile(): Promise<FileUploaderResponse[]> {
+  async listFile(): Promise<any[]> {
     return await this.fileUploaderService.listFile();
   }
 
@@ -42,7 +41,7 @@ export class FileUploaderController {
         new MaxFileSizeValidator({ maxSize: 1000000 }),
         new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
       ],
-    })) files: FileUploaderRequest[],
+    })) files: Express.Multer.File[],
   ): Promise<void> {
     for (const file of files) {
       await this.fileUploaderService.uploadImage(file);

@@ -16,7 +16,6 @@ import { SavePostTagDto } from '@/tag/models/dto/save-post-tag.dto';
 import { TagRepository } from '@/tag/repositories/tag.repository';
 import { SaveTagDto, TagEntity } from '@/tag/models';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
-import { FileUploaderResponse } from '@/file-uploader/models';
 import { CountPostDto } from '../models/dto/count-post.dto';
 import { PostLikeService } from './post-like.service';
 import { PostReplyService } from './post-reply.service';
@@ -212,7 +211,7 @@ export class PostService {
 
     // 대표 이미지 파일을 업로드한다.
     if (isNotFileEmpty(ogImgFile) && !this.hasDelOgImg(delOgImg)) {
-      const uploadFile: FileUploaderResponse = await this.fileUploaderService.uploadImage(ogImgFile);
+      const uploadFile = await this.fileUploaderService.uploadImage(ogImgFile);
 
       savePostDto.ogImg = uploadFile.public_id + '.' + uploadFile.format;
       savePostDto.ogImgUrl = uploadFile.secure_url;

@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Builder } from 'builder-pattern';
-import { FileUploaderResponse } from '@/file-uploader/models';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
 import { MenuRepository } from '@/menu/repositories/menu.repository';
 import { escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotFileEmpty, md, santinizeHtmlOption } from '@/shared/utils';
@@ -71,7 +70,7 @@ export class ContentService {
 
     // 대표 이미지 파일을 업로드한다.
     if (isNotFileEmpty(ogImgFile) && !this.hasDelOgImg(delOgImg)) {
-      const uploadFile: FileUploaderResponse = await this.fileUploaderService.uploadImage(ogImgFile);
+      const uploadFile = await this.fileUploaderService.uploadImage(ogImgFile);
 
       saveContentDto.ogImg = uploadFile.public_id + '.' + uploadFile.format;
       saveContentDto.ogImgUrl = uploadFile.secure_url;
