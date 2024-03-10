@@ -1,4 +1,6 @@
 import { MaxFileSizeValidator as DefaultMaxFileSizeValidator } from '@nestjs/common';
+import { Express } from 'express';
+import { Multer } from 'multer';
 
 /** 파일 최대 용량 확인 validator */
 export class MaxFileSizeValidator extends DefaultMaxFileSizeValidator {

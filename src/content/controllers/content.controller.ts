@@ -8,6 +8,8 @@ import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } fr
 import { DeleteResult } from 'typeorm';
 import { RemoveContentDto, ContentEntity, GetContentDto, ContentDto, SaveContentDto, ListContentDto } from '../models';
 import { ContentService } from '../services/content.service';
+import { Express } from 'express';
+import { Multer } from 'multer';
 
 @Controller('content')
 @ApiTags('콘텐츠 API')

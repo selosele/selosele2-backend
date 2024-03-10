@@ -1,5 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsNumber, IsOptional, Max, MaxLength, Min } from 'class-validator';
+import { Express } from 'express';
+import { Multer } from 'multer';
 
 /** 블로그 환경설정 추가/수정 DTO */
 export class SaveBlogConfigDto {

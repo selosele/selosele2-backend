@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UploadStream, v2 } from 'cloudinary';
 import toStream = require('buffer-to-stream');
+import { Express } from 'express';
+import { Multer } from 'multer';
 
 @Injectable()
 export class FileUploaderService {

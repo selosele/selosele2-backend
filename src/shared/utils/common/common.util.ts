@@ -1,4 +1,6 @@
 import { plainToClass, ClassConstructor, classToPlain } from 'class-transformer';
+import { Express } from 'express';
+import { Multer } from 'multer';
 
 /** 값이 비었는지 확인한다. */
 export function isEmpty(value: any): boolean {

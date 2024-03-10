@@ -2,6 +2,8 @@ import { Transform, TransformFnParams, Type } from 'class-transformer';
 import { IsEmpty, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 import { isNotBlank } from '@/shared/utils';
 import { SaveTagDto } from '@/tag/models';
+import { Express } from 'express';
+import { Multer } from 'multer';
 
 /** 포스트 등록/수정 DTO */
 export class SavePostDto {

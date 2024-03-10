@@ -9,6 +9,8 @@ import { ParseFilePipe, ParseIntPipe, ValidationPipe } from '@nestjs/common/pipe
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { FileTypeValidator, MaxFileSizeValidator, serialize } from '@/shared/utils';
 import { DeleteResult } from 'typeorm';
+import { Express } from 'express';
+import { Multer } from 'multer';
 
 @Controller('blogconfig')
 @ApiTags('블로그 환경설정 API')

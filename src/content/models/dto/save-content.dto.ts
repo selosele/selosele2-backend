@@ -1,6 +1,8 @@
 import { Transform, TransformFnParams, Type } from 'class-transformer';
 import { IsEmpty, IsInt, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 import { isNotBlank } from '@/shared/utils';
+import { Express } from 'express';
+import { Multer } from 'multer';
 
 /** 콘텐츠 등록/수정 DTO */
 export class SaveContentDto {

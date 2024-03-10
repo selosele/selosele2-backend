@@ -5,6 +5,8 @@ import { Auth } from '@/shared/decorators';
 import { Roles } from '@/auth/models';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { FileTypeValidator, MaxFileSizeValidator } from '@/shared/utils';
+import { Express } from 'express';
+import { Multer } from 'multer';
 
 @Controller('file')
 @ApiTags('파일 업로더 API')

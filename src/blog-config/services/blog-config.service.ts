@@ -5,6 +5,8 @@ import { BlogConfigRepository } from '../repositories/blog-config.repository';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
 import { isNotBlank, isNotEmpty } from '@/shared/utils';
 import { DeleteResult } from 'typeorm';
+import { Express } from 'express';
+import { Multer } from 'multer';
 
 @Injectable()
 export class BlogConfigService {
