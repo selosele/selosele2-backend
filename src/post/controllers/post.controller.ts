@@ -11,6 +11,8 @@ import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, Post
 import { PostService } from '../services/post.service';
 import { IndexSearchEntity, ListIndexSearchDto } from '@/index-search/models';
 import { globalCodes } from '@/shared/codes/code';
+import { Express } from 'express';
+import { Multer } from 'multer';
 
 @Controller('post')
 @ApiTags('포스트 API')
