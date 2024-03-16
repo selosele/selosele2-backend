@@ -8,11 +8,11 @@ WORKDIR /app
 COPY package*.json ./
 
 # npm 인증서 업데이트
-RUN npm update ca-certificates
-RUN npm config set cafile /etc/ssl/certs/ca-certificates.crt
+# RUN npm update ca-certificates
+# RUN npm config set cafile /etc/ssl/certs/ca-certificates.crt
 
 # npm 미러 변경
-RUN npm config set registry https://registry.npm.taobao.org/
+# RUN npm config set registry https://registry.npm.taobao.org/
 
 # 의존성 설치
 RUN npm install -g @nestjs/cli
