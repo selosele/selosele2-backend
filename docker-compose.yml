@@ -2,7 +2,6 @@ version: '3'
 
 services:
   api:
-    container_name: api_server
     restart: always
     depends_on:
       - db
@@ -39,7 +38,6 @@ services:
 
   db:
     image: mariadb:10.6.12
-    container_name: db_server
     restart: always
     ports:
       - "${DB_PORT}:${DB_PORT}"
