@@ -7,6 +7,9 @@ WORKDIR /app
 # 프로젝트 의존성 파일 복사
 COPY package*.json ./
 
+# npm 미러 변경
+RUN npm config set registry https://registry.npm.taobao.org/
+
 # 의존성 설치
 RUN npm install -g @nestjs/cli
 RUN npm install -g pm2
