@@ -27,7 +27,7 @@
 3. `npm run start:dev` (백엔드 구동)
 4. `npm start` (프론트엔드 구동)
 
-## 운영 환경 구동 절차
+## 운영환경 구동 절차
 
 ### Docker 컨테이너 구동
 1. `docker-compose up -d` (Docker Compose 실행)
