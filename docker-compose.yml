@@ -18,7 +18,7 @@ services:
       - PAGE_ORIGIN=${PAGE_ORIGIN}
       - PRIVATE_KEY_PATH=${PRIVATE_KEY_PATH}
       - CERT_PATH=${CERT_PATH}
-      - DB_HOST=${DB_HOST}
+      - DB_HOST=db
       - DB_PORT=${DB_PORT}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
