@@ -40,4 +40,4 @@ COPY --from=build /app/secrets ./secrets
 # ENV NODE_ENV production
 
 # 앱 실행
-CMD ["node", "./dist/main.js"]
+CMD ["npm", "start"]
