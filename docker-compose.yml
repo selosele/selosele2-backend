@@ -12,6 +12,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
+      - TZ=Asia/Seoul
       - NODE_ENV=${NODE_ENV}
       - TS_NODE_TRANSPILE_ONLY=${TS_NODE_TRANSPILE_ONLY}
       - PORT=${PORT}
