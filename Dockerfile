@@ -41,4 +41,4 @@ COPY --from=build /app/ecosystem.config.js ./ecosystem.config.js
 # ENV NODE_ENV production
 
 # 앱 실행
-CMD ["pm2-runtime", "start", "ecosystem.config.js"]
+CMD ["pm2-runtime", "start", "ecosystem.config.js", "--env", "production"]
