@@ -2,7 +2,7 @@ version: '3'
 
 services:
   api:
-    image: selosele2_api:latest
+    image: selosele2:api
     container_name: api
     restart: always
     depends_on:
