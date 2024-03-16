@@ -2,7 +2,6 @@ import { Controller, Get, Post, Put, Body, ParseIntPipe } from '@nestjs/common';
 import { Delete, Param } from '@nestjs/common/decorators';
 import { ValidationPipe } from '@nestjs/common/pipes';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { Builder } from 'builder-pattern';
 import { Roles } from '@/auth/models';
 import { Auth, IsAuthenticated } from '@/shared/decorators';
 import { DeleteResult } from 'typeorm';
@@ -46,9 +45,8 @@ export class CategoryController {
   async listCategoryAndCount(
     @IsAuthenticated() isAuthenticated: boolean
   ): Promise<[CategoryDto[], TagDto[]]> {
-    const listCategoryDto = Builder(ListCategoryDto)
-                            .isLogin(isAuthenticated ? 'Y' : 'N')
-                            .build();
+    const listCategoryDto: ListCategoryDto = {};
+    listCategoryDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
     const categoriesAndTags: [CategoryEntity[], TagEntity[]] = await this.categoryService.listCategoryAndCount(listCategoryDto);
 

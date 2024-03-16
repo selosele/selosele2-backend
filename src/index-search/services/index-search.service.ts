@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, DeleteResult, EntityManager, InsertResult } from 'typeorm';
-import { Builder } from 'builder-pattern';
 import { ListPostDto, PostEntity, SearchPostDto } from '@/post/models';
 import { PostRepository } from '@/post/repositories/post.repository';
 import { PaginationDto } from '@/shared/models';
@@ -52,9 +51,8 @@ export class IndexSearchService {
       const deleteRes: DeleteResult = await em.withRepository(this.indexSearchRepository).removeIndexSearchAll();
       this.logger.warn(`1. 모든 검색 데이터 삭제: ${deleteRes.affected}건 삭제됨`);
 
-      const listPostDto = Builder(ListPostDto)
-                          .tmpYn('N')
-                          .build();
+      const listPostDto: ListPostDto = {};
+      listPostDto.tmpYn = 'N';
 
       // 2. 모든 포스트 목록을 조회한다.
       const posts: [PostEntity[], number] = await em.withRepository(this.postRepository).listPost(listPostDto);
@@ -77,22 +75,21 @@ export class IndexSearchService {
           tagInfo += `${postTag.tag.nm};`;
         }
 
-        const saveIndexSearchDto = Builder(SaveIndexSearchDto)
-                                   .id(no)
-                                   .cnncId(post.id)
-                                   .cnncRegYear(new Date(post.regDate).getFullYear() as unknown as string)
-                                   .cnncRegDate(post.regDate)
-                                   .title(post.title)
-                                   .cont(post.cont.substring(0, 180))
-                                   .ogImgUrl(post.ogImgUrl)
-                                   .secretYn(post.secretYn)
-                                   .pinYn(post.pinYn)
-                                   .likeCnt(post.postLike.length)
-                                   .replyCnt(post.postReply.filter(d => d.delYn === 'N').length)
-                                   .category(categoryInfo)
-                                   .tag(tagInfo)
-                                   .typeCd(searchCodes.INDEX_SEARCH_POST.id)
-                                   .build();
+        const saveIndexSearchDto: SaveIndexSearchDto = {};
+        saveIndexSearchDto.id = no;
+        saveIndexSearchDto.cnncId = post.id;
+        saveIndexSearchDto.cnncRegYear = new Date(post.regDate).getFullYear() as unknown as string;
+        saveIndexSearchDto.cnncRegDate = post.regDate;
+        saveIndexSearchDto.title = post.title;
+        saveIndexSearchDto.cont = post.cont.substring(0, 180);
+        saveIndexSearchDto.ogImgUrl = post.ogImgUrl;
+        saveIndexSearchDto.secretYn = post.secretYn;
+        saveIndexSearchDto.pinYn = post.pinYn;
+        saveIndexSearchDto.likeCnt = post.postLike.length;
+        saveIndexSearchDto.replyCnt = post.postReply.filter(d => d.delYn === 'N').length;
+        saveIndexSearchDto.category = categoryInfo;
+        saveIndexSearchDto.tag = tagInfo;
+        saveIndexSearchDto.typeCd = searchCodes.INDEX_SEARCH_POST.id;
 
         // 3. 색인 데이터를 저장한다.
         const insertRes = await em.withRepository(this.indexSearchRepository).addIndexSearch(saveIndexSearchDto);
@@ -109,13 +106,12 @@ export class IndexSearchService {
       const indexPostsData: [IndexSearchEntity[], number] = await em.withRepository(this.indexSearchRepository).listIndexSearch(searchCodes.INDEX_SEARCH_POST.id);
       const indexPosts = indexPostsData[0];
 
-      const addIndexSearchLogDto = Builder(AddIndexSearchLogDto)
-                                   .typeCd(searchCodes.INDEX_SEARCH_POST.id)
-                                   .autoYn(autoYn)
-                                   .cnt(indexPostsData[1])
-                                   .startDate(indexPosts[0].regDate)
-                                   .endDate(indexPosts[indexPosts.length - 1].regDate)
-                                   .build();
+      const addIndexSearchLogDto: AddIndexSearchLogDto = {};
+      addIndexSearchLogDto.typeCd = searchCodes.INDEX_SEARCH_POST.id;
+      addIndexSearchLogDto.autoYn = autoYn;
+      addIndexSearchLogDto.cnt = indexPostsData[1];
+      addIndexSearchLogDto.startDate = indexPosts[0].regDate;
+      addIndexSearchLogDto.endDate = indexPosts[indexPosts.length - 1].regDate;
 
       // 5. 포스트 색인 데이터 로그를 저장한다.
       insertPostLogRes = await em.withRepository(this.indexSearchLogRepository).addIndexSearchLog(addIndexSearchLogDto);

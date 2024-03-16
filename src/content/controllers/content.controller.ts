@@ -1,7 +1,6 @@
 import { Controller, Get, Body, ValidationPipe, Post, Param, Delete, ParseIntPipe, Query, UseInterceptors, UploadedFile, ParseFilePipe, Put } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Builder } from 'builder-pattern';
 import { Roles } from '@/auth/models';
 import { Auth, IsAuthenticated } from '@/shared/decorators';
 import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } from '@/shared/utils';
@@ -62,10 +61,9 @@ export class ContentController {
     @IsAuthenticated() isAuthenticated: boolean,
     @Param('link') link: string
   ): Promise<ContentDto> {
-    const getContentDto = Builder(GetContentDto)
-                          .link(`/${link}`)
-                          .isLogin(isAuthenticated ? 'Y' : 'N')
-                          .build();
+    const getContentDto: GetContentDto = {};
+    getContentDto.link = `/${link}`;
+    getContentDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
     const content: ContentEntity = await this.contentService.getContent(getContentDto);
 

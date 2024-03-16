@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Builder } from 'builder-pattern';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
 import { MenuRepository } from '@/menu/repositories/menu.repository';
 import { escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotFileEmpty, md, santinizeHtmlOption } from '@/shared/utils';
@@ -94,10 +93,10 @@ export class ContentService {
 
       // 2. 연결메뉴명을 수정한다.
       if ('Y' === updateMenuNameYn) {
-        const updateContentMenuDto = Builder(UpdateContentMenuDto)
-                                      .link(`/content${saveContentDto.link}`)
-                                      .name(saveContentDto.title)
-                                      .build();
+        const updateContentMenuDto: UpdateContentMenuDto = {};
+        updateContentMenuDto.link = `/content${saveContentDto.link}`;
+        updateContentMenuDto.name = saveContentDto.title;
+        
         await em.withRepository(this.menuRepository).updateContentMenu(updateContentMenuDto);
       }
     });

@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../repositories/user.repository';
 import { DataSource, EntityManager, InsertResult } from 'typeorm';
 import { UserRoleRepository } from '../repositories/user-role.repository';
-import { Builder } from 'builder-pattern';
 import { JwtService } from '@nestjs/jwt';
 import { BizException } from '@/shared/exceptions/biz/biz-exception';
 import { AuthCredentialsDto, AuthCredentialsRoleDto, UserEntity, RoleEntity, Roles, Tokens, UserDto } from '../models';
@@ -56,11 +55,11 @@ export class AuthService {
       for (const role of roles) {
 
         // 2. 사용자 권한을 생성한다.
-        const addUserRoleDto = Builder(AuthCredentialsRoleDto)
-                                .userSn(user.userSn)
-                                .userId(userId)
-                                .roleId(role)
-                                .build();
+        const addUserRoleDto: AuthCredentialsRoleDto = {};
+        addUserRoleDto.userSn = user.userSn;
+        addUserRoleDto.userId = userId;
+        addUserRoleDto.roleId = role;
+
         await em.withRepository(this.userRoleRepository).addUserRole(addUserRoleDto);
       }
     });

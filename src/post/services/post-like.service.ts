@@ -1,13 +1,12 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Builder } from "builder-pattern";
-import { AddNotificationDto, notificationCodes } from "@/notification/models";
-import { NotificationRepository } from "@/notification/repositories/notification.repository";
-import { BizException } from "@/shared/exceptions/biz/biz-exception";
-import { isEmpty } from "@/shared/utils/common/common.util";
-import { DataSource, DeleteResult, EntityManager } from "typeorm";
-import { GetPostLikeDto, SavePostLikeDto, PostLikeEntity } from "../models";
-import { PostLikeRepository } from "../repositories/post-like.repository";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AddNotificationDto, notificationCodes } from '@/notification/models';
+import { NotificationRepository } from '@/notification/repositories/notification.repository';
+import { BizException } from '@/shared/exceptions/biz/biz-exception';
+import { isEmpty } from '@/shared/utils/common/common.util';
+import { DataSource, DeleteResult, EntityManager } from 'typeorm';
+import { GetPostLikeDto, SavePostLikeDto, PostLikeEntity } from '../models';
+import { PostLikeRepository } from '../repositories/post-like.repository';
 
 @Injectable()
 export class PostLikeService {
@@ -45,13 +44,13 @@ export class PostLikeService {
         res = await em.withRepository(this.postLikeRepository).addPostLike(savePostLikeDto);
   
         // 2. 알림을 등록한다.
-        const addNotificationDto = Builder(AddNotificationDto)
-                                    .cnncId(res.id)
-                                    .typeCd(notificationCodes.POST_LIKE.id)
-                                    .link(`/post/${savePostLikeDto.postId}`)
-                                    .senderIp(savePostLikeDto.ip)
-                                    .title(savePostLikeDto.title)
-                                    .build();
+        const addNotificationDto: AddNotificationDto = {};
+        addNotificationDto.cnncId = res.id;
+        addNotificationDto.typeCd = notificationCodes.POST_LIKE.id;
+        addNotificationDto.link = `/post/${savePostLikeDto.postId}`;
+        addNotificationDto.senderIp = savePostLikeDto.ip;
+        addNotificationDto.title = savePostLikeDto.title;
+
         await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
       });
 

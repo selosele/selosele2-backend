@@ -3,7 +3,6 @@ import { Param } from '@nestjs/common/decorators';
 import { Post, Put } from '@nestjs/common/decorators/http/request-mapping.decorator';
 import { Body } from '@nestjs/common/decorators/http/route-params.decorator';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Builder } from 'builder-pattern';
 import { Roles } from '@/auth/models';
 import { Auth, IsAuthenticated } from '@/shared/decorators';
 import { DeleteResult } from 'typeorm';
@@ -37,11 +36,10 @@ export class MenuController {
     @IsAuthenticated() isAuthenticated: boolean,
     @Query(ValidationPipe) listMenuDto: ListMenuDto,
   ): Promise<MenuDto[]> {
-    const dto = Builder(ListMenuDto)
-                .useYn(listMenuDto?.useYn)
-                .isLogin(isAuthenticated ? 'Y' : 'N')
-                .roleIds(isAuthenticated ? [Roles.ROLE_ADMIN] : [Roles.ROLE_ANONYMOUS])
-                .build();
+    const dto: ListMenuDto = {};
+    dto.useYn = listMenuDto?.useYn;
+    dto.isLogin = isAuthenticated ? 'Y' : 'N';
+    dto.roleIds = isAuthenticated ? [Roles.ROLE_ADMIN] : [Roles.ROLE_ANONYMOUS];
 
     const menus: MenuEntity[] = await this.menuService.listTreeMenu(dto);
 

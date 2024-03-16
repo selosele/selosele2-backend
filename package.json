@@ -39,7 +39,6 @@
     "axios": ">=1.6.0",
     "bcrypt": "^5.0.1",
     "buffer-to-stream": "^1.0.0",
-    "builder-pattern": "^2.0.0",
     "cache-manager": "^4.0.0",
     "cache-manager-ioredis": "^2.1.0",
     "cache-manager-redis-store": "^2.0.0",

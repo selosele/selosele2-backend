@@ -1,10 +1,9 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, ValidationPipe } from "@nestjs/common";
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { Builder } from "builder-pattern";
-import { Ip, IsAuthenticated } from "@/shared/decorators";
-import { GetPostLikeDto, SavePostLikeDto, PostLikeEntity, PostLikeDto } from "../models";
-import { PostLikeService } from "../services/post-like.service";
-import { serialize } from "@/shared/utils";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, ValidationPipe } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Ip, IsAuthenticated } from '@/shared/decorators';
+import { GetPostLikeDto, SavePostLikeDto, PostLikeEntity, PostLikeDto } from '../models';
+import { PostLikeService } from '../services/post-like.service';
+import { serialize } from '@/shared/utils';
 
 @Controller('postlike')
 @ApiTags('포스트 추천 API')
@@ -32,10 +31,9 @@ export class PostLikeController {
     @Ip() ip: string,
     @Param('id', ParseIntPipe) id: number
   ): Promise<PostLikeDto> {
-    const getPostLikeDto = Builder(GetPostLikeDto)
-                            .postId(id)
-                            .ip(ip)
-                            .build();
+    const getPostLikeDto: GetPostLikeDto = {};
+    getPostLikeDto.postId = id;
+    getPostLikeDto.ip = ip;
 
     const postLike: PostLikeEntity = await this.postLikeService.getPostLike(getPostLikeDto);
 

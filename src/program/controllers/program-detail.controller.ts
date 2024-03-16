@@ -6,7 +6,6 @@ import { serialize } from '@/shared/utils';
 import { GetProgramDetailDto, ProgramDetailDto, ProgramDetailEntity, RemoveProgramDetailDto, SaveProgramDetailDto } from '../models';
 import { ProgramDetailService } from '../services/program-detail.service';
 import { DeleteResult } from 'typeorm';
-import { Builder } from 'builder-pattern';
 
 @Controller('programdetail')
 @ApiTags('프로그램 상세 API')
@@ -57,9 +56,9 @@ export class ProgramDetailController {
   async getProgramDetail(
     @Param('id', ParseIntPipe) id: number
   ): Promise<ProgramDetailDto> {
-    const getProgramDetailDto = Builder(GetProgramDetailDto)
-                                .id(id)
-                                .build();
+    const getProgramDetailDto: GetProgramDetailDto = {};
+    getProgramDetailDto.id = id;
+    
     const detail: ProgramDetailEntity = await this.programDetailService.getProgramDetail(getProgramDetailDto);
 
     return serialize<ProgramDetailDto>(detail);

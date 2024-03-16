@@ -7,7 +7,6 @@ import { BizException } from '@/shared/exceptions';
 import { compareEncrypt, encrypt, escapeHtml } from '@/shared/utils';
 import { DataSource, EntityManager } from 'typeorm';
 import { AddNotificationDto, notificationCodes } from '@/notification/models';
-import { Builder } from 'builder-pattern';
 import { NotificationRepository } from '@/notification/repositories/notification.repository';
 import { UserEntity } from '@/auth/models';
 import { AuthService } from '@/auth/services/auth.service';
@@ -64,13 +63,13 @@ export class GuestbookReplyService {
 
       // 2. 알림을 등록한다.
       if ('N' === addGuestbookReplyDto.adminYn) {
-        const addNotificationDto = Builder(AddNotificationDto)
-                                    .cnncId(guestbookReply.id)
-                                    .typeCd(notificationCodes.GUESTBOOK_REPLY.id)
-                                    .link('/guestbook')
-                                    .senderIp(addGuestbookReplyDto.ip)
-                                    .senderNm(addGuestbookReplyDto.author)
-                                    .build();
+        const addNotificationDto: AddNotificationDto = {};
+        addNotificationDto.cnncId = guestbookReply.id;
+        addNotificationDto.typeCd = notificationCodes.GUESTBOOK_REPLY.id;
+        addNotificationDto.link = '/guestbook';
+        addNotificationDto.senderIp = addGuestbookReplyDto.ip;
+        addNotificationDto.senderNm = addGuestbookReplyDto.author;
+
         await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
       }
     });

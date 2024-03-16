@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Query, Param, ValidationPipe, ParseIntPipe, Delete, Body, UseInterceptors, ParseFilePipe, UploadedFile, Put, Logger } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Builder } from 'builder-pattern';
 import { DeleteResult } from 'typeorm';
 import { Roles } from '@/auth/models';
 import { Auth, Ip, IsAuthenticated } from '@/shared/decorators';
@@ -111,9 +110,8 @@ export class PostController {
   async listYearAndCount(
     @IsAuthenticated() isAuthenticated: boolean
   ): Promise<PostDto[]> {
-    const listPostDto = Builder(ListPostDto)
-                        .isLogin(isAuthenticated ? 'Y' : 'N')
-                        .build();
+    const listPostDto: ListPostDto = {};
+    listPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
     const posts: IndexSearchEntity[] = await this.postService.listYearAndCount(listPostDto);
 
@@ -143,10 +141,9 @@ export class PostController {
     @Param('year') year: string,
     @Query() paginationDto: PaginationDto
   ): Promise<[PostDto[], number]> {
-    const listPostDto = Builder(ListPostDto)
-                        .year(year)
-                        .isLogin(isAuthenticated ? 'Y' : 'N')
-                        .build();
+    const listPostDto: ListPostDto = {};
+    listPostDto.year = year;
+    listPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
     const posts: [IndexSearchEntity[], number] = await this.postService.listPostByYear(listPostDto, paginationDto);
 
@@ -179,10 +176,9 @@ export class PostController {
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Query() paginationDto: PaginationDto
   ): Promise<[PostDto[], number]> {
-    const listPostDto = Builder(ListPostDto)
-                        .categoryId(categoryId)
-                        .isLogin(isAuthenticated ? 'Y' : 'N')
-                        .build();
+    const listPostDto: ListPostDto = {};
+    listPostDto.categoryId = categoryId;
+    listPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
     const posts: [PostEntity[], number] = await this.postService.listPostByCategory(listPostDto, paginationDto);
 
@@ -215,10 +211,9 @@ export class PostController {
     @Param('tagId', ParseIntPipe) tagId: number,
     @Query() paginationDto: PaginationDto
   ): Promise<[PostDto[], number]> {
-    const listPostDto = Builder(ListPostDto)
-                        .tagId(tagId)
-                        .isLogin(isAuthenticated ? 'Y' : 'N')
-                        .build();
+    const listPostDto: ListPostDto = {};
+    listPostDto.tagId = tagId;
+    listPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
     const posts: [PostEntity[], number] = await this.postService.listPostByTag(listPostDto, paginationDto);
 
@@ -247,11 +242,11 @@ export class PostController {
     @Param('id', ParseIntPipe) id: number,
     @IsAuthenticated() isAuthenticated: boolean
   ): Promise<PostDto> {
-    const getPostDto = Builder(GetPostDto)
-                        .id(id)
-                        .ip(ip)
-                        .isLogin(isAuthenticated ? 'Y' : 'N')
-                        .build();
+    const getPostDto: GetPostDto = {};
+    getPostDto.id = id;
+    getPostDto.ip = ip;
+    getPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
+
     return await this.postService.getPost(getPostDto);
   }
 

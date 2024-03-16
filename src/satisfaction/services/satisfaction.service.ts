@@ -6,7 +6,6 @@ import { SatisfactionRepository } from '../repositories/satisfaction.repository'
 import { BizException } from '@/shared/exceptions/biz/biz-exception';
 import { escapeHtml } from '@/shared/utils';
 import { NotificationRepository } from '@/notification/repositories/notification.repository';
-import { Builder } from 'builder-pattern';
 import { AddNotificationDto, notificationCodes } from '@/notification/models';
 import { HttpService } from '@nestjs/axios/dist/http.service';
 import { BlogConfigRepository } from '@/blog-config/repositories/blog-config.repository';
@@ -48,13 +47,13 @@ export class SatisfactionService {
       res = await em.withRepository(this.satisfactionRepository).addSatisfaction(addSatisfactiontDto);
 
       // 2. 알림을 등록한다.
-      const addNotificationDto = Builder(AddNotificationDto)
-                                  .cnncId(res.id)
-                                  .typeCd(notificationCodes.SATISFACTION.id)
-                                  .link(addSatisfactiontDto.pagePath)
-                                  .senderIp(addSatisfactiontDto.ip)
-                                  .title(addSatisfactiontDto.pageTitle)
-                                  .build();
+      const addNotificationDto: AddNotificationDto = {};
+      addNotificationDto.cnncId = res.id;
+      addNotificationDto.typeCd = notificationCodes.SATISFACTION.id;
+      addNotificationDto.link = addSatisfactiontDto.pagePath;
+      addNotificationDto.senderIp = addSatisfactiontDto.ip;
+      addNotificationDto.title = addSatisfactiontDto.pageTitle;
+
       await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
 
       // 3. 블로그 환경설정의 카카오톡 메시지 수신 여부를 조회한다.

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Builder } from 'builder-pattern';
 import { RoleRepository } from '@/auth/repositories/role.repository';
 import { DataSource, DeleteResult, EntityManager, UpdateResult } from 'typeorm';
 import { ListMenuDto, SaveMenuRoleDto, SaveMenuDto, MenuEntity, UpdateContentMenuDto } from '../models';
@@ -41,9 +40,9 @@ export class MenuService {
       menu = await em.withRepository(this.menuRepository).saveMenu(saveMenuDto);
   
       // 2. 기존의 메뉴 권한을 삭제한다.
-      const removeMenuRoleDto = Builder(SaveMenuRoleDto)
-                                .menuId(menu.id)
-                                .build();
+      const removeMenuRoleDto: SaveMenuRoleDto = {};
+      removeMenuRoleDto.menuId = menu.id;
+
       await em.withRepository(this.menuRoleRepository).removeMenuRole(removeMenuRoleDto);
   
       let roles: SaveMenuRoleDto[] = [];
@@ -70,10 +69,10 @@ export class MenuService {
       for (const role of roles) {
 
         // 3. 메뉴 권한을 등록한다.
-        const addMenuRoleDto = Builder(SaveMenuRoleDto)
-                                .menuId(role.menuId)
-                                .roleId(role.roleId)
-                                .build();
+        const addMenuRoleDto: SaveMenuRoleDto = {};
+        addMenuRoleDto.menuId = role.menuId;
+        addMenuRoleDto.roleId = role.roleId;
+
         await em.withRepository(this.menuRoleRepository).saveMenuRole(addMenuRoleDto);
       }
     });
@@ -89,9 +88,9 @@ export class MenuService {
     await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
       // 1. 메뉴 권한을 삭제한다.
-      const removeMenuRoleDto = Builder(SaveMenuRoleDto)
-                                .menuId(id)
-                                .build();
+      const removeMenuRoleDto: SaveMenuRoleDto = {};
+      removeMenuRoleDto.menuId = id;
+
       await em.withRepository(this.menuRoleRepository).removeMenuRole(removeMenuRoleDto);
   
       // 2. 메뉴를 삭제한다.
