@@ -30,6 +30,7 @@ WORKDIR /app
 # 빌드된 코드 및 의존성 파일 복사
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/secrets ./secrets
 
 # 환경 변수 설정 (옵션)
 # ENV NODE_ENV production
