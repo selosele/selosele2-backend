@@ -40,6 +40,6 @@
 
 ## etc.
 
-- 운영 환경 로그 출력 명령: `pm2 logs main`
+- 운영환경 로그 출력 명령: `pm2 logs main`
 - [API 문서 (로컬)](http://localhost:3000/api-docs)
 - [Frontend 저장소](https://github.com/selosele/selosele2-frontend)
