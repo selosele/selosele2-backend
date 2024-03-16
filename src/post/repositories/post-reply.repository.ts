@@ -1,7 +1,7 @@
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
-import { isNotEmpty } from "@/shared/utils";
-import { Repository, UpdateResult } from "typeorm";
-import { GetPostReplyDto, ListPostReplyDto, PostReplyEntity, SavePostReplyDto, UpdatePostReplySortDto } from "../models";
+import { isNotEmpty } from '@/shared/utils';
+import { Repository, UpdateResult } from 'typeorm';
+import { GetPostReplyDto, ListPostReplyDto, PostReplyEntity, SavePostReplyDto, UpdatePostReplySortDto } from '../models';
 
 @CustomRepository(PostReplyEntity)
 export class PostReplyRepository extends Repository<PostReplyEntity> {

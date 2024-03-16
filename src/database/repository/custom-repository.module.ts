@@ -1,7 +1,7 @@
-import { DynamicModule, Provider } from "@nestjs/common";
-import { getDataSourceToken } from "@nestjs/typeorm";
-import { DataSource } from "typeorm";
-import { TYPEORM_CUSTOM_REPOSITORY } from "./custom-repository.decorator";
+import { DynamicModule, Provider } from '@nestjs/common';
+import { getDataSourceToken } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { TYPEORM_CUSTOM_REPOSITORY } from './custom-repository.decorator';
 
 export class CustomRepositoryModule {
 

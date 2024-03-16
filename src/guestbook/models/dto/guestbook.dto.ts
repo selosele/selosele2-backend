@@ -1,4 +1,4 @@
-import { GuestbookReplyDto } from "./guestbook-reply.dto";
+import { GuestbookReplyDto } from './guestbook-reply.dto';
 
 /** 방명록 DTO */
 export class GuestbookDto {

@@ -1,5 +1,5 @@
-import { Type } from "class-transformer";
-import { IsInt, IsNotEmpty } from "class-validator";
+import { Type } from 'class-transformer';
+import { IsInt, IsNotEmpty } from 'class-validator';
 
 /** 포스트 태그 등록/수정 DTO */
 export class SavePostTagDto {

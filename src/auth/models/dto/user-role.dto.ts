@@ -1,5 +1,5 @@
-import { RoleEntity } from "../entities/role.entity";
-import { UserDto } from "./user.dto";
+import { RoleEntity } from '../entities/role.entity';
+import { UserDto } from './user.dto';
 
 /** 사용자 권한 DTO */
 export class UserRoleDto {

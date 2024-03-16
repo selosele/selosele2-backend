@@ -1,6 +1,6 @@
-import { StaticImplements } from "@/shared/decorators"
-import { SendKakaoMessageDto } from "@/shared/models"
-import { KakaoMessageApi } from "./models/kakao.model"
+import { StaticImplements } from '@/shared/decorators'
+import { SendKakaoMessageDto } from '@/shared/models'
+import { KakaoMessageApi } from './models/kakao.model'
 
 /** 카카오톡 유틸 */
 @StaticImplements<KakaoMessageApi>() 

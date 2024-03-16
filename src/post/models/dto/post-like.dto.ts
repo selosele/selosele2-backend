@@ -1,4 +1,4 @@
-import { PostDto } from "./post.dto";
+import { PostDto } from './post.dto';
 
 /** 포스트 추천 DTO */
 export class PostLikeDto {

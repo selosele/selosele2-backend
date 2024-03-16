@@ -1,4 +1,4 @@
-import { IsEmpty, IsNotEmpty } from "class-validator";
+import { IsEmpty, IsNotEmpty } from 'class-validator';
 
 /** 카카오톡 메시지 전송 DTO */
 export class SendKakaoMessageDto {

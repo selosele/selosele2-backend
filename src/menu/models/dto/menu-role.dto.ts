@@ -1,4 +1,4 @@
-import { MenuDto } from "./menu.dto";
+import { MenuDto } from './menu.dto';
 
 /** 메뉴 권한 DTO */
 export class MenuRoleDto {

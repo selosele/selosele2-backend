@@ -1,10 +1,10 @@
-import { Brackets, DeleteResult, Repository } from "typeorm";
+import { Brackets, DeleteResult, Repository } from 'typeorm';
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
-import { PostCategoryEntity } from "@/category/models";
-import { SearchPostDto } from "@/post/models";
-import { PaginationDto } from "@/shared/models";
-import { searchCodes } from "@/index-search/models";
-import { SavePostTagDto, PostTagEntity } from "../models";
+import { PostCategoryEntity } from '@/category/models';
+import { SearchPostDto } from '@/post/models';
+import { PaginationDto } from '@/shared/models';
+import { searchCodes } from '@/index-search/models';
+import { SavePostTagDto, PostTagEntity } from '../models';
 
 @CustomRepository(PostTagEntity)
 export class PostTagRepository extends Repository<PostTagEntity> {

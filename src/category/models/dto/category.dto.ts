@@ -1,4 +1,4 @@
-import { PostCategoryDto } from "./post-category.dto";
+import { PostCategoryDto } from './post-category.dto';
 
 /** 카테고리 DTO */
 export class CategoryDto {

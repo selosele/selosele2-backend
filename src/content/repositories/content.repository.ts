@@ -1,6 +1,6 @@
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
-import { DeleteResult, Repository } from "typeorm";
-import { ContentEntity, GetContentDto, ListContentDto, SaveContentDto } from "../models";
+import { DeleteResult, Repository } from 'typeorm';
+import { ContentEntity, GetContentDto, ListContentDto, SaveContentDto } from '../models';
 
 @CustomRepository(ContentEntity)
 export class ContentRepository extends Repository<ContentEntity> {

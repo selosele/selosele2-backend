@@ -1,4 +1,4 @@
-import { PostTagDto } from "./post-tag.dto";
+import { PostTagDto } from './post-tag.dto';
 
 /** 태그 DTO */
 export class TagDto {

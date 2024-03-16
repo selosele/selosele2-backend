@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 /** 비즈니스 로직 예외 Exception */
 export class BizException extends HttpException {

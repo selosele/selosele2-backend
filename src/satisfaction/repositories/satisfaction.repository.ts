@@ -1,6 +1,6 @@
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
-import { Repository } from "typeorm";
-import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from "../models";
+import { Repository } from 'typeorm';
+import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
 
 @CustomRepository(SatisfactionEntity)
 export class SatisfactionRepository extends Repository<SatisfactionEntity> {

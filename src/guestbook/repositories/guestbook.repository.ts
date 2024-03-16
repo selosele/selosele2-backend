@@ -1,7 +1,7 @@
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
-import { PaginationDto } from "@/shared/models";
-import { Repository } from "typeorm";
-import { AddGuestbookDto, UpdateGuestbookDto, GuestbookEntity } from "../models";
+import { PaginationDto } from '@/shared/models';
+import { Repository } from 'typeorm';
+import { AddGuestbookDto, UpdateGuestbookDto, GuestbookEntity } from '../models';
 
 @CustomRepository(GuestbookEntity)
 export class GuestbookRepository extends Repository<GuestbookEntity> {

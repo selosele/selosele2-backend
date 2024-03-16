@@ -1,7 +1,7 @@
-import { BaseEntity, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { ApiProperty } from "@nestjs/swagger";
-import { UserEntity } from "./user.entity";
-import { RoleEntity } from "./role.entity";
+import { BaseEntity, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+import { UserEntity } from './user.entity';
+import { RoleEntity } from './role.entity';
 
 @Entity('user_role')
 export class UserRoleEntity extends BaseEntity {

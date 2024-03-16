@@ -1,6 +1,6 @@
-import { IndexSearchService } from "@/index-search/services/index-search.service";
-import { Injectable, Logger } from "@nestjs/common";
-import { Cron, CronExpression } from "@nestjs/schedule";
+import { IndexSearchService } from '@/index-search/services/index-search.service';
+import { Injectable, Logger } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class CronService {

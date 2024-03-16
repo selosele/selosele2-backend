@@ -1,6 +1,6 @@
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
-import { DeleteResult, Repository } from "typeorm";
-import { SavePostLikeDto, PostLikeEntity } from "../models";
+import { DeleteResult, Repository } from 'typeorm';
+import { SavePostLikeDto, PostLikeEntity } from '../models';
 
 @CustomRepository(PostLikeEntity)
 export class PostLikeRepository extends Repository<PostLikeEntity> {

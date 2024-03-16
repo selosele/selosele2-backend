@@ -3,7 +3,7 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@n
 import { AccessTokenUser, Ip, IsAuthenticated } from '@/shared/decorators';
 import { PaginationDto } from '@/shared/models';
 import { ListGuestbookReplyDto, AddGuestbookReplyDto, RemoveGuestbookReplyDto, UpdateGuestbookReplyDto, GuestbookReplyEntity, GuestbookReplyDto } from '../models';
-import { GuestbookReplyService } from "../services/guestbook-reply.service";
+import { GuestbookReplyService } from '../services/guestbook-reply.service';
 import { serialize } from '@/shared/utils';
 
 @Controller('guestbookreply')
