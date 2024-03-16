@@ -8,6 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # npm 인증서 업데이트
+RUN npm update ca-certificates
 RUN npm config set cafile /etc/ssl/certs/ca-certificates.crt
 
 # npm 미러 변경
