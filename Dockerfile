@@ -35,10 +35,9 @@ WORKDIR /app
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/secrets ./secrets
-COPY --from=build /app/ecosystem.config.js ./ecosystem.config.js
 
 # 환경 변수 설정 (옵션)
 # ENV NODE_ENV production
 
 # 앱 실행
-CMD ["pm2-runtime", "start", "ecosystem.config.js", "--env", "production"]
+CMD ["node", "./dist/main.js"]
