@@ -50,6 +50,7 @@ services:
     volumes:
       - db_volume:/var/lib/mysql
     environment:
+      - TZ=Asia/Seoul
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - MYSQL_DATABASE=${DB_DATABASE}
       - MYSQL_USER=${DB_USERNAME}
