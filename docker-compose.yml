@@ -5,6 +5,7 @@ services:
     image: seloseled/selosele2:api
     container_name: api
     restart: always
+    mem_limit: 512M
     depends_on:
       - db
     ports:
@@ -43,6 +44,7 @@ services:
     image: mariadb:10.6.12
     container_name: db
     restart: always
+    mem_limit: 256M
     ports:
       - "${DB_PORT}:${DB_PORT}"
     volumes:
