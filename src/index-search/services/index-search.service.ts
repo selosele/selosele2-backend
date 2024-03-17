@@ -104,14 +104,13 @@ export class IndexSearchService {
 
       // 4. 포스트 색인 데이터를 조회한다.
       const indexPostsData: [IndexSearchEntity[], number] = await em.withRepository(this.indexSearchRepository).listIndexSearch(searchCodes.INDEX_SEARCH_POST.id);
-      const indexPosts = indexPostsData[0];
 
       const addIndexSearchLogDto: AddIndexSearchLogDto = {};
       addIndexSearchLogDto.typeCd = searchCodes.INDEX_SEARCH_POST.id;
       addIndexSearchLogDto.autoYn = autoYn;
       addIndexSearchLogDto.cnt = indexPostsData[1];
-      addIndexSearchLogDto.startDate = indexPosts[0].regDate;
-      addIndexSearchLogDto.endDate = indexPosts[indexPosts.length - 1].regDate;
+      addIndexSearchLogDto.startDate = new Date(startTime);
+      addIndexSearchLogDto.endDate = new Date(endTime);
 
       // 5. 포스트 색인 데이터 로그를 저장한다.
       insertPostLogRes = await em.withRepository(this.indexSearchLogRepository).addIndexSearchLog(addIndexSearchLogDto);
