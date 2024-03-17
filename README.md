@@ -28,7 +28,7 @@
 
 ## 운영환경 구동 절차
 
-### Docker 컨테이너 구동
+### Docker 컨테이너 실행
 
 1. `docker-compose up -d`
 
