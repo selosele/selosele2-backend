@@ -62,10 +62,11 @@ export class ContentService {
     }
 
     // HTML Escape
-    saveContentDto.cont = escapeHtml(cont, Object.assign(santinizeHtmlOption, {
-      allowedTags: false,
-      allowedAttributes: false,
-    }));
+    // 2024.03.23. 코드블럭의 Java 제네릭이 태그로 인식되어 닫는 태그가 생성되는 이슈로 인해 주석처리
+    // saveContentDto.cont = escapeHtml(cont, Object.assign(santinizeHtmlOption, {
+    //   allowedTags: false,
+    //   allowedAttributes: false,
+    // }));
 
     // 대표 이미지 파일을 업로드한다.
     if (isNotFileEmpty(ogImgFile) && !this.hasDelOgImg(delOgImg)) {
