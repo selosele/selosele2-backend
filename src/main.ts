@@ -56,12 +56,6 @@ async function bootstrap() {
 
   await app.listen(port, host);
 
-  /** 서버 정보 */
-  //const server = await app.getHttpServer();
-  //console.log('server >>>', server);
-  //console.log('address >>>', server.address());
-  //console.log('request >>>', server._events.request);
-
   if (isDev(env.get<string>('NODE_ENV'))) {
     console.log(`Server running at http://localhost:${port}..`);
   }

@@ -13,7 +13,7 @@ export function escapeHtml(dirty: string, options?: sanitizeHtml.IOptions): stri
 /** santinize-html 공통 옵션 */
 export const santinizeHtmlOption: sanitizeHtml.IOptions = {
 
-  /** self closing할 태그 목록 */
+  // self closing할 태그 목록
   selfClosing: selfClosingTags,
   // iframe 태그를 허용하되, codepen만 허용
   allowedIframeHostnames: ['https://codepen.io/'],

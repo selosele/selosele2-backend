@@ -1,6 +1,6 @@
 import { IndexSearchService } from '@/index-search/services/index-search.service';
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class CronService {
@@ -13,9 +13,9 @@ export class CronService {
 
   /**
    * 검색 데이터 저장
-   *   - 매주 토요일, 일요일 자정에 실행
+   *   - 매주 토요일, 일요일, 월요일 자정에 실행
    */
-  @Cron(CronExpression.EVERY_WEEKEND)
+  @Cron("0 0 0 * * 6-1")
   async saveIndexSearch(): Promise<void> {
     this.logger.warn(`============== 검색 데이터 저장 cron 시작 ==============`);
 
