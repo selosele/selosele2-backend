@@ -1,10 +1,9 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
-import { getAuthenticatedUser, isEmpty, isProd } from '../utils';
-import { ProgramDetailEntity, ProgramLogData } from '@/program/models';
+import { getAuthenticatedUser, isProd } from '../utils';
+import { ProgramLogData } from '@/program/models';
 import { UserDto } from '@/auth/models';
-import { DataSource } from 'typeorm';
 
 @Injectable()
 export class ProgramLogInterceptor implements NestInterceptor {
@@ -13,7 +12,6 @@ export class ProgramLogInterceptor implements NestInterceptor {
 
   constructor(
     private readonly env: ConfigService,
-    private readonly dataSource: DataSource,
   ) {}
 
   async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
@@ -37,30 +35,30 @@ export class ProgramLogInterceptor implements NestInterceptor {
     // service, repository 의존성 주입해서 ProgramDetailRepository.findOne() 호출 시
     // ProgramDetailRepository가 undefined로서, 의존성 주입되지 않는 이슈가 있어 아래처럼 처리
     // 의존성 주입 로직으로 해결하려면 app.module.ts의 providers에 ProgramDetailService, ProgramDetailRepository 추가 필요
-    const programDetail = await this.dataSource.getRepository(ProgramDetailEntity).findOne({
-      where: {
-        method: logData.method,
-        routePath: logData.routePath
-      },
-    });
+    // const programDetail = await this.dataSource.getRepository(ProgramDetailEntity).findOne({
+    //   where: {
+    //     method: logData.method,
+    //     routePath: logData.routePath
+    //   },
+    // });
 
     // 존재하지 않는 프로그램일 경우
-    if (isEmpty(programDetail)) {
-      logData.statusCode = 404;
-      logData.message = '존재하지 않는 프로그램 호출 시도';
-      this.logger.warn(logData);
-      throw new NotFoundException();
-    }
+    // if (isEmpty(programDetail)) {
+    //   logData.statusCode = 404;
+    //   logData.message = '존재하지 않는 프로그램 호출 시도';
+    //   this.logger.warn(logData);
+    //   throw new NotFoundException();
+    // }
 
     // 미사용 프로그램일 경우
-    if ('N' === programDetail.useYn) {
-      logData.statusCode = 404;
-      logData.message = '미사용 프로그램 호출 시도';
-      this.logger.warn(logData);
-      throw new NotFoundException();
-    }
+    // if ('N' === programDetail.useYn) {
+    //   logData.statusCode = 404;
+    //   logData.message = '미사용 프로그램 호출 시도';
+    //   this.logger.warn(logData);
+    //   throw new NotFoundException();
+    // }
 
-    logData.programDetail = programDetail;
+    // logData.programDetail = programDetail;
 
     this.logger.warn(logData);
 

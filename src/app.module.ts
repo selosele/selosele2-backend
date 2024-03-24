@@ -11,7 +11,7 @@ import { TagModule } from './tag/tag.module';
 import { SatisfactionModule } from './satisfaction/satisfaction.module';
 import { GuestbookModule } from './guestbook/guestbook.module';
 import { ContentModule } from './content/content.module';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { BizExceptionFilter } from './shared/exceptions/biz/biz-exception-filter';
 import { FileUploaderModule } from './file-uploader/file-uploader.module';
 import { NotificationModule } from './notification/notification.module';
@@ -20,6 +20,7 @@ import { IndexSearchModule } from './index-search/index-search.module';
 import { ProgramModule } from './program/program.module';
 import { CronModule } from './cron/cron.module';
 import { isProd } from './shared/utils';
+import { ProgramLogInterceptor } from './shared/interceptors/program-log.interceptor';
 
 @Module({
   imports: [
@@ -55,10 +56,10 @@ import { isProd } from './shared/utils';
       provide: APP_FILTER,
       useClass: BizExceptionFilter,
     },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: ProgramLogInterceptor,
-    // },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ProgramLogInterceptor,
+    },
   ],
 })
 export class AppModule {}
