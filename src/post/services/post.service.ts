@@ -225,13 +225,11 @@ export class PostService {
       savePostDto.ogImgSize = null;
     }
 
-    let post: PostEntity = null;
-
     // 트랜잭션을 시작한다.
-    await this.dataSource.transaction<void>(async (em: EntityManager) => {
+    const result = await this.dataSource.transaction<PostEntity>(async (em: EntityManager) => {
 
       // 1. 포스트를 저장한다.
-      post = await em.withRepository(this.postRepository).savePost(savePostDto);
+      const post: PostEntity = await em.withRepository(this.postRepository).savePost(savePostDto);
 
       // 2. 포스트 카테고리를 저장한다.
       const savePostCategoryDto: SavePostCategoryDto = {};
@@ -267,9 +265,10 @@ export class PostService {
           await em.withRepository(this.postTagRepository).savePostTag(savePostTagDto);
         }
       }
+      return post;
     });
 
-    return post;
+    return result;
   }
 
   /** 포스트 다건을 삭제한다. */

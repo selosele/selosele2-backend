@@ -45,7 +45,7 @@ export class IndexSearchService {
     let insertPostTotal = 0;
 
     // 트랜잭션을 시작한다.
-    await this.dataSource.transaction<void>(async (em: EntityManager) => {
+    const result = await this.dataSource.transaction<InsertResult>(async (em: EntityManager) => {
 
       // 1. 모든 검색 데이터를 삭제한다.
       const deleteRes: DeleteResult = await em.withRepository(this.indexSearchRepository).removeIndexSearchAll();
@@ -114,9 +114,10 @@ export class IndexSearchService {
 
       // 5. 포스트 색인 데이터 로그를 저장한다.
       insertPostLogRes = await em.withRepository(this.indexSearchLogRepository).addIndexSearchLog(addIndexSearchLogDto);
+      return insertPostLogRes;
     });
 
-    if (0 < insertPostLogRes?.raw.length) {
+    if (0 < result?.raw.length) {
       this.logger.warn(`5. 포스트 색인 로그 저장 완료`);
     }
   }

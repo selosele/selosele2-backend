@@ -84,13 +84,11 @@ export class ContentService {
       saveContentDto.ogImgSize = null;
     }
 
-    let content: ContentEntity = null;
-
     // 트랜잭션을 시작한다.
-    await this.dataSource.transaction<void>(async (em: EntityManager) => {
+    const result = await this.dataSource.transaction<ContentEntity>(async (em: EntityManager) => {
 
       // 1. 콘텐츠를 저장한다.
-      content = await em.withRepository(this.contentRepository).saveContent(saveContentDto);
+      const content: ContentEntity = await em.withRepository(this.contentRepository).saveContent(saveContentDto);
 
       // 2. 연결메뉴명을 수정한다.
       if ('Y' === updateMenuNameYn) {
@@ -100,9 +98,10 @@ export class ContentService {
         
         await em.withRepository(this.menuRepository).updateContentMenu(updateContentMenuDto);
       }
+      return content;
     });
 
-    return content;
+    return result;
   }
 
   /** 콘텐츠를 삭제한다. */

@@ -38,17 +38,15 @@ export class SatisfactionService {
     // HTML Escape
     addSatisfactiontDto.comment = escapeHtml(addSatisfactiontDto.comment);
 
-    let res: SatisfactionEntity = null;
-
     // 트랜잭션을 시작한다.
-    await this.dataSource.transaction<void>(async (em: EntityManager) => {
+    const result = await this.dataSource.transaction<SatisfactionEntity>(async (em: EntityManager) => {
 
       // 1. 만족도조사를 등록한다.
-      res = await em.withRepository(this.satisfactionRepository).addSatisfaction(addSatisfactiontDto);
+      const satisfaction: SatisfactionEntity = await em.withRepository(this.satisfactionRepository).addSatisfaction(addSatisfactiontDto);
 
       // 2. 알림을 등록한다.
       const addNotificationDto: AddNotificationDto = {};
-      addNotificationDto.cnncId = res.id;
+      addNotificationDto.cnncId = satisfaction.id;
       addNotificationDto.typeCd = notificationCodes.SATISFACTION.id;
       addNotificationDto.link = addSatisfactiontDto.pagePath;
       addNotificationDto.senderIp = addSatisfactiontDto.ip;
@@ -80,9 +78,11 @@ export class SatisfactionService {
       //     }
       //   });
       // }
+
+      return satisfaction;
     });
     
-    return res;
+    return result;
   }
 
   /** 만족도조사 참여 여부를 조회한다. */

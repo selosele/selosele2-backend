@@ -35,17 +35,16 @@ export class PostLikeService {
 
     // 추천 이력이 없으면 추천을 하고
     if (isEmpty(foundLike)) {
-      let res: PostLikeEntity = null;
 
       // 트랜잭션을 시작한다.
       await this.dataSource.transaction<void>(async (em: EntityManager) => {
 
         // 1. 추천을 등록한다.
-        res = await em.withRepository(this.postLikeRepository).addPostLike(savePostLikeDto);
+        const postLike: PostLikeEntity = await em.withRepository(this.postLikeRepository).addPostLike(savePostLikeDto);
   
         // 2. 알림을 등록한다.
         const addNotificationDto: AddNotificationDto = {};
-        addNotificationDto.cnncId = res.id;
+        addNotificationDto.cnncId = postLike.id;
         addNotificationDto.typeCd = notificationCodes.POST_LIKE.id;
         addNotificationDto.link = `/post/${savePostLikeDto.postId}`;
         addNotificationDto.senderIp = savePostLikeDto.ip;
