@@ -111,9 +111,8 @@ export class IndexSearchService {
       addIndexSearchLogDto.startDate = new Date(startTime);
       addIndexSearchLogDto.endDate = new Date(endTime);
 
-      // 5. 포스트 색인 데이터 로그를 저장한다.
-      const insertPostLogRes = await em.withRepository(this.indexSearchLogRepository).addIndexSearchLog(addIndexSearchLogDto);
-      return insertPostLogRes;
+      // 5. 포스트 색인 데이터 로그를 저장하고 결과 값을 반환한다.
+      return await em.withRepository(this.indexSearchLogRepository).addIndexSearchLog(addIndexSearchLogDto);
     });
 
     if (0 < result?.raw.length) {

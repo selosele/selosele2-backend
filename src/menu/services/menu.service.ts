@@ -92,9 +92,8 @@ export class MenuService {
 
       await em.withRepository(this.menuRoleRepository).removeMenuRole(removeMenuRoleDto);
   
-      // 2. 메뉴를 삭제한다.
-      const deleteRes: DeleteResult = await em.withRepository(this.menuRepository).removeMenu(id);
-      return deleteRes;
+      // 2. 메뉴를 삭제하고 결과 값을 반환한다.
+      return await em.withRepository(this.menuRepository).removeMenu(id);
     });
 
     return result;
