@@ -41,7 +41,6 @@ export class IndexSearchService {
   async saveIndexSearch(autoYn: string = 'Y'): Promise<void> {
     const startTime = Date.now();
 
-    let insertPostLogRes: InsertResult;
     let insertPostTotal = 0;
 
     // 트랜잭션을 시작한다.
@@ -113,7 +112,7 @@ export class IndexSearchService {
       addIndexSearchLogDto.endDate = new Date(endTime);
 
       // 5. 포스트 색인 데이터 로그를 저장한다.
-      insertPostLogRes = await em.withRepository(this.indexSearchLogRepository).addIndexSearchLog(addIndexSearchLogDto);
+      const insertPostLogRes = await em.withRepository(this.indexSearchLogRepository).addIndexSearchLog(addIndexSearchLogDto);
       return insertPostLogRes;
     });
 
