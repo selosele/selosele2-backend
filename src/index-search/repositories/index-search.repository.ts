@@ -44,7 +44,8 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
           searchQueries.forEach(q => {
             qb.orWhere(caseSensitive + `indexSearch.title LIKE '%${q}%'`)
               .orWhere(caseSensitive + `indexSearch.cont LIKE '%${q}%'`)
-              .orWhere(caseSensitive + `indexSearch.category LIKE '%${q}%'`);
+              .orWhere(caseSensitive + `indexSearch.category LIKE '%${q}%'`)
+              .orWhere(caseSensitive + `indexSearch.tag LIKE '%${q}%'`);
           });
         }));
     }
