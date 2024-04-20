@@ -7,17 +7,9 @@ WORKDIR /app
 # 프로젝트 의존성 파일 복사
 COPY package*.json ./
 
-# npm 인증서 업데이트
-# RUN npm update ca-certificates
-# RUN npm config set cafile /etc/ssl/certs/ca-certificates.crt
-
-# npm 미러 변경
-# RUN npm config set registry https://registry.npm.taobao.org/
-
 # 의존성 설치
-RUN npm install -g @nestjs/cli
-# RUN npm install -g pm2
-RUN npm install --production
+RUN npm install -g @nestjs/cli \
+    npm install --production
 
 # 소스 코드 복사
 COPY . .
