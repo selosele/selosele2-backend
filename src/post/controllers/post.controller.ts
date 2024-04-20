@@ -44,7 +44,7 @@ export class PostController {
     // 비밀 포스트 조회를 위한 세팅
     listPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
-    let posts: [PostEntity[], number];
+    let posts: [PostDto[], number];
 
     // 메인 포스트 목록 조회
     if (globalCodes.PAGE_MAIN.id === listPostDto.pageType) {
@@ -54,7 +54,7 @@ export class PostController {
     }
 
     return [
-      serialize<PostDto[]>(posts[0]),
+      posts[0],
       posts[1],
     ];
   }

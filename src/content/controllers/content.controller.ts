@@ -65,9 +65,7 @@ export class ContentController {
     getContentDto.link = `/${link}`;
     getContentDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
-    const content: ContentEntity = await this.contentService.getContent(getContentDto);
-
-    return serialize<ContentDto>(content);
+    return await this.contentService.getContent(getContentDto);
   }
 
   @Post()

@@ -7,29 +7,21 @@ import { CategoryEntity } from './category.entity';
 export class PostCategoryEntity extends BaseEntity {
 
   @PrimaryColumn()
-  @ApiProperty({
-    description: '포스트 ID'
-  })
+  @ApiProperty({ description: '포스트 ID' })
   postId?: number;
 
   @PrimaryColumn()
-  @ApiProperty({
-    description: '카테고리 ID'
-  })
+  @ApiProperty({ description: '카테고리 ID' })
   categoryId?: number;
 
   @ManyToOne(() => PostEntity, (post) => post.postCategory)
   @JoinColumn({ name: 'post_id' })
-  @ApiProperty({
-    description: '포스트'
-  })
+  @ApiProperty({ description: '포스트' })
   post?: PostEntity;
 
   @ManyToOne(() => CategoryEntity, (category) => category.postCategory)
   @JoinColumn({ name: 'category_id' })
-  @ApiProperty({
-    description: '카테고리'
-  })
+  @ApiProperty({ description: '카테고리' })
   category?: CategoryEntity;
   
 }

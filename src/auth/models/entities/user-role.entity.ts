@@ -7,35 +7,25 @@ import { RoleEntity } from './role.entity';
 export class UserRoleEntity extends BaseEntity {
 
   @PrimaryColumn()
-  @ApiProperty({
-    description: '사용자 일련번호'
-  })
+  @ApiProperty({ description: '사용자 일련번호' })
   userSn?: number;
 
   @PrimaryColumn()
-  @ApiProperty({
-    description: '사용자 ID'
-  })
+  @ApiProperty({ description: '사용자 ID' })
   userId?: string;
   
   @PrimaryColumn()
-  @ApiProperty({
-    description: '권한 ID'
-  })
+  @ApiProperty({ description: '권한 ID' })
   roleId?: string;
 
   @ManyToOne(() => UserEntity, (user) => user.userRole)
   @JoinColumn({ name: 'user_id' })
-  @ApiProperty({
-    description: '사용자'
-  })
+  @ApiProperty({ description: '사용자' })
   user?: UserEntity;
 
   @ManyToOne(() => RoleEntity, (role) => role.userRole)
   @JoinColumn({ name: 'role_id' })
-  @ApiProperty({
-    description: '권한'
-  })
+  @ApiProperty({ description: '권한' })
   role?: RoleEntity;
 
 }

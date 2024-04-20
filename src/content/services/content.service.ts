@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
 import { MenuRepository } from '@/menu/repositories/menu.repository';
-import { getRawText, isBlank, isEmpty, isNotBlank, isNotFileEmpty, md } from '@/shared/utils';
+import { getRawText, isBlank, isEmpty, isNotBlank, isNotFileEmpty, md, serialize } from '@/shared/utils';
 import { DataSource, DeleteResult, EntityManager } from 'typeorm';
-import { RemoveContentDto, GetContentDto, ContentEntity, SaveContentDto, ListContentDto } from '../models';
+import { RemoveContentDto, GetContentDto, ContentEntity, SaveContentDto, ListContentDto, ContentDto } from '../models';
 import { ContentRepository } from '../repositories/content.repository';
 import { UpdateContentMenuDto } from '@/menu/models';
 
@@ -21,10 +21,11 @@ export class ContentService {
   ) {}
 
   /** 콘텐츠 목록을 조회한다. */
-  async listContent(listContentDto?: ListContentDto): Promise<[ContentEntity[], number]> {
+  async listContent(listContentDto?: ListContentDto): Promise<[ContentDto[], number]> {
     const [contents, contentCount] = await this.contentRepository.listContent(listContentDto);
+    const contentDtos = serialize<ContentDto[]>(contents);
 
-    contents.forEach(c => {
+    contentDtos.forEach(c => {
 
       // 콘텐츠 데이터에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       c.rawText = getRawText(c.cont);
@@ -33,23 +34,24 @@ export class ContentService {
       c.cont = md.render(c.cont);
     });
 
-    return [contents, contentCount];
+    return [contentDtos, contentCount];
   }
 
   /** 콘텐츠를 조회한다. */
-  async getContent(getContentDto: GetContentDto): Promise<ContentEntity> {
-    const content: ContentEntity = await this.contentRepository.getContent(getContentDto);
+  async getContent(getContentDto: GetContentDto): Promise<ContentDto> {
+    const content = await this.contentRepository.getContent(getContentDto);
 
     if (isEmpty(content)) {
       throw new NotFoundException();
     }
 
-    content.rawText = content.cont;
+    const contentDto = serialize<ContentDto>(content);
+    contentDto.rawText = content.cont;
 
     // 콘텐츠의 내용을 Markdown으로 렌더링한다.
-    content.cont = md.render(content.cont);
+    contentDto.cont = md.render(content.cont);
 
-    return content;
+    return contentDto;
   }
 
   /** 콘텐츠를 등록/수정한다. */

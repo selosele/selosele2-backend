@@ -6,22 +6,16 @@ import { MenuEntity } from './menu.entity';
 export class MenuRoleEntity extends BaseEntity {
 
   @PrimaryColumn()
-  @ApiProperty({
-    description: '메뉴 ID'
-  })
+  @ApiProperty({ description: '메뉴 ID' })
   menuId?: number;
 
   @PrimaryColumn()
-  @ApiProperty({
-    description: '권한 ID'
-  })
+  @ApiProperty({ description: '권한 ID' })
   roleId?: string;
 
   @ManyToOne(() => MenuEntity, (menu) => menu.menuRole)
   @JoinColumn({ name: 'menu_id' })
-  @ApiProperty({
-    description: '메뉴'
-  })
+  @ApiProperty({ description: '메뉴' })
   menu?: MenuEntity;
   
 }

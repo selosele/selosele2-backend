@@ -46,8 +46,8 @@ export class PostService {
   ) {}
 
   /** 메인 포스트 목록을 조회한다. */
-  async listPostMain(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
-    const [postList, postCategory] = await Promise.all([
+  async listPostMain(listPostDto: ListPostDto): Promise<[PostDto[], number]> {
+    const [[posts, postCount], postCategory] = await Promise.all([
 
       // 포스트 목록 조회
       this.postRepository.listPostMain(listPostDto),
@@ -55,7 +55,9 @@ export class PostService {
       this.postCategoryRepository.listPostCategory(listPostDto),
     ]);
 
-    postList[0].forEach(p => {
+    const postDtos = serialize<PostDto[]>(posts);
+
+    postDtos.forEach(p => {
 
       // 포스트 데이터에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       p.rawText = getRawText(p.cont).substring(0, 180);
@@ -64,14 +66,15 @@ export class PostService {
       p.postCategory = postCategory.filter(d => d.postId === p.id);
     });
 
-    return [postList[0], postList[1]];
+    return [postDtos, postCount];
   }
 
   /** 포스트 목록을 조회한다. */
-  async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
+  async listPost(listPostDto: ListPostDto): Promise<[PostDto[], number]> {
     const [posts, postCount] = await this.postRepository.listPost(listPostDto);
+    const postDtos = serialize<PostDto[]>(posts);
 
-    posts.forEach(p => {
+    postDtos.forEach(p => {
 
       // 포스트 데이터에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       p.rawText = getRawText(p.cont);
@@ -80,7 +83,7 @@ export class PostService {
       p.cont = md.render(p.cont);
     });
 
-    return [posts, postCount];
+    return [postDtos, postCount];
   }
 
   /** 포스트를 검색한다. */
