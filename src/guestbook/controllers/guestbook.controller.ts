@@ -31,11 +31,11 @@ export class GuestbookController {
   async listGuestbook(
     @Query(ValidationPipe) paginationDto: PaginationDto
   ): Promise<[GuestbookDto[], number]> {
-    const guestbooks: [GuestbookEntity[], number] = await this.guestbookService.listGuestbook(paginationDto);
+    const [guestbooks, guestbookCount] = await this.guestbookService.listGuestbook(paginationDto);
 
     return [
-      serialize<GuestbookDto[]>(guestbooks[0]),
-      guestbooks[1],
+      serialize<GuestbookDto[]>(guestbooks),
+      guestbookCount,
     ];
   }
 

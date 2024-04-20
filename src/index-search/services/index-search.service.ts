@@ -29,11 +29,11 @@ export class IndexSearchService {
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto,
   ): Promise<[ListIndexSearchDto[], number]> {
-    const indexSearches: [IndexSearchEntity[], number] = await this.indexSearchRepository.listPost(searchPostDto, paginationDto);
+    const [indexSearches, indexSearchCount] = await this.indexSearchRepository.listPost(searchPostDto, paginationDto);
     
     return [
-      serialize<ListIndexSearchDto[]>(indexSearches[0]),
-      indexSearches[1]
+      serialize<ListIndexSearchDto[]>(indexSearches),
+      indexSearchCount
     ];
   }
 
@@ -54,11 +54,11 @@ export class IndexSearchService {
       listPostDto.tmpYn = 'N';
 
       // 2. 모든 포스트 목록을 조회한다.
-      const posts: [PostEntity[], number] = await em.withRepository(this.postRepository).listPost(listPostDto);
-      this.logger.warn(`2. 포스트 총 ${posts[1]}건 조회됨`);
+      const [posts, postCount] = await em.withRepository(this.postRepository).listPost(listPostDto);
+      this.logger.warn(`2. 포스트 총 ${postCount}건 조회됨`);
       
-      for (let i = 0; i < posts[0].length; i++) {
-        const post = posts[0][i];
+      for (let i = 0; i < posts.length; i++) {
+        const post = posts[i];
         const no = (i + 1);
 
         let categoryInfo = ``;
@@ -102,12 +102,12 @@ export class IndexSearchService {
       this.logger.warn(`4. 포스트 색인 소요 시간: ${resTime}초`);
 
       // 4. 포스트 색인 데이터를 조회한다.
-      const indexPostsData: [IndexSearchEntity[], number] = await em.withRepository(this.indexSearchRepository).listIndexSearch(searchCodes.INDEX_SEARCH_POST.id);
+      const [_, indexPostCount] = await em.withRepository(this.indexSearchRepository).listIndexSearch(searchCodes.INDEX_SEARCH_POST.id);
 
       const addIndexSearchLogDto: AddIndexSearchLogDto = {};
       addIndexSearchLogDto.typeCd = searchCodes.INDEX_SEARCH_POST.id;
       addIndexSearchLogDto.autoYn = autoYn;
-      addIndexSearchLogDto.cnt = indexPostsData[1];
+      addIndexSearchLogDto.cnt = indexPostCount;
       addIndexSearchLogDto.startDate = new Date(startTime);
       addIndexSearchLogDto.endDate = new Date(endTime);
 

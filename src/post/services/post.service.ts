@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostCategoryRepository } from '@/category/repositories/post-category.repository';
 import { PaginationDto } from '@/shared/models';
-import { deserialize, escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, santinizeHtmlOption, serialize } from '@/shared/utils';
+import { deserialize, escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, serialize } from '@/shared/utils';
 import { DataSource, DeleteResult, EntityManager, UpdateResult } from 'typeorm';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, GetPostLikeDto, PostLikeEntity, PostReplyEntity, PostDto, PostLikeDto, PostReplyDto } from '../models';
 import { SavePostDto } from '../models/dto/save-post.dto';
@@ -69,9 +69,9 @@ export class PostService {
 
   /** 포스트 목록을 조회한다. */
   async listPost(listPostDto: ListPostDto): Promise<[PostEntity[], number]> {
-    const postList: [PostEntity[], number] = await this.postRepository.listPost(listPostDto);
+    const [posts, postCount] = await this.postRepository.listPost(listPostDto);
 
-    postList[0].forEach(p => {
+    posts.forEach(p => {
 
       // 포스트 데이터에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       p.rawText = getRawText(p.cont);
@@ -80,7 +80,7 @@ export class PostService {
       p.cont = md.render(p.cont);
     });
 
-    return postList;
+    return [posts, postCount];
   }
 
   /** 포스트를 검색한다. */
@@ -306,7 +306,7 @@ export class PostService {
     const countPostDto: CountPostDto = {};
     countPostDto.pinYn = 'Y';
 
-    const [pinPostCount, pageSize]: [number, number] = await Promise.all([
+    const [pinPostCount, pageSize] = await Promise.all([
       this.countPost(countPostDto),
       this.blogConfigRepository.getPageSize(),
     ]);

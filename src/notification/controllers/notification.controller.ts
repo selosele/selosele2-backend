@@ -33,11 +33,11 @@ export class NotificationController {
   async listNotification(
     @Query(ValidationPipe) listNotificationDto: ListNotificationDto
   ): Promise<[NotificationDto[], number]> {
-    const notifications: [NotificationEntity[], number] = await this.notificationService.listNotification(listNotificationDto);
+    const [notifications, notificationCount] = await this.notificationService.listNotification(listNotificationDto);
 
     return [
-      serialize<NotificationDto[]>(notifications[0]),
-      notifications[1],
+      serialize<NotificationDto[]>(notifications),
+      notificationCount,
     ];
   }
 

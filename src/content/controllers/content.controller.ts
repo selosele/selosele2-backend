@@ -35,11 +35,11 @@ export class ContentController {
   async listContent(
     @Query(ValidationPipe) listContentDto: ListContentDto
   ): Promise<[ContentDto[], number]> {
-    const contents: [ContentEntity[], number] = await this.contentService.listContent(listContentDto);
+    const [contents, contentCount] = await this.contentService.listContent(listContentDto);
 
     return [
-      serialize<ContentDto[]>(contents[0]),
-      contents[1],
+      serialize<ContentDto[]>(contents),
+      contentCount,
     ];
   }
 

@@ -8,7 +8,7 @@ import { PaginationDto } from '@/shared/models';
 import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } from '@/shared/utils';
 import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, PostDto, SavePostDto } from '../models';
 import { PostService } from '../services/post.service';
-import { IndexSearchEntity, ListIndexSearchDto } from '@/index-search/models';
+import { IndexSearchEntity } from '@/index-search/models';
 import { globalCodes } from '@/shared/codes/code';
 import { Express } from 'express';
 import { Multer } from 'multer';
@@ -90,11 +90,11 @@ export class PostController {
     // 비밀 포스트 조회를 위한 세팅
     searchPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
-    const posts: [ListIndexSearchDto[], number] = await this.postService.listPostSearch(searchPostDto, paginationDto);
+    const [posts, postCount] = await this.postService.listPostSearch(searchPostDto, paginationDto);
     
     return [
-      serialize<PostDto[]>(posts[0]),
-      posts[1],
+      serialize<PostDto[]>(posts),
+      postCount,
     ];
   }
 
@@ -145,11 +145,11 @@ export class PostController {
     listPostDto.year = year;
     listPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
-    const posts: [IndexSearchEntity[], number] = await this.postService.listPostByYear(listPostDto, paginationDto);
+    const [posts, postCount] = await this.postService.listPostByYear(listPostDto, paginationDto);
 
     return [
-      serialize<PostDto[]>(posts[0]),
-      posts[1],
+      serialize<PostDto[]>(posts),
+      postCount,
     ];
   }
 
@@ -180,11 +180,11 @@ export class PostController {
     listPostDto.categoryId = categoryId;
     listPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
-    const posts: [PostEntity[], number] = await this.postService.listPostByCategory(listPostDto, paginationDto);
+    const [posts, postCount] = await this.postService.listPostByCategory(listPostDto, paginationDto);
 
     return [
-      serialize<PostDto[]>(posts[0]),
-      posts[1],
+      serialize<PostDto[]>(posts),
+      postCount,
     ];
   }
 
@@ -215,11 +215,11 @@ export class PostController {
     listPostDto.tagId = tagId;
     listPostDto.isLogin = isAuthenticated ? 'Y' : 'N';
 
-    const posts: [PostEntity[], number] = await this.postService.listPostByTag(listPostDto, paginationDto);
+    const [posts, postCount] = await this.postService.listPostByTag(listPostDto, paginationDto);
 
     return [
-      serialize<PostDto[]>(posts[0]),
-      posts[1],
+      serialize<PostDto[]>(posts),
+      postCount,
     ];
   }
 

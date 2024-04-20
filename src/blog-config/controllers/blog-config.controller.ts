@@ -46,11 +46,11 @@ export class BlogConfigController {
     }
 
     // 없으면 전체 목록을 조회한다.
-    const blogConfigs: [BlogConfigEntity[], number] = await this.blogConfigService.listBlogConfig();
+    const [blogConfigs, blogConfigCount] = await this.blogConfigService.listBlogConfig();
     
     return [
-      serialize<BlogConfigDto[]>(blogConfigs[0]),
-      blogConfigs[1],
+      serialize<BlogConfigDto[]>(blogConfigs),
+      blogConfigCount,
     ];
   }
 

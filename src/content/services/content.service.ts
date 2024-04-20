@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FileUploaderService } from '@/file-uploader/services/file-uploader.service';
 import { MenuRepository } from '@/menu/repositories/menu.repository';
-import { escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotFileEmpty, md, santinizeHtmlOption } from '@/shared/utils';
+import { getRawText, isBlank, isEmpty, isNotBlank, isNotFileEmpty, md } from '@/shared/utils';
 import { DataSource, DeleteResult, EntityManager } from 'typeorm';
 import { RemoveContentDto, GetContentDto, ContentEntity, SaveContentDto, ListContentDto } from '../models';
 import { ContentRepository } from '../repositories/content.repository';
@@ -22,9 +22,9 @@ export class ContentService {
 
   /** 콘텐츠 목록을 조회한다. */
   async listContent(listContentDto?: ListContentDto): Promise<[ContentEntity[], number]> {
-    const contentList: [ContentEntity[], number] = await this.contentRepository.listContent(listContentDto);
+    const [contents, contentCount] = await this.contentRepository.listContent(listContentDto);
 
-    contentList[0].forEach(c => {
+    contents.forEach(c => {
 
       // 콘텐츠 데이터에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       c.rawText = getRawText(c.cont);
@@ -33,7 +33,7 @@ export class ContentService {
       c.cont = md.render(c.cont);
     });
 
-    return contentList;
+    return [contents, contentCount];
   }
 
   /** 콘텐츠를 조회한다. */
