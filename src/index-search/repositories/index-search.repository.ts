@@ -1,14 +1,13 @@
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { Brackets, DeleteResult, InsertResult, Repository } from 'typeorm';
-import { IndexSearchEntity, SaveIndexSearchDto, searchCodes } from '../models';
+import { IndexSearchEntity, ListIndexSearchDto, SaveIndexSearchDto, searchCodes } from '../models';
 import { ListPostDto, SearchPostDto } from '@/post/models';
 import { PaginationDto } from '@/shared/models';
-import { isNotBlank } from '@/shared/utils';
 
 @CustomRepository(IndexSearchEntity)
 export class IndexSearchRepository extends Repository<IndexSearchEntity> {
 
-  /** 검색 데이터 포스트 목록을 조회한다. */
+  /** 검색 색인 데이터 포스트 목록을 조회한다. */
   async listPost(
     searchPostDto: SearchPostDto,
     paginationDto: PaginationDto,
@@ -102,27 +101,33 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
     ]);
   }
 
-  /** 검색 데이터 목록을 조회한다. */
-  async listIndexSearch(typeCd: string) {
+  /** 검색 색인 데이터 목록을 조회한다. */
+  async listIndexSearch(listIndexSearchDto: ListIndexSearchDto): Promise<[IndexSearchEntity[], number]> {
     return await this.findAndCount({
-      ...(isNotBlank(typeCd) && {
-        where: { typeCd },
-      }),
-      order: {
-        id: 'ASC',
+      where: {
+        typeCd: listIndexSearchDto.typeCd,
+        secretYn: listIndexSearchDto.secretYn,
       },
+      order: {
+        ...('Y' === listIndexSearchDto.recommendYn && {
+          replyCnt: 'DESC',
+          likeCnt: 'DESC',
+        }),
+      },
+      take: listIndexSearchDto.take,
     });
   }
 
-  /** 검색 데이터 포스트의 연도 및 개수를 조회한다. */
+  /** 검색 색인 데이터 포스트의 연도 및 개수를 조회한다. */
   async listYearAndCount(listPostDto: ListPostDto): Promise<IndexSearchEntity[]> {
     let query = this.createQueryBuilder('indexSearch')
       .select("cnnc_reg_year", "year")
         .addSelect("COUNT('cnnc_reg_year')", "count")
+      .where("indexSearch.type_cd = :type_cd", { type_cd: searchCodes.INDEX_SEARCH_POST.id });
 
     if ('N' === listPostDto?.isLogin) {
       query = query
-        .where("secret_yn = 'N'");
+        .andWhere("secret_yn = 'N'");
     }
 
     query = query
@@ -132,7 +137,7 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
     return await query.getRawMany();
   }
 
-  /** 연도별 검색 데이터 포스트 목록을 조회한다. */
+  /** 연도별 검색 색인 데이터 포스트 목록을 조회한다. */
   async listPostByYear(
     listPostDto: ListPostDto,
     paginationDto: PaginationDto
@@ -141,7 +146,8 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
       .select("cnnc_id", "id")
         .addSelect("title")
         .addSelect("cnnc_reg_date", "regDate")
-      .where("cnnc_reg_year = :year", { year: listPostDto?.year })
+      .where("indexSearch.type_cd = :type_cd", { type_cd: searchCodes.INDEX_SEARCH_POST.id })
+      .andWhere("cnnc_reg_year = :year", { year: listPostDto?.year });
 
       if ('N' === listPostDto?.isLogin) {
         query = query
@@ -159,12 +165,12 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
     ]);
   }
 
-  /** 검색 데이터를 등록한다. */
+  /** 검색 색인 데이터를 등록한다. */
   async addIndexSearch(saveIndexSearchDto: SaveIndexSearchDto): Promise<InsertResult> {
     return await this.insert(saveIndexSearchDto);
   }
 
-  /** 모든 검색 데이터를 삭제한다. */
+  /** 모든 검색 색인 데이터를 삭제한다. */
   async removeIndexSearchAll(): Promise<DeleteResult> {
     return await this.createQueryBuilder('indexSearch')
       .delete()
