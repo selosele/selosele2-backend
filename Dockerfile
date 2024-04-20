@@ -8,8 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # 의존성 설치
-RUN npm install -g @nestjs/cli \
-    npm install --production
+RUN npm install --production
 
 # 소스 코드 복사
 COPY . .
