@@ -60,12 +60,11 @@ export class ProgramLogInterceptor implements NestInterceptor {
 
     // logData.programDetail = programDetail;
 
-    this.logger.warn(logData);
-
-    // TODO: 프로그램 사용 로그 저장 로직 구현
-    // 운영 환경에서만 프로그램 사용 로그를 저장한다.
     if (isProd(this.env.get<string>('NODE_ENV'))) {
-      
+      this.logger.warn(logData);
+
+      // TODO: 프로그램 사용 로그 저장 로직 구현
+      // 운영 환경에서만 프로그램 사용 로그를 저장한다.
     }
 
     return next.handle();
