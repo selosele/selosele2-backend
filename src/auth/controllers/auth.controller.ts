@@ -1,5 +1,5 @@
-import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Param, ParseIntPipe, Logger, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Controller, Post, Body, ValidationPipe, NotFoundException, Get, Logger, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AccessTokenUser, Auth, Ip, RefreshTokenUser } from '@/shared/decorators';
 import { Response } from 'express';
@@ -20,28 +20,6 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly cacheDBService: CacheDBService,
   ) {}
-
-  @Get('user/:userSn')
-  @ApiOperation({
-    summary: '사용자 조회 API',
-    description: '사용자를 조회한다.',
-  })
-  @ApiCreatedResponse({
-    type: UserDto,
-    description: '사용자 DTO',
-  })
-  @ApiParam({
-    type: Number,
-    name: 'userSn',
-    description: '사용자 일련번호',
-  })
-  async getUser(
-    @Param('userSn', ParseIntPipe) userSn: number
-  ): Promise<UserDto> {
-    const user: UserEntity = await this.authService.getUser(userSn);
-
-    return serialize<UserDto>(user);
-  }
 
   @Post('user')
   @ApiOperation({
