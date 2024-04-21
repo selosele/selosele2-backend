@@ -28,8 +28,5 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/secrets ./secrets
 
-# 환경 변수 설정 (옵션)
-# ENV NODE_ENV production
-
 # 앱 실행
 CMD ["node", "./dist/main.js"]
