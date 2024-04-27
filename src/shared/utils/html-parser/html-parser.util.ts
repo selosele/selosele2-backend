@@ -4,16 +4,16 @@ import { isBlank } from '../common/common.util';
 export function getRawText(str: string): string {
   if (isBlank(str)) return '';
 
-  str = str.replace(/##/g, '')                       // h2
-           .replace(/###/g, '')                      // h3
-           .replace(/####/g, '')                     // h4
-           .replace(/#####/g, '')                    // h5
-           .replace(/######/g, '')                   // h6
-           .replace(/\**/g, '')                      // 볼드체
-           .replace(/```/g, '')                      // 코드 하이라이트
-           .replace(/{\.language-.+?}/g, '')         // 코드 하이라이트 클래스
-           .replace(/!\[.+?\]\(.+?\)/g, '')          // 이미지
-           .replace(/\[(.*?)\]\((.*?)\)/g, '$1');    // 링크
+  str = str.replace(/##/g, '').trim()                       // h2
+           .replace(/###/g, '').trim()                      // h3
+           .replace(/####/g, '').trim()                     // h4
+           .replace(/#####/g, '').trim()                    // h5
+           .replace(/######/g, '').trim()                   // h6
+           .replace(/\**/g, '').trim()                      // 볼드체
+           .replace(/```/g, '').trim()                      // 코드 하이라이트
+           .replace(/{\.language-.+?}/g, '').trim()         // 코드 하이라이트 클래스
+           .replace(/!\[(.*?)\]\((.*?)\)/g, '').trim()      // 이미지
+           .replace(/\[(.*?)\]\((.*?)\)/g, '$1').trim();    // 링크
 
-  return str.trim();
+  return str;
 }
