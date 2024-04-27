@@ -28,17 +28,7 @@
 
 ## 운영환경 구동 절차
 
-### Docker 컨테이너 실행
-
-1. `docker-compose up -d`
-
-### Ubuntu에서 백엔드 직접 구동
-
-1. `npm start`
-    - PM2로 백그라운드 실행하며, Node.js 16.14.2 버전의 인터프리터로 애플리케이션을 실행하도록 설정함
-      - `nvm use` 명령 실행 필요하지 않음
-    - 환경변수 변경 시, `pm2 reload main --update-env` 명령 실행 (새 환경변수 값으로 애플리케이션을 재시작)
-    - 운영환경 로그 출력 명령: `pm2 logs main`
+1. `docker-compose up -d` (Docker 컨테이너 실행)
 
 ## etc.
 
