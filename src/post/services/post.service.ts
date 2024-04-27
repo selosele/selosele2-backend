@@ -60,7 +60,7 @@ export class PostService {
     postDtos.forEach(p => {
 
       // 포스트 데이터에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
-      p.rawText = getRawText(p.cont);
+      p.rawText = getRawText(p.cont).substring(0, 180);
 
       // 포스트 데이터에 카테고리 데이터를 넣어준다.
       p.postCategory = postCategory.filter(d => d.postId === p.id);
