@@ -1,5 +1,5 @@
 # 기본 이미지로 Node.js 16.14.2 사용
-FROM node:16.14.2 as build
+FROM node:16.14.2 AS build
 
 # 작업 디렉토리 설정
 WORKDIR /app
