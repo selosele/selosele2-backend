@@ -2,7 +2,7 @@ import { Type } from 'class-transformer';
 import { IsOptional, IsString } from 'class-validator';
 
 /** 만족도조사 검색 DTO */
-export class SearchSatisfactiontDto {
+export class SearchSatisfactionDto {
   
   /** 오늘 날짜 조회 여부 */
   @IsOptional()

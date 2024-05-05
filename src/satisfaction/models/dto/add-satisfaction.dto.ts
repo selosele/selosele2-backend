@@ -1,7 +1,7 @@
 import { IsEmpty, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
 /** 만족도조사 참여 DTO */
-export class AddSatisfactiontDto {
+export class AddSatisfactionDto {
 
   /** 페이지 URL */
   @IsNotEmpty()

@@ -1,6 +1,6 @@
 import { Body, Query, Controller, Post, Get, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity, SatisfactionDto } from '../models';
+import { AddSatisfactionDto, SearchSatisfactionDto, SatisfactionEntity, SatisfactionDto } from '../models';
 import { SatisfactionService } from '../services/satisfaction.service';
 import { Auth, Ip, IsAuthenticated } from '@/shared/decorators';
 import { Roles } from '@/auth/models';
@@ -26,14 +26,14 @@ export class SatisfactionController {
     description: '만족도조사 DTO 목록',
   })
   @ApiQuery({
-    type: SearchSatisfactiontDto,
-    name: 'searchSatisfactiontDto',
+    type: SearchSatisfactionDto,
+    name: 'searchSatisfactionDto',
     description: '만족도조사 검색 DTO',
   })
   async listSatisfaction(
-    @Query(ValidationPipe) searchSatisfactiontDto: SearchSatisfactiontDto
+    @Query(ValidationPipe) searchSatisfactionDto: SearchSatisfactionDto
   ): Promise<SatisfactionDto[]> {
-    const satisfactions: SatisfactionEntity[] = await this.satisfactionService.listSatisfaction(searchSatisfactiontDto);
+    const satisfactions: SatisfactionEntity[] = await this.satisfactionService.listSatisfaction(searchSatisfactionDto);
 
     return serialize<SatisfactionDto[]>(satisfactions);
   }
@@ -48,21 +48,21 @@ export class SatisfactionController {
     description: '만족도조사 DTO',
   })
   @ApiBody({
-    type: AddSatisfactiontDto,
+    type: AddSatisfactionDto,
     description: '만족도조사 참여 DTO',
   })
   async addSatisfaction(
     @Ip() ip: string,
-    @Body(ValidationPipe) addSatisfactiontDto: AddSatisfactiontDto,
+    @Body(ValidationPipe) addSatisfactionDto: AddSatisfactionDto,
     @IsAuthenticated() isAuthenticated: boolean
   ): Promise<SatisfactionDto> {
     if (isAuthenticated) {
       throw new BizException('관리자는 참여할 수 없습니다.');
     }
 
-    addSatisfactiontDto.ip = ip;
+    addSatisfactionDto.ip = ip;
 
-    const satisfaction: SatisfactionEntity = await this.satisfactionService.addSatisfaction(addSatisfactiontDto);
+    const satisfaction: SatisfactionEntity = await this.satisfactionService.addSatisfaction(addSatisfactionDto);
     
     return serialize<SatisfactionDto>(satisfaction);
   }

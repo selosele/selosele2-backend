@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, EntityManager } from 'typeorm';
-import { AddSatisfactiontDto, SearchSatisfactiontDto, SatisfactionEntity } from '../models';
+import { AddSatisfactionDto, SearchSatisfactionDto, SatisfactionEntity } from '../models';
 import { SatisfactionRepository } from '../repositories/satisfaction.repository';
 import { BizException } from '@/shared/exceptions/biz/biz-exception';
 import { escapeHtml } from '@/shared/utils';
@@ -29,28 +29,28 @@ export class SatisfactionService {
   ) {}
 
   /** 만족도조사에 참여한다. */
-  async addSatisfaction(addSatisfactiontDto: AddSatisfactiontDto): Promise<SatisfactionEntity> {
-    const foundCount: number = await this.countSatisfaction(addSatisfactiontDto);
+  async addSatisfaction(addSatisfactionDto: AddSatisfactionDto): Promise<SatisfactionEntity> {
+    const foundCount: number = await this.countSatisfaction(addSatisfactionDto);
     if (0 < foundCount) {
       throw new BizException('페이지별 하루에 한 번 참여할 수 있습니다.');
     }
 
     // HTML Escape
-    addSatisfactiontDto.comment = escapeHtml(addSatisfactiontDto.comment);
+    addSatisfactionDto.comment = escapeHtml(addSatisfactionDto.comment);
 
     // 트랜잭션을 시작한다.
     const result = await this.dataSource.transaction<SatisfactionEntity>(async (em: EntityManager) => {
 
       // 1. 만족도조사를 등록한다.
-      const satisfaction: SatisfactionEntity = await em.withRepository(this.satisfactionRepository).addSatisfaction(addSatisfactiontDto);
+      const satisfaction: SatisfactionEntity = await em.withRepository(this.satisfactionRepository).addSatisfaction(addSatisfactionDto);
 
       // 2. 알림을 등록한다.
       const addNotificationDto: AddNotificationDto = {};
       addNotificationDto.cnncId = satisfaction.id;
       addNotificationDto.typeCd = notificationCodes.SATISFACTION.id;
-      addNotificationDto.link = addSatisfactiontDto.pagePath;
-      addNotificationDto.senderIp = addSatisfactiontDto.ip;
-      addNotificationDto.title = addSatisfactiontDto.pageTitle;
+      addNotificationDto.link = addSatisfactionDto.pagePath;
+      addNotificationDto.senderIp = addSatisfactionDto.ip;
+      addNotificationDto.title = addSatisfactionDto.pageTitle;
 
       await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
 
@@ -63,8 +63,8 @@ export class SatisfactionService {
       //   await lastValueFrom(this.http.post('https://kauth.kakao.com/oauth/token'));
 
       //   // 5. 카카오톡 메시지를 전송한다.
-      //   const text = `${addSatisfactiontDto.pageTitle} 페이지에 만족도 평가가 등록되었습니다.`;
-      //   const url = `${this.env.get<string>('PAGE_ORIGIN')}${addSatisfactiontDto.pagePath}`;
+      //   const text = `${addSatisfactionDto.pageTitle} 페이지에 만족도 평가가 등록되었습니다.`;
+      //   const url = `${this.env.get<string>('PAGE_ORIGIN')}${addSatisfactionDto.pagePath}`;
       //   const headers = kakaoUtil.getSendMessageHeaders('token');
       //   const body = kakaoUtil.getSendMessageBody(text, url);
 
@@ -86,13 +86,13 @@ export class SatisfactionService {
   }
 
   /** 만족도조사 참여 여부를 조회한다. */
-  async countSatisfaction(addSatisfactiontDto: AddSatisfactiontDto): Promise<number> {
-    return await this.satisfactionRepository.countSatisfaction(addSatisfactiontDto);
+  async countSatisfaction(addSatisfactionDto: AddSatisfactionDto): Promise<number> {
+    return await this.satisfactionRepository.countSatisfaction(addSatisfactionDto);
   }
 
   /** 만족도조사 목록을 조회한다. */
-  async listSatisfaction(searchSatisfactiontDto: SearchSatisfactiontDto): Promise<SatisfactionEntity[]> {
-    return await this.satisfactionRepository.listSatisfaction(searchSatisfactiontDto);
+  async listSatisfaction(searchSatisfactionDto: SearchSatisfactionDto): Promise<SatisfactionEntity[]> {
+    return await this.satisfactionRepository.listSatisfaction(searchSatisfactionDto);
   }
 
 }
