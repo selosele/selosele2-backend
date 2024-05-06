@@ -124,7 +124,7 @@ export class PostReplyController {
   })
   @ApiCreatedResponse({
     type: Number,
-    description: '삭제된 포스트 댓글을 복구 정보',
+    description: '삭제된 포스트 댓글 복구 정보',
   })
   @ApiParam({
     type: Number,
