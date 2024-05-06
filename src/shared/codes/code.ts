@@ -15,7 +15,7 @@ export const globalCodes = {
   CRUD_UPDATE:    { id: 'E01003', prefix: 'E01', val: '003', nm: '수정', desc: 'CRUD 유형', useYn: 'Y' },
   CRUD_DELETE:    { id: 'E01004', prefix: 'E01', val: '004', nm: '삭제', desc: 'CRUD 유형', useYn: 'Y' },
 
-  NICKNAME:       { id: 'F01001', prefix: 'F01', val: '001', nm: '관리자', desc: '닉네임', useYn: 'Y' },
+  NICKNAME:       { id: 'F01001', prefix: 'F01', val: '001', nm: '주인장', desc: '닉네임', useYn: 'Y' },
   
   RESPONSE_OK:    { id: 'G01001', prefix: 'G01', val: '001', nm: 'OK', desc: '응답 상태 코드', useYn: 'Y' },
   RESPONSE_NO:    { id: 'G01002', prefix: 'G01', val: '002', nm: 'NO', desc: '응답 상태 코드', useYn: 'Y' },
