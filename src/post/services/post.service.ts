@@ -61,6 +61,7 @@ export class PostService {
 
       // 포스트 데이터에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       p.rawText = getRawText(p.cont).substring(0, 180);
+      delete p.cont;
 
       // 포스트 데이터에 카테고리 데이터를 넣어준다.
       p.postCategory = postCategory.filter(d => d.postId === p.id);
@@ -81,6 +82,7 @@ export class PostService {
 
       // 포스트의 콘텐츠를 Markdown으로 렌더링한다.
       p.cont = md.render(p.cont);
+      delete p.cont;
     });
 
     return [postDtos, postCount];
@@ -106,6 +108,7 @@ export class PostService {
     post[0].forEach(p => {
       // 포스트 데이터에 Markdown -> 순수 텍스트로 파싱한 결과물을 넣어준다.
       p.rawText = getRawText(p.cont);
+      delete p.cont;
 
       // 포스트 데이터에 카테고리 데이터를 넣어준다.
       p.postCategory = postCategory.filter(d => d.postId === p.id);
