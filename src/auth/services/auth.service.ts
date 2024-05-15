@@ -47,9 +47,11 @@ export class AuthService {
 
     // 트랜잭션을 시작한다.
     await this.dataSource.transaction<void>(async (em: EntityManager) => {
+      const userRepository = em.withRepository(this.userRepository);
+      const userRoleRepository = em.withRepository(this.userRoleRepository);
 
       // 1. 사용자를 생성한다.
-      const user: UserEntity = await em.withRepository(this.userRepository).addUser(authCredentialsDto);
+      const user: UserEntity = await userRepository.addUser(authCredentialsDto);
       const roles: string[] = [Roles.ROLE_ANONYMOUS, Roles.ROLE_ADMIN];
         
       for (const role of roles) {
@@ -60,7 +62,7 @@ export class AuthService {
         addUserRoleDto.userId = userId;
         addUserRoleDto.roleId = role;
 
-        await em.withRepository(this.userRoleRepository).addUserRole(addUserRoleDto);
+        await userRoleRepository.addUserRole(addUserRoleDto);
       }
     });
   }

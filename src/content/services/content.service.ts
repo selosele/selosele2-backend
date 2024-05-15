@@ -88,9 +88,11 @@ export class ContentService {
 
     // 트랜잭션을 시작한다.
     const result = await this.dataSource.transaction<ContentEntity>(async (em: EntityManager) => {
+      const contentRepository = em.withRepository(this.contentRepository);
+      const menuRepository = em.withRepository(this.menuRepository);
 
       // 1. 콘텐츠를 저장한다.
-      const content: ContentEntity = await em.withRepository(this.contentRepository).saveContent(saveContentDto);
+      const content: ContentEntity = await contentRepository.saveContent(saveContentDto);
 
       // 2. 연결메뉴명을 수정한다.
       if ('Y' === updateMenuNameYn) {
@@ -98,7 +100,7 @@ export class ContentService {
         updateContentMenuDto.link = `/content${saveContentDto.link}`;
         updateContentMenuDto.name = saveContentDto.title;
         
-        await em.withRepository(this.menuRepository).updateContentMenu(updateContentMenuDto);
+        await menuRepository.updateContentMenu(updateContentMenuDto);
       }
       return content;
     });

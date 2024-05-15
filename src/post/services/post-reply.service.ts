@@ -90,15 +90,18 @@ export class PostReplyService {
 
       // 트랜잭션을 시작한다.
       result = await this.dataSource.transaction<PostReplyEntity>(async (em: EntityManager) => {
+        const postReplyRepository = em.withRepository(this.postReplyRepository);
+        const postRepository = em.withRepository(this.postRepository);
+        const notificationRepository = em.withRepository(this.notificationRepository);
 
         // 1. 댓글을 등록한다
-        const postReply: PostReplyEntity = await em.withRepository(this.postReplyRepository).savePostReply(savePostReplyDto);
+        const postReply: PostReplyEntity = await postReplyRepository.savePostReply(savePostReplyDto);
 
         // 2. 포스트 댓글의 그룹을 수정한다.
         if (isEmpty(group)) {
 
           // 1 depth 댓글은 등록한 댓글의 ID 값을 group 값에 넣어주고, 2 depth 댓글은 상위 댓글의 ID 값을 group 값에 넣어준다.
-          await em.withRepository(this.postReplyRepository).updatePostReplyGroup(postReply.id);
+          await postReplyRepository.updatePostReplyGroup(postReply.id);
         }
 
         if (isNotEmpty(parentReplyId)) {
@@ -108,18 +111,18 @@ export class PostReplyService {
           getPostReplyDto.id = postReply.id;
           getPostReplyDto.group = parentReplyId;
 
-          const lastPostReply: PostReplyEntity = await em.withRepository(this.postReplyRepository).getLastPostReply(getPostReplyDto);
+          const lastPostReply: PostReplyEntity = await postReplyRepository.getLastPostReply(getPostReplyDto);
 
           // 4. 포스트 댓글의 순서를 수정한다.
           const updatePostReplySortDto: UpdatePostReplySortDto = {};
           updatePostReplySortDto.id = postReply.id;
           updatePostReplySortDto.sort = lastPostReply.sort + 1;
 
-          await em.withRepository(this.postReplyRepository).updatePostReplySort(updatePostReplySortDto);
+          await postReplyRepository.updatePostReplySort(updatePostReplySortDto);
         }
   
         // 5. 댓글 개수를 조회한다.
-        const postReplyCount: number = await em.withRepository(this.postReplyRepository).countPostReply(postReply.parentId);
+        const postReplyCount: number = await postReplyRepository.countPostReply(postReply.parentId);
         
         // 6. 상위 포스트의 댓글 개수 컬럼을 수정한다.
         const savePostDto: SavePostDto = {};
@@ -127,7 +130,7 @@ export class PostReplyService {
         savePostDto.replyCnt = postReplyCount;
         savePostDto.modDate = parentPost.modDate;
 
-        await em.withRepository(this.postRepository).updatePostReplyCnt(savePostDto);
+        await postRepository.updatePostReplyCnt(savePostDto);
 
         // 7. 알림을 등록한다.
         if ('N' === savePostReplyDto.isLogin) {
@@ -139,7 +142,7 @@ export class PostReplyService {
           addNotificationDto.senderNm = savePostReplyDto.author;
           addNotificationDto.title = savePostReplyDto.title;
 
-          await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
+          await notificationRepository.addNotification(addNotificationDto);
         }
         return postReply;
       });
@@ -196,13 +199,15 @@ export class PostReplyService {
 
     // 트랜잭션을 시작한다.
     const result = await this.dataSource.transaction<PostReplyEntity>(async (em: EntityManager) => {
+      const postReplyRepository = em.withRepository(this.postReplyRepository);
+      const postRepository = em.withRepository(this.postRepository);
 
       // 1. 댓글을 삭제한다.
       savePostReplyDto.delYn = 'Y';
-      const postReply: PostReplyEntity = await em.withRepository(this.postReplyRepository).savePostReply(savePostReplyDto);
+      const postReply: PostReplyEntity = await postReplyRepository.savePostReply(savePostReplyDto);
 
       // 2. 댓글 개수를 조회한다.
-      const postReplyCount: number = await em.withRepository(this.postReplyRepository).countPostReply(postReply.parentId);
+      const postReplyCount: number = await postReplyRepository.countPostReply(postReply.parentId);
       
       // 3. 상위 포스트의 댓글 개수 컬럼을 수정한다.
       const savePostDto: SavePostDto = {};
@@ -210,7 +215,7 @@ export class PostReplyService {
       savePostDto.replyCnt = postReplyCount;
       savePostDto.modDate = parentPost.modDate;
 
-      await em.withRepository(this.postRepository).updatePostReplyCnt(savePostDto);
+      await postRepository.updatePostReplyCnt(savePostDto);
       return postReply;
     });
 
@@ -232,18 +237,20 @@ export class PostReplyService {
 
     // 트랜잭션을 시작한다.
     const result = await this.dataSource.transaction<UpdateResult>(async (em: EntityManager) => {
+      const postReplyRepository = em.withRepository(this.postReplyRepository);
+      const postRepository = em.withRepository(this.postRepository);
 
       // 1. 포스트 댓글의 삭제 여부 값을 N으로 변경한다.
-      const updateRes: UpdateResult = await em.withRepository(this.postReplyRepository).updatePostReplyDelYn(savePostReplyDto);
+      const updateRes: UpdateResult = await postReplyRepository.updatePostReplyDelYn(savePostReplyDto);
 
       // 2. 상위 포스트를 조회한다.
       const getPostDto: GetPostDto = {};
       getPostDto.id = savePostReplyDto.parentId;
 
-      const parentPost: PostEntity = await em.withRepository(this.postRepository).getPost(getPostDto);
+      const parentPost: PostEntity = await postRepository.getPost(getPostDto);
 
       // 3. 댓글 개수를 조회한다.
-      const postReplyCount: number = await em.withRepository(this.postReplyRepository).countPostReply(savePostReplyDto.parentId);
+      const postReplyCount: number = await postReplyRepository.countPostReply(savePostReplyDto.parentId);
 
       // 4. 상위 포스트의 댓글 개수 컬럼을 수정한다.
       const savePostDto: SavePostDto = {};
@@ -251,7 +258,7 @@ export class PostReplyService {
       savePostDto.replyCnt = postReplyCount;
       savePostDto.modDate = parentPost.modDate;
 
-      await em.withRepository(this.postRepository).updatePostReplyCnt(savePostDto);
+      await postRepository.updatePostReplyCnt(savePostDto);
       return updateRes;
     });
 

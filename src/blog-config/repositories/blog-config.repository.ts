@@ -45,13 +45,13 @@ export class BlogConfigRepository extends Repository<BlogConfigEntity> {
 
   /** 블로그 환경설정 사용 여부를 수정한다. */
   async updateBlogConfigUseYn(updateBlogConfigUseYnDto: UpdateBlogConfigUseYnDto): Promise<BlogConfigEntity> {
-    let result: BlogConfigEntity;
 
     // 트랜잭션을 시작한다.
-    await this.manager.transaction<void>(async (em: EntityManager) => {
+    const result = await this.manager.transaction<BlogConfigEntity>(async (em: EntityManager) => {
+      const blogConfigRepository = em.withRepository(this);
 
       // 1. 사용 처리 데이터를 제외한 모든 데이터를 미사용으로 변경한다.
-      await em.withRepository(this).createQueryBuilder('blogConfig')
+      await blogConfigRepository.createQueryBuilder('blogConfig')
         .update()
         .set({
           useYn: 'N'
@@ -60,12 +60,12 @@ export class BlogConfigRepository extends Repository<BlogConfigEntity> {
         .execute();
   
       // 2. 사용 처리 데이터를 사용으로 변경한다.
-      await em.withRepository(this).update(updateBlogConfigUseYnDto.id, {
+      await blogConfigRepository.update(updateBlogConfigUseYnDto.id, {
         useYn: updateBlogConfigUseYnDto.useYn
       });
   
-      // 3. 사용으로 변경된 데이터를 조회한다.
-      result = await em.withRepository(this).findOne({
+      // 3. 사용으로 변경된 데이터를 조회해서 반환한다.
+      return await blogConfigRepository.findOne({
         where: { id: updateBlogConfigUseYnDto.id }
       });
     });

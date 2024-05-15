@@ -45,16 +45,19 @@ export class IndexSearchService {
 
     // 트랜잭션을 시작한다.
     const result = await this.dataSource.transaction<InsertResult>(async (em: EntityManager) => {
+      const indexSearchRepository = em.withRepository(this.indexSearchRepository);
+      const indexSearchLogRepository = em.withRepository(this.indexSearchLogRepository);
+      const postRepository = em.withRepository(this.postRepository);
 
       // 1. 모든 검색 색인 데이터를 삭제한다.
-      const deleteRes = await em.withRepository(this.indexSearchRepository).removeIndexSearchAll();
+      const deleteRes = await indexSearchRepository.removeIndexSearchAll();
       this.logger.warn(`1. 모든 검색 색인 데이터 삭제: ${deleteRes.affected}건 삭제됨`);
 
       const listPostDto: ListPostDto = {};
       listPostDto.tmpYn = 'N';
 
       // 2. 모든 포스트 목록을 조회한다.
-      const [posts, postCount] = await em.withRepository(this.postRepository).listPost(listPostDto);
+      const [posts, postCount] = await postRepository.listPost(listPostDto);
       this.logger.warn(`2. 포스트 총 ${postCount}건 조회됨`);
       
       for (let i = 0; i < posts.length; i++) {
@@ -91,7 +94,7 @@ export class IndexSearchService {
         saveIndexSearchDto.typeCd = searchCodes.INDEX_SEARCH_POST.id;
 
         // 3. 검색 색인 데이터를 저장한다.
-        const insertRes = await em.withRepository(this.indexSearchRepository).addIndexSearch(saveIndexSearchDto);
+        const insertRes = await indexSearchRepository.addIndexSearch(saveIndexSearchDto);
         insertPostTotal += insertRes.raw.length;
       }
       
@@ -105,7 +108,7 @@ export class IndexSearchService {
       listIndexSearchDto.typeCd = searchCodes.INDEX_SEARCH_POST.id;
       
       // 4. 포스트 색인 데이터를 조회한다.
-      const [_, indexPostCount] = await em.withRepository(this.indexSearchRepository).listIndexSearch(listIndexSearchDto);
+      const [_, indexPostCount] = await indexSearchRepository.listIndexSearch(listIndexSearchDto);
 
       const addIndexSearchLogDto: AddIndexSearchLogDto = {};
       addIndexSearchLogDto.typeCd = searchCodes.INDEX_SEARCH_POST.id;
@@ -115,7 +118,7 @@ export class IndexSearchService {
       addIndexSearchLogDto.endDate = new Date(endTime);
 
       // 5. 포스트 색인 데이터 로그를 저장하고 결과 값을 반환한다.
-      return await em.withRepository(this.indexSearchLogRepository).addIndexSearchLog(addIndexSearchLogDto);
+      return await indexSearchLogRepository.addIndexSearchLog(addIndexSearchLogDto);
     });
 
     if (0 < result?.raw.length) {

@@ -40,9 +40,12 @@ export class SatisfactionService {
 
     // 트랜잭션을 시작한다.
     const result = await this.dataSource.transaction<SatisfactionEntity>(async (em: EntityManager) => {
+      const satisfactionRepository = em.withRepository(this.satisfactionRepository);
+      const notificationRepository = em.withRepository(this.notificationRepository);
+      //const blogConfigRepository = em.withRepository(this.blogConfigRepository);
 
       // 1. 만족도조사를 등록한다.
-      const satisfaction: SatisfactionEntity = await em.withRepository(this.satisfactionRepository).addSatisfaction(addSatisfactionDto);
+      const satisfaction: SatisfactionEntity = await satisfactionRepository.addSatisfaction(addSatisfactionDto);
 
       // 2. 알림을 등록한다.
       const addNotificationDto: AddNotificationDto = {};
@@ -52,10 +55,10 @@ export class SatisfactionService {
       addNotificationDto.senderIp = addSatisfactionDto.ip;
       addNotificationDto.title = addSatisfactionDto.pageTitle;
 
-      await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
+      await notificationRepository.addNotification(addNotificationDto);
 
       // 3. 블로그 환경설정의 카카오톡 메시지 수신 여부를 조회한다.
-      // const kakaoMsgYn: string = await em.withRepository(this.blogConfigRepository).getKakaoMsgYn();
+      // const kakaoMsgYn: string = await blogConfigRepository.getKakaoMsgYn();
 
       // if ('Y' === kakaoMsgYn) {
 

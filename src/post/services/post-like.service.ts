@@ -38,9 +38,11 @@ export class PostLikeService {
 
       // 트랜잭션을 시작한다.
       await this.dataSource.transaction<void>(async (em: EntityManager) => {
+        const postLikeRepository = em.withRepository(this.postLikeRepository);
+        const notificationRepository = em.withRepository(this.notificationRepository);
 
         // 1. 추천을 등록한다.
-        const postLike: PostLikeEntity = await em.withRepository(this.postLikeRepository).addPostLike(savePostLikeDto);
+        const postLike: PostLikeEntity = await postLikeRepository.addPostLike(savePostLikeDto);
   
         // 2. 알림을 등록한다.
         const addNotificationDto: AddNotificationDto = {};
@@ -50,7 +52,7 @@ export class PostLikeService {
         addNotificationDto.senderIp = savePostLikeDto.ip;
         addNotificationDto.title = savePostLikeDto.title;
 
-        await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
+        await notificationRepository.addNotification(addNotificationDto);
       });
 
       return 1;

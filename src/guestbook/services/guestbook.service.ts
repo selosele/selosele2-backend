@@ -51,9 +51,11 @@ export class GuestbookService {
 
     // 트랜잭션을 시작한다.
     const result = await this.dataSource.transaction<GuestbookEntity>(async (em: EntityManager) => {
+      const guestbookRepository = em.withRepository(this.guestbookRepository);
+      const notificationRepository = em.withRepository(this.notificationRepository);
 
       // 1. 방명록을 등록한다.
-      const guestbook: GuestbookEntity = await em.withRepository(this.guestbookRepository).addGuestbook(addGuestbookDto);
+      const guestbook: GuestbookEntity = await guestbookRepository.addGuestbook(addGuestbookDto);
       guestbook.guestbookReply = [];
       delete guestbook.authorPw;
 
@@ -66,7 +68,7 @@ export class GuestbookService {
         addNotificationDto.senderIp = addGuestbookDto.ip;
         addNotificationDto.senderNm = addGuestbookDto.author;
         
-        await em.withRepository(this.notificationRepository).addNotification(addNotificationDto);
+        await notificationRepository.addNotification(addNotificationDto);
       }
       return guestbook;
     });

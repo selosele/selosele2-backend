@@ -34,15 +34,17 @@ export class MenuService {
 
     // 트랜잭션을 시작한다.
     const result = await this.dataSource.transaction<MenuEntity>(async (em: EntityManager) => {
+      const menuRepository = em.withRepository(this.menuRepository);
+      const menuRoleRepository = em.withRepository(this.menuRoleRepository);
 
       // 1. 메뉴를 저장한다.
-      const menu: MenuEntity = await em.withRepository(this.menuRepository).saveMenu(saveMenuDto);
+      const menu: MenuEntity = await menuRepository.saveMenu(saveMenuDto);
   
       // 2. 기존의 메뉴 권한을 삭제한다.
       const removeMenuRoleDto: SaveMenuRoleDto = {};
       removeMenuRoleDto.menuId = menu.id;
 
-      await em.withRepository(this.menuRoleRepository).removeMenuRole(removeMenuRoleDto);
+      await menuRoleRepository.removeMenuRole(removeMenuRoleDto);
   
       let roles: SaveMenuRoleDto[] = [];
     
@@ -72,7 +74,7 @@ export class MenuService {
         addMenuRoleDto.menuId = role.menuId;
         addMenuRoleDto.roleId = role.roleId;
 
-        await em.withRepository(this.menuRoleRepository).saveMenuRole(addMenuRoleDto);
+        await menuRoleRepository.saveMenuRole(addMenuRoleDto);
       }
       return menu;
     });
@@ -85,15 +87,17 @@ export class MenuService {
 
     // 트랜잭션을 시작한다.
     const result = await this.dataSource.transaction<DeleteResult>(async (em: EntityManager) => {
+      const menuRoleRepository = em.withRepository(this.menuRoleRepository);
+      const menuRepository = em.withRepository(this.menuRepository);
 
       // 1. 메뉴 권한을 삭제한다.
       const removeMenuRoleDto: SaveMenuRoleDto = {};
       removeMenuRoleDto.menuId = id;
 
-      await em.withRepository(this.menuRoleRepository).removeMenuRole(removeMenuRoleDto);
+      await menuRoleRepository.removeMenuRole(removeMenuRoleDto);
   
       // 2. 메뉴를 삭제하고 결과 값을 반환한다.
-      return await em.withRepository(this.menuRepository).removeMenu(id);
+      return await menuRepository.removeMenu(id);
     });
 
     return result;
