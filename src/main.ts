@@ -36,7 +36,9 @@ async function bootstrap() {
   if (isProd(env.get<string>('NODE_ENV'))) {
     const locOrigins = [
       'https://blog.selosele.com',
-      'https://blog-selosele.vercel.app'
+      'https://blog-selosele.vercel.app',
+      'https://admin.blog.selosele.com',
+      'https://admin-blog-selosele.vercel.app'
     ];
     setupCors(app, locOrigins); // CORS 설정
   }
