@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { JwtServiceFactory } from '@/shared/factories';
-import { isBlank } from '@/shared/utils';
+import { isBlank, isNotEmpty } from '@/shared/utils';
 
 /** 유효한 요청인지 확인하는 데코레이터 */
 export const IsAuthenticated = createParamDecorator((data: unknown, context: ExecutionContext): boolean => {
@@ -18,9 +18,17 @@ export const IsAuthenticated = createParamDecorator((data: unknown, context: Exe
     });
     const isExpired = new Date().getTime() > decodedToken.exp * 1000;
     
-    // JWT 액세스 토큰 만료 여부에 따른 boolean 값을 반환한다.
-    return !isExpired;
+    return isTokenValid(isExpired, decodedToken)
   } catch (err) {
     return false;
   }
 });
+
+/**
+ * 유효한 JWT인지 확인한다.
+ * 1. JWT 액세스 토큰 만료 여부
+ * 2. 관리자 권한 소유 여부
+*/
+function isTokenValid(isExpired: boolean, token) {
+  return !isExpired && isNotEmpty(token.userRole.find(role => role.roleId === 'ROLE_ADMIN'))
+}
