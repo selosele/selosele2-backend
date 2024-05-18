@@ -24,7 +24,8 @@
 
 1. `redis-server` (Redis 구동)
 2. `sudo service mariadb start` (MariaDB 구동)
-3. `npm run start:dev` (백엔드 구동)
+3. `npm install` (패키지 설치, 생략 가능)
+4. `npm run start:dev` (백엔드 구동)
 
 ## 운영환경 구동 절차
 
