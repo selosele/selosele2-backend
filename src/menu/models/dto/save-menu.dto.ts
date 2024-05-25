@@ -44,10 +44,6 @@ export class SaveMenuDto {
   @IsOptional()
   role: string;
 
-  /** 메뉴 외부 링크 여부 */
-  @IsNotEmpty()
-  externalYn?: string;
-
   /** 메뉴 사용 여부 */
   @IsNotEmpty()
   useYn?: string;
