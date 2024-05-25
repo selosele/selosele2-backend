@@ -7,9 +7,6 @@ export class ListIndexSearchDto {
   /** 색인 데이터 유형 코드 */
   typeCd?: string;
 
-  /** 추천 검색어 여부 */
-  recommendYn?: string = 'N';
-
   /** 범위 값 */
   take?: number;
   

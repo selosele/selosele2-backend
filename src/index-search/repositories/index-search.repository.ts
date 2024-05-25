@@ -108,12 +108,6 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
         typeCd: listIndexSearchDto.typeCd,
         secretYn: listIndexSearchDto.secretYn,
       },
-      order: {
-        ...('Y' === listIndexSearchDto.recommendYn && {
-          replyCnt: 'DESC',
-          likeCnt: 'DESC',
-        }),
-      },
       take: listIndexSearchDto.take,
     });
   }
