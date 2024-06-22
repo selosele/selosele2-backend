@@ -13,9 +13,9 @@ export class CronService {
 
   /**
    * 검색 데이터 색인
-   *   - 매주 토요일, 일요일, 월요일 자정에 실행
+   *   - 매주 월요일 자정에 실행
    */
-  @Cron('0 0 * * 6,0,1')
+  @Cron('0 0 * * 1')
   async saveSearchData(): Promise<void> {
     this.logger.warn(`============== 검색 데이터 색인 cron 시작 ==============`);
     await this.indexSearchService.saveIndexSearch();
