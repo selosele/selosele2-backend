@@ -4,9 +4,6 @@ FROM node:16.14.2-alpine AS build
 # 작업 디렉터리 설정
 WORKDIR /app
 
-# 환경변수 개발환경 설정
-ENV NODE_ENV development
-
 # 프로젝트 의존성 파일 복사
 COPY package*.json ./
 
@@ -24,9 +21,6 @@ FROM node:16.14.2-alpine
 
 # 작업 디렉터리 설정
 WORKDIR /app
-
-# 환경변수 운영환경 설정
-ENV NODE_ENV production
 
 # 빌드 결과물만 복사
 COPY --from=build /app/dist ./dist
