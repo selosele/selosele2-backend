@@ -3,11 +3,13 @@
 .gitignore
 .dockerignore
 .eslintrc.js
+*Dockerfile*
 coverage/
 .vscode/
 .github/
 dist
 node_modules
+secrets
 *.md
 *.yml
 *.log
