@@ -4,11 +4,14 @@ FROM node:16.14.2-alpine AS build
 # 작업 디렉터리 설정
 WORKDIR /app
 
+# 환경변수 개발환경 설정
+ENV NODE_ENV development
+
 # 프로젝트 의존성 파일 복사
 COPY package*.json ./
 
 # 의존성 설치
-RUN npm ci
+RUN npm install
 
 # 소스 코드 복사
 COPY . .
@@ -22,9 +25,13 @@ FROM node:16.14.2-alpine
 # 작업 디렉터리 설정
 WORKDIR /app
 
+# 환경변수 운영환경 설정
+ENV NODE_ENV production
+
 # 빌드 결과물만 복사
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/secrets ./secrets
 COPY --from=build /app/package*.json ./
 
 # 앱 실행
