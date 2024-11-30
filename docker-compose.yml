@@ -7,12 +7,15 @@ services:
     restart: always
     mem_limit: 512M
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "443:${PORT}"
     build:
       context: .
       dockerfile: Dockerfile
+    networks:
+      - container-network
     environment:
       - TZ=Asia/Seoul
       - NODE_ENV=${NODE_ENV}
@@ -49,6 +52,12 @@ services:
       - "${DB_PORT}:${DB_PORT}"
     volumes:
       - db_volume:/var/lib/mysql
+    networks:
+      - container-network
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD']
+      timeout: 20s
+      retries: 10
     environment:
       - TZ=Asia/Seoul
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
@@ -58,3 +67,7 @@ services:
 
 volumes:
   db_volume:
+
+networks:
+  container-network:
+    driver: bridge
