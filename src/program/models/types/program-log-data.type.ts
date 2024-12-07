@@ -18,9 +18,10 @@ export type ProgramLogData = {
   /** 클라이언트 IP 주소 */
   ip?: string;
 
+  /** 응답 코드 */
   statusCode?: number;
 
-  /** 응답 코드 */
+  /** 응답 메시지 */
   message?: string;
 
   /** 사용자 일련번호 */
