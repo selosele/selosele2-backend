@@ -8,73 +8,90 @@ import { PostReplyEntity } from './post-reply.entity';
 @Entity('post')
 export class PostEntity extends BaseEntity {
 
+  /** 포스트 ID */
   @PrimaryGeneratedColumn()
   @ApiProperty({ description: '포스트 ID' })
   id?: number;
 
-  @Column({ comment: '포스트 제목' })
+  /** 포스트 제목 */
+  @Column()
   @ApiProperty({ description: '포스트 제목' })
   title?: string;
 
-  @CreateDateColumn({ comment: '포스트 등록일시' })
+  /** 포스트 등록일시 */
+  @CreateDateColumn()
   @ApiProperty({ description: '포스트 등록일시' })
   regDate?: Date;
 
-  @UpdateDateColumn({ comment: '포스트 수정일시' })
+  /** 포스트 수정일시 */
+  @UpdateDateColumn()
   @ApiProperty({ description: '포스트 수정일시' })
   modDate?: Date;
 
-  @Column({ comment: '포스트 댓글 수' })
+  /** 포스트 댓글 수 */
+  @Column()
   @ApiProperty({ description: '포스트 댓글 수' })
   replyCnt?: number;
   
-  @Column({ comment: '포스트 내용' })
+  /** 포스트 내용 */
+  @Column()
   @ApiProperty({ description: '포스트 내용' })
   cont?: string;
   
-  @Column({ comment: '포스트 대표 이미지' })
+  /** 포스트 대표 이미지 */
+  @Column()
   @ApiProperty({ description: '포스트 대표 이미지' })
   ogImg?: string;
   
-  @Column({ comment: '포스트 대표 이미지 URL' })
+  /** 포스트 대표 이미지 URL */
+  @Column()
   @ApiProperty({ description: '포스트 대표 이미지 URL' })
   ogImgUrl?: string;
   
-  @Column({ comment: '포스트 대표 이미지 용량' })
+  /** 포스트 대표 이미지 용량 */
+  @Column()
   @ApiProperty({ description: '포스트 대표 이미지 용량' })
   ogImgSize?: number;
   
-  @Column({ comment: '포스트 내용 요약' })
+  /** 포스트 내용 요약 */
+  @Column()
   @ApiProperty({ description: '포스트 내용 요약' })
   ogDesc?: string;
   
-  @Column({ comment: '포스트 비공개 여부' })
+  /** 포스트 비공개 여부 */
+  @Column()
   @ApiProperty({ description: '포스트 비공개 여부' })
   secretYn?: string;
   
-  @Column({ comment: '포스트 상단고정 여부' })
+  /** 포스트 상단고정 여부 */
+  @Column()
   @ApiProperty({ description: '포스트 상단고정 여부' })
   pinYn?: string;
 
-  @Column({ comment: '포스트 임시저장 여부' })
+  /** 포스트 임시저장 여부 */
+  @Column()
   @ApiProperty({ description: '포스트 임시저장 여부' })
   tmpYn?: string;
 
+  /** 포스트 카테고리 */
   @OneToMany(() => PostCategoryEntity, (postCategory) => postCategory.post)
   @JoinColumn({ referencedColumnName: 'post_id' })
   @ApiProperty({ description: '포스트 카테고리' })
   postCategory?: PostCategoryEntity[];
 
+  /** 포스트 태그 */
   @OneToMany(() => PostTagEntity, (postTag) => postTag.post)
   @JoinColumn({ referencedColumnName: 'post_id' })
   @ApiProperty({ description: '포스트 태그' })
   postTag?: PostTagEntity[];
 
+  /** 포스트 추천 */
   @OneToMany(() => PostLikeEntity, (postLike) => postLike.post)
   @JoinColumn({ referencedColumnName: 'post_id' })
   @ApiProperty({ description: '포스트 추천' })
   postLike?: PostLikeEntity[];
 
+  /** 포스트 댓글 */
   @OneToMany(() => PostReplyEntity, (postReply) => postReply.post)
   @JoinColumn({ referencedColumnName: 'id' })
   @ApiProperty({ description: '포스트 댓글' })

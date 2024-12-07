@@ -4,31 +4,38 @@ import { ApiProperty } from '@nestjs/swagger';
 @Entity('satisfaction')
 export class SatisfactionEntity extends BaseEntity {
 
+  /** 만족도 ID */
   @PrimaryGeneratedColumn()
   @ApiProperty({ description: '만족도 ID' })
   id?: number;
 
-  @Column({ comment: '페이지 URL' })
+  /** 페이지 URL */
+  @Column()
   @ApiProperty({ description: '페이지 URL' })
   pagePath?: string;
 
-  @Column({ comment: '만족도 점수' })
+  /** 만족도 점수 */
+  @Column()
   @ApiProperty({ description: '만족도 점수' })
   score?: string;
 
-  @Column({ comment: '만족도 의견' })
+  /** 만족도 의견 */
+  @Column()
   @ApiProperty({ description: '만족도 의견' })
   comment?: string;
 
-  @Column({ comment: '만족도 의견 유형 코드' })
+  /** 만족도 의견 유형 코드 */
+  @Column()
   @ApiProperty({ description: '만족도 의견 유형 코드' })
   commentTypeCd?: string;
 
-  @Column({ comment: '참여자 IP', select: false })
+  /** 참여자 IP */
+  @Column({ select: false })
   @ApiProperty({ description: '참여자 IP' })
   ip?: string;
 
-  @CreateDateColumn({ comment: '참여일시' })
+  /** 참여일시 */
+  @CreateDateColumn()
   @ApiProperty({ description: '참여일시' })
   regDate?: Date;
   

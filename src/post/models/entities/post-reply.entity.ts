@@ -5,63 +5,77 @@ import { PostEntity } from './post.entity';
 @Entity('post_reply')
 export class PostReplyEntity extends BaseEntity {
 
+  /** 포스트 댓글 ID */
   @PrimaryGeneratedColumn()
   @ApiProperty({ description: '포스트 댓글 ID' })
   id?: number;
 
-  @Column({ comment: '상위 포스트 ID' })
+  /** 상위 포스트 ID */
+  @Column()
   @ApiProperty({ description: '상위 포스트 ID' })
   parentId?: number;
 
-  @Column({ comment: '상위 댓글 ID' })
+  /** 상위 댓글 ID */
+  @Column()
   @ApiProperty({ description: '상위 댓글 ID' })
   parentReplyId?: number;
 
-  @Column({ comment: '포스트 댓글 그룹' })
+  /** 포스트 댓글 그룹 */
+  @Column()
   @ApiProperty({ description: '포스트 댓글 그룹' })
   group?: number;
 
-  @Column({ comment: '포스트 댓글 순서' })
+  /** 포스트 댓글 순서 */
+  @Column()
   @ApiProperty({ description: '포스트 댓글 순서' })
   sort?: number;
 
-  @Column({ comment: '포스트 댓글 계층' })
+  /** 포스트 댓글 계층 */
+  @Column()
   @ApiProperty({ description: '포스트 댓글 계층' })
   depth?: number;
 
-  @Column({ comment: '포스트 댓글 작성자' })
+  /** 포스트 댓글 작성자 */
+  @Column()
   @ApiProperty({ description: '포스트 댓글 작성자' })
   author?: string;
 
-  @Column({ comment: '포스트 댓글 작성자 비밀번호' })
+  /** 포스트 댓글 작성자 비밀번호 */
+  @Column()
   @ApiProperty({ description: '포스트 댓글 작성자 비밀번호' })
   authorPw?: string;
 
-  @Column({ comment: '포스트 댓글 작성자 IP',
-    select: false })
+  /** 포스트 댓글 작성자 IP */
+  @Column({ select: false })
   @ApiProperty({ description: '포스트 댓글 작성자 IP' })
   ip?: string;
 
-  @Column({ comment: '포스트 댓글 내용' })
+  /** 포스트 댓글 내용 */
+  @Column()
   @ApiProperty({ description: '포스트 댓글 내용' })
   cont?: string;
 
-  @CreateDateColumn({ comment: '포스트 댓글 등록일시' })
+  /** 포스트 댓글 등록일시 */
+  @CreateDateColumn()
   @ApiProperty({ description: '포스트 댓글 등록일시' })
   regDate?: Date;
 
-  @UpdateDateColumn({ comment: '포스트 댓글 수정일시' })
+  /** 포스트 댓글 수정일시 */
+  @UpdateDateColumn()
   @ApiProperty({ description: '포스트 댓글 수정일시' })
   modDate?: Date;
 
-  @Column({ comment: '포스트 댓글 삭제 여부' })
+  /** 포스트 댓글 삭제 여부 */
+  @Column()
   @ApiProperty({ description: '포스트 댓글 삭제 여부' })
   delYn?: string;
 
-  @Column({ comment: '관리자 계정 여부' })
+  /** 관리자 계정 여부 */
+  @Column()
   @ApiProperty({ description: '관리자 계정 여부' })
   adminYn?: string;
 
+  /** 포스트 */
   @ManyToOne(() => PostEntity, (post) => post.postReply)
   @JoinColumn({ name: 'parent_id' })
   @ApiProperty({ type: () => PostEntity, description: '포스트' })

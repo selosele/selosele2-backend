@@ -5,26 +5,32 @@ import { PostTagEntity } from './post-tag.entity';
 @Entity('tag')
 export class TagEntity extends BaseEntity {
 
+  /** 태그 ID */
   @PrimaryGeneratedColumn()
   @ApiProperty({ description: '태그 ID' })
   id?: number;
 
-  @Column({ comment: '태그 명' })
+  /** 태그 명 */
+  @Column()
   @ApiProperty({ description: '태그 명' })
   nm?: string;
 
-  @Column({ comment: '태그 설명' })
+  /** 태그 설명 */
+  @Column()
   @ApiProperty({ description: '태그 설명' })
   desc?: string;
 
-  @CreateDateColumn({ comment: '태그 등록일시' })
+  /** 태그 등록일시 */
+  @CreateDateColumn()
   @ApiProperty({ description: '태그 등록일시' })
   regDate?: Date;
 
-  @UpdateDateColumn({ comment: '태그 수정일시' })
+  /** 태그 수정일시 */
+  @UpdateDateColumn()
   @ApiProperty({ description: '태그 수정일시' })
   modDate?: Date;
 
+  /** 포스트 태그 */
   @OneToMany(() => PostTagEntity, (postTag) => postTag.tag)
   @JoinColumn({ referencedColumnName: 'tag_id' })
   @ApiProperty({ description: '포스트 태그' })

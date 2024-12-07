@@ -4,47 +4,58 @@ import { ApiProperty } from '@nestjs/swagger';
 @Entity('content')
 export class ContentEntity extends BaseEntity {
 
+  /** 콘텐츠 ID */
   @PrimaryGeneratedColumn()
   @ApiProperty({ description: '콘텐츠 ID' })
   id?: number;
 
-  @Column({ comment: '콘텐츠 링크' })
+  /** 콘텐츠 링크 */
+  @Column()
   @ApiProperty({ description: '콘텐츠 링크' })
   link?: string;
 
-  @Column({ comment: '콘텐츠 제목' })
+  /** 콘텐츠 제목 */
+  @Column()
   @ApiProperty({ description: '콘텐츠 제목' })
   title?: string;
 
-  @CreateDateColumn({ comment: '콘텐츠 등록일시' })
+  /** 콘텐츠 등록일시 */
+  @CreateDateColumn()
   @ApiProperty({ description: '콘텐츠 등록일시' })
   regDate?: Date;
 
-  @UpdateDateColumn({ comment: '콘텐츠 수정일시' })
+  /** 콘텐츠 수정일시 */
+  @UpdateDateColumn()
   @ApiProperty({ description: '콘텐츠 수정일시' })
   modDate?: Date;
 
-  @Column({ comment: '콘텐츠 내용' })
+  /** 콘텐츠 내용 */
+  @Column()
   @ApiProperty({ description: '콘텐츠 내용' })
   cont?: string;
 
-  @Column({ comment: '콘텐츠 대표 이미지' })
+  /** 콘텐츠 대표 이미지 */
+  @Column()
   @ApiProperty({ description: '콘텐츠 대표 이미지' })
   ogImg?: string;
   
-  @Column({ comment: '콘텐츠 대표 이미지 URL' })
+  /** 콘텐츠 대표 이미지 URL */
+  @Column()
   @ApiProperty({ description: '콘텐츠 대표 이미지 URL' })
   ogImgUrl?: string;
   
-  @Column({ comment: '콘텐츠 대표 이미지 용량' })
+  /** 콘텐츠 대표 이미지 용량 */
+  @Column()
   @ApiProperty({ description: '콘텐츠 대표 이미지 용량' })
   ogImgSize?: number;
 
-  @Column({ comment: '콘텐츠 내용 요약' })
+  /** 콘텐츠 내용 요약 */
+  @Column()
   @ApiProperty({ description: '콘텐츠 내용 요약' })
   ogDesc?: string;
 
-  @Column({ comment: '콘텐츠 임시저장 여부' })
+  /** 콘텐츠 임시저장 여부 */
+  @Column()
   @ApiProperty({ description: '콘텐츠 임시저장 여부' })
   tmpYn?: string;
   
