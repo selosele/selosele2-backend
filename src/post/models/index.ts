@@ -1,4 +1,6 @@
 // DTO
+export * from './dto/count-post-stat-response.dto';
+export * from './dto/count-post-stat.dto';
 export * from './dto/count-post.dto';
 export * from './dto/get-post-like.dto';
 export * from './dto/get-post-reply.dto';

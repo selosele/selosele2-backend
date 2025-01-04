@@ -4,7 +4,7 @@ import { PostCategoryRepository } from '@/category/repositories/post-category.re
 import { PaginationDto } from '@/shared/models';
 import { deserialize, escapeHtml, getRawText, isBlank, isEmpty, isNotBlank, isNotEmpty, isNotFileEmpty, md, serialize } from '@/shared/utils';
 import { DataSource, DeleteResult, EntityManager, UpdateResult } from 'typeorm';
-import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, GetPostLikeDto, PostLikeEntity, PostReplyEntity, PostDto, PostLikeDto, PostReplyDto } from '../models';
+import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, GetPostLikeDto, PostLikeEntity, PostReplyEntity, PostDto, PostLikeDto, PostReplyDto, CountPostStatResponseDto } from '../models';
 import { SavePostDto } from '../models/dto/save-post.dto';
 import { PostRepository } from '../repositories/post.repository';
 import { BlogConfigRepository } from '@/blog-config/repositories/blog-config.repository';
@@ -194,6 +194,19 @@ export class PostService {
   /** 포스트의 개수를 조회한다. */
   async countPost(countPostDto?: CountPostDto): Promise<number> {
     return await this.postRepository.countPost(countPostDto);
+  }
+
+  /** 유형별 포스트 개수를 조회한다. */
+  async countPostStat(): Promise<CountPostStatResponseDto> {
+    const [total, normal, secret, pin, tmp] = await Promise.all([
+      await this.postRepository.countPostStat(),                  // 모든글
+      await this.postRepository.countPostStat({ secretYn: 'N' }), // 공개글
+      await this.postRepository.countPostStat({ secretYn: 'Y' }), // 비공개글
+      await this.postRepository.countPostStat({ pinYn: 'Y' }),    // 고정글
+      await this.postRepository.countPostStat({ tmpYn: 'Y' }),    // 임시저장글
+    ]);
+    
+    return { total, normal, secret, pin, tmp };
   }
 
   /** 포스트를 등록/수정한다. */

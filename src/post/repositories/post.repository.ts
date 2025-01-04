@@ -2,7 +2,7 @@ import { CustomRepository } from '@/database/repository/custom-repository.decora
 import { PaginationDto } from '@/shared/models';
 import { isNotEmpty } from '@/shared/utils';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { GetPostDto, ListPostDto, PostEntity } from '../models';
+import { CountPostStatDto, GetPostDto, ListPostDto, PostEntity } from '../models';
 import { CountPostDto } from '../models/dto/count-post.dto';
 import { SavePostDto } from '../models/dto/save-post.dto';
 
@@ -270,6 +270,17 @@ export class PostRepository extends Repository<PostEntity> {
     return await this.count({
       where: {
         ...(isNotEmpty(countPostDto.pinYn) && { pinYn: countPostDto.pinYn }),
+      },
+    });
+  }
+
+  /** 유형별 포스트 개수를 조회한다. */
+  async countPostStat(countPostStatDto?: CountPostStatDto): Promise<number> {
+    return await this.count({
+      where: {
+        ...(isNotEmpty(countPostStatDto?.pinYn) && { pinYn: countPostStatDto?.pinYn }),
+        ...(isNotEmpty(countPostStatDto?.secretYn) && { secretYn: countPostStatDto?.secretYn }),
+        ...(isNotEmpty(countPostStatDto?.tmpYn) && { tmpYn: countPostStatDto?.tmpYn }),
       },
     });
   }

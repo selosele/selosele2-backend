@@ -6,7 +6,7 @@ import { Roles } from '@/auth/models';
 import { Auth, Ip, IsAuthenticated } from '@/shared/decorators';
 import { PaginationDto } from '@/shared/models';
 import { FileTypeValidator, isNotFileEmpty, MaxFileSizeValidator, serialize } from '@/shared/utils';
-import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, PostDto, SavePostDto } from '../models';
+import { GetPostDto, ListPostDto, RemovePostDto, SearchPostDto, PostEntity, PostDto, SavePostDto, CountPostStatResponseDto } from '../models';
 import { PostService } from '../services/post.service';
 import { IndexSearchEntity } from '@/index-search/models';
 import { globalCodes } from '@/shared/codes/code';
@@ -221,6 +221,20 @@ export class PostController {
       serialize<PostDto[]>(posts),
       postCount,
     ];
+  }
+
+  @Get('stat')
+  @Auth(Roles.ROLE_ADMIN)
+  @ApiOperation({
+    summary: '유형별 포스트 개수 조회 API',
+    description: '유형별 포스트 개수를 조회한다.'
+  })
+  @ApiCreatedResponse({
+    type: CountPostStatResponseDto,
+    description: '유형별 포스트 개수',
+  })
+  async countPostStat(): Promise<CountPostStatResponseDto> {
+    return await this.postService.countPostStat();
   }
 
   @Get(':id')
