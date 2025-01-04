@@ -1,8 +1,9 @@
 import { CustomRepository } from '@/database/repository/custom-repository.decorator';
 import { Brackets, DeleteResult, InsertResult, Repository } from 'typeorm';
-import { IndexSearchEntity, ListIndexSearchDto, SaveIndexSearchDto, searchCodes } from '../models';
+import { CountIndexSearchStatDto, IndexSearchEntity, ListIndexSearchDto, SaveIndexSearchDto, searchCodes } from '../models';
 import { ListPostDto, SearchPostDto } from '@/post/models';
 import { PaginationDto } from '@/shared/models';
+import { isNotEmpty } from '@/shared/utils';
 
 @CustomRepository(IndexSearchEntity)
 export class IndexSearchRepository extends Repository<IndexSearchEntity> {
@@ -170,6 +171,16 @@ export class IndexSearchRepository extends Repository<IndexSearchEntity> {
       .delete()
       .where("1=1")
       .execute();
+  }
+
+  /** 유형별 검색 색인 데이터 개수를 조회한다. */
+  async countIndexSearchStat(countIndexSearchStatDto?: CountIndexSearchStatDto): Promise<number> {
+    return await this.count({
+      where: {
+        ...(isNotEmpty(countIndexSearchStatDto?.pinYn) && { pinYn: countIndexSearchStatDto?.pinYn }),
+        ...(isNotEmpty(countIndexSearchStatDto?.secretYn) && { secretYn: countIndexSearchStatDto?.secretYn }),
+      },
+    });
   }
 
 }

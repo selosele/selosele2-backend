@@ -7,7 +7,7 @@ import { PaginationDto } from '@/shared/models';
 import { serialize } from '@/shared/utils';
 import { IndexSearchRepository } from '../repositories/index-search.repository';
 import { IndexSearchLogRepository } from '../repositories/index-search-log.repository';
-import { SaveIndexSearchDto, searchCodes, IndexSearchDto, AddIndexSearchLogDto, ListIndexSearchDto } from '../models';
+import { SaveIndexSearchDto, searchCodes, IndexSearchDto, AddIndexSearchLogDto, ListIndexSearchDto, CountIndexSearchStatResponseDto } from '../models';
 
 @Injectable()
 export class IndexSearchService {
@@ -124,6 +124,18 @@ export class IndexSearchService {
     if (0 < result?.raw.length) {
       this.logger.warn(`5. 포스트 색인 로그 저장 완료`);
     }
+  }
+
+  /** 유형별 검색 색인 데이터 개수를 조회한다. */
+  async countIndexSearchStat(): Promise<CountIndexSearchStatResponseDto> {
+    const [total, normal, secret, pin] = await Promise.all([
+      await this.indexSearchRepository.countIndexSearchStat(),                  // 모든글
+      await this.indexSearchRepository.countIndexSearchStat({ secretYn: 'N' }), // 공개글
+      await this.indexSearchRepository.countIndexSearchStat({ secretYn: 'Y' }), // 비공개글
+      await this.indexSearchRepository.countIndexSearchStat({ pinYn: 'Y' }),    // 고정글
+    ]);
+    
+    return { total, normal, secret, pin };
   }
 
 }
